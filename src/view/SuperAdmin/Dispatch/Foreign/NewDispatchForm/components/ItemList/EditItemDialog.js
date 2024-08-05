@@ -1,0 +1,60 @@
+import React, { memo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dialog } from "../../../../../../../components/ui";
+import ItemForm from "./ItemForm";
+import {
+  toggleAddDispatchItemDialog,
+  toggleEditDispatchItemDialog,
+} from "../../../NewDispatch/store/stateSlice";
+
+const EditDispatchItemDialog = (props) => {
+  const {
+    boxes = [],
+    locationIndex,
+    setFieldValue,
+    dispatchList = [],
+    editItemInPoList,
+  } = props;
+  const dispatch = useDispatch();
+
+  const editDispatchItemDialog = useSelector(
+    (state) => state.new_foreign_invoice.state.editDispatchItemDialog
+  );
+
+  const selectedDispatchItem = useSelector(
+    (state) => state.new_foreign_invoice.state.selectedDispatchItem
+  );
+
+  const onDialogClose = () => {
+    dispatch(
+      toggleEditDispatchItemDialog({ option: false, locationIndex: null })
+    );
+  };
+
+  const handleEditItem = (values) => {
+    editItemInPoList?.(dispatchList, values, locationIndex, setFieldValue);
+    // onDialogClose()
+  };
+
+  return (
+    <Dialog
+      isOpen={
+        editDispatchItemDialog.option &&
+        locationIndex === editDispatchItemDialog.locationIndex
+      }
+      onClose={onDialogClose}
+      onRequestClose={onDialogClose}
+    >
+      <ItemForm
+        boxes={boxes}
+        type="edit"
+        dispatchList={dispatchList}
+        handleFormSubmit={handleEditItem}
+        onDiscard={onDialogClose}
+        initialData={selectedDispatchItem}
+      />
+    </Dialog>
+  );
+};
+
+export default memo(EditDispatchItemDialog);
