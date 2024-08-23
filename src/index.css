@@ -27705,6 +27705,11 @@ hr {
     font-size: 0.4rem;
     line-height: 0.9rem;
   }
+
+  .print\:text-xxxs {
+    font-size: 0.2rem; 
+    line-height: 0.5rem;
+  }
 }
 
 @media (min-width: 576) {

@@ -15,8 +15,8 @@ const InputInformationFields = (props) => {
     <FormItem
       className="mb-4"
       label={label}
-      // invalid={errors && touched}
-      //   errorMessage={errors}
+      invalid={errors && touched}
+      errorMessage={errors}
     >
       <Field
         type={"text"}

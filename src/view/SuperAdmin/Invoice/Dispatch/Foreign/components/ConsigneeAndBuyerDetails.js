@@ -3,11 +3,11 @@ import React from "react";
 const ConsigneeAndBuyerDetails = ({ title, data, address }) => {
   return (
     <div className="h-full">
-      <h6 className="font-normal text-center text-gray-500 print:text-xs uppercase">
+      <h6 className="font-normal text-center text-gray-500 print:text-sm uppercase">
         {title}
       </h6>
-      <h6 className="text-gray-700 print:text-xs uppercase">{data?.name}</h6>
-      <p className="flex font-medium text-gray-500 print:text-xs flex-wrap uppercase">
+      <h6 className="text-gray-700 print:text-sm uppercase">{data?.name}</h6>
+      <p className="flex font-medium text-gray-500 print:text-sm flex-wrap uppercase">
         {address?.address}
         {", "}
         {address?.country}
@@ -16,9 +16,9 @@ const ConsigneeAndBuyerDetails = ({ title, data, address }) => {
       </p>
       {title === "Consignee" && (
         <div className="flex gap-1 justify-start uppercase">
-          <p className="text-gray-700 font-semibold print:text-xs">Email</p>
-          <p className="text-gray-700 print:text-xs">-</p>
-          <p className="text-gray-500 font-medium print:text-xs uppercase">
+          <p className="text-gray-700 font-semibold print:text-sm">Email</p>
+          <p className="text-gray-700 print:text-sm">-</p>
+          <p className="text-gray-500 font-medium print:text-sm uppercase">
             {data?.email}
           </p>
         </div>
@@ -26,18 +26,18 @@ const ConsigneeAndBuyerDetails = ({ title, data, address }) => {
       {title === "buyer" && (
         <>
           <div className="flex gap-1 justify-start uppercase">
-            <p className="text-gray-700 font-semibold print:text-xs">
+            <p className="text-gray-700 font-semibold print:text-sm">
               Contact Name
             </p>
-            <p className="text-gray-700 print:text-xs">-</p>
-            <p className="text-gray-500 font-medium print:text-xs uppercase">
+            <p className="text-gray-700 print:text-sm">-</p>
+            <p className="text-gray-500 font-medium print:text-sm uppercase">
               {address?.contact_person}
             </p>
           </div>
           <div className="flex gap-1 justify-start uppercase">
-            <p className="text-gray-700 font-semibold print:text-xs">Contact</p>
-            <p className="text-gray-700 print:text-xs">-</p>
-            <p className="text-gray-500 font-medium print:text-xs uppercase">
+            <p className="text-gray-700 font-semibold print:text-sm">Contact</p>
+            <p className="text-gray-700 print:text-sm">-</p>
+            <p className="text-gray-500 font-medium print:text-sm uppercase">
               {address?.contact_phone || data?.mobile || data?.phone}
             </p>
           </div>

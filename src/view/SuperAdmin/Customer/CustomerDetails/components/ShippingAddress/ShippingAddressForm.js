@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
   country: Yup.string().required("Required"),
   address: Yup.string().required("Required"),
   contact_person: Yup.string().required("Required"),
-  contact_phone: Yup.string().required("Required"),
+  contact_phone: Yup.number().required("Required"),
 });
 
 const ShippingAddressForm = forwardRef((props, ref) => {
@@ -62,7 +62,7 @@ const ShippingAddressForm = forwardRef((props, ref) => {
                   errorMessage={errors.contact_phone}
                 >
                   <Field
-                    type="text"
+                    type="number"
                     autoComplete="off"
                     name="contact_phone"
                     placeholder="Contact Phone"

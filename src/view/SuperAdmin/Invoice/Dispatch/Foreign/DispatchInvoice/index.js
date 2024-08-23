@@ -55,12 +55,18 @@ const DispatchInvoice = ({ data }) => {
               key={`page-${pageNo}`}
               className="page"
               style={{
-                height: "calc(1128px - 50px)",
-                marginLeft: "4%",
-                // border: "1px dashed black",
+                height: "calc(1130px - 50px)",
+                paddingLeft: "6%",
+                paddingRight: "2%",
               }}
             >
-              <div className="invoice w-full p-4 relative">
+              <div
+                className="invoice w-full  relative"
+                style={{
+                  border: "1px solid black",
+                  marginTop: "4px",
+                }}
+              >
                 {/* <div className='w-full h-full absolute top-0' style={{ opacity: .15 }}>
                   <img src='http://www.brothers.net.in/img/logoBrother.png' className='w-full h-full' style={{ objectFit: 'contain', objectPosition: 'center' }}></img>
                 </div> */}

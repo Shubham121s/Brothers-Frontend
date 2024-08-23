@@ -6,6 +6,7 @@ import {
   FormContainer,
   FormItem,
   Input,
+  Checkbox,
 } from "../../../../../components/ui";
 import { toggleNewPoItemDialog } from "../../NewPo/store/stateSlice";
 import { toggleEditPoItemDialog } from "../../EditPo/store/stateSlice";
@@ -14,6 +15,7 @@ import { Field, Form, Formik } from "formik";
 import InputInformationFields from "./components/InputInformationFields";
 import DatePickerInformationFields from "./components/DatePickerInformationFields";
 import ProductInformationFields from "./components/ProductInformationFields";
+import CheckBoxField from "./components/CheckBoxField";
 
 const validationSchema = Yup.object().shape({
   description: Yup.string().required("Required"),
@@ -159,6 +161,26 @@ const ItemForm = forwardRef((props, ref) => {
                     placeholder="PO Delivery Date"
                   />
                 </div>
+                <div className="grid grid-cols-3 gap-1">
+                  <CheckBoxField
+                    name="material_tc_verify_check"
+                    label="Material TC"
+                  />
+                  <CheckBoxField
+                    name="internal_inspection_check"
+                    label="Internal Insp."
+                  />
+                  <CheckBoxField name="ndt_requirement_check" label="NDT" />
+                  <CheckBoxField
+                    name="final_inspection_check"
+                    label="final Insp."
+                  />
+                  <CheckBoxField
+                    name="heat_treatment_check"
+                    label="Heat Treatment"
+                  />
+                  <CheckBoxField name="other_check" label="Other" />
+                </div>
                 <div className="grid grid-cols-1 gap-2">
                   <InputInformationFields
                     errors={errors.description}
@@ -227,6 +249,12 @@ ItemForm.defaultProps = {
     serial_number: "",
     Product: null,
     project_no: "",
+    material_tc_verify_check: false,
+    internal_inspection_check: false,
+    ndt_requirement_check: false,
+    final_inspection_check: false,
+    heat_treatment_check: false,
+    other_check: false,
   },
 };
 

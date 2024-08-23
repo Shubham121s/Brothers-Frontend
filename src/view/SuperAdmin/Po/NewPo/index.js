@@ -64,6 +64,7 @@ const NewPO = () => {
 
   const handleFormSubmit = async (values, setSubmitting) => {
     setSubmitting(true);
+    console.log(values);
     const action = await addPo({
       ...values,
       number: values.number.replace(/\s+/g, ""),

@@ -15,6 +15,9 @@ const validationSchema = Yup.object().shape({
   status: Yup.boolean().required("Required"),
   type: Yup.string().required("Required"),
   city: Yup.string(),
+  // email: Yup.email().typeError("It should be a email"),
+  mobile: Yup.number().typeError("It should be a number"),
+  phone: Yup.number().typeError("It should be a number"),
   gst_no: Yup.string(),
   CustomerPermanentAddress: Yup.object().shape({
     address: Yup.string().required("Required"),
@@ -22,7 +25,6 @@ const validationSchema = Yup.object().shape({
     city: Yup.string().required("Required"),
     zip_code: Yup.number().required("Required"),
     state: Yup.string().required("Required"),
-    state_code: Yup.string().required("Required"),
   }),
 });
 

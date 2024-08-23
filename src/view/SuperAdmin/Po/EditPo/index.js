@@ -44,9 +44,9 @@ const EditPO = () => {
   const initialData = useSelector((state) => state.edit_po.data.poDetails);
   const customers = useSelector((state) => state.edit_po.data.customers);
   const products = useSelector((state) => state.edit_po.data.products);
-  const Notes = useSelector((state) => state.new_po.data.notes);
-  const Condition = useSelector((state) => state.new_po.data.condition);
-  const loadingStates = useSelector((state) => state.new_po.data.loading);
+  const Notes = useSelector((state) => state.edit_po.data.notes);
+  const Condition = useSelector((state) => state.edit_po.data.condition);
+  const loadingStates = useSelector((state) => state.edit_po.data.loading);
 
   const isLoading = Object.values(loadingStates).some((state) => state);
 

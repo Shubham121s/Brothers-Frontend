@@ -161,7 +161,7 @@ const DispatchTable = (props) => {
         cell: (props) => {
           const row = props.row.original;
           return (
-            <div className="uppercase text-center">
+            <div className="uppercase ">
               {`${row?.Po?.number}-${row?.PoList?.serial_number}`}
             </div>
           );
@@ -184,7 +184,7 @@ const DispatchTable = (props) => {
         accessorKey: "name",
         cell: (props) => {
           const row = props.row.original;
-          return <div className="uppercase">{row?.item_name || "-"}</div>;
+          return <div className="uppercase ">{row?.item_name || "-"}</div>;
         },
       },
       {
@@ -192,9 +192,7 @@ const DispatchTable = (props) => {
         accessorKey: "item_code",
         cell: (props) => {
           const row = props.row.original;
-          return (
-            <div className="uppercase text-center">{row?.item_code || "-"}</div>
-          );
+          return <div className="uppercase">{row?.item_code || "-"}</div>;
         },
       },
       {
@@ -202,9 +200,7 @@ const DispatchTable = (props) => {
         accessorKey: "hsn_code",
         cell: (props) => {
           const row = props.row.original;
-          return (
-            <div className="uppercase text-center">{row?.hsn_code || "-"}</div>
-          );
+          return <div className="uppercase">{row?.hsn_code || "-"}</div>;
         },
       },
       {
