@@ -332,64 +332,20 @@ const superAdminRoute = [
     key: "enquiry.list",
     path: `/super/admin/enquiry/List`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Enquiry/EnquiryList")
-    ),
-    authority: [SUPER_ADMIN],
-  },
-  {
-    key: "enquiry.new",
-    path: `/super/admin/enquiry/new`,
-    component: React.lazy(() =>
-      import("../../view/SuperAdmin/Sales/NewEnquiry")
+      import("../../view/SuperAdmin/Sales/Enquiry/EnquiryList")
     ),
     authority: [SUPER_ADMIN],
   },
 
-  {
-    key: "enquiry.detail",
-    path: `/super/admin/enquiry/details/:id`,
-    component: React.lazy(() =>
-      import("../../view/SuperAdmin/Enquiry/EnquiryDetails")
-    ),
-    authority: [SUPER_ADMIN],
-  },
+  //*********END********* */
 
+  //Quotation
+  //*********START********* */
   {
     key: "quotation.list",
     path: `/super/admin/quotation`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Enquiry/Quotation")
-    ),
-    authority: [SUPER_ADMIN],
-  },
-  {
-    key: "quotation.details",
-    path: `/super/admin/quotation/details/:id`,
-    component: React.lazy(() =>
-      import("../../view/SuperAdmin/Enquiry/QuotationDetails")
-    ),
-    authority: [SUPER_ADMIN],
-  },
-  {
-    key: "store",
-    path: `/super/admin/store/level/1`,
-    component: React.lazy(() =>
-      import("../../view/SuperAdmin/Store/RawMaterial")
-    ),
-    authority: [SUPER_ADMIN],
-  },
-
-  {
-    key: "store",
-    path: `/super/admin/store/level/2`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Store")),
-    authority: [SUPER_ADMIN],
-  },
-  {
-    key: "store",
-    path: `/super/admin/store/level/3`,
-    component: React.lazy(() =>
-      import("../../view/SuperAdmin/Store/ConsumableItems2")
+      import("../../view/SuperAdmin/Sales/Quotation/QuotationList")
     ),
     authority: [SUPER_ADMIN],
   },

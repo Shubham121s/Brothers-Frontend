@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const stateSlice = createSlice({
-  name: "po/data/list",
+  name: "purchase/order/data/list",
   initialState: {
+    deleteConfirmation: false,
+
     deletePoItemDialog: false,
     openDialog: false,
     selectedPurchase: {},
@@ -10,6 +12,9 @@ const stateSlice = createSlice({
   reducers: {
     toggleDeletePoItemDialog: (state, action) => {
       state.deletePoItemDialog = action.payload;
+    },
+    toggleDeleteConfirmation: (state, action) => {
+      state.deleteConfirmation = action.payload;
     },
     toggleDialog: (state, action) => {
       state.openDialog = action.payload;
@@ -21,6 +26,7 @@ const stateSlice = createSlice({
   },
 });
 
-export const { toggleDialog, setSelectedPurchase } = stateSlice.actions;
+export const { toggleDialog, setSelectedPurchase, toggleDeleteConfirmation } =
+  stateSlice.actions;
 
 export default stateSlice.reducer;

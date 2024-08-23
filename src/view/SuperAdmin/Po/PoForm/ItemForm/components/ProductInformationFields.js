@@ -29,9 +29,7 @@ const CustomSelectOption = ({ innerProps, label, data, isSelected }) => {
       {...innerProps}
     >
       <div className="items-center flex justify-between w-full">
-        <div className="ml-2 uppercase">
-          {`${label} ( ${data?.value?.item_code})`}
-        </div>
+        <div className="ml-2 uppercase">{`${label}`}</div>
         {isSelected && <HiCheck className="text-emerald-500 text-xl" />}
       </div>
     </div>
@@ -46,7 +44,10 @@ const ProductInformationFields = (props) => {
   );
   const productData = useMemo(() => {
     return products.map((product) => {
-      return { label: product.name, value: product };
+      return {
+        label: `${product.name} (${product?.item_code})`,
+        value: product,
+      };
     });
   }, [products]);
 

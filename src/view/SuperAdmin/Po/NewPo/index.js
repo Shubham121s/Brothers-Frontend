@@ -13,6 +13,7 @@ import {
   getUniquePoNumber,
   postNewPoRegister,
 } from "./store/dataSlice";
+import { Loading } from "../../../../components/shared";
 
 injectReducer("new_po", newPoReducer);
 
@@ -37,6 +38,9 @@ const NewPO = () => {
   const number = useSelector((state) => state.new_po.data.number);
   const Notes = useSelector((state) => state.new_po.data.notes);
   const Condition = useSelector((state) => state.new_po.data.condition);
+  const loadingStates = useSelector((state) => state.new_po.data.loading);
+
+  const isLoading = Object.values(loadingStates).some((state) => state);
 
   const noteOption = useMemo(() => {
     return Notes?.map((m) => {
@@ -51,7 +55,7 @@ const NewPO = () => {
         value: { condition_id: m.condition_id, condition: m.condition },
       };
     });
-  }, [Notes]);
+  }, [Condition]);
 
   const addPo = async (data) => {
     const action = await dispatch(postNewPoRegister(data));
@@ -59,9 +63,11 @@ const NewPO = () => {
   };
 
   const handleFormSubmit = async (values, setSubmitting) => {
-    console.log(values);
     setSubmitting(true);
-    const action = await addPo(values);
+    const action = await addPo({
+      ...values,
+      number: values.number.replace(/\s+/g, ""),
+    });
     setSubmitting(false);
     if (action.payload.status === 200) {
       Toast.push(
@@ -77,6 +83,15 @@ const NewPO = () => {
         }
       );
       handleDiscard();
+    } else {
+      Toast.push(
+        <Notification title={"Error"} type="danger" duration={2500}>
+          Some Error Occured
+        </Notification>,
+        {
+          placement: "top-center",
+        }
+      );
     }
   };
 
@@ -85,7 +100,7 @@ const NewPO = () => {
   };
 
   return (
-    <>
+    <Loading loading={isLoading}>
       <PoForm
         type="new"
         onFormSubmit={handleFormSubmit}
@@ -96,7 +111,7 @@ const NewPO = () => {
         Notes={noteOption}
         Condition={conditionOption}
       />
-    </>
+    </Loading>
   );
 };
 

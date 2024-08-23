@@ -74,7 +74,7 @@ const PoForm = forwardRef((props, ref) => {
       setData((data) =>
         data.map((f) =>
           f.serial_number === item.serial_number
-            ? { ...f, ...item, delivery_date: new Date(f.delivery_date) }
+            ? { ...f, ...item, delivery_date: new Date(item?.delivery_date) }
             : f
         )
       );

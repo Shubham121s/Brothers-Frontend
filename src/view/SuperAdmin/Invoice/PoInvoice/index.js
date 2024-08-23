@@ -7,7 +7,10 @@ const POInvoice = (props) => {
   const { data, PoLists = [] } = props;
 
   return (
-    <div className="invoice w-full p-4 relative h-full">
+    <div
+      className="invoice w-full  relative h-full"
+      style={{ paddingLeft: "6%", paddingRight: "2%" }}
+    >
       <div className="w-full h-full absolute top-0" style={{ opacity: 0.15 }}>
         {/* <img src='/img/logo/logo.png' className='w-full h-full' style={{ objectFit: 'contain', objectPosition: 'center' }}></img> */}
       </div>

@@ -68,14 +68,14 @@ const DeleteCustomerConfirmationDialog = () => {
       onClose={onDialogClose}
       onRequestClose={onDialogClose}
       type="danger"
-      title="Delete Drawing"
+      title="Delete Customer"
       onCancel={onDialogClose}
       onConfirm={onDelete}
       confirmText={!loading ? "Confirm" : "Deleting..."}
       confirmButtonColor="red-600"
     >
       <p>
-        Are you sure you want to delete this Product? This action cannot be
+        Are you sure you want to delete this Customer? This action cannot be
         undone.
       </p>
     </ConfirmDialog>

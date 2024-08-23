@@ -10,14 +10,17 @@ import { Link, useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../../components/shared/DataTable";
-import { HiOutlineEye, HiOutlinePencil } from "react-icons/hi";
+import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 import {
   setSelectedInvoice,
   toggleInvoiceDialog,
   toggleDetailDialog,
+  togglDeleteConfirmationDialog,
 } from "../store/stateSlice";
+
 import { MdDetails } from "react-icons/md";
 import DetailDialog from "./DetailsDialog";
+import DeleteInvoiceConfirmationDialog from "./DeleteConfirmationDialog";
 
 const statusColor = {
   confirm: {
@@ -71,6 +74,11 @@ const ActionColumn = ({ row }) => {
       );
   }, [row]);
 
+  const onDelete = () => {
+    dispatch(togglDeleteConfirmationDialog(true));
+    dispatch(setSelectedInvoice(row));
+  };
+
   const onDetailsDialog = () => {
     dispatch(toggleDetailDialog(true));
     dispatch(setSelectedInvoice(row));
@@ -98,6 +106,13 @@ const ActionColumn = ({ row }) => {
         // to={`/super/admin/dispatch/foreign/dispatch-invoice/${row?.dispatch_invoice_id}`}
       >
         <HiOutlinePencil />
+      </span>
+      <span
+        onClick={onDelete}
+        className={`cursor-pointer hover:${textTheme}`}
+        // to={`/super/admin/dispatch/foreign/dispatch-invoice/${row?.dispatch_invoice_id}`}
+      >
+        <HiOutlineTrash />
       </span>
     </div>
   );
@@ -300,6 +315,7 @@ const DispatchInvoiceTable = () => {
         onSelectChange={onSelectChange}
       />
       <DetailDialog />
+      <DeleteInvoiceConfirmationDialog />
     </>
   );
 };

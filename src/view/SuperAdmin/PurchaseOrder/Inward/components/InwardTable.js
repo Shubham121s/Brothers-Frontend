@@ -1,330 +1,396 @@
 import React, { useMemo, useEffect, useState } from "react";
 import DataTable from "../../../../../components/shared/DataTable";
-import { Card, Input, Table } from "../../../../../components/ui";
+import {
+  Card,
+  Input,
+  Table,
+  Button,
+  Upload,
+  FormItem,
+  Notification,
+  Toast,
+  FormContainer,
+} from "../../../../../components/ui";
+import { Formik, Field, FieldArray, Form } from "formik";
 import { useDispatch, useSelector } from "react-redux";
-import { setPurchaseOrderListData } from "../store/stateSlice";
+import { setPurchaseOrderListData, setReports } from "../store/stateSlice";
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
+import { StickyFooter } from "../../../../../components/shared";
+import cloneDeep from "lodash/cloneDeep";
+import { PutAttachment } from "../store/dataSlice";
+import FormData from "form-data";
 
 const { Tr, Th, Td, THead, TBody } = Table;
 
-const InwardTable = () => {
+const InwardTable = ({ handleSubmit }) => {
   const dispatch = useDispatch();
+  const [PoData, setPoData] = useState([]);
 
   const data = useSelector((state) => state.inward.state.purchaseOrderList);
 
-  const handleInputChange = (row, field, value) => {
-    dispatch(
-      setPurchaseOrderListData({ id: row.purchase_order_list_id, field, value })
-    );
+  useEffect(() => {
+    let podata = [...data];
+    setPoData(podata);
+  }, [data]);
+
+  const onSetFormFile = async (form, field, file, index) => {
+    form.setFieldValue(field.name, file[0]);
+
+    let name = field.name.substring(8);
+    const formData = new FormData();
+    if (file[0]) {
+      formData.append("file", file[0]);
+    } else {
+      let path = PoData[index][name];
+      formData.append("filePath", path);
+    }
+
+    const action = await dispatch(PutAttachment(formData));
+
+    if (action.payload.status < 300) {
+      Toast.push(
+        <Notification title={"Success"} type="success" duration={3000}>
+          {action?.payload?.data?.message}
+        </Notification>,
+        {
+          placement: "top-center",
+        }
+      );
+      console.log(action.payload.data.path);
+      let dataa = PoData.map((item, idx) =>
+        idx === index
+          ? { ...item, [name]: file[0] ? action?.payload?.data?.path : null }
+          : item
+      );
+      console.log(dataa);
+      setPoData(dataa);
+    } else {
+      Toast.push(
+        <Notification title={"Error"} type="danger" duration={3000}>
+          File Not Uploaded
+        </Notification>,
+        {
+          placement: "top-center",
+        }
+      );
+    }
   };
-
-  const columns = useMemo(
-    () => [
-      {
-        header: "product code",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.Product?.product_code}</span>;
-        },
-      },
-      {
-        header: "part name",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.Product?.part_name}</span>;
-        },
-      },
-      {
-        header: "Description",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.Product?.description}</span>;
-        },
-      },
-      {
-        header: "thickness",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.Product?.thickness}</span>;
-        },
-      },
-      {
-        header: "Unit",
-        accessorKey: "unit",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.Product?.unit_measurement || "-"}</span>;
-        },
-      },
-      {
-        header: "weight",
-        accessorKey: "weight",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.Product?.weight || "-"}</span>;
-        },
-      },
-      {
-        header: "PO quantity",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.quantity}</span>;
-        },
-      },
-      {
-        header: "total weight",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return <span>{row?.Product?.weight * row?.quantity || "-"}</span>;
-        },
-      },
-      {
-        header: "Actual desc.",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return (
-            <Input
-              type="text"
-              size="sm"
-              style={{ width: "180px" }}
-              onChange={(e) =>
-                handleInputChange(row, "actual_description", e.target.value)
-              }
-            />
-          );
-        },
-      },
-      {
-        header: "Actual thickness",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return (
-            <Input
-              type="text"
-              size="sm"
-              style={{ width: "180px" }}
-              onChange={(e) =>
-                handleInputChange(row, "actual_thickness", e.target.value)
-              }
-            />
-          );
-        },
-      },
-      {
-        header: "Actual weight",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return (
-            <Input
-              type="text"
-              size="sm"
-              style={{ width: "180px" }}
-              onChange={(e) =>
-                handleInputChange(row, "actual_weight", e.target.value)
-              }
-            />
-          );
-        },
-      },
-      {
-        header: "Actual Inward Qty",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return (
-            <Input
-              type="text"
-              size="sm"
-              style={{ width: "180px" }}
-              onChange={(e) =>
-                handleInputChange(row, "actual_quantity", e.target.value)
-              }
-            />
-          );
-        },
-      },
-      {
-        header: "rejected Qty",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return (
-            <Input
-              type="text"
-              style={{ width: "180px" }}
-              size="sm"
-              onChange={(e) =>
-                handleInputChange(row, "rejected_quantity", e.target.value)
-              }
-            />
-          );
-        },
-      },
-      {
-        header: "v code",
-        accessorKey: "",
-        cell: (props) => {
-          const row = props.row.original;
-          return (
-            <Input
-              type="text"
-              style={{ width: "180px" }}
-              size="sm"
-              onChange={(e) => handleInputChange(row, "v_code", e.target.value)}
-            />
-          );
-        },
-      },
-      {
-        header: "Comments",
-        accessorKey: "comments",
-        cell: (props) => {
-          const row = props.row.original;
-          return (
-            <Input
-              type="text"
-              size="sm"
-              style={{ width: "180px" }}
-              onChange={(e) =>
-                handleInputChange(row, "comments", e.target.value, row)
-              }
-            />
-          );
-        },
-      },
-    ],
-    []
-  );
-
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
 
   return (
     <>
-      {/* <Table>
-        <THead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <Tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <Th key={header.id} colSpan={header.colSpan}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </Th>
-                );
-              })}
-            </Tr>
-          ))}
-        </THead>
-        <TBody>
-          {table.getRowModel().rows.map((row) => {
-            return (
-              <Tr key={row.id}>
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <Td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </Td>
-                  );
-                })}
-              </Tr>
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          data: data,
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          let arr = values.data.filter(
+            (f) => f.quantity !== "" && Number(f.quantity) !== 0
+          );
+          arr = PoData.map((m, index) => {
+            return {
+              ...m,
+              rejected_quantity: values.data[index].rejected_quantity,
+              actual_quantity: values.data[index].actual_quantity,
+              comments: values.data[index].comments,
+              heat_treatment: m.heat_treatment,
+              invoice: m.invoice,
+              inward_inspection: m.inward_inspection,
+              material_tc: m.material_tc,
+            };
+          });
+
+          if (arr.filter((f) => Number(f.quantity) > 0).length === 0) {
+            return Toast.push(
+              <Notification title={"Required"} type="danger" duration={2500}>
+                Please Fill Any Ones Quantity
+              </Notification>,
+              {
+                placement: "top-end",
+              }
             );
-          })}
-        </TBody>
-      </Table> */}
-      <div className="grid grid-cols-3 gap-4">
-        {data.map((m) => (
-          <Card className="bg-orange-100">
-            <div className="flex justify-between">
-              <strong>Product Code :</strong>{" "}
-              <span className="uppercase">{m?.Product?.product_code}</span>
-            </div>
-            <div className="flex justify-between">
-              <strong>Part name :</strong>{" "}
-              <span className="uppercase">{m?.Product?.name}</span>
-            </div>
-            <div className="flex justify-between">
-              <strong>Remarks :</strong>{" "}
-              <span className="uppercase">{m?.remarks}</span>
-            </div>
-            {m?.Product?.category === "raw_material" && (
-              <>
-                {" "}
-                <div className="flex justify-between">
-                  <strong>Thickness :</strong>{" "}
-                  <span className="uppercase">{m?.Product?.thickness}</span>
-                </div>
-                <div className="flex justify-between">
-                  <strong>unit :</strong>{" "}
-                  <span className="uppercase">
-                    {m?.Product?.unit_measurement}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <strong>weight :</strong>{" "}
-                  <span className="uppercase">{m?.Product?.weight}</span>
-                </div>
-              </>
-            )}
-            <div className="flex justify-between">
-              <strong>PO quantity :</strong>{" "}
-              <span className="uppercase">{m?.quantity}</span>
-            </div>
+          }
+          console.log(arr);
+          handleSubmit?.(arr, setSubmitting);
+        }}
+      >
+        {({ values, touched, errors, isSubmitting }) => {
+          return (
+            <Form>
+              <FormContainer>
+                <div>
+                  <FieldArray name="data">
+                    {({ form, remove, push }) => (
+                      <div className="grid grid-cols-3 gap-4">
+                        {values.data && values.data.length > 0
+                          ? values.data.map((_, index) => {
+                              return (
+                                <div key={index}>
+                                  <Card className="bg-orange-100">
+                                    <div className="flex justify-between">
+                                      <strong>Product Code :</strong>{" "}
+                                      <span className="uppercase">
+                                        {
+                                          values.data[index].Product
+                                            ?.product_code
+                                        }
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <strong>Part name :</strong>{" "}
+                                      <span className="uppercase">
+                                        {values.data[index].Product?.name}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <strong>Remarks :</strong>{" "}
+                                      <span className="uppercase">
+                                        {values.data[index]?.remarks}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <strong>PO quantity :</strong>{" "}
+                                      <span className="uppercase">
+                                        {values.data[index]?.quantity}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <strong>Received :</strong>{" "}
+                                      <span className="uppercase">
+                                        {values.data[index]?.received_quantity}
+                                      </span>
+                                    </div>
+                                    <div className="grid grid-cols-3 gap-2 mt-3">
+                                      <FormItem
+                                        label="Actual Quantity"
+                                        className="mb-2"
+                                      >
+                                        <Field
+                                          placeholder="Actual Quantity"
+                                          name={`data[${index}].actual_quantity`}
+                                          type="text"
+                                          component={Input}
+                                          size="sm"
+                                        />
+                                      </FormItem>
+                                      <FormItem
+                                        label="Rejected Quantity"
+                                        className="mb-2"
+                                      >
+                                        <Field
+                                          placeholder="Rejected Quantity"
+                                          name={`data[${index}].rejected_quantity`}
+                                          type="text"
+                                          component={Input}
+                                          size="sm"
+                                        />
+                                      </FormItem>
+                                      <FormItem
+                                        label="Comment"
+                                        className="mb-2"
+                                      >
+                                        <Field
+                                          placeholder="Comment"
+                                          name={`data[${index}].comments`}
+                                          type="text"
+                                          component={Input}
+                                          size="sm"
+                                        />
+                                      </FormItem>
+                                    </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-4">
-              <Input
-                type="text"
-                size="sm"
-                placeholder="Actual Quantity"
-                style={{ width: "180px" }}
-                onChange={(e) =>
-                  handleInputChange(m, "actual_quantity", e.target.value)
-                }
-              />
-              <Input
-                type="text"
-                placeholder="Rejected Quantity"
-                style={{ width: "180px" }}
-                size="sm"
-                onChange={(e) =>
-                  handleInputChange(m, "rejected_quantity", e.target.value)
-                }
-              />
-
-              <Input
-                type="text"
-                size="sm"
-                placeholder="Comments"
-                style={{ width: "180px" }}
-                onChange={(e) =>
-                  handleInputChange(m, "comments", e.target.value)
-                }
-              />
-            </div>
-          </Card>
-        ))}
-      </div>
+                                    <div className="grid grid cols-2">
+                                      <FormItem className="mb-2" label="">
+                                        <Field
+                                          name={`data[${index}].material_tc`}
+                                        >
+                                          {({ field, form }) => (
+                                            <Upload
+                                              size="sm"
+                                              showList={true}
+                                              className="cursor-pointer h-[15px]"
+                                              onChange={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              onFileRemove={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              uploadLimit={1}
+                                            >
+                                              <Button
+                                                variant=""
+                                                type="button"
+                                                size="sm"
+                                                style={{ width: "149px" }}
+                                              >
+                                                Material TC
+                                              </Button>
+                                            </Upload>
+                                          )}
+                                        </Field>
+                                      </FormItem>
+                                      <FormItem className="mb-2" label="">
+                                        <Field
+                                          name={`data[${index}].inward_inspection`}
+                                        >
+                                          {({ field, form }) => (
+                                            <Upload
+                                              size="sm"
+                                              showList={true}
+                                              className="cursor-pointer h-[15px]"
+                                              onChange={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              onFileRemove={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              uploadLimit={1}
+                                            >
+                                              <Button
+                                                variant=""
+                                                type="button"
+                                                size="sm"
+                                              >
+                                                Inward Inspection
+                                              </Button>
+                                            </Upload>
+                                          )}
+                                        </Field>
+                                      </FormItem>
+                                      <FormItem className="mb-2" label="">
+                                        <Field name={`data[${index}].invoice`}>
+                                          {({ field, form }) => (
+                                            <Upload
+                                              size="sm"
+                                              showList={true}
+                                              className="cursor-pointer h-[15px]"
+                                              onChange={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              onFileRemove={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              uploadLimit={1}
+                                            >
+                                              <Button
+                                                variant=""
+                                                type="button"
+                                                size="sm"
+                                                style={{ width: "149px" }}
+                                              >
+                                                Invoice
+                                              </Button>
+                                            </Upload>
+                                          )}
+                                        </Field>
+                                      </FormItem>
+                                      <FormItem className="mb-2" label="">
+                                        <Field
+                                          name={`data[${index}].heat_treatment`}
+                                        >
+                                          {({ field, form }) => (
+                                            <Upload
+                                              size="sm"
+                                              showList={true}
+                                              className="cursor-pointer h-[15px]"
+                                              onChange={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              onFileRemove={(files) =>
+                                                onSetFormFile(
+                                                  form,
+                                                  field,
+                                                  files,
+                                                  index
+                                                )
+                                              }
+                                              uploadLimit={1}
+                                            >
+                                              <Button
+                                                variant=""
+                                                type="button"
+                                                size="sm"
+                                                style={{ width: "149px" }}
+                                              >
+                                                Heat Treatment
+                                              </Button>
+                                            </Upload>
+                                          )}
+                                        </Field>
+                                      </FormItem>
+                                    </div>
+                                  </Card>
+                                </div>
+                              );
+                            })
+                          : null}
+                      </div>
+                    )}
+                  </FieldArray>
+                </div>
+                <StickyFooter
+                  className="-mx-8 px-8 flex items-center justify-end py-4"
+                  stickyClass="border-t bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                >
+                  <div className="md:flex items-center">
+                    <Button size="sm" className="mr-3" type="button">
+                      Discard
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="solid"
+                      loading={isSubmitting}
+                      type="submit"
+                    >
+                      save
+                    </Button>
+                    {/* <Progress variant="circle" width={40} percent={40} /> */}
+                  </div>
+                </StickyFooter>
+              </FormContainer>
+            </Form>
+          );
+        }}
+      </Formik>
     </>
   );
 };

@@ -4,6 +4,7 @@ const stateSlice = createSlice({
   name: "po/accept/state",
   initialState: {
     deletePoItemDialog: false,
+    remarkDialog: false,
     editPoItemDialog: false,
     selectedPoItem: {},
   },
@@ -17,6 +18,9 @@ const stateSlice = createSlice({
     setSelectedPoItem: (state, action) => {
       state.selectedPoItem = action.payload;
     },
+    toggleRemarkDialog: (state, action) => {
+      state.remarkDialog = action.payload;
+    },
   },
 });
 
@@ -25,6 +29,7 @@ export const {
   toggleEditPoItemDialog,
   toggleDeletePoItemDialog,
   setSelectedGRNDate,
+  toggleRemarkDialog,
 } = stateSlice.actions;
 
 export default stateSlice.reducer;

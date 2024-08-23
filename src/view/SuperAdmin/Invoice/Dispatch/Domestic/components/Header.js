@@ -8,12 +8,17 @@ const LOGO_SRC_PATH = "/img/logo/logo.png";
 
 const Header = (props) => {
   const { data, pageNo, location_code, invoice_type, pageCount } = props;
+  // pageNo < 10 ? `0${pageNo}` : pageNo}
   return (
     <>
       <div className="grid grid-cols-6 p-2 h-full items-center">
         <div className="col-span-1 h-full">
           <div className="h-full justify-start items-center flex">
-            <img src={LOGO_SRC_PATH} />
+            <img
+              src={LOGO_SRC_PATH}
+              className="absolute object-cover opacity-150"
+              style={{ height: "50px" }}
+            />
           </div>
         </div>
         <div className="col-span-4 h-full">
@@ -30,8 +35,8 @@ const Header = (props) => {
         <div className="col-span-1 h-full">
           <div className="h-full flex justify-end items-center">
             <h6 className="text-gray-700 font-medium">
-              {pageNo < 10 ? `0${pageNo}` : pageNo}/
-              {pageCount < 10 ? `0${pageCount}` : pageCount}
+              01/{pageNo < 10 ? `0${pageNo}` : pageNo}
+              {/* {pageCount < 10 ? `0${pageCount}` : pageCount} */}
             </h6>
           </div>
         </div>
@@ -39,23 +44,17 @@ const Header = (props) => {
       <div
         className="grid grid-cols-6 gap-2"
         style={{
-          borderBottom: "1px dashed lightGray",
-          borderTop: "1px dashed lightGray",
+          borderBottom: "1px dashed black",
+          borderTop: "1px dashed black",
         }}
       >
         <div className="col-span-2 p-2 h-full">
-          <div
-            className="h-full"
-            style={{ borderRight: "1px dashed lightGray" }}
-          >
+          <div className="h-full" style={{ borderRight: "1px dashed black" }}>
             <CompanyDetails data={data?.DispatchCompanyDetail} />
           </div>
         </div>
         <div className="col-span-2 p-2 h-full">
-          <div
-            className="h-full"
-            style={{ borderRight: "1px dashed lightGray" }}
-          >
+          <div className="h-full" style={{ borderRight: "1px dashed black" }}>
             <GstAndOtherDetails data={data?.DispatchCompanyDetail} />
           </div>
         </div>
@@ -67,10 +66,10 @@ const Header = (props) => {
       </div>
       <div
         className="grid grid-cols-4 gap-2"
-        style={{ borderBottom: "1px dashed lightGray" }}
+        style={{ borderBottom: "1px dashed black" }}
       >
         <div className="col-span-2 h-full p-2">
-          <div style={{ borderRight: "1px dashed lightGray" }}>
+          <div style={{ borderRight: "1px dashed black" }}>
             <ConsigneeAndBuyerDetails
               data={data?.DispatchConsignee}
               address={data?.DispatchConsignee?.DispatchConsigneeAddress}
@@ -79,18 +78,13 @@ const Header = (props) => {
           </div>
         </div>
         <div className="col-span-2 h-full p-2">
-          <div style={{ borderRight: "1px dashed lightGray" }}>
+          <div>
             <ConsigneeAndBuyerDetails
               data={data?.DispatchBuyer}
               address={data?.DispatchShippingAddress}
               title="Details of Recipient (Shipped To)"
             />
           </div>
-        </div>
-      </div>
-      <div className="h-full p-2">
-        <div className="h-full flex justify-start items-center">
-          <TransportAndPaymentTerms />
         </div>
       </div>
     </>

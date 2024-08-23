@@ -39,129 +39,123 @@ const TableFooterRows = ({
     <>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
-        <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
-          colSpan="2"
-        >
+        <Td style={{ border: ".5px solid black", padding: "3px" }} colSpan="2">
           1 USD = {Number(convert_rate).toFixed(2)} INR
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="3"
         ></Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="2"
           className={`uppercase ${className}`}
         >
           TOTAL(page {pageNo})
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {pageQuantity}
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".5px solid black", padding: "3px" }}>
           <NumberFormat value={pageAmount} />
         </Td>
       </Tr>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="4"
         ></Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="3"
           className={`uppercase ${className}`}
         >
           Total (page 1 to {pageCount})
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {totalQuantity}
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".5px solid black", padding: "3px" }}>
           <NumberFormat value={totalAmount} />
         </Td>
       </Tr>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="7"
         ></Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           IGST
         </Td>
-        <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
-          colSpan="1"
-        >
+        <Td style={{ border: ".5px solid black", padding: "3px" }} colSpan="1">
           {GST_RATE}%
         </Td>
-        <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".5px solid black", padding: "3px" }}>
           <NumberFormat value={GSTAmount} />
         </Td>
       </Tr>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="7"
           className="text-gray-700 font-semibold uppercase"
         ></Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="2"
           className="text-gray-700 font-semibold"
         >
           GRAND TOTAL
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           className="text-gray-700 font-semibold"
         >
           <NumberFormat value={GrandTotal} />
@@ -169,14 +163,14 @@ const TableFooterRows = ({
       </Tr>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="2"
           className="uppercase"
         >
@@ -185,7 +179,7 @@ const TableFooterRows = ({
         <Td
           className="font-semibold uppercase"
           style={{
-            border: ".5px dashed lightGray",
+            border: ".5px solid black",
             padding: "6px 3px",
             paddingLeft: "10px",
           }}
@@ -287,7 +281,7 @@ const TaxTable = (props) => {
         cell: (props) => {
           const row = props.row.original;
           return (
-            <div className="text-center">{`BOX NO ${
+            <div className="text-center">{`${
               findBox(boxes, "dispatch_box_list_id", row?.dispatch_box_id)
                 ?.box_no
             }`}</div>
@@ -355,7 +349,7 @@ const TaxTable = (props) => {
                   <Th
                     className={className}
                     style={{
-                      border: ".5px dashed lightGray",
+                      border: ".5px solid black",
                       textAlign: "center",
                       padding: "3px",
                     }}
@@ -382,7 +376,7 @@ const TaxTable = (props) => {
                       className={className}
                       key={cell.id}
                       style={{
-                        border: ".5px dashed lightGray",
+                        border: ".5px solid black",
                         padding: "3px",
                       }}
                     >

@@ -5,7 +5,7 @@ import poReducer from "./store";
 import { Card, Tabs, Tag } from "../../../../components/ui";
 import PoTableTools from "./components/PoTableTools";
 
-injectReducer("po_list", poReducer);
+injectReducer("purchase_order_list", poReducer);
 const { TabNav, TabList, TabContent } = Tabs;
 
 const PoList = () => {
@@ -53,6 +53,14 @@ const PoList = () => {
               Received
             </Tag>
           </TabNav>
+          <TabNav value="tab6">
+            <Tag
+              className={`bg-purple-100 text-purple-600
+              } border-0`}
+            >
+              Cancelled
+            </Tag>
+          </TabNav>
         </TabList>
         <div className="p-4">
           <TabContent value="tab1">
@@ -83,6 +91,12 @@ const PoList = () => {
             <PoTableTools />
             <Card>
               <PoTable status={"received"} />
+            </Card>
+          </TabContent>
+          <TabContent value="tab6">
+            <PoTableTools />
+            <Card>
+              <PoTable status={"cancelled"} />
             </Card>
           </TabContent>
         </div>

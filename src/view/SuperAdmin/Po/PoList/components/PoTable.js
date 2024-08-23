@@ -8,6 +8,11 @@ import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../../components/shared/DataTable";
 import { HiOutlineTrash, HiOutlinePencil } from "react-icons/hi";
+import {
+  setSelectedOrder,
+  togglDeleteConfirmationDialog,
+} from "../store/stateSlice";
+import DeletePoConfirmationDialog from "./PoDeleteConfirmationDialog";
 
 const statusColor = {
   delivered: {
@@ -34,8 +39,12 @@ const statusColor = {
 
 const ActionColumn = ({ index, row }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { textTheme } = useThemeClass();
-  const onDelete = () => {};
+  const onDelete = () => {
+    dispatch(togglDeleteConfirmationDialog(true));
+    dispatch(setSelectedOrder(row));
+  };
 
   const onEdit = () => {
     navigate(`/super/admin/po-Edit/${row.po_id}`);
@@ -227,7 +236,7 @@ const PoTable = () => {
         onPaginationChange={onPaginationChange}
         onSelectChange={onSelectChange}
       />
-      {/* <productEditDialog /> */}
+      <DeletePoConfirmationDialog />
     </>
   );
 };

@@ -13,7 +13,8 @@ const CustomControl = ({ children, ...props }) => {
     <Control {...props}>
       {selected && (
         <span className="ml-2 font-semibold uppercase">
-          {selected?.value?.item_code} :
+          {selected?.value?.item_code} :{" "}
+          {selected?.value?.MaterialGrade?.number}
         </span>
       )}
       {children}
@@ -31,7 +32,7 @@ const CustomSelectOption = ({ innerProps, label, data, isSelected }) => {
     >
       <div className="items-center flex justify-between w-full">
         <div className="ml-2 uppercase">
-          {`${label} ( ${data?.value?.item_code})`}
+          {`${label} : ( ${data?.value?.item_code}) : ( ${data?.value?.MaterialGrade?.number}) `}
         </div>
         {isSelected && <HiCheck className="text-emerald-500 text-xl" />}
       </div>

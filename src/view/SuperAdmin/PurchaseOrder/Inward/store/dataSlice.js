@@ -3,6 +3,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   apiPostInward,
   apiGetNewGRNNumber,
+  apiPostAttachment,
+  apiPutAttachment,
 } from "../../../../../services/SuperAdmin/PruchaseOrder/InwardService";
 import { apiGetPurchaseOrderDetailsByPurchaseORderId } from "../../../../../services/SuperAdmin/PruchaseOrder/PurchaseOrderService";
 
@@ -30,11 +32,35 @@ export const postInward = createAsyncThunk(
   }
 );
 
+export const postAttachment = createAsyncThunk(
+  "po/details/data/attachment",
+  async (data) => {
+    try {
+      const response = await apiPostAttachment(data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+);
+
 export const getNewGRN = createAsyncThunk(
   "po/details/data/get/grn",
   async (data) => {
     try {
       const response = await apiGetNewGRNNumber();
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+);
+
+export const PutAttachment = createAsyncThunk(
+  "po/details/data/get/upload/attachment",
+  async (data) => {
+    try {
+      const response = await apiPutAttachment(data);
       return response;
     } catch (error) {
       return error.response;
@@ -69,6 +95,8 @@ const dataSlice = createSlice({
     [getNewGRN.fulfilled]: (state, action) => {
       state.newGRN = action.payload.data?.data || "";
     },
+    [postAttachment.fulfilled]: (state, action) => {},
+    [PutAttachment.fulfilled]: (state, action) => {},
   },
 });
 

@@ -1,6 +1,6 @@
 import React from "react";
-import Notes from "./Notes";
 import Condition from "./PoCondition";
+import Notes from "./Note";
 import { Card } from "../../../../components/ui";
 
 const PoSetting = () => {
@@ -17,11 +17,6 @@ const PoSetting = () => {
             <Condition />
           </Card>
         </div>
-        {/* <div className="md:col-span-2">
-          <Card className="bg-orange-50">
-            <Pattern />
-          </Card>
-        </div> */}
       </div>
     </>
   );

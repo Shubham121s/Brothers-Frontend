@@ -15,7 +15,10 @@ import {
   getPODates,
   getPODeliveryDates,
   getRawDate,
+  setSelectedPoList,
   setTableData,
+  toggleAttachmentDialog,
+  toggleViewDialog,
   UpdateRawMachiningDate,
 } from "../store/dataSlice";
 import useThemeClass from "../../../../utils/hooks/useThemeClass";
@@ -23,6 +26,9 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../components/shared/DataTable";
+import { MdOutlineUploadFile, MdOutlineSimCardDownload } from "react-icons/md";
+import AttachmentDialog from "./AttachmentsDialog";
+import ViewDialog from "./ViewDialog";
 
 const statusColor = {
   accepted: {
@@ -42,6 +48,31 @@ const statusColor = {
   },
 };
 
+const ActionColumn = ({ index, row }) => {
+  const dispatch = useDispatch();
+  const { textTheme } = useThemeClass();
+
+  const onEdit = () => {
+    dispatch(setSelectedPoList(row));
+    dispatch(toggleAttachmentDialog(true));
+  };
+  const onView = () => {
+    dispatch(setSelectedPoList(row));
+    dispatch(toggleViewDialog(true));
+  };
+
+  return (
+    <div className="flex justify-center text-lg gap-x-4">
+      <span className={`cursor-pointer hover:${textTheme}`} onClick={onEdit}>
+        <MdOutlineUploadFile />
+      </span>
+      <span className={`cursor-pointer hover:${textTheme}`} onClick={onView}>
+        <MdOutlineSimCardDownload />
+      </span>
+    </div>
+  );
+};
+
 const PoAColumn = ({ row }) => {
   const { textTheme } = useThemeClass();
 
@@ -55,9 +86,9 @@ const PoAColumn = ({ row }) => {
     >
       <Link
         className={`hover:${textTheme} font-semibold`}
-        to={`/super/admin/product/drawing/${row?.PoList?.Product?.product_id}`}
+        to={`/super/admin/product/drawing/${row?.product_id}`}
       >
-        {row?.PoList?.Product?.item_code}
+        {row?.item_code}
       </Link>
     </Tooltip>
   );
@@ -71,60 +102,60 @@ const PoListTable = () => {
   const { status } = useSelector((state) => state.poList.data.filterData);
 
   const columns = [
-    {
-      header: "raw date",
-      accessorKey: "raw_date",
-      cell: (props) => {
-        const { raw_date, dispatch_list_id } = props.row.original;
-        const date = raw_date ? new Date(raw_date) : null;
-        return (
-          <DatePicker
-            style={{ width: "150px" }}
-            placeholder="Raw Date"
-            value={date}
-            size="sm"
-            onChange={async (date) => {
-              await dispatch(
-                UpdateRawMachiningDate({
-                  raw_date: dayjs(date).format("YYYY-MM-DD"),
-                  dispatch_list_id: dispatch_list_id,
-                })
-              );
-              dispatch(
-                getAllPoLists({ pageIndex, pageSize, sort, query, status })
-              );
-            }}
-          />
-        );
-      },
-    },
-    {
-      header: "mach. date",
-      accessorKey: "machining_date",
-      cell: (props) => {
-        const { machining_date, dispatch_list_id } = props.row.original;
-        const date = machining_date ? new Date(machining_date) : null;
-        return (
-          <DatePicker
-            style={{ width: "150px" }}
-            placeholder="Machining Date"
-            value={date}
-            size="sm"
-            onChange={async (date) => {
-              await dispatch(
-                UpdateRawMachiningDate({
-                  machining_date: dayjs(date).format("YYYY-MM-DD"),
-                  dispatch_list_id: dispatch_list_id,
-                })
-              );
-              dispatch(
-                getAllPoLists({ pageIndex, pageSize, sort, query, status })
-              );
-            }}
-          />
-        );
-      },
-    },
+    // {
+    //   header: "raw date",
+    //   accessorKey: "raw_date",
+    //   cell: (props) => {
+    //     const { raw_date, dispatch_list_id } = props.row.original;
+    //     const date = raw_date ? new Date(raw_date) : null;
+    //     return (
+    //       <DatePicker
+    //         style={{ width: "150px" }}
+    //         placeholder="Raw Date"
+    //         value={date}
+    //         size="sm"
+    //         onChange={async (date) => {
+    //           await dispatch(
+    //             UpdateRawMachiningDate({
+    //               raw_date: dayjs(date).format("YYYY-MM-DD"),
+    //               dispatch_list_id: dispatch_list_id,
+    //             })
+    //           );
+    //           dispatch(
+    //             getAllPoLists({ pageIndex, pageSize, sort, query, status })
+    //           );
+    //         }}
+    //       />
+    //     );
+    //   },
+    // },
+    // {
+    //   header: "mach. date",
+    //   accessorKey: "machining_date",
+    //   cell: (props) => {
+    //     const { machining_date, dispatch_list_id } = props.row.original;
+    //     const date = machining_date ? new Date(machining_date) : null;
+    //     return (
+    //       <DatePicker
+    //         style={{ width: "150px" }}
+    //         placeholder="Machining Date"
+    //         value={date}
+    //         size="sm"
+    //         onChange={async (date) => {
+    //           await dispatch(
+    //             UpdateRawMachiningDate({
+    //               machining_date: dayjs(date).format("YYYY-MM-DD"),
+    //               dispatch_list_id: dispatch_list_id,
+    //             })
+    //           );
+    //           dispatch(
+    //             getAllPoLists({ pageIndex, pageSize, sort, query, status })
+    //           );
+    //         }}
+    //       />
+    //     );
+    //   },
+    // },
     {
       header: "sr no.",
       accessorKey: "",
@@ -138,8 +169,8 @@ const PoListTable = () => {
       header: "Customer",
       accessorKey: "",
       cell: (props) => {
-        const { Po } = props.row.original;
-        const nameParts = Po?.Customer?.name.split(" ");
+        const { customer_name } = props.row.original;
+        const nameParts = customer_name.split(" ");
 
         const initials = nameParts
           ?.map((part) => part.charAt(0).toUpperCase())
@@ -151,8 +182,8 @@ const PoListTable = () => {
       header: "project no",
       accessorKey: "",
       cell: (props) => {
-        const { PoList } = props.row.original;
-        return <div className="uppercase">{PoList?.project_no}</div>;
+        const { project_no } = props.row.original;
+        return <div className="uppercase">{project_no}</div>;
       },
     },
     {
@@ -171,16 +202,16 @@ const PoListTable = () => {
       header: `PO date`,
       accessorKey: "",
       cell: (props) => {
-        const { Po } = props.row.original;
-        return <div>{Po?.date}</div>;
+        const { DATE } = props.row.original;
+        return <div>{DATE}</div>;
       },
     },
     {
       header: "product",
       accessorKey: "",
       cell: (props) => {
-        const { PoList } = props.row.original;
-        return <div className="uppercase">{PoList?.Product?.name}</div>;
+        const { product_name } = props.row.original;
+        return <div className="uppercase">{product_name}</div>;
       },
     },
     {
@@ -196,11 +227,11 @@ const PoListTable = () => {
       header: "drg/ rev no.",
       accessorKey: "Drawing.revision_number",
       cell: (props) => {
-        const { Drawing, Product } = props.row.original?.PoList || {};
+        const { drawing_number, revision_number } = props.row.original;
         return (
           <div className="uppercase">
-            {Product?.drawing_number && Drawing?.revision_number
-              ? `${Product.drawing_number}/ ${Drawing.revision_number}`
+            {drawing_number && revision_number
+              ? `${drawing_number}/ ${revision_number}`
               : "N/A"}
           </div>
         );
@@ -210,20 +241,16 @@ const PoListTable = () => {
       header: "material grade",
       accessorKey: "",
       cell: (props) => {
-        const { PoList } = props.row.original;
-        return (
-          <div className="uppercase">
-            {PoList?.Product?.MaterialGrade?.number}
-          </div>
-        );
+        const { material_grade } = props.row.original;
+        return <div className="uppercase">{material_grade}</div>;
       },
     },
     {
       header: "po qty",
       accessorKey: "",
       cell: (props) => {
-        const { PoList } = props.row.original;
-        return <div>{PoList?.quantity}</div>;
+        const { quantity } = props.row.original;
+        return <div>{quantity}</div>;
       },
     },
     {
@@ -238,7 +265,7 @@ const PoListTable = () => {
       header: "brother cnf date",
       accessorKey: "accept_delivery_date",
       cell: (props) => {
-        const { accept_delivery_date } = props.row.original?.PoList || {};
+        const { accept_delivery_date } = props.row.original || {};
         return (
           <div>
             {accept_delivery_date
@@ -253,7 +280,7 @@ const PoListTable = () => {
       accessorKey: "",
       cell: (props) => {
         const { item_quantity } = props.row.original;
-        return <div>{item_quantity}</div>;
+        return <div>{item_quantity ? item_quantity : 0}</div>;
       },
     },
     {
@@ -261,16 +288,14 @@ const PoListTable = () => {
       accessorKey: "",
       cell: (props) => {
         const row = props.row.original;
-        return (
-          <div>{Math.abs(row?.PoList?.quantity - row?.item_quantity)}</div>
-        );
+        return <div>{Math.abs(row?.quantity - row?.item_quantity)}</div>;
       },
     },
     {
       header: "status",
       accessorKey: "list_status",
       cell: (props) => {
-        const list_status = props.row.original?.PoList?.list_status;
+        const { list_status } = props.row.original;
         const status = statusColor[list_status] || {};
 
         return (
@@ -284,6 +309,14 @@ const PoListTable = () => {
             </Tag>
           </div>
         );
+      },
+    },
+    {
+      header: "Action",
+      accessorKey: "action",
+      cell: (props) => {
+        const row = props.row.original;
+        return <ActionColumn row={row} />;
       },
     },
 
@@ -363,6 +396,8 @@ const PoListTable = () => {
         onPaginationChange={onPaginationChange}
         onSelectChange={onSelectChange}
       />
+      <AttachmentDialog />
+      <ViewDialog />
     </>
   );
 };

@@ -8,6 +8,22 @@ export async function apiPostInward(data) {
   });
 }
 
+export async function apiPostAttachment(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/inward/attachment",
+    method: "post",
+    data,
+  });
+}
+
+export async function apiPutAttachment(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/inward/upload/attachment",
+    method: "put",
+    data,
+  });
+}
+
 export async function apiGetAllInward(data) {
   return ApiService.fetchData({
     url: "v1/web/company/inward",

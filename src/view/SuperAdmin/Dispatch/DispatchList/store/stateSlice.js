@@ -6,8 +6,12 @@ const stateSlice = createSlice({
     invoiceDialog: false,
     detailDialog: false,
     selectedInvoice: {},
+    deleteConfirmation: false,
   },
   reducers: {
+    togglDeleteConfirmationDialog: (state, action) => {
+      state.deleteConfirmation = action.payload;
+    },
     toggleInvoiceDialog: (state, action) => {
       state.invoiceDialog = action.payload;
     },
@@ -20,7 +24,11 @@ const stateSlice = createSlice({
   },
 });
 
-export const { toggleInvoiceDialog, setSelectedInvoice, toggleDetailDialog } =
-  stateSlice.actions;
+export const {
+  toggleInvoiceDialog,
+  setSelectedInvoice,
+  toggleDetailDialog,
+  togglDeleteConfirmationDialog,
+} = stateSlice.actions;
 
 export default stateSlice.reducer;

@@ -3,6 +3,7 @@ import {
   apiGetDispatchDomesticInvoiceByInvoiceId,
   apiUpdateDispatchListByDispatchListId,
   apiDeleteDispatchListByDispatchListId,
+  apiPutDispatchDomesticInvoiceByInvoiceId,
 } from "../../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
 export const getDomesticInvoiceDetailsByInvoiceId = createAsyncThunk(
@@ -10,6 +11,18 @@ export const getDomesticInvoiceDetailsByInvoiceId = createAsyncThunk(
   async (data) => {
     try {
       const response = await apiGetDispatchDomesticInvoiceByInvoiceId(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const putDomesticInvoiceDetailsByInvoiceId = createAsyncThunk(
+  "edit/domestic/invoice/data/update/charges",
+  async (data) => {
+    try {
+      const response = await apiPutDispatchDomesticInvoiceByInvoiceId(data);
       return response;
     } catch (error) {
       return error?.response;
@@ -60,6 +73,7 @@ const dataSlice = createSlice({
     },
     [updateDispatchListByDispatchListId.fulfilled]: (state, action) => {},
     [deleteDispatchListByDispatchListId.fulfilled]: (state, action) => {},
+    [putDomesticInvoiceDetailsByInvoiceId.fulfilled]: (state, action) => {},
   },
 });
 

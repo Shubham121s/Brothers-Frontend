@@ -1,7 +1,9 @@
-import { combineReducers } from '@reduxjs/toolkit'
-import data from './dataSlice'
+import { combineReducers } from "@reduxjs/toolkit";
+import data from "./dataSlice";
+import state from "./stateSlice";
 const poReducer = combineReducers({
-    data,
-})
+  data,
+  state,
+});
 
-export default poReducer
+export default poReducer;

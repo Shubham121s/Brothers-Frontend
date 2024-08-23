@@ -26,6 +26,7 @@ import CGSTInformationField from "./components/GSTandOther/CGSTInformationField"
 import IGSTInformationField from "./components/GSTandOther/IGSTInformationField";
 import SGSTInformationField from "./components/GSTandOther/SGSTInformationField";
 import InvoiceNumberField from "./components/invoiceNumberField";
+import PackingChargesInformationField from "./components/GSTandOther/PackingChargers";
 
 const validationSchema = Yup.object().shape({
   DispatchConsignee: Yup.object().required("Required"),
@@ -379,6 +380,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                           />
                         </div>
                       </div>
+                      <PackingChargesInformationField />
                       <RemarkInformationField
                         errors={errors?.DispatchShippingAndOtherDetails?.remark}
                         touched={
@@ -558,6 +560,7 @@ NewDomesticForm.defaultProps = {
       e_way_bill_no: "",
       remark: "",
       convert_rate: "",
+      packing_charges: "",
     },
   },
 };

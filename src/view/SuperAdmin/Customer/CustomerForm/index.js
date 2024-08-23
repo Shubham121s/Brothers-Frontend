@@ -22,6 +22,7 @@ const validationSchema = Yup.object().shape({
     city: Yup.string().required("Required"),
     zip_code: Yup.number().required("Required"),
     state: Yup.string().required("Required"),
+    state_code: Yup.string().required("Required"),
   }),
 });
 
@@ -219,6 +220,13 @@ const CustomerForm = forwardRef((props, ref) => {
                       name="CustomerPermanentAddress.state"
                     />
                     <InputInformationFields
+                      errors={errors.CustomerPermanentAddress?.state_code}
+                      touched={touched.CustomerPermanentAddress?.state_code}
+                      placeholder="State Code"
+                      label="State Code"
+                      name="CustomerPermanentAddress.state_code"
+                    />
+                    <InputInformationFields
                       errors={errors.CustomerPermanentAddress?.city}
                       touched={touched.CustomerPermanentAddress?.city}
                       placeholder="City"
@@ -291,6 +299,7 @@ CustomerForm.defaultProps = {
       city: "",
       zip_code: "",
       state: "",
+      state_code: "",
     },
     gst_no: "",
     pan: "",

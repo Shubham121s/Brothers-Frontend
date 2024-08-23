@@ -15,3 +15,11 @@ export async function apiUpdatePurchaseOrderStatus(data) {
     data,
   });
 }
+
+export async function apiDeletePurchaseOrder(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/purchase/order/delete/id",
+    method: "delete",
+    data,
+  });
+}

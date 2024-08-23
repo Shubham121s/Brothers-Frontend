@@ -1,6 +1,11 @@
 import React, { useMemo, useEffect, useState } from "react";
 import DataTable from "../../../../../components/shared/DataTable";
-import { Table } from "../../../../../components/ui";
+import {
+  Table,
+  Tooltip,
+  Notification,
+  Toast,
+} from "../../../../../components/ui";
 import { useDispatch, useSelector } from "react-redux";
 import { setPurchaseOrderListData } from "../store/stateSlice";
 import {
@@ -8,8 +13,104 @@ import {
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
+import { HiOutlineDocumentDownload } from "react-icons/hi";
 
 const { Tr, Th, Td, THead, TBody } = Table;
+const pushNotification = (title, type, message) => {
+  return Toast.push(
+    <Notification title={title} type={type} duration={2500}>
+      {message}
+    </Notification>,
+    {
+      placement: "top-center",
+    }
+  );
+};
+
+const ActionColumn = ({ row }) => {
+  const dispatch = useDispatch();
+
+  const onView = (field) => {
+    let url = field;
+    if (!url) {
+      return pushNotification("Error", "danger", `File Not Uploaded`);
+    }
+    const splitString = url.split("/uploads/");
+    const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`;
+    window.open(transformedString, "_blank");
+  };
+
+  return (
+    <div className="flex justify-center text-lg gap-x-4">
+      <Tooltip
+        title={
+          <div>
+            View <strong className="text-yellow-400">Material TC</strong> Attch.
+          </div>
+        }
+      >
+        <span
+          className={`cursor-pointer text-lg`}
+          onClick={() => {
+            onView(row.material_tc);
+          }}
+        >
+          <HiOutlineDocumentDownload />
+        </span>
+      </Tooltip>
+      <Tooltip
+        title={
+          <div>
+            View <strong className="text-yellow-400">Inward Inspe.</strong>{" "}
+            Attch.
+          </div>
+        }
+      >
+        <span
+          className={`cursor-pointer text-lg`}
+          onClick={() => {
+            onView(row.inward_inspection);
+          }}
+        >
+          <HiOutlineDocumentDownload />
+        </span>
+      </Tooltip>
+      <Tooltip
+        title={
+          <div>
+            View <strong className="text-yellow-400">Invoice</strong> Attch.
+          </div>
+        }
+      >
+        <span
+          className={`cursor-pointer text-lg`}
+          onClick={() => {
+            onView(row.invoice);
+          }}
+        >
+          <HiOutlineDocumentDownload />
+        </span>
+      </Tooltip>
+      <Tooltip
+        title={
+          <div>
+            View <strong className="text-yellow-400">Heat Treatment</strong>{" "}
+            Attch.
+          </div>
+        }
+      >
+        <span
+          className={`cursor-pointer text-lg`}
+          onClick={() => {
+            onView(row.heat_treatment);
+          }}
+        >
+          <HiOutlineDocumentDownload />
+        </span>
+      </Tooltip>
+    </div>
+  );
+};
 
 const InwardTable = () => {
   const dispatch = useDispatch();
@@ -66,6 +167,14 @@ const InwardTable = () => {
         cell: (props) => {
           const row = props.row.original;
           return <span>{row?.comments}</span>;
+        },
+      },
+      {
+        header: "",
+        accessorKey: "action",
+        cell: (props) => {
+          const row = props.row.original;
+          return <ActionColumn row={row} />;
         },
       },
     ];

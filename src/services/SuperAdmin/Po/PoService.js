@@ -15,6 +15,14 @@ export async function apiUpdatePo(data) {
     data,
   });
 }
+
+export async function apiDeletePo(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/po/delete/id",
+    method: "delete",
+    data,
+  });
+}
 export async function apiGetPoDetailsByPoId(data) {
   return ApiService.fetchData({
     url: "v1/web/company/po/id",
@@ -127,6 +135,22 @@ export async function apiGetAllSerialNumber(data) {
   return ApiService.fetchData({
     url: "v1/web/company/po-list/serial/number",
     method: "post",
+    data,
+  });
+}
+
+export async function apiPutAttachmentsPoList(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/po-list/attachment",
+    method: "put",
+    data,
+  });
+}
+
+export async function apideleteAttachmentsPoList(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/po-list/attachment/delete",
+    method: "put",
     data,
   });
 }

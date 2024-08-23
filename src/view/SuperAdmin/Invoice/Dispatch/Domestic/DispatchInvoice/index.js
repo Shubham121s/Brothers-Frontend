@@ -16,7 +16,7 @@ const DispatchInvoice = ({ data }) => {
 
   const TableData = (props) => {
     return (
-      <div className="grid grid-cols-6">
+      <div className="grid grid-cols-6 mt-2">
         <div className="col-span-6 h-full">
           <div className="h-full overflow-hidden">
             <DispatchTable
@@ -51,7 +51,15 @@ const DispatchInvoice = ({ data }) => {
           i++
         ) {
           pages.push(
-            <div key={Math.random()} style={{ height: "1130px" }}>
+            <div
+              key={`page-${pageNo}`}
+              className="page"
+              style={{
+                height: "calc(1128px - 50px)",
+                marginLeft: "4%",
+                // border: "1px dashed black",
+              }}
+            >
               <div className="invoice w-full p-4 relative">
                 {/* <div
                   className="w-full h-full absolute top-0"

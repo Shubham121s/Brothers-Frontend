@@ -47,7 +47,7 @@ const Footer = ({ data }) => {
         <h6 className="text-gray-600" style={{ height: "16px" }}>
           ******************
         </h6>
-        <h6 className="text-gray-600">THANK YOU FOR</h6>
+        <h6 className="text-gray-600">THANK YOU</h6>
         <h6 className="text-gray-600" style={{ height: "16px" }}>
           ******************
         </h6>

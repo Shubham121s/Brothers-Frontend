@@ -14,18 +14,35 @@ const ConsigneeAndBuyerDetails = ({ title, data, address }) => {
         {", "}
         {address?.zip_code}
       </p>
-      <div className="flex gap-1 justify-start uppercase">
-        <p className="text-gray-700 font-semibold print:text-xs">Contact</p>
-        <p className="text-gray-700 print:text-xs">-</p>
-        <p className="text-gray-500 font-medium print:text-xs uppercase">
-          {data?.mobile}
-        </p>
-      </div>
-      <div className="flex gap-1 justify-start uppercase">
-        <p className="text-gray-700 font-semibold print:text-xs">Phone</p>
-        <p className="text-gray-700 print:text-xs">-</p>
-        <p className="text-gray-500 font-medium print:text-xs">{data?.phone}</p>
-      </div>
+      {title === "Consignee" && (
+        <div className="flex gap-1 justify-start uppercase">
+          <p className="text-gray-700 font-semibold print:text-xs">Email</p>
+          <p className="text-gray-700 print:text-xs">-</p>
+          <p className="text-gray-500 font-medium print:text-xs uppercase">
+            {data?.email}
+          </p>
+        </div>
+      )}
+      {title === "buyer" && (
+        <>
+          <div className="flex gap-1 justify-start uppercase">
+            <p className="text-gray-700 font-semibold print:text-xs">
+              Contact Name
+            </p>
+            <p className="text-gray-700 print:text-xs">-</p>
+            <p className="text-gray-500 font-medium print:text-xs uppercase">
+              {address?.contact_person}
+            </p>
+          </div>
+          <div className="flex gap-1 justify-start uppercase">
+            <p className="text-gray-700 font-semibold print:text-xs">Contact</p>
+            <p className="text-gray-700 print:text-xs">-</p>
+            <p className="text-gray-500 font-medium print:text-xs uppercase">
+              {address?.contact_phone || data?.mobile || data?.phone}
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };

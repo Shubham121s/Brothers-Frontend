@@ -11,6 +11,10 @@ const stateSlice = createSlice({
     bill_date: "",
     challan_no: "",
     challan_date: "",
+    material_tc: "",
+    inward_inspection: "",
+    invoice: "",
+    heat_treatment: "",
   },
   reducers: {
     toggleDeletePoItemDialog: (state, action) => {
@@ -20,7 +24,20 @@ const stateSlice = createSlice({
       state.editPoItemDialog = action.payload;
     },
     setPurchaseOrderList: (state, action) => {
-      state.purchaseOrderList = action.payload || [];
+      state.purchaseOrderList = action.payload
+        .map((m) => {
+          return {
+            ...m,
+            rejected_quantity: 0,
+            actual_quantity: 0,
+            comments: "",
+            material_tc: null,
+            inward_inspection: null,
+            invoice: null,
+            heat_treatment: null,
+          };
+        })
+        .filter((f) => f.received_quantity !== f.quantity);
     },
     setPurchaseOrderListData: (state, action) => {
       const { id, field, value } = action.payload;
@@ -49,6 +66,17 @@ const stateSlice = createSlice({
     setChallanDate: (state, action) => {
       state.challan_date = action.payload;
     },
+    setReports: (state, action) => {
+      if (action.payload.name === "material_tc") {
+        state.material_tc = action.payload.data;
+      } else if (action.payload.name === "inward_inspection") {
+        state.inward_inspection = action.payload.data;
+      } else if (action.payload.name === "invoice") {
+        state.invoice = action.payload.data;
+      } else if (action.payload.name === "heat_treatment") {
+        state.heat_treatment = action.payload.data;
+      }
+    },
   },
 });
 
@@ -62,6 +90,7 @@ export const {
   setBillNo,
   setChallanDate,
   setChallanNo,
+  setReports,
 } = stateSlice.actions;
 
 export default stateSlice.reducer;

@@ -17,5 +17,5 @@ export const STATE = "MAHARASTRA";
 export const STATE_CODE = 27;
 export const PAN = "GZUPS0011Q";
 export const PAYMENT_TERMS = ["FROM DATE OF INVOICE"];
-export const GST_PERCENTAGE = [3, 5, 7, 9, 12, 18, 24];
+export const GST_PERCENTAGE = [3, 5, 6, 7, 9, 12, 18, 24];
 export const BILL_TYPE = ["IGST", "GST", "NON GST"];

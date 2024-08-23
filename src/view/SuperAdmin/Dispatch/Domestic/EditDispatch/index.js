@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card } from "../../../../../components/ui";
+import { Card, Button } from "../../../../../components/ui";
 import ConsigneeAndBuyerDetails from "./components/ConsigneeAndBuyer/ConsigneeAndBuyerDetails";
 import ShippingAddress from "./components/ShippingAndShippingAddress/ShippingAddress";
 import TransportDetails from "./components/ShippingAndShippingAddress/TransportDetails";
@@ -7,39 +7,66 @@ import EditDispatchItemDialog from "./components/ItemList/EditDispatchItemDialog
 import { injectReducer } from "../../../../../store";
 import EditDispatchForeignReducer from "./store";
 import { useDispatch, useSelector } from "react-redux";
-import { getDomesticInvoiceDetailsByInvoiceId } from "./store/dataSlice";
+import {
+  getDomesticInvoiceDetailsByInvoiceId,
+  putDomesticInvoiceDetailsByInvoiceId,
+} from "./store/dataSlice";
 import {
   Container,
   DoubleSidedImage,
   Loading,
 } from "../../../../../components/shared";
 import isEmpty from "lodash/isEmpty";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ItemTable from "./components/ItemList/ItemTable";
 import DeleteProductConfirmationDialog from "./components/ItemList/DeleteConfirmationDialog";
+import PackingChargesInformationField from "./components/GSTAndOther/PackingChargesInformationField";
+import { StickyFooter } from "../../../../../components/shared";
 
 injectReducer("edit_domestic_dispatch", EditDispatchForeignReducer);
 
 const EditDispatch = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const data = useSelector(
     (state) => state.edit_domestic_dispatch.data.invoiceDetails
   );
   const [loading, setLoading] = useState(false);
+
+  const [charges, setCharges] = useState(0);
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const fetchData = () => {
+  const fetchData = async () => {
     const dispatch_invoice_id = location.pathname.substring(
       location.pathname.lastIndexOf("/") + 1
     );
     if (dispatch_invoice_id) {
-      dispatch(getDomesticInvoiceDetailsByInvoiceId({ dispatch_invoice_id }));
+      const action = await dispatch(
+        getDomesticInvoiceDetailsByInvoiceId({ dispatch_invoice_id })
+      );
+      setCharges(
+        action.payload.data.data?.DispatchShippingAndOtherDetail
+          ?.packing_charges
+          ? action.payload.data.data?.DispatchShippingAndOtherDetail
+              ?.packing_charges
+          : ""
+      );
     }
+  };
+
+  const UpdateIvoice = () => {
+    dispatch(
+      putDomesticInvoiceDetailsByInvoiceId({
+        dispatch_invoice_id: data.dispatch_invoice_id,
+        packing_charges: charges,
+      })
+    );
+    navigate("/super/admin/dispatch-list");
   };
 
   return (
@@ -81,7 +108,11 @@ const EditDispatch = () => {
                 </p>
                 <div className="grid grid-cols-2 gap-2">
                   <ShippingAddress data={data?.DispatchShippingAddress} />
-                  <TransportDetails data={data?.DispatchShippingDetail} />
+                  <TransportDetails data={data} />
+                  <PackingChargesInformationField
+                    setCharges={setCharges}
+                    charges={charges}
+                  />
                 </div>
               </Card>
             </div>
@@ -121,6 +152,20 @@ const EditDispatch = () => {
               />
               <DeleteProductConfirmationDialog fetchData={fetchData} />
             </Card>
+            <StickyFooter
+              className="-mx-8 px-8 flex items-center justify-end p-3"
+              stickyClass="border-t bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+            >
+              <div className="md:flex items-center">
+                <Button
+                  variant="solid"
+                  // icon={<AiOutlineSave className='mr-1' />}
+                  onClick={UpdateIvoice}
+                >
+                  Update
+                </Button>
+              </div>
+            </StickyFooter>
           </>
         )}
       </Loading>

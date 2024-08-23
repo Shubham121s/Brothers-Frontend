@@ -25,6 +25,8 @@ const TableFooterRows = ({
     i_gst = 0,
     c_gst = 0,
     s_gst = 0,
+    packing_charges = 0,
+    remark = "",
   } = data?.DispatchShippingAndOtherDetail;
   const GST_RATE =
     bill_type === "NON GST" ? 0 : bill_type === "IGST" ? i_gst : c_gst + s_gst;
@@ -32,105 +34,145 @@ const TableFooterRows = ({
   const totalQuantity = InvoiceQuantity(dispatchList(data?.DispatchLocations));
   const totalAmount = InvoiceTotal(dispatchList(data?.DispatchLocations));
   const pageAmount = InvoiceTotal(pageData);
-  const GSTAmount = Number(totalAmount * (GST_RATE / 100)).toFixed(2);
-  const GrandTotal = Number(totalAmount) + Number(GSTAmount);
+  const packingAmount = parseFloat(packing_charges ? packing_charges : 0);
+  const GSTAmount = parseFloat(
+    (totalAmount + packingAmount) * (GST_RATE / 100)
+  ).toFixed(2);
+  const GrandTotal = Math.round(
+    Number(totalAmount) + Number(packingAmount) + Number(GSTAmount)
+  );
+  const RoundOff =
+    Number(totalAmount) +
+    Number(packingAmount) +
+    Number(GSTAmount) -
+    GrandTotal;
+
   return (
     <>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="3"
         ></Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="2"
           className={`uppercase ${className}`}
         >
           TOTAL(page {pageNo})
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {pageQuantity}
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".5px solid black", padding: "3px" }}>
           <NumberFormat value={pageAmount} />
         </Td>
       </Tr>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="2"
         ></Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="3"
           className={`uppercase ${className}`}
         >
           Total (page 1 to {pageCount})
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {totalQuantity}
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".5px solid black", padding: "3px" }}>
           <NumberFormat value={totalAmount} />
+        </Td>
+      </Tr>
+      <Tr
+        style={{
+          border: ".5px solid black",
+          padding: "3px",
+          textAlign: "center",
+        }}
+        className={className}
+      >
+        <Td
+          style={{ border: ".5px solid black", padding: "3px" }}
+          colSpan="2"
+        ></Td>
+        <Td
+          style={{ border: ".5px solid black", padding: "3px" }}
+          colSpan="3"
+          className={`uppercase ${className}`}
+        >
+          P & F Charges
+        </Td>
+        <Td
+          style={{ border: ".5px solid black", padding: "3px" }}
+          colSpan="2"
+          className={`uppercase ${className}`}
+        ></Td>
+
+        <Td style={{ border: ".5px solid black", padding: "3px" }}>
+          <NumberFormat value={packingAmount} />
         </Td>
       </Tr>
       {bill_type === "IGST" ? (
         <Tr
           style={{
-            border: ".5px dashed lightGray",
+            border: ".5px solid black",
             padding: "3px",
             textAlign: "center",
           }}
           className={className}
         >
           <Td
-            style={{ border: ".5px dashed lightGray", padding: "3px" }}
+            style={{ border: ".5px solid black", padding: "3px" }}
             colSpan="5"
           ></Td>
           <Td
-            style={{ border: ".5px dashed lightGray", padding: "3px" }}
+            style={{ border: ".5px solid black", padding: "3px" }}
             colSpan="1"
             className={className}
           >
             IGST
           </Td>
           <Td
-            style={{ border: ".5px dashed lightGray", padding: "3px" }}
+            style={{ border: ".5px solid black", padding: "3px" }}
             colSpan="1"
           >
             {GST_RATE}%
           </Td>
-          <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
+          <Td style={{ border: ".5px solid black", padding: "3px" }}>
             <NumberFormat value={GSTAmount} />
           </Td>
         </Tr>
@@ -138,90 +180,113 @@ const TableFooterRows = ({
         <>
           <Tr
             style={{
-              border: ".5px dashed lightGray",
+              border: ".5px solid black",
               padding: "3px",
               textAlign: "center",
             }}
             className={className}
           >
             <Td
-              style={{ border: ".5px dashed lightGray", padding: "3px" }}
+              style={{ border: ".5px solid black", padding: "3px" }}
               colSpan="5"
             ></Td>
             <Td
-              style={{ border: ".5px dashed lightGray", padding: "3px" }}
+              style={{ border: ".5px solid black", padding: "3px" }}
               colSpan="1"
               className={className}
             >
               CGST
             </Td>
             <Td
-              style={{ border: ".5px dashed lightGray", padding: "3px" }}
+              style={{ border: ".5px solid black", padding: "3px" }}
               colSpan="1"
             >
               {c_gst}%
             </Td>
-            <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
-              <NumberFormat
-                value={Number(totalAmount * (c_gst / 100)).toFixed(2)}
-              />
+            <Td style={{ border: ".5px solid black", padding: "3px" }}>
+              <NumberFormat value={Number(GSTAmount / 2).toFixed(2)} />
             </Td>
           </Tr>
           <Tr
             style={{
-              border: ".5px dashed lightGray",
+              border: ".5px solid black",
               padding: "3px",
               textAlign: "center",
             }}
             className={className}
           >
             <Td
-              style={{ border: ".5px dashed lightGray", padding: "3px" }}
+              style={{ border: ".5px solid black", padding: "3px" }}
               colSpan="5"
             ></Td>
             <Td
-              style={{ border: ".5px dashed lightGray", padding: "3px" }}
+              style={{ border: ".5px solid black", padding: "3px" }}
               colSpan="1"
               className={className}
             >
               SGST
             </Td>
             <Td
-              style={{ border: ".5px dashed lightGray", padding: "3px" }}
+              style={{ border: ".5px solid black", padding: "3px" }}
               colSpan="1"
             >
               {s_gst}%
             </Td>
-            <Td style={{ border: ".5px dashed lightGray", padding: "3px" }}>
-              <NumberFormat
-                value={Number(totalAmount * (s_gst / 100)).toFixed(2)}
-              />
+            <Td style={{ border: ".5px solid black", padding: "3px" }}>
+              <NumberFormat value={Number(GSTAmount / 2).toFixed(2)} />
             </Td>
           </Tr>
         </>
       ) : null}
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
+          colSpan="5"
+        ></Td>
+        <Td
+          style={{ border: ".5px solid black", padding: "3px" }}
+          colSpan="1"
+          className={className}
+        >
+          Round Off
+        </Td>
+        <Td
+          style={{ border: ".5px solid black", padding: "3px" }}
+          colSpan="1"
+        ></Td>
+        <Td style={{ border: ".5px solid black", padding: "3px" }}>
+          <NumberFormat value={parseFloat(RoundOff).toFixed(2)} />
+        </Td>
+      </Tr>
+      <Tr
+        style={{
+          border: ".5px solid black",
+          padding: "3px",
+          textAlign: "center",
+        }}
+        className={className}
+      >
+        <Td
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="5"
           className="text-gray-700 font-semibold uppercase"
         ></Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="2"
           className="text-gray-700 font-semibold"
         >
           GRAND TOTAL
         </Td>
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{ border: ".5px solid black", padding: "3px" }}
           className="text-gray-700 font-semibold"
         >
           <NumberFormat value={GrandTotal} />
@@ -229,14 +294,47 @@ const TableFooterRows = ({
       </Tr>
       <Tr
         style={{
-          border: ".5px dashed lightGray",
+          border: ".5px solid black",
           padding: "3px",
-          textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".5px dashed lightGray", padding: "3px" }}
+          style={{
+            border: ".5px solid black",
+            padding: "3px",
+            textAlign: "center",
+          }}
+          colSpan="2"
+          className="uppercase"
+        >
+          Remark
+        </Td>
+        <Td
+          className="font-semibold uppercase"
+          style={{
+            border: ".5px solid black",
+            padding: "6px 3px",
+            paddingLeft: "10px",
+          }}
+          colSpan="7"
+        >
+          {remark}
+        </Td>
+      </Tr>
+      <Tr
+        style={{
+          border: ".5px solid black",
+          padding: "3px",
+        }}
+        className={className}
+      >
+        <Td
+          style={{
+            border: ".5px solid black",
+            padding: "3px",
+            textAlign: "center",
+          }}
           colSpan="2"
           className="uppercase"
         >
@@ -245,7 +343,7 @@ const TableFooterRows = ({
         <Td
           className="font-semibold uppercase"
           style={{
-            border: ".5px dashed lightGray",
+            border: ".5px solid black",
             padding: "6px 3px",
             paddingLeft: "10px",
           }}
@@ -375,7 +473,7 @@ const DispatchTable = (props) => {
                   <Th
                     className={className}
                     style={{
-                      border: ".5px dashed lightGray",
+                      border: ".5px solid black",
                       textAlign: "center",
                       padding: "3px",
                     }}
@@ -402,7 +500,7 @@ const DispatchTable = (props) => {
                       className={className}
                       key={cell.id}
                       style={{
-                        border: ".5px dashed lightGray",
+                        border: ".5px solid black",
                         padding: "3px",
                       }}
                     >

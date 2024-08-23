@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import {
+  getAllCondition,
   getAllCustomers,
+  getAllNotes,
   getAllProductsWithDrawing,
   getPoDetailsByPoId,
   postUpdatePo,
@@ -12,6 +14,7 @@ import PoForm from "../PoForm";
 import editPoReducer from "./store";
 import { injectReducer } from "../../../../store";
 import { Notification, Toast } from "../../../../components/ui";
+import { Loading } from "../../../../components/shared";
 
 injectReducer("edit_po", editPoReducer);
 
@@ -27,6 +30,8 @@ const EditPO = () => {
   const fetch = async () => {
     dispatch(getAllCustomers());
     dispatch(getAllProductsWithDrawing());
+    dispatch(getAllCondition());
+    dispatch(getAllNotes());
     if (po_id) {
       await dispatch(getPoDetailsByPoId({ po_id }));
     }
@@ -39,6 +44,26 @@ const EditPO = () => {
   const initialData = useSelector((state) => state.edit_po.data.poDetails);
   const customers = useSelector((state) => state.edit_po.data.customers);
   const products = useSelector((state) => state.edit_po.data.products);
+  const Notes = useSelector((state) => state.new_po.data.notes);
+  const Condition = useSelector((state) => state.new_po.data.condition);
+  const loadingStates = useSelector((state) => state.new_po.data.loading);
+
+  const isLoading = Object.values(loadingStates).some((state) => state);
+
+  const noteOption = useMemo(() => {
+    return Notes?.map((m) => {
+      return { label: m.name, value: { note_id: m.note_id, notes: m.notes } };
+    });
+  }, [Notes]);
+
+  const conditionOption = useMemo(() => {
+    return Condition?.map((m) => {
+      return {
+        label: m.name,
+        value: { condition_id: m.condition_id, condition: m.condition },
+      };
+    });
+  }, [Condition]);
 
   const updatePo = async (data) => {
     const action = await dispatch(postUpdatePo(data));
@@ -60,6 +85,15 @@ const EditPO = () => {
         }
       );
       handleDiscard();
+    } else {
+      Toast.push(
+        <Notification title={"Error"} type="danger" duration={2500}>
+          Some Error Occured
+        </Notification>,
+        {
+          placement: "top-center",
+        }
+      );
     }
   };
 
@@ -68,23 +102,27 @@ const EditPO = () => {
   };
 
   return (
-    <>
+    <Loading loading={isLoading}>
       <PoForm
         type="edit"
         onFormSubmit={handleFormSubmit}
         onDiscard={handleDiscard}
         customers={customers}
         products={products}
+        Notes={noteOption}
+        Condition={conditionOption}
         initialData={{
           ...initialData,
           date: initialData ? new Date(initialData.date) : null,
           Note: {
             ...initialData?.Note,
-            notes: JSON.parse(initialData?.Note?.notes),
+            notes: initialData?.Note?.notes
+              ? JSON.parse(initialData?.Note?.notes)
+              : [],
           },
         }}
       />
-    </>
+    </Loading>
   );
 };
 

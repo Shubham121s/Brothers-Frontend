@@ -15,7 +15,7 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
     <div>
       <div
         className="grid grid-cols-6 p-2 h-full items-center"
-        style={{ borderBottom: "1px dashed lightGray" }}
+        style={{ borderBottom: "1px dashed black" }}
       >
         <div className="col-span-2 h-full">
           <div className="h-full justify-start items-center flex">
@@ -30,32 +30,29 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
         <div className="col-span-2 h-full">
           <div className="h-full flex gap-2 justify-end items-center">
             <h6 className="text-gray-700 font-medium">
-              {pageNo < 10 ? `0${pageNo}` : pageNo}/
-              {pageCount < 10 ? `0${pageCount}` : pageCount}
+              01/{pageNo < 10 ? `0${pageNo}` : pageNo}
+              {/* {pageCount < 10 ? `0${pageCount}` : pageCount} */}
             </h6>
           </div>
         </div>
       </div>
       <div
         className="grid grid-cols-6"
-        style={{ borderBottom: "1px dashed lightGray" }}
+        style={{ borderBottom: "1px dashed black" }}
       >
         <div className="col-span-2 h-full p-2">
-          <div
-            className="h-full"
-            style={{ borderRight: "1px dashed lightGray" }}
-          >
+          <div className="h-full" style={{ borderRight: "1px dashed black" }}>
             <CompanyDetails />
           </div>
         </div>
         <div className="col-span-4 h-full p-2">
           <div
             className="h-full"
-            // style={{ borderRight: "1px dashed lightGray" }}
+            // style={{ borderRight: "1px dashed black" }}
           >
             <InvoiceDetails location_code={location_code} data={data} />
           </div>
-          {/* <div className="h-full" style={{ borderTop: "1px dashed lightGray" }}>
+          {/* <div className="h-full" style={{ borderTop: "1px dashed black" }}>
             <PoDetails data={data?.DispatchLocations} />
           </div> */}
         </div>
@@ -65,13 +62,10 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
       </div>
       <div
         className="grid grid-cols-6"
-        style={{ borderBottom: "1px dashed lightGray" }}
+        style={{ borderBottom: "1px dashed black" }}
       >
         <div className="col-span-2 h-full p-2">
-          <div
-            className="h-full"
-            style={{ borderRight: "1px dashed lightGray" }}
-          >
+          <div className="h-full" style={{ borderRight: "1px dashed black" }}>
             <ConsigneeAndBuyerDetails
               data={data?.DispatchConsignee}
               address={data?.DispatchConsignee?.DispatchConsigneeAddress}
@@ -80,10 +74,7 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
           </div>
         </div>
         <div className="col-span-2 h-full p-2">
-          <div
-            className="h-full"
-            style={{ borderRight: "1px dashed lightGray" }}
-          >
+          <div className="h-full" style={{ borderRight: "1px dashed black" }}>
             <ConsigneeAndBuyerDetails
               data={data?.DispatchBuyer}
               address={data?.DispatchShippingAddress}
@@ -102,21 +93,15 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
       </div>
       <div
         className="grid grid-cols-6"
-        style={{ borderBottom: "1px dashed lightGray" }}
+        style={{ borderBottom: "1px dashed black" }}
       >
         <div className="col-span-2 h-full p-2">
-          <div
-            className="h-full"
-            style={{ borderRight: "1px dashed lightGray" }}
-          >
+          <div className="h-full" style={{ borderRight: "1px dashed black" }}>
             <PortDetails data={data?.DispatchShippingDetail} />
           </div>
         </div>
         <div className="col-span-2 h-full p-2">
-          <div
-            className="h-full"
-            style={{ borderRight: "1px dashed lightGray" }}
-          >
+          <div className="h-full" style={{ borderRight: "1px dashed black" }}>
             <DestinationDetails data={data?.DispatchShippingDetail} />
           </div>
         </div>

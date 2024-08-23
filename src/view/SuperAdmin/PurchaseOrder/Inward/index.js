@@ -5,10 +5,16 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { injectReducer } from "../../../../store";
 import inwardReducer from "./store";
 import { useDispatch, useSelector } from "react-redux";
-import { getNewGRN, getPoDetailsByPoId, postInward } from "./store/dataSlice";
+import {
+  getNewGRN,
+  getPoDetailsByPoId,
+  postAttachment,
+  postInward,
+} from "./store/dataSlice";
 import { setPurchaseOrderList } from "./store/stateSlice";
 import { Button, Notification, Toast } from "../../../../components/ui";
 import { StickyFooter } from "../../../../components/shared/index.js";
+import FormData from "form-data";
 
 injectReducer("inward", inwardReducer);
 
@@ -49,13 +55,35 @@ const Inward = () => {
     }
   };
 
-  const onSave = async () => {
-    const action = await dispatch(
+  const onSave = async (values, setSubmitting) => {
+    let missingFields = [];
+
+    if (!date) missingFields.push("Date");
+    if (!billNo) missingFields.push("Bill Number");
+    if (!billDate) missingFields.push("Bill Date");
+    if (!newGrn) missingFields.push("New GRN");
+
+    if (missingFields.length > 0) {
+      const missingFieldsMessage = `Missing fields: ${missingFields.join(
+        ", "
+      )}`;
+      setSubmitting(false);
+      return Toast.push(
+        <Notification title={"Required"} type="danger" duration={2500}>
+          {missingFieldsMessage}
+        </Notification>,
+        {
+          placement: "top-end",
+        }
+      );
+    }
+
+    console.log(values);
+
+    const mainAction = await dispatch(
       postInward({
         ...initialData,
-        items: PurchaseOrderList.filter(
-          (f) => f.actual_quantity !== undefined && f.actual_quantity !== 0
-        ),
+        items: values,
         inward_date: date,
         bill_no: billNo,
         bill_date: billDate,
@@ -64,47 +92,36 @@ const Inward = () => {
         inward_no: newGrn,
       })
     );
-    if (action.payload.status < 300) {
+
+    if (mainAction.payload.status < 300) {
+      setSubmitting(false);
       Toast.push(
-        <Notification
-          title={"Successfully added"}
-          type="success"
-          duration={2500}
-        >
-          InWard Details Successfully Added
+        <Notification title={"Success"} type="success" duration={2500}>
+          Successfully Inwarded
         </Notification>,
         {
           placement: "top-end",
         }
       );
+      setSubmitting(false);
       navigate("/super/admin/purchaseOrder/inward/list");
     } else {
       Toast.push(
         <Notification title={"Error"} type="danger" duration={2500}>
-          {action?.payload?.data?.message}
+          {mainAction?.payload?.data?.message}
         </Notification>,
         {
           placement: "top-end",
         }
       );
     }
+    setSubmitting(false);
   };
 
   return (
     <>
       <PrimaryForm initialData={initialData} date={date} setDate={setDate} />
-      <InwardTable initialData={initialData} />
-
-      <StickyFooter
-        className="-mx-8 px-8 flex items-center justify-end py-4"
-        stickyClass="border-t bg-white border-gray-200"
-      >
-        <div className="flex items-center gap-4">
-          <Button size="sm" variant="solid" onClick={onSave}>
-            Save
-          </Button>
-        </div>
-      </StickyFooter>
+      <InwardTable initialData={initialData} handleSubmit={onSave} />
     </>
   );
 };

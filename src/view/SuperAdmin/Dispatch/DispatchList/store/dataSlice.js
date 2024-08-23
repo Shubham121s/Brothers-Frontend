@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   apiGetAllDispatchInvoiceWithPagination,
   apiAddInvoiceDetails,
+  apiDeleteInvoice,
 } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
 export const getDispatchInvoiceWithPagination = createAsyncThunk(
@@ -21,6 +22,18 @@ export const addDetails = createAsyncThunk(
   async (data) => {
     try {
       const response = await apiAddInvoiceDetails(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const deleteInvoice = createAsyncThunk(
+  "dispatch/invoice/details/delete",
+  async (data) => {
+    try {
+      const response = await apiDeleteInvoice(data);
       return response;
     } catch (error) {
       return error?.response;
@@ -68,6 +81,7 @@ const dataSlice = createSlice({
       state.loading = true;
     },
     [addDetails.fulfilled]: (state) => {},
+    [deleteInvoice.fulfilled]: (state) => {},
   },
 });
 

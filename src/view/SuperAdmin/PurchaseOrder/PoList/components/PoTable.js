@@ -8,6 +8,11 @@ import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../../components/shared/DataTable";
 import { HiOutlineTrash, HiOutlinePencil } from "react-icons/hi";
+import {
+  setSelectedPurchase,
+  toggleDeleteConfirmation,
+} from "../store/stateSlice";
+import DeletePoConfirmationDialog from "./PoDeleteConfirmation";
 
 const statusColor = {
   delivered: {
@@ -51,9 +56,14 @@ const ActionColumn = ({ row }) => {
     navigate(`/super/admin/purchaseOrder/edit/${row.purchase_order_id}`);
   };
 
+  const onDelete = () => {
+    dispatch(toggleDeleteConfirmation(true));
+    dispatch(setSelectedPurchase(row));
+  };
+
   return (
     <div className="flex justify-center text-lg gap-x-4">
-      {row?.status !== "accepted" && (
+      {row?.status === "pending" && (
         <>
           <span
             className={`cursor-pointer hover:${textTheme}`}
@@ -62,7 +72,10 @@ const ActionColumn = ({ row }) => {
             <HiOutlinePencil />
           </span>
 
-          <span className="cursor-pointer hover:text-red-500">
+          <span
+            className="cursor-pointer hover:text-red-500"
+            onClick={onDelete}
+          >
             <HiOutlineTrash />
           </span>
         </>
@@ -94,8 +107,10 @@ const PoAColumn = ({ row }) => {
 
 const PoTable = ({ status }) => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.po_list.data.poList);
-  const loading = useSelector((state) => state.po_list.data.loading);
+  const data = useSelector((state) => state.purchase_order_list.data.poList);
+  const loading = useSelector(
+    (state) => state.purchase_order_list.data.loading
+  );
   const columns = [
     // {
     //   header: "POa",
@@ -195,17 +210,31 @@ const PoTable = ({ status }) => {
     //   },
     // },
     {
-      header: "action",
-      id: "id",
+      header: `action`,
+      accessorKey: "action",
       cell: (props) => {
         const row = props.row.original;
         return <ActionColumn row={row} />;
       },
     },
   ];
+  if (status !== "pending") {
+    columns.splice(columns.length - 1, 0, {
+      header: `${
+        status === "processing" || status === "received"
+          ? "Accepted"
+          : status.toUpperCase()
+      } Remark`,
+      accessorKey: "status_remark",
+      cell: (props) => {
+        const row = props.row.original;
+        return <div>{row?.status_remark}</div>;
+      },
+    });
+  }
 
   const { pageIndex, pageSize, sort, query, total } = useSelector(
-    (state) => state.po_list.data.tableData
+    (state) => state.purchase_order_list.data.tableData
   );
 
   const fetchData = useCallback(() => {
@@ -252,7 +281,7 @@ const PoTable = ({ status }) => {
         onPaginationChange={onPaginationChange}
         onSelectChange={onSelectChange}
       />
-      {/* <productEditDialog /> */}
+      <DeletePoConfirmationDialog />
     </>
   );
 };

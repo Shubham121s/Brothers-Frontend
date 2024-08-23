@@ -27,69 +27,69 @@ const TableFooterRows = ({
     <>
       <Tr
         style={{
-          border: ".2px dashed lightGray",
+          border: ".2px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="5"
         ></Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="2"
           className={`uppercase ${className}`}
         >
           Total (page {pageNo})
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {pageQuantity}
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".2px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".2px solid black", padding: "3px" }}>
           {pageWeight}
         </Td>
       </Tr>
       <Tr
         style={{
-          border: ".2px dashed lightGray",
+          border: ".2px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="5"
         ></Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="2"
           className={`uppercase ${className}`}
         >
           Total (page 1 to {pageCount})
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {totalQuantity}
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".2px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".2px solid black", padding: "3px" }}>
           {totalWeight}
         </Td>
       </Tr>
@@ -187,7 +187,7 @@ const PackingTable = (props) => {
         cell: (props) => {
           const row = props.row.original;
           return (
-            <div className="text-center">{`BOX NO ${
+            <div className="text-center">{`${
               findBox(boxes, "dispatch_box_list_id", row?.dispatch_box_id)
                 ?.box_no
             }`}</div>
@@ -249,7 +249,7 @@ const PackingTable = (props) => {
                   <Th
                     className={className}
                     style={{
-                      border: ".2px dashed lightGray",
+                      border: ".2px solid black",
                       textAlign: "center",
                       padding: "3px",
                     }}
@@ -276,7 +276,7 @@ const PackingTable = (props) => {
                       className={className}
                       key={cell.id}
                       style={{
-                        border: ".2px dashed lightGray",
+                        border: ".2px solid black",
                         padding: "3px",
                       }}
                     >

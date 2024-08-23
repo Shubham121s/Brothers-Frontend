@@ -16,6 +16,8 @@ import {
   apiGetPOBrotherAcceptDates,
   apiGetRawDates,
   apiGetMachiningDates,
+  apiPutAttachmentsPoList,
+  apideleteAttachmentsPoList,
 } from "../../../../services/SuperAdmin/Po/PoService";
 import { apiUpdateDispatchMachiningRawDate } from "../../../../services/SuperAdmin/Invoice/DispatchServices";
 
@@ -199,6 +201,30 @@ export const getMachinigDate = createAsyncThunk(
   }
 );
 
+export const putAttachment = createAsyncThunk(
+  "po/lists/data/raw/dispatch/list/atachment",
+  async (data) => {
+    try {
+      const response = await apiPutAttachmentsPoList(data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+);
+
+export const deleteAttachment = createAsyncThunk(
+  "po/lists/data/raw/dispatch/list/atachment/delete",
+  async (data) => {
+    try {
+      const response = await apideleteAttachmentsPoList(data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+);
+
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -243,6 +269,9 @@ const dataSlice = createSlice({
     loading: false,
     tableData: initialTableData,
     filterData: initialFilterData,
+    attachmentDialog: false,
+    viewDialog: false,
+    selectedPOList: {},
   },
   reducers: {
     setTableData: (state, action) => {
@@ -250,6 +279,15 @@ const dataSlice = createSlice({
     },
     setFilterData: (state, action) => {
       state.filterData = action.payload;
+    },
+    toggleAttachmentDialog: (state, action) => {
+      state.attachmentDialog = action.payload;
+    },
+    toggleViewDialog: (state, action) => {
+      state.viewDialog = action.payload;
+    },
+    setSelectedPoList: (state, action) => {
+      state.selectedPOList = action.payload;
     },
   },
   extraReducers: {
@@ -348,9 +386,17 @@ const dataSlice = createSlice({
     [getMachinigDate.fulfilled]: (state, action) => {
       state.machiningDate = action.payload.data.data;
     },
+    [putAttachment.fulfilled]: (state, action) => {},
+    [deleteAttachment.fulfilled]: (state, action) => {},
   },
 });
 
-export const { setFilterData, setTableData } = dataSlice.actions;
+export const {
+  setFilterData,
+  setTableData,
+  toggleAttachmentDialog,
+  setSelectedPoList,
+  toggleViewDialog,
+} = dataSlice.actions;
 
 export default dataSlice.reducer;

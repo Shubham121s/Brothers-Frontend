@@ -83,6 +83,13 @@ export const getUniquePoNumber = createAsyncThunk(
 const dataSlice = createSlice({
   name: "new/po/data",
   initialState: {
+    loading: {
+      getAllCustomers: false,
+      getUniquePoNumber: false,
+      getAllProductsWithDrawing: false,
+      getAllNotes: false,
+      getAllCondition: false,
+    },
     customers: [],
     products: [],
     notes: [],
@@ -90,21 +97,61 @@ const dataSlice = createSlice({
     number: "",
   },
   extraReducers: {
+    // Pending states
+    [getAllCustomers.pending]: (state) => {
+      state.loading.getAllCustomers = true;
+    },
+    [getUniquePoNumber.pending]: (state) => {
+      state.loading.getUniquePoNumber = true;
+    },
+    [getAllProductsWithDrawing.pending]: (state) => {
+      state.loading.getAllProductsWithDrawing = true;
+    },
+    [getAllNotes.pending]: (state) => {
+      state.loading.getAllNotes = true;
+    },
+    [getAllCondition.pending]: (state) => {
+      state.loading.getAllCondition = true;
+    },
+
+    // Fulfilled states
     [getAllCustomers.fulfilled]: (state, action) => {
+      state.loading.getAllCustomers = false;
       state.customers = action.payload.data?.data || [];
     },
     [getUniquePoNumber.fulfilled]: (state, action) => {
+      state.loading.getUniquePoNumber = false;
       state.number = action.payload.data?.data || "";
     },
     [postNewPoRegister.fulfilled]: (state) => {},
     [getAllProductsWithDrawing.fulfilled]: (state, action) => {
+      state.loading.getAllProductsWithDrawing = false;
       state.products = action.payload.data?.data || [];
     },
     [getAllNotes.fulfilled]: (state, action) => {
+      state.loading.getAllNotes = false;
       state.notes = action.payload.data?.data || [];
     },
     [getAllCondition.fulfilled]: (state, action) => {
+      state.loading.getAllCondition = false;
       state.condition = action.payload.data?.data || [];
+    },
+
+    // Rejected states
+    [getAllCustomers.rejected]: (state) => {
+      state.loading.getAllCustomers = false;
+    },
+    [getUniquePoNumber.rejected]: (state) => {
+      state.loading.getUniquePoNumber = false;
+    },
+    [getAllProductsWithDrawing.rejected]: (state) => {
+      state.loading.getAllProductsWithDrawing = false;
+    },
+    [getAllNotes.rejected]: (state) => {
+      state.loading.getAllNotes = false;
+    },
+    [getAllCondition.rejected]: (state) => {
+      state.loading.getAllCondition = false;
     },
   },
 });

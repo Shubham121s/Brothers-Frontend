@@ -21,6 +21,8 @@ import PoDetails from "./components/PoDetails.js";
 import { HiOutlinePrinter } from "react-icons/hi";
 import { useReactToPrint } from "react-to-print";
 import PurchaseOrderInvoice from "../../Invoice/PurchaseOrderInvoice/index.js";
+import { toggleRemarkDialog } from "./store/stateSlice.js";
+import StatusDialog from "./components/RemarkDialog.js";
 
 injectReducer("accept_po", acceptPoReducer);
 const { TabNav, TabList, TabContent } = Tabs;
@@ -33,6 +35,7 @@ const PoAccept = () => {
   const initialData = useSelector((state) => state.accept_po.data.poDetails);
   const loading = useSelector((state) => state.accept_po.data.loading);
   const [POStatus, setPOStatus] = useState(null);
+  const [status, setStatus] = useState(null);
   const [poLoading, setPoLoading] = useState(false);
 
   useEffect(() => {
@@ -50,19 +53,21 @@ const PoAccept = () => {
   };
 
   const onChangeStatus = async (val) => {
-    setPoLoading(true);
-    const action = await dispatch(
-      updatePurchaseOrderStatus({
-        status: val,
-        purchase_order_id: initialData.purchase_order_id,
-      })
-    );
-    if (action.payload.status < 300) {
-      setPoLoading(false);
-      setPOStatus(val);
-    } else {
-      setPoLoading(false);
-    }
+    // setPoLoading(true);
+    dispatch(toggleRemarkDialog(true));
+    setStatus(val);
+    // const action = await dispatch(
+    //   updatePurchaseOrderStatus({
+    //     status: val,
+    //     purchase_order_id: initialData.purchase_order_id,
+    //   })
+    // );
+    // if (action.payload.status < 300) {
+    //   setPoLoading(false);
+    //   setPOStatus(val);
+    // } else {
+    //   setPoLoading(false);
+    // }
   };
 
   const handleDiscard = () => {
@@ -135,7 +140,6 @@ const PoAccept = () => {
                       size="sm"
                       variant="solid"
                       color="emerald-500"
-                      loading={poLoading}
                       onClick={() => onChangeStatus("accepted")}
                     >
                       Accept
@@ -144,10 +148,17 @@ const PoAccept = () => {
                       size="sm"
                       variant="solid"
                       color="red-500"
-                      loading={poLoading}
                       onClick={() => onChangeStatus("rejected")}
                     >
                       Reject
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="solid"
+                      color="yellow-500"
+                      onClick={() => onChangeStatus("cancelled")}
+                    >
+                      Cancel
                     </Button>
                   </>
                 )}
@@ -157,7 +168,6 @@ const PoAccept = () => {
                     size="sm"
                     variant="solid"
                     color="pink-500"
-                    loading={poLoading}
                     onClick={onInward}
                   >
                     Make Inward
@@ -178,6 +188,11 @@ const PoAccept = () => {
           <h3 className="mt-8">No PO found!</h3>
         </div>
       )}
+      <StatusDialog
+        setPOStatus={setPOStatus}
+        status={status}
+        initialData={initialData}
+      />
     </>
   );
 };

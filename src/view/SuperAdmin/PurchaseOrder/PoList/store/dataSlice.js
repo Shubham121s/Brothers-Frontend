@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { apiGetAllPurchaseOrderWithPagination } from "../../../../../services/SuperAdmin/Stock/StockService";
+import { apiDeletePurchaseOrder } from "../../../../../services/SuperAdmin/PruchaseOrder/PurchaseOrderService";
+
 export const getAllPoWithPagination = createAsyncThunk(
-  "po/data/list/all",
+  "purchase/order/data/all",
   async (data) => {
     try {
       const response = await apiGetAllPurchaseOrderWithPagination(data);
@@ -13,6 +15,17 @@ export const getAllPoWithPagination = createAsyncThunk(
   }
 );
 
+export const deletePurchaseOrder = createAsyncThunk(
+  "purchase/order/data/delete",
+  async (data) => {
+    try {
+      const response = await apiDeletePurchaseOrder(data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+);
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -25,7 +38,7 @@ export const initialFilterData = {
 };
 
 const dataSlice = createSlice({
-  name: "po/data/list",
+  name: "purchase/order/data/list",
   initialState: {
     loading: false,
     poList: [],
@@ -49,6 +62,7 @@ const dataSlice = createSlice({
     [getAllPoWithPagination.pending]: (state, action) => {
       state.loading = true;
     },
+    [deletePurchaseOrder.fulfilled]: (state, action) => {},
   },
 });
 

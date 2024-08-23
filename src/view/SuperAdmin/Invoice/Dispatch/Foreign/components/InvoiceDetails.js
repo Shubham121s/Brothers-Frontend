@@ -11,11 +11,11 @@ const InvoiceDetails = ({ data, location_code }) => {
     <div className="h-full">
       <div
         className="grid grid-cols-2"
-        style={{ borderBottom: "1px dashed lightGray" }}
+        style={{ borderBottom: "1px dashed black" }}
       >
         <div
           className="flex gap-1 items-center"
-          style={{ borderRight: "1px dashed lightGray" }}
+          style={{ borderRight: "1px dashed black" }}
         >
           <p className="text-center text-gray-500 print:text-xs">INVOICE NO</p>
           <p className="text-center text-gray-500 print:text-xs">-</p>
@@ -43,7 +43,7 @@ const InvoiceDetails = ({ data, location_code }) => {
       {location_code ? (
         <div
           className="flex gap-1 items-center"
-          style={{ marginTop: "-5px", borderBottom: "1px dashed lightGray" }}
+          style={{ marginTop: "-5px", borderBottom: "1px dashed black" }}
         >
           <p className="font-normal text-center text-gray-500 print:text-xs">
             LOCATION

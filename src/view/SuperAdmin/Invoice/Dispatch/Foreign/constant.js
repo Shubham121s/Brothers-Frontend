@@ -1,1 +1,1 @@
-export const TABLE_ROW_COUNT = 6
+export const TABLE_ROW_COUNT = 8;

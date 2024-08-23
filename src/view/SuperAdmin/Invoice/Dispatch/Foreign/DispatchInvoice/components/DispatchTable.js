@@ -29,82 +29,82 @@ const TableFooterRows = ({
     <>
       <Tr
         style={{
-          border: ".2px dashed lightGray",
+          border: ".2px  black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="5"
         ></Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="2"
           className={`uppercase ${className}`}
         >
           Total (page {pageNo})
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {pageQuantity}
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".2px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".2px solid black", padding: "3px" }}>
           <NumberFormat value={pageAmount} />
         </Td>
       </Tr>
       <Tr
         style={{
-          border: ".2px dashed lightGray",
+          border: ".2px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="4"
         ></Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="3"
           className={`uppercase ${className}`}
         >
           Total (page 1 to {pageCount})
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
           className={className}
         >
           {totalQuantity}
         </Td>
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".2px dashed lightGray", padding: "3px" }}>
+        <Td style={{ border: ".2px solid black", padding: "3px" }}>
           <NumberFormat value={totalAmount} />
         </Td>
       </Tr>
       <Tr
         style={{
-          border: ".2px dashed lightGray",
+          border: ".2px solid black",
           padding: "3px",
           textAlign: "center",
         }}
         className={className}
       >
         <Td
-          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          style={{ border: ".2px solid black", padding: "3px" }}
           colSpan="2"
           className="uppercase"
         >
@@ -113,7 +113,7 @@ const TableFooterRows = ({
         <Td
           className="font-semibold uppercase"
           style={{
-            border: ".2px dashed lightGray",
+            border: ".2px solid black",
             padding: "6px 3px",
             paddingLeft: "10px",
           }}
@@ -184,9 +184,7 @@ const DispatchTable = (props) => {
         accessorKey: "name",
         cell: (props) => {
           const row = props.row.original;
-          return (
-            <div className="uppercase text-center">{row?.item_name || "-"}</div>
-          );
+          return <div className="uppercase">{row?.item_name || "-"}</div>;
         },
       },
       {
@@ -215,7 +213,7 @@ const DispatchTable = (props) => {
         cell: (props) => {
           const row = props.row.original;
           return (
-            <div className="text-center">{`BOX NO ${
+            <div className="text-center">{`${
               findBox(boxes, "dispatch_box_list_id", row?.dispatch_box_id)
                 ?.box_no
             }`}</div>
@@ -277,7 +275,7 @@ const DispatchTable = (props) => {
                   <Th
                     className={className}
                     style={{
-                      border: ".2px dashed lightGray",
+                      border: ".2px solid black",
                       textAlign: "center",
                       padding: "3px",
                     }}
@@ -304,7 +302,7 @@ const DispatchTable = (props) => {
                       className={className}
                       key={cell.id}
                       style={{
-                        border: ".2px dashed lightGray",
+                        border: ".2px solid black",
                         padding: "3px",
                       }}
                     >
