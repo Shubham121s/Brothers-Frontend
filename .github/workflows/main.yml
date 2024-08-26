@@ -1,0 +1,36 @@
+name: Brother Industries WEB APP Deploy
+
+on:
+  push:
+    branches:
+      - main  
+env:
+  CI: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build the React app
+        run: npm run build
+
+      - name: Deploy 
+        uses: SamKirkland/FTP-Deploy-Action@v4
+        with:
+          ftp-server: ${{ secrets.FTP_server }}
+          ftp-username: ${{ secrets.FTP_USERNAME }}
+          ftp-password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: build 
+          server-dir:  ${{ secrets.DIRECTORY }} 
