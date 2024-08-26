@@ -3,9 +3,7 @@ name: Brother Industries WEB APP Deploy
 on:
   push:
     branches:
-      - main  
-env:
-  CI: false
+      - main
 
 jobs:
   deploy:
@@ -24,13 +22,13 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build the React app
-        run: npm run build
-
+        run: |
+          CI=false npm run build
       - name: Deploy 
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           ftp-server: ${{ secrets.FTP_server }}
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: build 
-          server-dir:  ${{ secrets.DIRECTORY }} 
+          local-dir: ./build 
+          server-dir: ${{ secrets.DIRECTORY }} 
