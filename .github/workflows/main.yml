@@ -19,16 +19,17 @@ jobs:
           node-version: 18 
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: npm install 
 
       - name: Build the React app
         run: |
-          CI=false npm run build
+          CI=false npm run build  # Ensuring build succeeds in a CI environment
+
       - name: Deploy 
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           ftp-server: ${{ secrets.FTP_server }}
           ftp-username: ${{ secrets.FTP_USERNAME }}
           ftp-password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./build 
-          server-dir: ${{ secrets.DIRECTORY }} 
+          local-dir: ./build
+          server-dir: ${{ secrets.DIRECTORY }}
