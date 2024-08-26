@@ -49,12 +49,17 @@ const dataSlice = createSlice({
   },
   extraReducers: {
     [getAllEnquiry.fulfilled]: (state, action) => {
-      state.enquiryList = action.payload.data?.data || [];
-      state.tableData.table = action.payload.data.total || 0;
+      state.enquiryList = action.payload?.data?.data || [];
+      state.tableData.total = action.payload?.data?.total || 0;
       state.loading = false;
     },
     [getAllEnquiry.pending]: (state, action) => {
       state.loading = true;
+    },
+    [getAllEnquiry.rejected]: (state, action) => {
+      state.enquiryList = [];
+      state.tableData.total = 0;
+      state.loading = false;
     },
     [deleteEnquiry.fulfilled]: (state, action) => {},
   },

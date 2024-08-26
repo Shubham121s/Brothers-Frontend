@@ -42,16 +42,22 @@ export const postNewEnquiry = createAsyncThunk(
 const dataSlice = createSlice({
   name: "new/enquiry/data",
   initialState: {
+    loading: {
+      getAllCustomers: true,
+      getAllProductsWithDrawing: true,
+    },
     customers: [],
     products: [],
   },
   extraReducers: {
     [getAllCustomers.fulfilled]: (state, action) => {
       state.customers = action.payload.data?.data || [];
+      state.loading.getAllCustomers = false;
     },
     [postNewEnquiry.fulfilled]: (state) => {},
     [getAllProductsWithDrawing.fulfilled]: (state, action) => {
       state.products = action.payload.data?.data || [];
+      state.loading.getAllProductsWithDrawing = false;
     },
   },
 });

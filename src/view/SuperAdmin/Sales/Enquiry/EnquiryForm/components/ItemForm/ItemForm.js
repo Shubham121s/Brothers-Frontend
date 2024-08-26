@@ -10,16 +10,12 @@ import {
 } from "../../../../../../../components/ui";
 import { HiCheck } from "react-icons/hi";
 import { components } from "react-select";
-import {
-  useReactTable,
-  getCoreRowModel,
-  flexRender,
-} from "@tanstack/react-table";
 import { HiOutlineTrash } from "react-icons/hi";
+import DatePickerInformationField from "../DatePickerInformationField";
 const { Tr, Th, Td, THead, TBody } = Table;
 const { Control } = components;
 
-const ItemForm = ({ values, errors, touched, Products = [] }) => {
+const ItemForm = ({ values, errors, touched, Products = [], type = "new" }) => {
   const fieldFeedback = (form, name) => {
     const error = getIn(form.errors, name);
     const touch = getIn(form.touched, name);
@@ -29,9 +25,11 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
     };
   };
 
+  console.log(values);
+
   const productData = useMemo(() => {
     return Products.map((product) => {
-      return { label: product.name, value: product };
+      return { label: `${product.name} ${product?.item_code}`, value: product };
     });
   }, [Products]);
 
@@ -58,9 +56,7 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
         {...innerProps}
       >
         <div className="items-center flex justify-between w-full">
-          <div className="ml-2 uppercase">
-            {`${label} ( ${data?.value?.item_code})`}
-          </div>
+          <div className="ml-2 uppercase">{`${label}`}</div>
           {isSelected && <HiCheck className="text-emerald-500 text-xl" />}
         </div>
       </div>
@@ -206,7 +202,23 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
                           </FormItem>
                         </Td>
                         <Td style={style}>
-                          <FormItem
+                          <DatePickerInformationField
+                            // errors={errors?.enquiry_date}
+                            // touched={touched?.enquiry_date}
+                            placeholder="Expected Delivery Date"
+                            label=""
+                            size="sm"
+                            name={`items[${index}].delivery_date`}
+                            value={values.items[index].delivery_date}
+                            menuPortalTarget={document.body}
+                            styles={{
+                              menuPortal: (base) => ({
+                                ...base,
+                                zIndex: 9999,
+                              }),
+                            }}
+                          />
+                          {/* <FormItem
                             label=""
                             className="mb-2"
                             invalid={deliveryFeedBack.invalid}
@@ -221,7 +233,7 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
                               placeholder="Expeted Delivery Date"
                               component={Input}
                             />
-                          </FormItem>
+                          </FormItem> */}
                         </Td>
                         <Td
                           style={{

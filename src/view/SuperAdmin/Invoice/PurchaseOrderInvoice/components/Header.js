@@ -16,20 +16,22 @@ const Header = ({ data, className }) => {
             />
           </div>
           <div className="col-span-1 pb-0">
-            <p className="text-gray-600">
+            <p className="text-gray-600 uppercase">
               BROTHERS INDUSTRIES <br />
               Gat No.882 ,Kirloskarwadi Road, Savantpur, Tal: Palus, Dist.:
               Sangli, Pin-416310,
               <br />
               Maharashtra, India
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 uppercase">
               Mob : (+91) 7588777800, 9764705724, 99201139101
             </p>
-            <p className="text-gray-600">
+            <p className="text-gray-600 uppercase">
               E-mail : brothersindustries07@gmail.com{" "}
             </p>
-            <p className="text-gray-600">Website : www.brothers.net.in </p>
+            <p className="text-gray-600 uppercase">
+              Website : www.brothers.net.in{" "}
+            </p>
           </div>
         </div>
       </Card>

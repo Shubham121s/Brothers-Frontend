@@ -6,7 +6,7 @@ const InvoiceDetails = ({ data, location_code }) => {
     String(item?.Po?.number)
   );
   const POInvoice = Array.from(new Set(POLists));
-
+  // data?.invoice_date
   return (
     <div className="h-full">
       <div
@@ -35,7 +35,7 @@ const InvoiceDetails = ({ data, location_code }) => {
             className="text-center text-gray-700 font-semibold"
             style={{ fontSize: "11px" }}
           >
-            {dayjs(data?.invoice_date).format("DD MMM, YYYY")}
+            {dayjs().format("DD MMM, YYYY")}
           </h6>
         </div>
       </div>

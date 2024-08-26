@@ -17,10 +17,12 @@ import {
   getAllCustomers,
   getAllProductsWithDrawing,
   getEnquiryById,
+  UpdateEnquiry,
 } from "./store/dataSlice";
 import EnquiryForm from "../EnquiryForm";
 import { postNewEnquiry } from "./store/dataSlice";
 import { getAllEnquiry } from "../EnquiryList/store/dataSlice";
+import { Loading } from "../../../../../components/shared";
 
 injectReducer("enquiry_edit", editEnquiryReducer);
 
@@ -43,42 +45,52 @@ const EditEnquiry = () => {
   const Customers = useSelector((state) => state.enquiry_edit.data.customers);
   const Products = useSelector((state) => state.enquiry_edit.data.products);
   const Enquiry = useSelector((state) => state.enquiry_edit.data.enquiry);
+  const loadingStates = useSelector((state) => state.enquiry_edit.data.loading);
   const isOpen = useSelector((state) => state.enquiry.state.openEditDrawer);
   const selectedEnquiry = useSelector(
     (state) => state.enquiry.state.selectedEnquiry
   );
+
+  const loading = Object.values(loadingStates);
+  console.log(loading);
 
   useEffect(() => {
     if (isOpen) {
       getWindowSize();
       fetchData();
     }
-  }, [isOpen]); // Run the effect only when isOpen changes
+  }, [isOpen]);
 
   const fetchData = async () => {
-    dispatch(getAllCustomers());
-    dispatch(getAllProductsWithDrawing());
-    dispatch(getEnquiryById({ enquiry_id: selectedEnquiry?.enquiry_id }));
+    try {
+      await dispatch(getAllCustomers());
+      await dispatch(getAllProductsWithDrawing());
+      await dispatch(
+        getEnquiryById({ enquiry_id: selectedEnquiry?.enquiry_id })
+      );
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   const getWindowSize = () => {
     const width = window.innerWidth;
-    setSize(width);
+    setSize(width - 250);
   };
 
   const handleFormSubmit = async (values, setSubmitting) => {
     console.log(values);
-    // setSubmitting(true);
-    // const action = await dispatch(postNewEnquiry(values));
-    // if (action.payload.status < 300) {
-    //   setSubmitting(false);
-    //   popNotification("Successfull", "success", "Enquiry Successfully created");
-    //   onDrawerClose();
-    //   dispatch(getAllEnquiry());
-    // } else {
-    //   popNotification("Unsuccessful", "error", "Enquiry not created");
-    //   setSubmitting(false);
-    // }
+    setSubmitting(true);
+    const action = await dispatch(UpdateEnquiry(values));
+    if (action.payload.status < 300) {
+      setSubmitting(false);
+      popNotification("Successfull", "success", "Enquiry Successfully Updated");
+      onDrawerClose();
+      dispatch(getAllEnquiry());
+    } else {
+      popNotification("Unsuccessful", "error", "Enquiry not Updated");
+      setSubmitting(false);
+    }
   };
 
   const onDrawerClose = () => {
@@ -109,14 +121,22 @@ const EditEnquiry = () => {
         // footer={Footer}
         width={size}
       >
-        <EnquiryForm
-          type="edit"
-          onFormSubmit={handleFormSubmit}
-          onDiscard={handleDiscard}
-          Customers={Customers}
-          Products={Products}
-          initialData={Enquiry}
-        />
+        <Loading loading={!loading.every((value) => value === false)}>
+          <EnquiryForm
+            type="edit"
+            onFormSubmit={handleFormSubmit}
+            onDiscard={handleDiscard}
+            Customers={Customers}
+            Products={Products}
+            initialData={{
+              ...Enquiry,
+              enquiry_date: new Date(Enquiry?.enquiry_date),
+              items: Enquiry?.items?.map((m) => {
+                return { ...m, delivery_date: new Date(m.delivery_date) };
+              }),
+            }}
+          />
+        </Loading>
       </Drawer>
     </>
   );

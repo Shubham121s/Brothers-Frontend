@@ -21,6 +21,7 @@ import ItemForm from "../EnquiryForm/components/ItemForm/ItemForm";
 import InputInformationFields from "./components/InputInformationFields";
 import SelectInformatinFields from "./components/SelectInformatinFields";
 import { EnquiryType } from "./constant";
+import DatePickerInformationField from "./components/DatePickerInformationField";
 
 const validationSchema = Yup.object().shape({
   customer_id: Yup.string().required("Required"),
@@ -44,9 +45,7 @@ const validationSchema = Yup.object().shape({
           return true;
         }),
       quantity: Yup.string().required("Required"),
-      delivery_date: Yup.string()
-        .required("Required")
-        .matches(/^\d{4}-\d{2}-\d{2}$/, "format YYYY-MM-DD"),
+      delivery_date: Yup.object().required("Required"),
     })
   ),
 });
@@ -75,7 +74,7 @@ const EnquiryForm = forwardRef((props, ref) => {
           initialValues={{
             ...initialData,
           }}
-          validationSchema={validationSchema}
+          // validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             const formData = cloneDeep(values);
             onFormSubmit?.(formData, setSubmitting);
@@ -90,11 +89,12 @@ const EnquiryForm = forwardRef((props, ref) => {
             handleSubmit,
             resetForm,
           }) => {
+            console.log(values);
             return (
               <Form>
                 <FormContainer>
                   <Card className=" h-max border-rose-800 bg-rose-50">
-                    <div className="grid grid-cols-7 gap-3">
+                    <div className="grid grid-cols-6 gap-3">
                       <SelectInformatinFields
                         errors={errors?.customer_id}
                         touched={touched?.customer_id}
@@ -120,31 +120,15 @@ const EnquiryForm = forwardRef((props, ref) => {
                         values={values.enquiry_type}
                         label="Type"
                       />
-                      <FormItem
+                      <DatePickerInformationField
+                        errors={errors?.enquiry_date}
+                        touched={touched?.enquiry_date}
+                        placeholder="Enquiry Date"
                         label="Enquiry Date"
-                        invalid={errors.enquiry_date && touched.enquiry_date}
-                        errorMessage={errors.enquiry_date}
-                        className="mb-2"
-                      >
-                        <Field name="enquiry_date" placeholder="Date">
-                          {({ field, form }) => (
-                            <DatePicker
-                              field={field}
-                              form={form}
-                              value={values.date}
-                              onChange={(date) => {
-                                form.setFieldValue(field.name, date);
-                              }}
-                            />
-                          )}
-                        </Field>
-                      </FormItem>
-                      <InputInformationFields
-                        placeholder="Customer Enquiry Number"
-                        label="Customer Enquiry No."
-                        name="customer_enquiry_number"
-                        type="text"
+                        name="enquiry_date"
+                        value={values.enquiry_date}
                       />
+
                       <InputInformationFields
                         errors={errors?.poc_name}
                         touched={touched?.poc_name}
@@ -169,6 +153,7 @@ const EnquiryForm = forwardRef((props, ref) => {
                       Products={Products}
                       errors={errors}
                       touched={touched}
+                      type={type}
                     />
                   </div>
                   <StickyFooter
@@ -205,7 +190,6 @@ EnquiryForm.defaultProps = {
     customer_id: "",
     enq_number: "",
     enquiry_type: "",
-    customer_enquiry_number: "",
     enquiry_date: new Date(),
     poc_name: "",
     poc_contact: "",
@@ -213,7 +197,7 @@ EnquiryForm.defaultProps = {
       {
         Product: null,
         quantity: "",
-        delivery_date: "",
+        delivery_date: new Date(),
         drawing_revision: "",
       },
     ],

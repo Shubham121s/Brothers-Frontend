@@ -18,7 +18,9 @@ const WeightDetails = ({ data }) => {
           PACKING DETAILS
         </p>
         <p className="text-gray-700 print:text-sm">-</p>
-        <p className="text-gray-500 font-medium print:text-sm">Wooden Box</p>
+        <p className="text-gray-500 font-medium print:text-sm uppercase">
+          Wooden Box
+        </p>
       </div>
       <div className="flex gap-1  justify-start capitalize">
         <p className="text-gray-700 font-semibold print:text-sm">NO OF BOX</p>

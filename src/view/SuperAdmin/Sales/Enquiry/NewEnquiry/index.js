@@ -14,6 +14,7 @@ import { getAllCustomers, getAllProductsWithDrawing } from "./store/dataSlice";
 import EnquiryForm from "../EnquiryForm";
 import { postNewEnquiry } from "./store/dataSlice";
 import { getAllEnquiry } from "../EnquiryList/store/dataSlice";
+import { Loading } from "../../../../../components/shared";
 
 injectReducer("enquiry_new", newEnquiryReducer);
 
@@ -35,7 +36,10 @@ const NewEnquiry = () => {
 
   const Customers = useSelector((state) => state.enquiry_new.data.customers);
   const Products = useSelector((state) => state.enquiry_new.data.products);
+  const loadingStates = useSelector((state) => state.enquiry_new.data.loading);
   const isOpen = useSelector((state) => state.enquiry.state.openDrawer);
+
+  let loading = Object.values(loadingStates);
 
   useEffect(() => {
     if (isOpen) {
@@ -51,7 +55,7 @@ const NewEnquiry = () => {
 
   const getWindowSize = () => {
     const width = window.innerWidth;
-    setSize(width);
+    setSize(width - 250);
   };
 
   const handleFormSubmit = async (values, setSubmitting) => {
@@ -97,13 +101,15 @@ const NewEnquiry = () => {
         // footer={Footer}
         width={size}
       >
-        <EnquiryForm
-          type="new"
-          onFormSubmit={handleFormSubmit}
-          onDiscard={handleDiscard}
-          Customers={Customers}
-          Products={Products}
-        />
+        <Loading loading={!loading.every((e) => e === false)}>
+          <EnquiryForm
+            type="new"
+            onFormSubmit={handleFormSubmit}
+            onDiscard={handleDiscard}
+            Customers={Customers}
+            Products={Products}
+          />
+        </Loading>
       </Drawer>
     </>
   );

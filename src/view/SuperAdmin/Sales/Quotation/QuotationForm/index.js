@@ -98,6 +98,14 @@ const QuotationForm = forwardRef((props, ref) => {
                       <SelectInformatinFields
                         errors={errors?.customer_id}
                         touched={touched?.customer_id}
+                        name="enq_number"
+                        data={CustomerOption}
+                        values={values.enq_number}
+                        label="Customer"
+                      />
+                      <SelectInformatinFields
+                        errors={errors?.customer_id}
+                        touched={touched?.customer_id}
                         name="customer_id"
                         data={CustomerOption}
                         values={values.customer_id}
@@ -181,14 +189,14 @@ QuotationForm.defaultProps = {
   type: "new",
   initialData: {
     customer_id: "",
+    enq_number: "",
     quotation_number: "",
     quotation_date: new Date(),
     project: "",
     items: [
       {
         Product: null,
-        casting_drawing_no: "",
-        machining_drawing_no: "",
+        revision_number: "",
         material: "",
         quantity: "",
         raw_weight: "",

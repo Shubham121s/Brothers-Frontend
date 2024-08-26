@@ -12,6 +12,7 @@ import { HiCheck } from "react-icons/hi";
 import { components } from "react-select";
 
 import { HiOutlineTrash } from "react-icons/hi";
+import { BsBorderRight } from "react-icons/bs";
 const { Tr, Th, Td, THead, TBody } = Table;
 const { Control } = components;
 
@@ -65,7 +66,7 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
 
   const style = {
     textAlign: "center",
-    border: ".2px dashed lightGray",
+    border: ".2px solid lightGray",
     width: "130px",
   };
 
@@ -87,7 +88,7 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
   // lead_time: "",
 
   return (
-    <div style={{ overflowX: "auto", width: "100%" }}>
+    <div style={{ overflowX: "auto", width: "auto" }}>
       <Table
         className="relative"
         compact={true}
@@ -95,25 +96,33 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
       >
         <THead className="sticky" style={{ top: "-.2px" }}>
           <Tr>
-            <Th style={style} rowSpan="3">
+            <Th
+              style={{
+                textAlign: "center",
+                border: ".2px solid lightGray",
+                widTh: "15px",
+              }}
+              rowSpan="3"
+            >
               Sr
             </Th>
-            <Th style={style} rowSpan="3">
+            <Th style={{ ...style, width: "230px" }} rowSpan="3">
               Item Name
             </Th>
             <Th style={style} rowSpan="3">
-              Casting Drawing No
+              Drawing Rev. No.
             </Th>
             <Th style={style} rowSpan="3">
-              Machinng Drawing No
-            </Th>
-            <Th style={style} rowSpan="3">
-              Material
+              Material Grade
             </Th>
             <Th style={style} rowSpan="3">
               MOQ QTY
             </Th>
-            <Th style={style} rowSpan="2" colSpan="1">
+            <Th
+              style={{ ...style, BsBorderRight: "1px solid lightGray" }}
+              rowSpan="2"
+              colSpan="1"
+            >
               RAW Weight
             </Th>
             <Th style={style} colSpan="9">
@@ -125,7 +134,7 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
             <Th
               style={{
                 textAlign: "center",
-                border: ".2px dashed lightGray",
+                border: ".2px solid lightGray",
                 width: "30px",
               }}
               rowSpan="3"
@@ -206,7 +215,14 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
                       // );
                       return (
                         <Tr key={index}>
-                          <Td style={style}>{index + 1}.</Td>
+                          <Td
+                            style={{
+                              ...style,
+                              width: "15px",
+                            }}
+                          >
+                            {index + 1}.
+                          </Td>
                           <Td style={style}>
                             <FormItem
                               label=""
@@ -263,25 +279,9 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
                                 autoComplete="off"
                                 // // invalid={drawingRevisionFeedBack.invalid}
                                 type="text"
-                                name={`items[${index}].casting_drawing_no`}
+                                name={`items[${index}].revision_number`}
                                 size="sm"
-                                component={Input}
-                              />
-                            </FormItem>
-                          </Td>
-                          <Td style={style}>
-                            <FormItem
-                              label=""
-                              className="mb-2"
-                              // // invalid={quantityFeedBack.invalid}
-                              // // errorMessage={quantityFeedBack.errorMessage}
-                            >
-                              <Field
-                                // // invalid={quantityFeedBack.invalid}
-                                autoComplete="off"
-                                type="text"
-                                name={`items[${index}].machining_drawing_no`}
-                                size="sm"
+                                disabled={true}
                                 component={Input}
                               />
                             </FormItem>
@@ -296,6 +296,7 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
                               <Field
                                 // // invalid={deliveryFeedBack.invalid}
                                 autoComplete="off"
+                                disabled={true}
                                 type="text"
                                 name={`items[${index}].material`}
                                 size="sm"
@@ -521,7 +522,7 @@ const ItemForm = ({ values, errors, touched, Products = [] }) => {
                           <Td
                             style={{
                               textAlign: "center",
-                              border: ".2px dashed lightGray",
+                              border: ".2px solid lightGray",
                               widTh: "100px",
                             }}
                           >

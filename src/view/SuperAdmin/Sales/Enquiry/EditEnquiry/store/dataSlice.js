@@ -4,6 +4,7 @@ import { apiGetAllProductsWithDrawing } from "../../../../../../services/SuperAd
 import {
   apiPostNewEnquiry,
   apiGetEnquiryById,
+  apiUpdateEnquiry,
 } from "../../../../../../services/SuperAdmin/Sales/enquiry";
 
 export const getAllCustomers = createAsyncThunk(
@@ -42,11 +43,11 @@ export const getEnquiryById = createAsyncThunk(
   }
 );
 
-export const postNewEnquiry = createAsyncThunk(
-  "edit/enquiry/data/register",
+export const UpdateEnquiry = createAsyncThunk(
+  "edit/enquiry/data/update",
   async (data) => {
     try {
-      const response = await apiPostNewEnquiry(data);
+      const response = await apiUpdateEnquiry(data);
       return response;
     } catch (error) {
       return error?.response;
@@ -57,6 +58,11 @@ export const postNewEnquiry = createAsyncThunk(
 const dataSlice = createSlice({
   name: "edit/enquiry/data",
   initialState: {
+    loading: {
+      getAllCustomers: true,
+      getAllProductsWithDrawing: true,
+      getEnquiryById: true,
+    },
     customers: [],
     products: [],
     enquiry: {},
@@ -64,13 +70,16 @@ const dataSlice = createSlice({
   extraReducers: {
     [getAllCustomers.fulfilled]: (state, action) => {
       state.customers = action.payload.data?.data || [];
+      state.loading.getAllCustomers = false;
     },
-    [postNewEnquiry.fulfilled]: (state) => {},
+    [UpdateEnquiry.fulfilled]: (state) => {},
     [getAllProductsWithDrawing.fulfilled]: (state, action) => {
       state.products = action.payload.data?.data || [];
+      state.loading.getAllProductsWithDrawing = false;
     },
     [getEnquiryById.fulfilled]: (state, action) => {
       state.enquiry = action.payload.data?.data || {};
+      state.loading.getEnquiryById = false;
     },
   },
 });

@@ -87,7 +87,7 @@ const NewPO = () => {
     } else {
       Toast.push(
         <Notification title={"Error"} type="danger" duration={2500}>
-          Some Error Occured
+          {action.payload?.data?.message}
         </Notification>,
         {
           placement: "top-center",

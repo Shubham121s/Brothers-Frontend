@@ -51,7 +51,7 @@ const NewQuotation = () => {
 
   const getWindowSize = () => {
     const width = window.innerWidth;
-    setSize(width);
+    setSize(width - 250);
   };
 
   const handleFormSubmit = async (values, setSubmitting) => {

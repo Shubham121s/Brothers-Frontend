@@ -56,6 +56,14 @@ export async function apiGetEnquiryDetailsByEnquiryId(data) {
   });
 }
 
+export async function apiUpdateEnquiry(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/enquiry/update",
+    method: "put",
+    data,
+  });
+}
+
 export async function apiDeleteSelectedMaterial(data) {
   return ApiService.fetchData({
     url: "v1/web/company/enquiry/delete/id",
