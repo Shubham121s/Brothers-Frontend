@@ -47,7 +47,7 @@ const DeleteProductConfirmationDialog = () => {
         "success",
         action.payload?.data?.message
       );
-
+      onDialogClose();
       dispatch(getAllProducts(tableData));
     } else {
       return pushNotification(

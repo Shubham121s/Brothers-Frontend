@@ -144,6 +144,12 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
     setFieldValue?.("DispatchBoxList", updatedBox);
   };
 
+  const handleDeleteBox = (boxes = [], index, setFieldValue) => {
+    const updatedBox = [...boxes];
+    updatedBox.splice(index, 1);
+    setFieldValue?.("DispatchBoxList", updatedBox);
+  };
+
   const handleNewLocationCodeAndPoList = (dispatchList = [], setFieldValue) => {
     const newDispatchList = {
       location_code: "",
@@ -322,6 +328,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                         <BoxTable
                           values={values?.DispatchBoxList}
                           handleNewBoxAdd={handleNewBoxAdd}
+                          handleDeleteBox={handleDeleteBox}
                           setFieldValue={setFieldValue}
                         />
                       </div>

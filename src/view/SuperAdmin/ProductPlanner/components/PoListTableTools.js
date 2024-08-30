@@ -6,6 +6,7 @@ import {
   DatePicker,
   Select,
 } from "../../../../components/ui";
+import CreatableSelect from "react-select/creatable";
 import {
   setTableData,
   getAllPoLists,
@@ -20,12 +21,15 @@ import { useDispatch, useSelector } from "react-redux";
 import cloneDeep from "lodash/cloneDeep";
 import debounce from "lodash/debounce";
 import PoListTableSearch from "./PoListSearch";
-import { HiOutlineFilter, HiOutlineSearch } from "react-icons/hi";
+import { HiOutlineFilter } from "react-icons/hi";
+import ReportButton from "./ReportButton";
+import { json } from "react-router-dom";
 
 const dateFormat = "MMM DD, YYYY";
 
 const PoListTableTools = () => {
   const [open, setOpen] = useState(false);
+  const [poDateVAlues, setPoDateValues] = useState([]);
   const dispatch = useDispatch();
 
   const tableData = useSelector((state) => state.poList.data.tableData);
@@ -77,7 +81,7 @@ const PoListTableTools = () => {
     newTableData.revision_no = "";
     newTableData.material_grade = "";
     newTableData.po_no = "";
-    newTableData.po_Date = "";
+    newTableData.po_Date = [];
     newTableData.po_del_Date = "";
     newTableData.brother_Date = "";
     newTableData.raw_date = "";
@@ -109,7 +113,9 @@ const PoListTableTools = () => {
     } else if (type === "po_number") {
       newTableData.po_no = val;
     } else if (type === "po_date") {
-      newTableData.po_Date = val;
+      setPoDateValues(val);
+      let poDates = val.map((m) => m.value);
+      newTableData.po_Date = JSON.stringify(poDates);
     } else if (type === "brothers_date") {
       newTableData.brother_Date = val;
     } else if (type === "po_del_date") {
@@ -121,11 +127,7 @@ const PoListTableTools = () => {
     }
 
     newTableData.pageIndex = 1;
-    if (typeof val === "string" && val.length >= 1) {
-      fetchData(newTableData);
-    }
-
-    if (typeof val === "string" && val.length === 0) {
+    if (val) {
       fetchData(newTableData);
     }
   }
@@ -159,7 +161,7 @@ const PoListTableTools = () => {
     } else if (type === "po_serial_no") {
       debounceFn(e.value, type);
     } else if (type === "po_date") {
-      debounceFn(e.value, type);
+      debounceFn(e, type);
     } else if (type === "po_del_date") {
       debounceFn(e.value, type);
     } else if (type === "brothers_date") {
@@ -201,10 +203,10 @@ const PoListTableTools = () => {
           >
             Filter
           </Button>
-          {/* <PoListTableSearch ref={inputRef} onInputChange={handleInputChange} /> */}
           <Button size="sm" onClick={onClearAll}>
             Clear All
           </Button>
+          <ReportButton />
         </div>
       </div>
       {open && (
@@ -309,25 +311,21 @@ const PoListTableTools = () => {
               placeholder="Select Material Grade"
               size="sm"
             />
-            <Select
+            {/* <Select
               options={PoDates}
               value={PoDates.filter((currency) => currency.value === po_Date)}
               onChange={(e) => onEdit(e, "po_date")}
               placeholder="Select PO Date"
               size="sm"
-            />
-            {/* <DatePicker
-              ref={searchInput}
-              value={po_Date}
-              onChange={(value) => {
-                console.log(value);
-                handleDateChange(value, "po_date");
-              }}
-              disableDate={disableCertainDate}
-              inputFormat={dateFormat}
-              size="sm"
-              placeholder="PO Date"
             /> */}
+            <Select
+              isMulti
+              placeholder="Select PO Date"
+              size="sm"
+              options={PoDates}
+              value={poDateVAlues}
+              onChange={(e) => onEdit(e, "po_date")}
+            />
             <Select
               options={PoDeliveryDates}
               value={PoDeliveryDates.filter(
@@ -337,14 +335,7 @@ const PoListTableTools = () => {
               placeholder="Select Po Delivery Date"
               size="sm"
             />
-            {/* <DatePicker
-              ref={searchInput}
-              value={po_del_Date}
-              onChange={(value) => handleDateChange(value, "po_del_date")}
-              inputFormat={dateFormat}
-              size="sm"
-              placeholder="PO Delivery Date"
-            /> */}
+
             <Select
               options={brotherDeliveryDate}
               value={brotherDeliveryDate?.filter(
@@ -354,48 +345,6 @@ const PoListTableTools = () => {
               placeholder="Select Brother Date"
               size="sm"
             />
-            {/* <DatePicker
-              ref={searchInput}
-              value={brother_Date}
-              onChange={(value) => handleDateChange(value, "brothers_date")}
-              inputFormat={dateFormat}
-              size="sm"
-              placeholder="Brothers Delivery Date"
-            /> */}
-            {/* <Select
-              options={rawDates}
-              value={rawDates?.filter(
-                (currency) => currency.value === raw_date
-              )}
-              onChange={(e) => onEdit(e, "raw_date")}
-              placeholder="Select Raw Date"
-              size="sm"
-            /> */}
-            {/* <DatePicker
-              ref={searchInput}
-              value={raw_date}
-              onChange={(value) => handleDateChange(value, "raw_date")}
-              inputFormat={dateFormat}
-              size="sm"
-              placeholder="Raw Date"
-            /> */}
-            {/* <Select
-              options={machiningDate}
-              value={machiningDate?.filter(
-                (currency) => currency.value === machining_date
-              )}
-              onChange={(e) => onEdit(e, "machining_date")}
-              placeholder="Select Machining Date"
-              size="sm"
-            /> */}
-            {/* <DatePicker
-              ref={searchInput}
-              value={machining_date}
-              onChange={(value) => handleDateChange(value, "machining_date")}
-              inputFormat={dateFormat}
-              size="sm"
-              placeholder="Machining Date"
-            /> */}
           </div>
         </Card>
       )}

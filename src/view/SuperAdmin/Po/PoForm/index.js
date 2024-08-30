@@ -51,6 +51,7 @@ const PoForm = forwardRef((props, ref) => {
     }
     return [];
   });
+  const [index, setIndex] = useState(-1);
 
   useEffect(() => {
     if (type === "edit" && initialData && initialData.PoLists) {
@@ -71,13 +72,15 @@ const PoForm = forwardRef((props, ref) => {
 
   const handleOnAddItem = (item) => {
     if (itemtype) {
+      console.log(item);
       setData((data) =>
-        data.map((f) =>
-          f.serial_number === item.serial_number
+        data.map((f, Index) =>
+          Index === index
             ? { ...f, ...item, delivery_date: new Date(item?.delivery_date) }
             : f
         )
       );
+      setIndex(-1);
     } else {
       setData((data) => [...data, item]);
     }
@@ -96,12 +99,13 @@ const PoForm = forwardRef((props, ref) => {
     }
   };
 
-  const onEditItem = (data) => {
+  const onEditItem = (data, index) => {
     if (type === "edit") {
       dispatch(toggleEditPoItemDialog(true));
     } else {
       dispatch(toggleNewPoItemDialog(true));
     }
+    setIndex(index);
     setItem(data);
     setType(true);
   };

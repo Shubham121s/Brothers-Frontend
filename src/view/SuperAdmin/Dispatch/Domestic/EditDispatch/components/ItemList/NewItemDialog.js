@@ -1,22 +1,15 @@
 import React, { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dialog } from "../../../../../../../components/ui";
-import ItemForm from "./ItemForm";
-import { toggleAddDispatchItemDialog } from "../../../NewDispatch/store/stateSlice";
+import NewItemForm from "./NewItemForm";
+import { toggleAddDispatchItemDialog } from "../../store/stateSlice";
 
 const NewDispatchItemDialog = (props) => {
-  const {
-    boxes = [],
-    locationIndex,
-    setFieldValue,
-    dispatchList = [],
-    addNewItemInPoList,
-    type = "new",
-  } = props;
+  const { locationIndex, dispatchList = [], addNewItemInPoList } = props;
   const dispatch = useDispatch();
 
   const addDispatchItemDialog = useSelector(
-    (state) => state.new_domestic_invoice.state.addDispatchItemDialog
+    (state) => state.edit_domestic_dispatch.state.addDispatchItemDialog
   );
 
   const onDialogClose = () => {
@@ -25,8 +18,8 @@ const NewDispatchItemDialog = (props) => {
     );
   };
 
-  const handleNewItem = (values) => {
-    addNewItemInPoList?.(dispatchList, values, locationIndex, setFieldValue);
+  const handleNewItem = (values, setSubmitting) => {
+    addNewItemInPoList?.(dispatchList, values, locationIndex);
     onDialogClose();
   };
 
@@ -39,8 +32,7 @@ const NewDispatchItemDialog = (props) => {
       onClose={onDialogClose}
       onRequestClose={onDialogClose}
     >
-      <ItemForm
-        boxes={boxes}
+      <NewItemForm
         type="new"
         dispatchList={dispatchList}
         handleFormSubmit={handleNewItem}

@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Card, Button } from "../../../../../components/ui";
+import {
+  Card,
+  Button,
+  Toast,
+  Notification,
+} from "../../../../../components/ui";
 import ConsigneeAndBuyerDetails from "./components/ConsigneeAndBuyer/ConsigneeAndBuyerDetails";
 import ShippingAddress from "./components/ShippingAndShippingAddress/ShippingAddress";
 import TransportDetails from "./components/ShippingAndShippingAddress/TransportDetails";
@@ -8,6 +13,7 @@ import { injectReducer } from "../../../../../store";
 import EditDispatchForeignReducer from "./store";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  addProductToInvoice,
   getDomesticInvoiceDetailsByInvoiceId,
   putDomesticInvoiceDetailsByInvoiceId,
 } from "./store/dataSlice";
@@ -22,24 +28,45 @@ import ItemTable from "./components/ItemList/ItemTable";
 import DeleteProductConfirmationDialog from "./components/ItemList/DeleteConfirmationDialog";
 import PackingChargesInformationField from "./components/GSTAndOther/PackingChargesInformationField";
 import { StickyFooter } from "../../../../../components/shared";
+import NewItemDialog from "./components/ItemList/NewItemDialog";
+import { toggleAddDispatchItemDialog } from "./store/stateSlice";
+import { getAllPosByCustomerId } from "./store/dataSlice";
 
 injectReducer("edit_domestic_dispatch", EditDispatchForeignReducer);
+
+const pushNotification = (message, type, title) => {
+  return Toast.push(
+    <Notification title={title} type={type} duration={2500}>
+      {message}
+    </Notification>,
+    {
+      placement: "top-end",
+    }
+  );
+};
 
 const EditDispatch = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [StateDispatchList, setList] = useState(null);
   const data = useSelector(
     (state) => state.edit_domestic_dispatch.data.invoiceDetails
   );
+
   const [loading, setLoading] = useState(false);
 
   const [charges, setCharges] = useState(0);
 
   useEffect(() => {
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setList(data);
+    }
+  }, [data]);
 
   const fetchData = async () => {
     const dispatch_invoice_id = location.pathname.substring(
@@ -56,6 +83,12 @@ const EditDispatch = () => {
               ?.packing_charges
           : ""
       );
+      dispatch(
+        getAllPosByCustomerId({
+          customer_id: action.payload.data.data?.DispatchConsignee?.customer_id,
+          currency_type: "INR",
+        })
+      );
     }
   };
 
@@ -69,10 +102,71 @@ const EditDispatch = () => {
     navigate("/super/admin/dispatch-list");
   };
 
+  const addNewItemInPoList = async (dispatchList, newItem, index) => {
+    const updatedDispatchList = [...dispatchList];
+
+    const find = StateDispatchList?.DispatchLocations[
+      index
+    ]?.DispatchLists.find((f) => {
+      if (
+        f?.Po?.number === newItem?.Po?.number &&
+        f?.product_id === newItem?.PoList?.Product?.product_id
+      )
+        return f;
+    });
+
+    if (find) {
+      return pushNotification(
+        `PO ${newItem?.Po?.number} and ${newItem?.PoList?.Product?.name} Already Added You Can Edit it.`,
+        "danger",
+        "Error"
+      );
+    }
+
+    const action = await dispatch(
+      addProductToInvoice({
+        item: newItem,
+        dispatch_location_id:
+          StateDispatchList?.DispatchLocations[index]?.dispatch_location_id,
+        dispatch_invoice_id: StateDispatchList.dispatch_invoice_id,
+      })
+    );
+
+    if (action.payload.status > 300) {
+      return pushNotification(
+        action?.payload?.data?.message,
+        "danger",
+        "Error"
+      );
+    }
+    pushNotification("Product Added Successfully", "success", "Successfull");
+    updatedDispatchList[index] = {
+      ...updatedDispatchList[index],
+      DispatchLists: [
+        ...(updatedDispatchList[index].DispatchLists || []),
+        {
+          ...newItem,
+          item_name: newItem?.PoList?.Product?.name,
+          item_code: newItem?.PoList?.Product?.item_code,
+          hsn_code: newItem?.PoList?.Product?.hsn_code,
+          product_id: newItem?.PoList?.Product?.product_id,
+          gst_percentage:
+            updatedDispatchList[index]?.DispatchLists[0]?.gst_percentage,
+          item_quantity: newItem?.quantity,
+          dispatch_list_id: action.payload.data?.data.dispatch_list_id,
+        },
+      ],
+    };
+    setList((prevData) => ({
+      ...prevData,
+      DispatchLocations: updatedDispatchList,
+    }));
+  };
+
   return (
     <Container className="h-full">
       <Loading loading={loading}>
-        {!isEmpty(data) && (
+        {!isEmpty(StateDispatchList) && (
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <Card className="bg-yellow-50">
@@ -89,13 +183,16 @@ const EditDispatch = () => {
                 <div className="grid grid-cols-2 gap-2">
                   <ConsigneeAndBuyerDetails
                     title="Receiver"
-                    data={data?.DispatchConsignee}
-                    address={data?.DispatchConsignee?.DispatchConsigneeAddress}
+                    data={StateDispatchList?.DispatchConsignee}
+                    address={
+                      StateDispatchList?.DispatchConsignee
+                        ?.DispatchConsigneeAddress
+                    }
                   />
                   <ConsigneeAndBuyerDetails
                     title="Recipient"
-                    data={data?.DispatchBuyer}
-                    address={data?.DispatchShippingAddress}
+                    data={StateDispatchList?.DispatchBuyer}
+                    address={StateDispatchList?.DispatchShippingAddress}
                   />
                 </div>
               </Card>
@@ -107,8 +204,10 @@ const EditDispatch = () => {
                   Section to config shipping & transport information
                 </p>
                 <div className="grid grid-cols-2 gap-2">
-                  <ShippingAddress data={data?.DispatchShippingAddress} />
-                  <TransportDetails data={data} />
+                  <ShippingAddress
+                    data={StateDispatchList?.DispatchShippingAddress}
+                  />
+                  <TransportDetails data={StateDispatchList} />
                   <PackingChargesInformationField
                     setCharges={setCharges}
                     charges={charges}
@@ -117,11 +216,13 @@ const EditDispatch = () => {
               </Card>
             </div>
             <Card className="my-4">
-              {data.DispatchLocations.map((list, index) => {
+              {StateDispatchList.DispatchLocations.map((list, index) => {
                 return (
                   <div
                     className={
-                      data.DispatchLocations.length - 1 === index ? "" : "mb-5"
+                      StateDispatchList.DispatchLocations.length - 1 === index
+                        ? ""
+                        : "mb-5"
                     }
                   >
                     <div className="flex justify-between items-center h-full mb-2">
@@ -137,17 +238,38 @@ const EditDispatch = () => {
                       )}
                       <div className="flex gap-2 justify-end items-center h-full">
                         <h2 className="text-gray-500">{list?.location_code}</h2>
+                        <Button
+                          type="button"
+                          variant="solid"
+                          color="pink-500"
+                          size="sm"
+                          onClick={() => {
+                            dispatch(
+                              toggleAddDispatchItemDialog({
+                                option: true,
+                                locationIndex: index,
+                              })
+                            );
+                          }}
+                        >
+                          Add Item
+                        </Button>
                       </div>
                     </div>
                     <ItemTable
                       initialData={list.DispatchLists}
-                      boxes={data?.DispatchBoxLists}
+                      boxes={StateDispatchList?.DispatchBoxLists}
+                    />
+                    <NewItemDialog
+                      locationIndex={index}
+                      addNewItemInPoList={addNewItemInPoList}
+                      dispatchList={StateDispatchList.DispatchLocations}
                     />
                   </div>
                 );
               })}
               <EditDispatchItemDialog
-                dispatchList={data.DispatchLocations}
+                dispatchList={StateDispatchList.DispatchLocations}
                 fetchData={fetchData}
               />
               <DeleteProductConfirmationDialog fetchData={fetchData} />

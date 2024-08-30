@@ -8,6 +8,7 @@ import {
   getAllCategories,
   getAllMaterialGrades,
   getAllPatterns,
+  postNewProduct,
 } from "./store/dataSlice";
 import { apiPostNewProduct } from "../../../../services/SuperAdmin/Product/IndexService";
 import ProductForm from "../ProductForm";
@@ -47,9 +48,9 @@ const NewProduct = () => {
   const handleFormSubmit = async (values, setSubmitting) => {
     setSubmitting(true);
 
-    const response = await apiPostNewProduct(values);
+    const action = await dispatch(postNewProduct(values));
 
-    if (response.data?.success) {
+    if (action.payload.status < 300) {
       const formData = new FormData();
 
       formData.append("process_attachment", values.process_attachment);
@@ -58,7 +59,7 @@ const NewProduct = () => {
       formData.append("revision_number", values.revision_number);
       formData.append("raw_weight", values.raw_weight);
       formData.append("finish_weight", values.finish_weight);
-      formData.append("product_id", response.data?.data?.product_id);
+      formData.append("product_id", action.payload.data?.data?.product_id);
       const response2 = await apiPostNewDrawing(formData);
       setSubmitting(false);
       if (response2.data?.success) {
@@ -67,14 +68,17 @@ const NewProduct = () => {
           "success",
           "Product Successfully created"
         );
+        setSubmitting(false);
       } else {
-        popNotification("Unsuccessful", "error", "Product not created");
+        popNotification("Unsuccessful", "danger", "Product not created");
+        setSubmitting(false);
       }
       navigate(
-        `/super/admin/product/drawing/${response?.data?.data?.product_id}`
+        `/super/admin/product/drawing/${action.payload.data?.data?.product_id}`
       );
     } else {
-      popNotification("Unsuccessful", "error", "Product not created");
+      popNotification("Unsuccessful", "danger", action.payload?.data?.message);
+      setSubmitting(false);
     }
   };
 

@@ -4,7 +4,9 @@ import {
   apiUpdateDispatchListByDispatchListId,
   apiDeleteDispatchListByDispatchListId,
   apiPutDispatchDomesticInvoiceByInvoiceId,
+  apiUpdateDispatchListAddProduct,
 } from "../../../../../../services/SuperAdmin/Invoice/DispatchServices";
+import { apiGetAllPosByCustomerId } from "../../../../../../services/SuperAdmin/Po/PoService";
 
 export const getDomesticInvoiceDetailsByInvoiceId = createAsyncThunk(
   "edit/domestic/invoice/data/details",
@@ -54,6 +56,30 @@ export const deleteDispatchListByDispatchListId = createAsyncThunk(
   }
 );
 
+export const getAllPosByCustomerId = createAsyncThunk(
+  "edit/domestic/invoice/data/po/all",
+  async (data) => {
+    try {
+      const response = await apiGetAllPosByCustomerId(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const addProductToInvoice = createAsyncThunk(
+  "edit/domestic/invoice/data/add/product",
+  async (data) => {
+    try {
+      const response = await apiUpdateDispatchListAddProduct(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
 const dataSlice = createSlice({
   name: "edit/domestic/invoice/data",
   initialState: {
@@ -74,6 +100,13 @@ const dataSlice = createSlice({
     [updateDispatchListByDispatchListId.fulfilled]: (state, action) => {},
     [deleteDispatchListByDispatchListId.fulfilled]: (state, action) => {},
     [putDomesticInvoiceDetailsByInvoiceId.fulfilled]: (state, action) => {},
+    [getAllPosByCustomerId.fulfilled]: (state, action) => {
+      state.poList = action.payload.data?.data || [];
+    },
+    [getAllPosByCustomerId.pending]: (state, action) => {
+      state.poList = [];
+    },
+    [addProductToInvoice.fulfilled]: (state, action) => {},
   },
 });
 

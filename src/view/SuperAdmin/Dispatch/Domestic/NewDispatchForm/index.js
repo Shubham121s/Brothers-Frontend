@@ -84,8 +84,13 @@ const validationSchema = Yup.object().shape({
 
 const NewDomesticForm = forwardRef((props, ref) => {
   const dispatch = useDispatch();
-  const { initialData, onFormSubmit, customers = [], pushNotification } = props;
-
+  const {
+    initialData,
+    onFormSubmit,
+    customers = [],
+    pushNotification,
+    type = "new",
+  } = props;
   const handleRemoveLocationCodeAndPoList = (
     dispatchList = [],
     indexToRemove,
@@ -141,9 +146,11 @@ const NewDomesticForm = forwardRef((props, ref) => {
     <>
       <Suspense fallback={<Loading loading={true} />}>
         <Formik
+          enableReinitialize={true}
           innerRef={ref}
           initialValues={{
             ...initialData,
+            DispatchShippingAddress: initialData?.DispatchShippingAddress,
           }}
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
@@ -163,6 +170,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
           }}
         >
           {({ values, touched, errors, setFieldValue, isSubmitting }) => {
+            console.log(values);
             return (
               <Form key="invoiceForm">
                 <FormContainer key="invoiceFormContainer">
@@ -379,7 +387,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                             }
                           />
                         </div>
-                      </div>
+                      </div>f
                       <PackingChargesInformationField />
                       <RemarkInformationField
                         errors={errors?.DispatchShippingAndOtherDetails?.remark}
@@ -390,11 +398,11 @@ const NewDomesticForm = forwardRef((props, ref) => {
                     </Card>
                   </div>
                   <Card className="my-4">
-                    {values.DispatchList.map((list, index) => {
+                    {values?.DispatchList?.map((list, index) => {
                       return (
                         <div
                           className={
-                            values.DispatchList.length - 1 === index
+                            values?.DispatchList?.length - 1 === index
                               ? ""
                               : "mb-5"
                           }
@@ -413,7 +421,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                               <div></div>
                             )}
                             <div className="flex gap-2 justify-end mb-5">
-                              {values.DispatchList.length !== 1 && (
+                              {values?.DispatchList?.length !== 1 && (
                                 <LocationCodeFields
                                   setFieldValue={setFieldValue}
                                   index={index}
@@ -426,7 +434,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                                 />
                               )}
 
-                              {values.DispatchList.length !== 1 && (
+                              {values?.DispatchList?.length !== 1 && (
                                 <Button
                                   type="button"
                                   variant="solid"
@@ -434,7 +442,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                                   size="sm"
                                   onClick={() => {
                                     handleRemoveLocationCodeAndPoList?.(
-                                      values.DispatchList,
+                                      values?.DispatchList,
                                       index,
                                       setFieldValue
                                     );
@@ -480,15 +488,16 @@ const NewDomesticForm = forwardRef((props, ref) => {
                             handleDeleteItemInPoList={handleDeleteItemInPoList}
                             locationIndex={index}
                             initialData={list.poList}
-                            dispatchList={values.DispatchList}
+                            dispatchList={values?.DispatchList}
                             setFieldValue={setFieldValue}
                           />
                           <NewDispatchItemDialog
-                            boxes={values.DispatchBoxList}
+                            boxes={values?.DispatchBoxList}
                             locationIndex={index}
+                            type={type}
                             setFieldValue={setFieldValue}
                             addNewItemInPoList={addNewItemInPoList}
-                            dispatchList={values.DispatchList}
+                            dispatchList={values?.DispatchList}
                           />
                         </div>
                       );
@@ -520,6 +529,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
 });
 
 NewDomesticForm.defaultProps = {
+  type: "new",
   initialData: {
     invoice_no: "",
     invoice_type: "domestic",

@@ -61,7 +61,7 @@ const DeleteProductConfirmationDialog = ({ fetchData }) => {
       onClose={onDialogClose}
       onRequestClose={onDialogClose}
       type="danger"
-      title="Delete Drawing"
+      title="Delete Product"
       onCancel={onDialogClose}
       onConfirm={onDelete}
       confirmText={!loading ? "Confirm" : "Deleting..."}

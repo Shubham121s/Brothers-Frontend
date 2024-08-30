@@ -78,6 +78,7 @@ const ActionColumn = ({ row, initialData }) => {
 };
 
 const ItemTable = ({ initialData = [], dispatchList, setFieldValue }) => {
+  console.log(initialData);
   const columns = useMemo(() => {
     return [
       {

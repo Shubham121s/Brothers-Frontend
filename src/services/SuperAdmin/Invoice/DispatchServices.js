@@ -37,6 +37,14 @@ export async function apiGetDispatchDomesticInvoiceByInvoiceId(data) {
     data,
   });
 }
+//test
+export async function apiGetDispatchDomesticInvoiceByInvoiceIdTest(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch/domestic/edit/invoice/id",
+    method: "post",
+    data,
+  });
+}
 
 export async function apiPutDispatchDomesticInvoiceByInvoiceId(data) {
   return ApiService.fetchData({
@@ -81,6 +89,14 @@ export async function apiDeleteDispatchListByDispatchListId(data) {
 export async function apiUpdateDispatchMachiningRawDate(data) {
   return ApiService.fetchData({
     url: "v1/web/company/invoice/dispatch-list/raw/machining/date",
+    method: "post",
+    data,
+  });
+}
+
+export async function apiUpdateDispatchListAddProduct(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch-list/domestic/add/product",
     method: "post",
     data,
   });

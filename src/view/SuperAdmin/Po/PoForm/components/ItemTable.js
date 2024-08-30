@@ -18,7 +18,7 @@ const ActionColumn = ({ index, onRemoveItem, row, onEditItem }) => {
   };
 
   const onEdit = () => {
-    onEditItem?.(row);
+    onEditItem?.(row, index);
   };
 
   return (
