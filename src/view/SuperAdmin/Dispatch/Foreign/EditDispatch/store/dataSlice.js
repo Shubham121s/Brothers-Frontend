@@ -4,6 +4,10 @@ import {
   apiUpdateDispatchListByDispatchListId,
   apiDeleteDispatchListByDispatchListId,
   apiUpdateForeignInvoiceDate,
+  apiUpdateDispatchListAddProduct,
+  apiAddBoxForeignInvoiceEdit,
+  apiDeleteBox,
+  apiUpdateBox,
 } from "../../../../../../services/SuperAdmin/Invoice/DispatchServices";
 import { apiGetAllPosByCustomerId } from "../../../../../../services/SuperAdmin/Po/PoService";
 
@@ -55,6 +59,66 @@ export const UpdateForeignInvoiceDate = createAsyncThunk(
   }
 );
 
+export const getAllPosByCustomerId = createAsyncThunk(
+  "edit/foreign/invoice/data/po/all",
+  async (data) => {
+    try {
+      const response = await apiGetAllPosByCustomerId(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const addProductToInvoice = createAsyncThunk(
+  "edit/foreign/invoice/data/add/product",
+  async (data) => {
+    try {
+      const response = await apiUpdateDispatchListAddProduct(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const addBox = createAsyncThunk(
+  "edit/foreign/invoice/data/add/box",
+  async (data) => {
+    try {
+      const response = await apiAddBoxForeignInvoiceEdit(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const deleteBox = createAsyncThunk(
+  "edit/foreign/invoice/data/delete/box",
+  async (data) => {
+    try {
+      const response = await apiDeleteBox(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const updateBox = createAsyncThunk(
+  "edit/foreign/invoice/data/update/box",
+  async (data) => {
+    try {
+      const response = await apiUpdateBox(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
 const dataSlice = createSlice({
   name: "edit/foreign/invoice/data",
   initialState: {
@@ -75,6 +139,13 @@ const dataSlice = createSlice({
     [updateDispatchListByDispatchListId.fulfilled]: (state, action) => {},
     [deleteDispatchListByDispatchListId.fulfilled]: (state, action) => {},
     [UpdateForeignInvoiceDate.fulfilled]: (state, action) => {},
+    [getAllPosByCustomerId.fulfilled]: (state, action) => {
+      state.poList = action.payload?.data?.data || [];
+    },
+    [addProductToInvoice.fulfilled]: (state, action) => {},
+    [addBox.fulfilled]: (state, action) => {},
+    [deleteBox.fulfilled]: (state, action) => {},
+    [updateBox.fulfilled]: (state, action) => {},
   },
 });
 

@@ -4,85 +4,34 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { memo } from "react";
-import { Table } from "../../../../../../../components/ui";
-// import NumberFormat from '../../../utils/numberFormat'
-// import { InvoiceQuantity } from '../../../utils/quantity'
-// import { InvoiceWeight } from '../../../utils/weight'
-// import { InvoiceTotal } from '../../../utils/amount'
+import { Table, Toast, Notification } from "../../../../../../../components/ui";
 import {
   setSelectedBox,
+  toggleDeleteBoxDialog,
   toggleEditBoxDialog,
-} from "../../../NewDispatch/store/stateSlice";
+} from "../../store/stateSlice";
 import { useDispatch } from "react-redux";
 import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 import NewBoxDialog from "./NewBoxDialog";
 import EditBoxDialog from "./EditBoxDialog";
 const { Tr, Th, Td, THead, TBody, TFoot } = Table;
 
-const TableFooterRows = ({ pageNo, singlePageData = [] }) => {
-  return (
-    <>
-      {/* <Tr style={{ border: '.5px solid #e0e0e0', textAlign: 'center' }}>
-                <Td style={{ border: '.5px solid #e0e0e0' }} colSpan='3'></Td>
-                <Td style={{ border: '.5px solid #e0e0e0' }} colSpan='3'><div className='text-gray-500'>Total (page {pageNo + 1})</div></Td>
-                <Td style={{ border: '.5px solid #e0e0e0' }} colSpan='1'><div className='text-gray-700 text-center'>{InvoiceQuantity(singlePageData)}</div></Td>
-                <Td style={{ border: '.5px solid #e0e0e0' }} colSpan='1'></Td>
-                <Td style={{ border: '.5px solid #e0e0e0' }}>
-                    <NumberFormat value={InvoiceTotal(singlePageData)} />
-                </Td>
-                <Td style={{ border: '.5px solid #e0e0e0' }} colSpan='1'></Td>
-                <Td style={{ border: '.5px solid #e0e0e0' }} colSpan='1'>
-                    <NumberFormat value={InvoiceWeight(singlePageData)} />
-                </Td>
-            </Tr> */}
-    </>
+const pushNotification = (message, type, title) => {
+  return Toast.push(
+    <Notification title={title} type={type} duration={2500}>
+      {message}
+    </Notification>,
+    {
+      placement: "top-center",
+    }
   );
 };
-
-const Box = [
-  {
-    length: 10,
-    breadth: 12,
-    height: 43,
-    tare: 223,
-    size: "inch",
-  },
-  {
-    length: 10,
-    breadth: 12,
-    height: 43,
-    tare: 223,
-    size: "inch",
-  },
-  {
-    length: 10,
-    breadth: 12,
-    height: 43,
-    tare: 223,
-    size: "inch",
-  },
-  {
-    length: 10,
-    breadth: 12,
-    height: 43,
-    tare: 223,
-    size: "inch",
-  },
-  {
-    length: 10,
-    breadth: 12,
-    height: 43,
-    tare: 223,
-    size: "inch",
-  },
-];
 
 const ActionColumn = ({
   row,
   index,
   handleDeleteBox,
   values,
-  setFieldValue,
   dispatchList,
 }) => {
   const dispatch = useDispatch();
@@ -91,7 +40,23 @@ const ActionColumn = ({
     dispatch(setSelectedBox({ ...row, index: index + 1 }));
   };
   const onDelete = () => {
-    handleDeleteBox?.(values, index, setFieldValue, dispatchList);
+    console.log(dispatchList);
+    console.log(row);
+    let boxExists = dispatchList.some((dispatchItem) =>
+      dispatchItem.DispatchLists.some(
+        (poItem) => poItem.dispatch_box_id === row?.dispatch_box_list_id
+      )
+    );
+
+    if (boxExists) {
+      return pushNotification(
+        "Cannot Delete Box Already Added In Product Delete Product First",
+        "danger",
+        "Error"
+      );
+    }
+    dispatch(setSelectedBox(row));
+    dispatch(toggleDeleteBoxDialog(true));
   };
 
   return (
@@ -99,12 +64,14 @@ const ActionColumn = ({
       <span className={`cursor-pointer p-1`} onClick={onEdit}>
         <HiOutlinePencil />
       </span>
-      <span
-        className="cursor-pointer p-1 hover:text-red-500"
-        onClick={onDelete}
-      >
-        <HiOutlineTrash />
-      </span>
+      {values.length > 1 && (
+        <span
+          className="cursor-pointer p-1 hover:text-red-500"
+          onClick={onDelete}
+        >
+          <HiOutlineTrash />
+        </span>
+      )}
     </div>
   );
 };
@@ -115,9 +82,9 @@ const BoxTable = (props) => {
     handleDeleteBox,
     className,
     values = [],
-    setFieldValue,
     dispatchList,
     handleEditBox,
+    invoiceId,
   } = props;
 
   const columns = [
@@ -125,10 +92,10 @@ const BoxTable = (props) => {
       header: "Box no",
       accessorKey: "box",
       cell: (props) => {
-        const { index } = props.row;
+        const row = props.row.original;
         return (
           <div className="uppercase text-center">
-            {`BOX NO ${index + 1 || "-"}`}
+            {`BOX NO ${row?.box_no || "-"}`}
           </div>
         );
       },
@@ -201,7 +168,6 @@ const BoxTable = (props) => {
             row={original}
             index={index}
             values={values}
-            setFieldValue={setFieldValue}
             handleDeleteBox={handleDeleteBox}
             dispatchList={dispatchList}
           />
@@ -217,11 +183,12 @@ const BoxTable = (props) => {
   });
 
   const handleNewBox = (box) => {
-    handleNewBoxAdd(values, box, setFieldValue);
+    handleNewBoxAdd(values, box);
   };
 
   const handleEditBoxs = (box) => {
-    handleEditBox(values, box, setFieldValue);
+    // console.log(box);
+    handleEditBox(values, box);
   };
 
   return (
@@ -269,10 +236,17 @@ const BoxTable = (props) => {
           })}
         </TBody>
       </Table>
-      <NewBoxDialog handleNewBox={handleNewBox} boxNo={values.length + 1} />
+      <NewBoxDialog
+        handleNewBox={handleNewBox}
+        boxNo={values.length + 1}
+        invoiceId={invoiceId}
+        boxes={values}
+      />
       <EditBoxDialog
         boxNo={values.length + 1}
         handleEditBoxs={handleEditBoxs}
+        invoiceId={invoiceId}
+        boxes={values}
       />
     </>
   );

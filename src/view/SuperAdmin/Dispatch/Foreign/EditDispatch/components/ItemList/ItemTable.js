@@ -226,6 +226,7 @@ const ItemTable = ({ initialData = [], dispatchList, boxes }) => {
             accessorKey: "weight",
             cell: (props) => {
               const row = props.row.original;
+              console.log(row.item_weight);
               return (
                 <div className="uppercase text-center">
                   {Number(row?.item_weight).toFixed(3)}
@@ -262,6 +263,8 @@ const ItemTable = ({ initialData = [], dispatchList, boxes }) => {
       },
     ];
   }, [initialData, dispatchList]);
+
+  console.log(initialData);
 
   const table = useReactTable({
     data: initialData,

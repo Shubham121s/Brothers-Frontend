@@ -96,8 +96,32 @@ export async function apiUpdateDispatchMachiningRawDate(data) {
 
 export async function apiUpdateDispatchListAddProduct(data) {
   return ApiService.fetchData({
-    url: "v1/web/company/invoice/dispatch-list/domestic/add/product",
+    url: "v1/web/company/invoice/dispatch-list/add/product",
     method: "post",
+    data,
+  });
+}
+
+export async function apiAddBoxForeignInvoiceEdit(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch-list/add/box",
+    method: "post",
+    data,
+  });
+}
+
+export async function apiDeleteBox(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch-list/delete/box",
+    method: "delete",
+    data,
+  });
+}
+
+export async function apiUpdateBox(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch-list/update/box",
+    method: "put",
     data,
   });
 }

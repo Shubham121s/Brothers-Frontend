@@ -102,64 +102,10 @@ const EditDispatch = () => {
     navigate("/super/admin/dispatch-list");
   };
 
-  const addNewItemInPoList = async (dispatchList, newItem, index) => {
-    const updatedDispatchList = [...dispatchList];
-
-    const find = StateDispatchList?.DispatchLocations[
-      index
-    ]?.DispatchLists.find((f) => {
-      if (
-        f?.Po?.number === newItem?.Po?.number &&
-        f?.product_id === newItem?.PoList?.Product?.product_id
-      )
-        return f;
-    });
-
-    if (find) {
-      return pushNotification(
-        `PO ${newItem?.Po?.number} and ${newItem?.PoList?.Product?.name} Already Added You Can Edit it.`,
-        "danger",
-        "Error"
-      );
-    }
-
-    const action = await dispatch(
-      addProductToInvoice({
-        item: newItem,
-        dispatch_location_id:
-          StateDispatchList?.DispatchLocations[index]?.dispatch_location_id,
-        dispatch_invoice_id: StateDispatchList.dispatch_invoice_id,
-      })
-    );
-
-    if (action.payload.status > 300) {
-      return pushNotification(
-        action?.payload?.data?.message,
-        "danger",
-        "Error"
-      );
-    }
-    pushNotification("Product Added Successfully", "success", "Successfull");
-    updatedDispatchList[index] = {
-      ...updatedDispatchList[index],
-      DispatchLists: [
-        ...(updatedDispatchList[index].DispatchLists || []),
-        {
-          ...newItem,
-          item_name: newItem?.PoList?.Product?.name,
-          item_code: newItem?.PoList?.Product?.item_code,
-          hsn_code: newItem?.PoList?.Product?.hsn_code,
-          product_id: newItem?.PoList?.Product?.product_id,
-          gst_percentage:
-            updatedDispatchList[index]?.DispatchLists[0]?.gst_percentage,
-          item_quantity: newItem?.quantity,
-          dispatch_list_id: action.payload.data?.data.dispatch_list_id,
-        },
-      ],
-    };
+  const addNewItemInPoList = async (dispatchList) => {
     setList((prevData) => ({
       ...prevData,
-      DispatchLocations: updatedDispatchList,
+      DispatchLocations: dispatchList,
     }));
   };
 
@@ -262,6 +208,7 @@ const EditDispatch = () => {
                     />
                     <NewItemDialog
                       locationIndex={index}
+                      invoiceId={StateDispatchList?.dispatch_invoice_id}
                       addNewItemInPoList={addNewItemInPoList}
                       dispatchList={StateDispatchList.DispatchLocations}
                     />

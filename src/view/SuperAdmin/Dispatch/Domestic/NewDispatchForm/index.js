@@ -387,7 +387,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                             }
                           />
                         </div>
-                      </div>f
+                      </div>
                       <PackingChargesInformationField />
                       <RemarkInformationField
                         errors={errors?.DispatchShippingAndOtherDetails?.remark}

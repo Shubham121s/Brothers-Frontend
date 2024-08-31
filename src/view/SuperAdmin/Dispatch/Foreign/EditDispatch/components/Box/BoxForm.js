@@ -21,13 +21,12 @@ const BoxForm = forwardRef((props, ref) => {
         ...initialData,
       }}
       validationSchema={validationSchema}
-      onSubmit={(values) => {
-        handleFormSubmit?.(values);
-        onDiscard?.();
+      onSubmit={(values, { setSubmitting }) => {
+        handleFormSubmit?.(values, setSubmitting);
       }}
     >
-      {({ values, touched, errors }) => {
-        values.index = index - 1;
+      {({ values, touched, errors, isSubmitting }) => {
+        // values.index = index;
         return (
           <Form>
             <FormContainer>
@@ -48,7 +47,12 @@ const BoxForm = forwardRef((props, ref) => {
                 >
                   Discard
                 </Button>
-                <Button size="sm" variant="solid" type="submit">
+                <Button
+                  size="sm"
+                  variant="solid"
+                  type="submit"
+                  loading={isSubmitting}
+                >
                   {type === "edit" ? "Update Box" : "Add Box"}
                 </Button>
               </div>

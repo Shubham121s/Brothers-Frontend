@@ -1,6 +1,12 @@
 import React, { Suspense, forwardRef, useState, useEffect } from "react";
 import { Form, Formik } from "formik";
-import { Button, Card, FormContainer } from "../../../../../components/ui";
+import {
+  Button,
+  Card,
+  FormContainer,
+  Toast,
+  Notification,
+} from "../../../../../components/ui";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { Loading, StickyFooter } from "../../../../../components/shared";
@@ -141,10 +147,43 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
 
   const handleNewBoxAdd = (boxes = [], newBox = {}, setFieldValue) => {
     const updatedBox = [...boxes, newBox];
+    console.log(updatedBox);
     setFieldValue?.("DispatchBoxList", updatedBox);
   };
 
-  const handleDeleteBox = (boxes = [], index, setFieldValue) => {
+  const handleEditBox = (boxes = [], newBox = {}, setFieldValue) => {
+    const updatedBox = [...boxes];
+    console.log(newBox, updatedBox);
+    let index = updatedBox.findIndex((f) => f.index === newBox.index);
+    if (index > -1) {
+      updatedBox[index] = newBox;
+    } else {
+      return pushNotification(
+        "Cannot Edit Box Some Error Occured, Please Delete It And Create New One",
+        "danger",
+        "Error"
+      );
+    }
+    setFieldValue?.("DispatchBoxList", updatedBox);
+  };
+
+  const handleDeleteBox = (
+    boxes = [],
+    index,
+    setFieldValue,
+    dispatchList = []
+  ) => {
+    let find = dispatchList.find((dispatchItem) => {
+      return dispatchItem.poList.find((poItem) => poItem.box_no === index + 1);
+    });
+
+    if (find) {
+      return pushNotification(
+        "Cannot Delete Box Already Added In Product Delete Product First",
+        "danger",
+        "Error"
+      );
+    }
     const updatedBox = [...boxes];
     updatedBox.splice(index, 1);
     setFieldValue?.("DispatchBoxList", updatedBox);
@@ -222,6 +261,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
           }}
         >
           {({ values, touched, errors, setFieldValue, isSubmitting }) => {
+            console.log(values.DispatchList);
             return (
               <Form key="invoiceForm">
                 <FormContainer key="invoiceFormContainer">
@@ -329,7 +369,9 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                           values={values?.DispatchBoxList}
                           handleNewBoxAdd={handleNewBoxAdd}
                           handleDeleteBox={handleDeleteBox}
+                          handleEditBox={handleEditBox}
                           setFieldValue={setFieldValue}
+                          dispatchList={values.DispatchList}
                         />
                       </div>
                     </Card>
