@@ -9,19 +9,16 @@ import { useSelector } from "react-redux";
 
 const ReportButton = () => {
   const tableData = useSelector((state) => state.poList.data.tableData);
-  const [progress, setProgress] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const downloadExcel = async () => {
     setIsDownloading(true);
-    setProgress(0);
 
     try {
       const rawPersistData = localStorage.getItem(PERSIST_STORE_NAME);
       const persistData = deepParseJson(rawPersistData);
 
       let accessToken = persistData.auth.session.token;
-
       const response = await axios.post(
         `${appConfig.apiPrefix}v1/web/company/reports/master/PP`,
         tableData,
@@ -32,8 +29,12 @@ const ReportButton = () => {
         }
       );
 
-      window.open(response.data.path, "_blank");
+      if (response.status == 200) {
+        isDownloading(false);
+        window.open(response.data.path, "_blank");
+      }
     } catch (error) {
+      isDownloading(false);
       console.error("Error downloading the file:", error);
     }
   };
@@ -46,13 +47,8 @@ const ReportButton = () => {
         loading={isDownloading}
         icon={<MdOutlineSimCardDownload />}
       >
-        Excel
+        {isDownloading ? "Preparing To Download" : "Excel"}
       </Button>
-      {isDownloading && (
-        <div>
-          <p>Download Progress: {progress}%</p>
-        </div>
-      )}
     </>
   );
 };
