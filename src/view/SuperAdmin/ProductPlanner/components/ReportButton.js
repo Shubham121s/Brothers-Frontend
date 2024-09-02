@@ -26,31 +26,15 @@ const ReportButton = () => {
         `${appConfig.apiPrefix}v1/web/company/reports/master/PP`,
         tableData,
         {
-          responseType: "blob",
           headers: {
             Authorization: `Bearer ${accessToken}`,
-          },
-          onDownloadProgress: (progressEvent) => {
-            const percentCompleted = Math.round(
-              (progressEvent.loaded * 100) / progressEvent.total
-            );
-            setProgress(percentCompleted);
           },
         }
       );
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "master-product-planner.xlsx");
-      document.body.appendChild(link);
-      link.click();
-
-      link.remove();
-      setIsDownloading(false);
+      window.open(response.data.path, "_blank");
     } catch (error) {
       console.error("Error downloading the file:", error);
-      setIsDownloading(false);
     }
   };
 
