@@ -29,10 +29,8 @@ const ReportButton = () => {
         }
       );
 
-      if (response.status == 200) {
-        isDownloading(false);
-        window.open(response.data.path, "_blank");
-      }
+      isDownloading(false);
+      window.open(response.data.path, "_blank");
     } catch (error) {
       isDownloading(false);
       console.error("Error downloading the file:", error);
