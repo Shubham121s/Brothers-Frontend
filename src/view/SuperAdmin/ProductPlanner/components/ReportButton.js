@@ -28,11 +28,10 @@ const ReportButton = () => {
           },
         }
       );
-
-      isDownloading(false);
+      setIsDownloading(false);
       window.open(response.data.path, "_blank");
     } catch (error) {
-      isDownloading(false);
+      setIsDownloading(false);
       console.error("Error downloading the file:", error);
     }
   };
