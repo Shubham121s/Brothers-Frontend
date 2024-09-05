@@ -16,33 +16,35 @@ const Header = ({ data, className }) => {
             />
           </div>
           <div className="col-span-1 pb-0">
-            <p className="text-gray-600 uppercase">
-              BROTHERS INDUSTRIES <br />
-              Gat No.882 ,Kirloskarwadi Road, Savantpur, Tal: Palus, Dist.:
-              Sangli, Pin-416310,
-              <br />
-              Maharashtra, India
-            </p>
-            <p className="text-gray-600 uppercase">
-              Mob : (+91) 7588777800, 9764705724, 99201139101
-            </p>
-            <p className="text-gray-600 uppercase">
-              E-mail : brothersindustries07@gmail.com{" "}
-            </p>
-            <p className="text-gray-600 uppercase">
-              Website : www.brothers.net.in{" "}
-            </p>
+          <h6 className=" text-gray-600">BROTHERS INDUSTRIES</h6>
+      <p className="flex font-medium text-gray-600 print:text-sm flex-wrap mb-1 uppercase">
+        Gat No.882 ,Kirloskarwadi Road, Sawantpur,
+      </p>
+      <p className="flex font-medium text-gray-600 print:text-sm flex-wrap mb-1 uppercase">
+        Tal: Palus, Dist.: Sangli, Pin-416310,
+      </p>
+      <p className="flex font-medium text-gray-600 print:text-sm flex-wrap mb-1 uppercase">
+        Maharashtra, India
+      </p>
+      <div className="flex gap-1 items-center print:text-sm uppercase">
+        <p className="text-gray-700 print:text-sm uppercase">Phone:</p>
+        (+91)<p> 7588777800, 9764705724</p>
+      </div>
+      <div className="flex gap-1 items-center print:text-sm ">
+        <p className="text-gray-700 print:text-sm uppercase">Email: </p>
+        <p>brothersindustries07@gmail.com</p>
+      </div>
+      <div className="flex gap-1 items-center print:text-sm ">
+        <p className="text-gray-700 print:text-sm uppercase">Website: </p>
+        <p>www.brothers.net.in </p>
+      </div>
           </div>
         </div>
       </Card>
-      <div className={`grid grid-cols-2 mt-1 gap-1`}>
+      <div className={`grid grid-cols-2 mt-1 gap-1 print:text-xs`}>
         <Card className={`col-span-1${className}`} bodyClass="p-2">
           <p>{data?.Customer?.name}</p>
-          <p>{data?.Customer?.CustomerPermanentAddress?.address}</p>
-          <p>{data?.Customer?.CustomerPermanentAddress?.city}</p>
-          <p>{data?.Customer?.CustomerPermanentAddress?.zip_code}</p>
-          <p>{data?.Customer?.CustomerPermanentAddress?.state}</p>
-          <p>{data?.Customer?.CustomerPermanentAddress?.country}</p>
+          <p>{data?.Customer?.CustomerPermanentAddress?.address}, {data?.Customer?.CustomerPermanentAddress?.city}, {data?.Customer?.CustomerPermanentAddress?.zip_code}, {data?.Customer?.CustomerPermanentAddress?.state}, {data?.Customer?.CustomerPermanentAddress?.country}</p>
         </Card>
         <Card className={`col-span-1 ${className}`} bodyClass="p-2">
           {/* <p>
@@ -52,7 +54,7 @@ const Header = ({ data, className }) => {
           <p className="capitalize">
             <strong>TYPE :</strong> {data?.Customer?.type.toUpperCase()}
           </p> */}
-          <h4 className="text-gray-700">PO : {data.number}</h4>
+          <h6 className="text-gray-700">PO : {data.number}</h6>
           <p>
             <strong>PO NUMBER :</strong> {data.number}
           </p>

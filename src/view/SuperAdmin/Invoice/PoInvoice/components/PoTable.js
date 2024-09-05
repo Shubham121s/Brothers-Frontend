@@ -28,24 +28,24 @@ const TFootRows = ({ data = [], className }) => {
   return (
     <Tr
       style={{
-        border: ".2px dashed lightGray",
+        border: ".2px solid black",
         padding: "3px",
         textAlign: "center",
       }}
       className={className}
     >
       <Td
-        style={{ border: ".2px dashed lightGray", padding: "3px" }}
+        style={{ border: ".2px solid black", padding: "3px" }}
         colSpan="6"
       ></Td>
       <Td
         className={`font-semibold ${className}`}
-        style={{ border: ".2px dashed lightGray", padding: "3px" }}
+        style={{ border: ".2px solid black", padding: "3px" }}
         colSpan="1"
       >
         TOTAL
       </Td>
-      <Td style={{ border: ".2px dashed lightGray", padding: "3px" }}>
+      <Td style={{ border: ".2px solid black", padding: "3px" }}>
         <NumericFormat
           displayType="text"
           value={totalAmount.toFixed(2)}
@@ -192,7 +192,7 @@ const PoTable = ({ data = [], className, currency_type = "INR" }) => {
                     <Th
                       className={className}
                       style={{
-                        border: ".2px dashed lightGray",
+                        border: ".2px solid black",
                         textAlign: "center",
                         padding: "3px",
                       }}
@@ -219,7 +219,7 @@ const PoTable = ({ data = [], className, currency_type = "INR" }) => {
                         className={className}
                         key={cell.id}
                         style={{
-                          border: ".2px dashed lightGray",
+                          border: ".2px solid black",
                           padding: "3px",
                         }}
                       >

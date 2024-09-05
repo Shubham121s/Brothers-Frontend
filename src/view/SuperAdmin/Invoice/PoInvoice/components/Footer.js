@@ -3,8 +3,8 @@ const Footer = ({ data }) => {
   const notes = JSON.parse(data?.Note?.notes);
   var points = data.Condition?.condition.split(/\d+\.\s/).filter(Boolean);
   return (
-    <div>
-      <h6 className="mb-0 font-bold">NOTES :</h6>
+    <div className="print:text-xs">
+      <strong className="mb-0 font-bold">NOTES :</strong>
       <div>
         <strong>{data?.Note?.name}</strong>
         <div className="grid grid-cols-2">
@@ -39,18 +39,18 @@ const Footer = ({ data }) => {
           </small>
         </div>
         <div></div>
-        <div>
+        {/* <div>
           <small className="italic">signature and seal.</small>
-        </div>
+        </div> */}
       </div>
       <div className="flex items-center mt-4 justify-center">
-        <h6 className="text-gray-600" style={{ height: "16px" }}>
+        <strong className="text-gray-600" style={{ height: "13px" }}>
           ******************
-        </h6>
-        <h6 className="text-gray-600">THANK YOU</h6>
-        <h6 className="text-gray-600" style={{ height: "16px" }}>
+        </strong>
+        <strong className="text-gray-600">This Is An Electronically Generated Report</strong>
+        <strong className="text-gray-600" style={{ height: "13px" }}>
           ******************
-        </h6>
+        </strong>
       </div>
       {/* <div className='text-center text-xs flex gap-4 justify-center'>
                 <p>Developed By <ActionLink href='https://www.5techg.com' target='_blank'>5TechG Lab LLP</ActionLink></p>

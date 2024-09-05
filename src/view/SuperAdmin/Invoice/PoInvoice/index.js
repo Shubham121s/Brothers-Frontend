@@ -5,24 +5,50 @@ import Footer from "./components/Footer";
 
 const POInvoice = (props) => {
   const { data, PoLists = [] } = props;
+  const pages = [];
+  const PoLength = PoLists?.length || 1;
 
-  return (
-    <div
-      className="invoice w-full  relative h-full"
-      style={{ paddingLeft: "6%", paddingRight: "2%" }}
+  let pageCount=0
+    pageCount += Math.ceil(PoLength?.length / 8);
+
+  let pageNo = 1;
+    for (
+      let i = 0;
+      i < Math.ceil(PoLength / 8);
+      i++
+    ) 
+
+    pages.push(
+      <div
+      key={`page-${pageNo}`}
+      className="page"
+      style={{
+        height: "calc(1130px - 50px)",
+        paddingLeft: "6%",
+        paddingRight: "2%",
+      }}
     >
-      <div className="w-full h-full absolute top-0" style={{ opacity: 0.15 }}>
-        {/* <img src='/img/logo/logo.png' className='w-full h-full' style={{ objectFit: 'contain', objectPosition: 'center' }}></img> */}
-      </div>
-      <Header className={"bg-inherit"} data={data} />
-      <PoTable
-        className={"bg-inherit print:text-xs"}
-        data={PoLists}
-        currency_type={data.currency_type}
-      />
-      <Footer className={"bg-inherit"} data={data} />
-    </div>
-  );
+      <div
+        className="invoice w-full  relative p-3"
+        style={{
+          border: "1px solid black",
+          marginTop: "4px",
+        }}
+      >
+<Header className={"bg-inherit"} data={data} />
+<PoTable
+className={"bg-inherit print:text-xs"}
+data={PoLists?.slice(
+  i * 8,
+  i * 8 + 8
+)}
+currency_type={data.currency_type}
+/>
+<Footer className={"bg-inherit"} data={data} />
+</div>
+</div>
+    )
+  return pages;
 };
 
 export default POInvoice;
