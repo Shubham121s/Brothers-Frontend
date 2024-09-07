@@ -26,9 +26,8 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../components/shared/DataTable";
-import { MdOutlineUploadFile, MdOutlineSimCardDownload } from "react-icons/md";
+import { MdAttachEmail } from "react-icons/md";
 import AttachmentDialog from "./AttachmentsDialog";
-import ViewDialog from "./ViewDialog";
 
 const statusColor = {
   accepted: {
@@ -56,18 +55,12 @@ const ActionColumn = ({ index, row }) => {
     dispatch(setSelectedPoList(row));
     dispatch(toggleAttachmentDialog(true));
   };
-  const onView = () => {
-    dispatch(setSelectedPoList(row));
-    dispatch(toggleViewDialog(true));
-  };
+
 
   return (
     <div className="flex justify-center text-lg gap-x-4">
       <span className={`cursor-pointer hover:${textTheme}`} onClick={onEdit}>
-        <MdOutlineUploadFile />
-      </span>
-      <span className={`cursor-pointer hover:${textTheme}`} onClick={onView}>
-        <MdOutlineSimCardDownload />
+        <MdAttachEmail />
       </span>
     </div>
   );
@@ -94,12 +87,13 @@ const PoAColumn = ({ row }) => {
   );
 };
 
-const PoListTable = () => {
+const PoListTable = ({DeliveryStatus}) => {
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.poList.data.poLists);
+  const data = useSelector((state) => state.masterPP.data.poLists);
 
-  const loading = useSelector((state) => state.poList.data.loading);
-  const { status } = useSelector((state) => state.poList.data.filterData);
+  const loading = useSelector((state) => state.masterPP.data.loading);
+  const { status } = useSelector((state) => state.masterPP.data.filterData);
+  const  TableData= useSelector((state) => state.masterPP.data.tableData);
 
   const columns = [
     // {
@@ -224,14 +218,28 @@ const PoListTable = () => {
     },
 
     {
-      header: "drg/ rev no.",
-      accessorKey: "Drawing.revision_number",
+      header: "drg no.",
+      accessorKey: "drawing_number",
       cell: (props) => {
-        const { drawing_number, revision_number } = props.row.original;
+        const { drawing_number } = props.row.original;
         return (
           <div className="uppercase">
-            {drawing_number && revision_number
-              ? `${drawing_number}/ ${revision_number}`
+            {drawing_number 
+              ? `${drawing_number}`
+              : "N/A"}
+          </div>
+        );
+      },
+    },
+    {
+      header: "rev no.",
+      accessorKey: "Drawing.revision_number",
+      cell: (props) => {
+        const {revision_number } = props.row.original;
+        return (
+          <div className="uppercase">
+            {revision_number
+              ? `${revision_number}`
               : "N/A"}
           </div>
         );
@@ -347,26 +355,36 @@ const PoListTable = () => {
     // },
   ];
 
-  const { pageIndex, pageSize, sort, query, total, customer, po_no } =
-    useSelector((state) => state.poList.data.tableData);
+  const { pageIndex, pageSize, sort, query, total, customer,
+    project_no,
+    po_no,
+    po_serial_no,
+    product,
+    item_code,
+    revision_no,
+    material_grade,
+    po_Date,
+    po_del_Date,
+    brother_Date } =
+    useSelector((state) => state.masterPP.data.tableData);
 
   const fetchData = useCallback(() => {
-    dispatch(getAllPoLists({ pageIndex, pageSize, sort, query, status }));
-    dispatch(getAllCustomerOption());
-    dispatch(getAllMaterialGradeOption());
-    dispatch(getAllProductItemCode());
-    dispatch(getAllProductOption());
-    dispatch(getAllDrawingOption());
-    dispatch(getPODates());
-    dispatch(getPODeliveryDates());
-    dispatch(getBrotherDeliveryDate());
-    dispatch(getRawDate());
-    dispatch(getMachinigDate());
+    dispatch(getAllPoLists({ pageIndex, pageSize, sort, query, status,DeliveryStatus,...TableData }));
+    // dispatch(getAllMaterialGradeOption());
+    // dispatch(getAllProductItemCode());
+    // dispatch(getAllDrawingOption());
+    // dispatch(getPODeliveryDates());
+    // dispatch(getBrotherDeliveryDate());
+    // dispatch(getRawDate());
+    // dispatch(getMachinigDate());
   }, [pageIndex, pageSize, sort, query, status, dispatch]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData, pageIndex, pageSize, sort, status]);
+  useEffect(()=>{
+    dispatch(getAllCustomerOption());
+  },[]);
 
   const tableData = useMemo(
     () => ({ pageIndex, pageSize, sort, query, total }),
@@ -397,7 +415,6 @@ const PoListTable = () => {
         onSelectChange={onSelectChange}
       />
       <AttachmentDialog />
-      <ViewDialog />
     </>
   );
 };

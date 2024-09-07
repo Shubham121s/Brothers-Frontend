@@ -86,6 +86,14 @@ export async function apiUpdatePOListByPOListId(data) {
   });
 }
 
+export async function apiGetPoListByPOListId(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/po-list/list/id",
+    method: "post",
+    data,
+  });
+}
+
 export async function apiGetAcceptedPoInvoice(data) {
   return ApiService.fetchData({
     url: "v1/web/admin/po/invoice/accept",

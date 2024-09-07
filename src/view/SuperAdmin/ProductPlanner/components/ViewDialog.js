@@ -18,8 +18,8 @@ const pushNotification = (title, type, message) => {
 const ViewDialog = () => {
   const dispatch = useDispatch();
 
-  const selectedPO = useSelector((state) => state.poList.data.selectedPOList);
-  const ViewDialog = useSelector((state) => state.poList.data.viewDialog);
+  const selectedPO = useSelector((state) => state.masterPP.data.selectedPOList);
+  const ViewDialog = useSelector((state) => state.masterPP.data.viewDialog);
 
   const onDialogClose = () => {
     dispatch(toggleViewDialog(false));

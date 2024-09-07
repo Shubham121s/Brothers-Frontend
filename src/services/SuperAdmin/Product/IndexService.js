@@ -99,9 +99,10 @@ export async function apiGetAllProductsItemCodeOption() {
   });
 }
 
-export async function apiGetAllProductsOption() {
+export async function apiGetAllProductsOption(data) {
   return ApiService.fetchData({
     url: "v1/web/company/product/option",
-    method: "get",
+    method: "post",
+    data
   });
 }

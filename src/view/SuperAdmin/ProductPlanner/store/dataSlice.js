@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { apiGetAllPoLists } from "../../../../services/SuperAdmin/Po/PoService";
+import { apiGetAllPoLists,apiGetPoListByPOListId } from "../../../../services/SuperAdmin/Po/PoService";
 import { apiGetAllCustomersOption } from "../../../../services/SuperAdmin/Customer/CustomerService";
 import { apiGetMaterialGradesOption } from "../../../../services/SuperAdmin/Product/MaterialGradeService";
 import {
@@ -72,7 +72,7 @@ export const getAllProductOption = createAsyncThunk(
   "po/lists/data/product",
   async (data) => {
     try {
-      const response = await apiGetAllProductsOption();
+      const response = await apiGetAllProductsOption(data);
       return response;
     } catch (error) {
       return error.response;
@@ -225,6 +225,19 @@ export const deleteAttachment = createAsyncThunk(
   }
 );
 
+export const getPoListById = createAsyncThunk(
+  "po/lists/data/raw/dispatch/list/po",
+  async (data) => {
+    try {
+      const response = await apiGetPoListByPOListId(data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+);
+
+
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -272,6 +285,7 @@ const dataSlice = createSlice({
     attachmentDialog: false,
     viewDialog: false,
     selectedPOList: {},
+    poListData:{},
   },
   reducers: {
     setTableData: (state, action) => {
@@ -288,6 +302,20 @@ const dataSlice = createSlice({
     },
     setSelectedPoList: (state, action) => {
       state.selectedPOList = action.payload;
+    },
+    setAllFilterData:(state,action)=>{
+      state.materialGrades= [];
+      state.itemCodes= [];
+      state.products= [];
+      state.revision= [];
+      state.projectNumber= [];
+      state.poNumber= [];
+      state.serialNumber= [];
+      state.poDates= [];
+      state.poDeliverydate= [];
+      state.brotherDeliveryDate= [];
+      state.rawDates= [];
+      state.machiningDate= [];
     },
   },
   extraReducers: {
@@ -324,11 +352,8 @@ const dataSlice = createSlice({
       };
     },
     [getAllProductOption.fulfilled]: (state, action) => {
-      const products = action.payload.data?.data || [];
-      return {
-        ...state,
-        products: [{ label: "ALL Products", value: "" }, ...products],
-      };
+      state.products = action.payload.data?.data || [];
+
     },
     [getAllDrawingOption.fulfilled]: (state, action) => {
       const revision = action.payload.data?.data || [];
@@ -338,31 +363,13 @@ const dataSlice = createSlice({
       };
     },
     [getAllProjectNumber.fulfilled]: (state, action) => {
-      const projectNumber = action.payload.data?.data || [];
-      return {
-        ...state,
-        projectNumber: [
-          { label: "ALL Project Numbers", value: "" },
-          ...projectNumber,
-        ],
-      };
+      state.projectNumber = action.payload.data?.data || [];
     },
     [getAllPoNumber.fulfilled]: (state, action) => {
-      const poNumber = action.payload.data?.data || [];
-      return {
-        ...state,
-        poNumber: [{ label: "ALL PO Numbers", value: "" }, ...poNumber],
-      };
+      state.poNumber = action.payload.data?.data || [];
     },
     [getAllSerialNumber.fulfilled]: (state, action) => {
-      const serialNumber = action.payload.data?.data || [];
-      return {
-        ...state,
-        serialNumber: [
-          { label: "ALL Serial Numbers", value: "" },
-          ...serialNumber,
-        ],
-      };
+       state.serialNumber = action.payload.data?.data || [];
     },
 
     [UpdateRawMachiningDate.pending]: (state, action) => {
@@ -388,6 +395,10 @@ const dataSlice = createSlice({
     },
     [putAttachment.fulfilled]: (state, action) => {},
     [deleteAttachment.fulfilled]: (state, action) => {},
+    [getPoListById.fulfilled]: (state, action) => {
+     
+      state.poListData = action.payload.data.data;
+    },
   },
 });
 
@@ -397,6 +408,7 @@ export const {
   toggleAttachmentDialog,
   setSelectedPoList,
   toggleViewDialog,
+  setAllFilterData
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

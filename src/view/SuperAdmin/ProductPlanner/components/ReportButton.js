@@ -8,7 +8,7 @@ import { MdOutlineSimCardDownload } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 const ReportButton = () => {
-  const tableData = useSelector((state) => state.poList.data.tableData);
+  const tableData = useSelector((state) => state.masterPP.data.tableData);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const downloadExcel = async () => {
