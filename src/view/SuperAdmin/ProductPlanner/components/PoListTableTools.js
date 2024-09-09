@@ -29,7 +29,7 @@ import { json } from "react-router-dom";
 
 const dateFormat = "MMM DD, YYYY";
 
-const PoListTableTools = () => {
+const PoListTableTools = ({DeliveryStatus}) => {
   const [open, setOpen] = useState(false);
   const [poDateVAlues, setPoDateValues] = useState([]);
   const [poDeliveryVAlues, setPoDeliveryVAlues] = useState([]);
@@ -149,12 +149,12 @@ const PoListTableTools = () => {
 
   const fetchData = (data) => {
     dispatch(setTableData(data));
-    dispatch(getAllPoLists(data));
+    dispatch(getAllPoLists({...data,DeliveryStatus}));
   };
 
   const onEdit = (e, type) => {
     if (type === "customer") {
-      dispatch(getAllPoNumber({ customer_id: e.value }));
+      dispatch(getAllPoNumber({ customer_id: e.value,DeliveryStatus }));
       // dispatch(getPODates({ customer_id: e.value }));
       // dispatch(getPODeliveryDates({ customer_id: e.value }));
       // dispatch(getBrotherDeliveryDate({ customer_id: e.value }));
@@ -168,16 +168,16 @@ const PoListTableTools = () => {
     } else if (type === "revision_number") {
       debounceFn(e.value, type);
     } else if (type === "project_no") {
-      dispatch(getAllSerialNumber({ project_no: e.value,number:po_no }));
+      dispatch(getAllSerialNumber({ project_no: e.value,number:po_no,DeliveryStatus }));
       debounceFn(e.value, type);
     } else if (type === "po_number") {
-      dispatch(getAllProjectNumber({ number: e.value }));
-      dispatch(getPODates({number:e.value}))
-      dispatch(getPODeliveryDates({number:e.value}))
-      dispatch(getBrotherDeliveryDate({number:e.value}))
+      dispatch(getAllProjectNumber({ number: e.value,DeliveryStatus }));
+      dispatch(getPODates({number:e.value,DeliveryStatus}))
+      dispatch(getPODeliveryDates({number:e.value,DeliveryStatus}))
+      dispatch(getBrotherDeliveryDate({number:e.value,DeliveryStatus}))
       debounceFn(e.value, type);
     } else if (type === "po_serial_no") {
-      dispatch(getAllProductOption({project_no:project_no ,number:po_no,serial_number:e.value}))
+      dispatch(getAllProductOption({project_no:project_no ,number:po_no,serial_number:e.value,DeliveryStatus}))
       debounceFn(e.value, type);
     } else if (type === "po_date") {
       debounceFn(e, type);
@@ -225,7 +225,7 @@ console.log(po_no)
           <Button size="sm" onClick={onClearAll}>
             Clear All
           </Button>
-          <ReportButton />
+          <ReportButton DeliveryStatus={DeliveryStatus} />
         </div>
       </div>
       {open && (

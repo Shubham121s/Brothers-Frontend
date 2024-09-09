@@ -33,15 +33,15 @@ const PoList = () => {
         </TabList>
         <div className="p-4">
           <TabContent value="tab1">
-          <PoListTableTools />
+          <PoListTableTools DeliveryStatus={"0"} />
       <Card>
-        <PoListTable DeliveryStatus={0} />
+        <PoListTable DeliveryStatus={"0"} />
       </Card>
           </TabContent>
           <TabContent value="tab2">
-          <PoListTableTools />
+          <PoListTableTools DeliveryStatus={"1"} />
       <Card>
-        <PoListTable DeliveryStatus={1} />
+        <PoListTable DeliveryStatus={"1"} />
       </Card>
           </TabContent>
           </div>

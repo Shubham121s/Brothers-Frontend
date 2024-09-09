@@ -7,7 +7,7 @@ import deepParseJson from "../../../../utils/deepParseJson";
 import { MdOutlineSimCardDownload } from "react-icons/md";
 import { useSelector } from "react-redux";
 
-const ReportButton = () => {
+const ReportButton = ({DeliveryStatus}) => {
   const tableData = useSelector((state) => state.masterPP.data.tableData);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -21,7 +21,7 @@ const ReportButton = () => {
       let accessToken = persistData.auth.session.token;
       const response = await axios.post(
         `${appConfig.apiPrefix}v1/web/company/reports/master/PP`,
-        tableData,
+        {...tableData,DeliveryStatus},
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
