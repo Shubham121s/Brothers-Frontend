@@ -32,19 +32,36 @@ const Footer = ({ data }) => {
         </div>
       </div>
       <div
-        className="grid grid-cols-6 gap-2"
+        className="p-2"
         style={{ borderBottom: "1px dashed black" }}
       >
-        <div className="col-span-6 h-full p-2">
+        {/* <div className="col-span-6 h-full p-2">
           <div className="h-full">
-            <div className="print:text-sm flex justify-center items-center font-medium">
+            <div className="print:text-sm flex items-center font-medium">
               <span>
-                Certified that the particulars given above are True and Correct.
-                Subject To Palus Jurisdiction
+                
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
+        <div className="flex gap-1 justify-start capitalize">
+        <p className="text-gray-700 font-semibold print:text-sm">
+        decleration
+        </p>
+        <p className="text-gray-700 print:text-sm">-</p>
+        <p className="text-gray-500 font-medium print:text-sm">
+        we declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+        </p>
+      </div>
+      </div>
+      <div className="flex items-center justify-center print:text-sm">
+        <strong className="text-gray-600" style={{ height: "10px" }}>
+          ******************
+        </strong>
+        <strong className="text-gray-600">THIS IS COMPUTER GENERATED INVOICE</strong>
+        <strong className="text-gray-600" style={{ height: "10px" }}>
+          ******************
+        </strong>
       </div>
     </>
   );

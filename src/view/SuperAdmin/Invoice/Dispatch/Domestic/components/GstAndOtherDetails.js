@@ -6,7 +6,7 @@ const GstAndOtherDetails = ({ data }) => {
 
             <div className='p-1'>
                 <div className='flex gap-1  justify-start capitalize'>
-                    <p className='text-gray-700 font-semibold print:text-xs'>GSTIN</p>
+                    <p className='text-gray-700 font-semibold print:text-xs'>GST IN/UIN</p>
                     <p className='text-gray-700 print:text-xs'>-</p>
                     <p className='text-gray-500 font-medium print:text-xs'>{data?.gstin}</p>
                 </div>

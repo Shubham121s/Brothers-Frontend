@@ -74,6 +74,7 @@ const Header = (props) => {
               data={data?.DispatchConsignee}
               address={data?.DispatchConsignee?.DispatchConsigneeAddress}
               contactPerson={data?.DispatchShippingAddress?.contact_person}
+              gst={data?.DispatchConsignee?.gst_no}
               title="Details of Receiver (Billed To)"
             />
           </div>
@@ -83,6 +84,7 @@ const Header = (props) => {
             <ConsigneeAndBuyerDetails
               data={data?.DispatchBuyer}
               address={data?.DispatchShippingAddress}
+              gst={data?.DispatchBuyer?.gst_no}
               title="Details of Recipient (Shipped To)"
             />
           </div>

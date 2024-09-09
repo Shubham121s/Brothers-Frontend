@@ -13,6 +13,7 @@ import NumberFormat from "../../utils/numberFormat";
 import { currencyToWords } from "../../utils/currencyConverter";
 const { Tr, Th, Td, THead, TBody, TFoot } = Table;
 
+
 const TableFooterRows = ({
   pageNo,
   pageCount,
@@ -41,11 +42,11 @@ const TableFooterRows = ({
   const GrandTotal = Math.round(
     Number(totalAmount) + Number(packingAmount) + Number(GSTAmount)
   );
-  const RoundOff =
+  const RoundOff =Math.abs(
     Number(totalAmount) +
     Number(packingAmount) +
     Number(GSTAmount) -
-    GrandTotal;
+    GrandTotal);
 
   return (
     <>
@@ -349,7 +350,7 @@ const TableFooterRows = ({
           }}
           colSpan="7"
         >
-          {currencyToWords(GrandTotal)} Only
+          {currencyToWords(GrandTotal)} 
         </Td>
       </Tr>
     </>

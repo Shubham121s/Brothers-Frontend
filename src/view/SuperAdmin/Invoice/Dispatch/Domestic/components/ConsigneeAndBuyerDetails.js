@@ -6,6 +6,7 @@ const ConsigneeAndBuyerDetails = ({
   address,
   state_code,
   contactPerson,
+  gst
 }) => {
   return (
     <div className="h-full">
@@ -20,6 +21,15 @@ const ConsigneeAndBuyerDetails = ({
         {", "}
         {address?.zip_code}
       </p>
+      <div className="flex gap-1 justify-start uppercase">
+            <p className="text-gray-700 font-semibold print:text-sm">
+              GST IN/UIN
+            </p>
+            <p className="text-gray-700 print:text-sm">-</p>
+            <p className="text-gray-500 font-medium print:text-sm uppercase">
+              {gst}
+            </p>
+          </div>
       {title === "Details of Receiver (Billed To)" ? (
         <>
           <div className="flex gap-1 justify-start uppercase">

@@ -10,7 +10,7 @@ import NumberFormat from "../../utils/numberFormat";
 import { InvoiceQuantity } from "../../utils/quantity";
 import { dispatchList } from "../../utils/dispatchList";
 import { InvoiceTotal } from "../../utils/amount";
-import { currencyToWords } from "../../utils/currencyConverter";
+import { currencyToINR } from "../../utils/currencyConverter";
 const { Tr, Th, Td, THead, TBody, TFoot } = Table;
 
 const TableFooterRows = ({
@@ -185,7 +185,7 @@ const TableFooterRows = ({
           }}
           colSpan="8"
         >
-          {currencyToWords(GrandTotal)}
+          {currencyToINR(GrandTotal)}
         </Td>
       </Tr>
     </>

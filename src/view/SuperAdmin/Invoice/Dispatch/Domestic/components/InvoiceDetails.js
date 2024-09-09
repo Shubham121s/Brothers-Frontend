@@ -40,7 +40,7 @@ const InvoiceDetails = ({ data, location_code }) => {
           {dayjs().format("DD MMM, YYYY")}
         </h6>
       </div>
-      <div className="flex gap-1 items-center" style={{ marginTop: "-5px" }}>
+      {/* <div className="flex gap-1 items-center" style={{ marginTop: "-5px" }}>
         <p className="font-normal text-center text-gray-500 print:text-xs">
           EWAY BILL NO
         </p>
@@ -51,7 +51,7 @@ const InvoiceDetails = ({ data, location_code }) => {
         >
           {data?.DispatchShippingAndOtherDetail?.e_way_bill_no}
         </h6>
-      </div>
+      </div> */}
     </div>
   );
 };
