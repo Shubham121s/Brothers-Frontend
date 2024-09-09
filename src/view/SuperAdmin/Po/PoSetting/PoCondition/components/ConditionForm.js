@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef,useState } from "react";
 import {
   FormContainer,
   Button,
@@ -10,6 +10,7 @@ import { Field, Form, Formik, FieldArray } from "formik";
 import cloneDeep from "lodash/cloneDeep";
 import { AiOutlineSave } from "react-icons/ai";
 import * as Yup from "yup";
+import TextEditor from "../../utils/TextEditor";
 
 const categoryStatus = [
   { label: "Active", value: true },
@@ -17,12 +18,12 @@ const categoryStatus = [
 ];
 
 const validationSchema = Yup.object().shape({
-  status: Yup.boolean().required("Status Required"),
   name: Yup.string().required("Name Required"),
 });
 
 const ConditionForm = forwardRef((props, ref) => {
   const { type, initialData, onFormSubmit, onDiscard } = props;
+  const [content, setContent] = useState(type==="edit" ? initialData.condition : '');
 
   return (
     <>
@@ -32,13 +33,14 @@ const ConditionForm = forwardRef((props, ref) => {
           initialValues={{
             ...initialData,
           }}
-          // validationSchema={validationSchema}
+           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
-            const formData = cloneDeep(values);
+            const formData = cloneDeep({...values,condition:content.replace(/\n/g, '').replace(/<p><br><\/p>/g, '')});
+            console.log(formData)
             onFormSubmit?.(formData, setSubmitting);
           }}
         >
-          {({ values, touched, errors, isSubmitting }) => (
+          {({ values, touched, errors, isSubmitting,setErrors }) => (
             <Form>
               <FormContainer>
                 <div className="">
@@ -51,6 +53,7 @@ const ConditionForm = forwardRef((props, ref) => {
                   <div className="grid grid-cols-1 gap-4">
                     <FormItem
                       label="Note Name"
+                      className="mb-1"
                       invalid={errors.name && touched.name}
                       errorMessage={errors.name}
                     >
@@ -63,19 +66,18 @@ const ConditionForm = forwardRef((props, ref) => {
                       />
                     </FormItem>
                     <FormItem
-                      label=""
-                      invalid={errors.name && touched.name}
-                      errorMessage={errors.name}
+                      label="Conditions"
+                      className=""
+                      // invalid={errors.name && touched.name}
+                      // errorMessage={errors.name}
                     >
-                      <Field
-                        type="text"
-                        autoComplete="off"
-                        name="condition"
-                        placeholder=""
-                        component={Input}
-                        textArea
-                      />
+                    <TextEditor content={content} setContent={setContent}/>
                     </FormItem>
+                    <div>
+                    <div>
+        
+      </div>
+      </div>
                   </div>
                 </div>
 

@@ -136,11 +136,6 @@ const PoForm = forwardRef((props, ref) => {
         }}
       >
         {({ values, touched, errors, isSubmitting }) => {
-          if (values.Condition) {
-            var points = values.Condition?.condition
-              .split(/\d+\.\s/)
-              .filter(Boolean);
-          }
           return (
             <Form>
               <FormContainer>
@@ -298,15 +293,12 @@ const PoForm = forwardRef((props, ref) => {
                               />
                             )}
                           </Field>
-                          {!isEmpty(points) ? (
-                            <Card className="mt-2">
-                              {points.map((point, index) => (
-                                <p key={index}>
-                                  {index + 1}. {point}
-                                </p>
-                              ))}
-                            </Card>
-                          ) : null}
+                          {!isEmpty(values?.Condition?.condition) ? <Card className='mt-2'>
+                <div className='flex justify-between'>
+                    <div dangerouslySetInnerHTML={{ __html: values?.Condition?.condition }}></div>
+                </div>
+            </Card> : null
+            }
                         </FormItem>
                       </Card>
                     </div>

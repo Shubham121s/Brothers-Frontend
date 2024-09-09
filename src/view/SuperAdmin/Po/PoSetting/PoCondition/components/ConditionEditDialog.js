@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dialog, Notification, Toast } from "../../../../../../components/ui";
 import { toggleEditCategoryDialog } from "../store/stateSlice";
-import { updateCondition } from "../store/dataslice";
+import { updateCondition,getAllCategories } from "../store/dataslice";
 import ConditionForm from "./ConditionForm";
 
 const ConditionEditDialog = () => {
@@ -15,6 +15,8 @@ const ConditionEditDialog = () => {
     (state) => state.condition.state.selectedCategory
   );
 
+  const tableData = useSelector((state) => state.condition.data.tableData);
+
   const onDialogClose = () => {
     dispatch(toggleEditCategoryDialog(false));
   };
@@ -24,6 +26,7 @@ const ConditionEditDialog = () => {
     const action = await dispatch(updateCondition(values));
     setSubmitting(false);
     if (action.payload.status < 300) {
+      dispatch(getAllCategories(tableData));
       Toast.push(
         <Notification
           title={"Successfully updated"}

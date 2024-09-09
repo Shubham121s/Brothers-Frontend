@@ -64,7 +64,7 @@ const Header = ({ data, className }) => {
           <p>
             <strong>PO DATE :</strong> {dayjs(data.date).format("DD/MM/YYYY")}
           </p>
-          <p>
+          <p className="uppercase">
             <span className="font-semibold">POA DATE :</span>
             <span> </span>
             <span> {dayjs(Date.now()).format("dddd, DD MMMM, YYYY")}</span>

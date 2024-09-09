@@ -1,7 +1,7 @@
 import React from "react";
 const Footer = ({ data }) => {
   const notes = JSON.parse(data?.Note?.notes);
-  var points = data.Condition?.condition.split(/\d+\.\s/).filter(Boolean);
+  var points = data.Condition?.condition;
   return (
     <div className="print:text-xs">
       <strong className="mb-0 font-bold">NOTES :</strong>
@@ -23,15 +23,13 @@ const Footer = ({ data }) => {
 
       <div>
         <strong>{data?.Condition?.name}</strong>
-        <div className="flex flex-col">
-          {points.map((point, index) => (
-            <small key={index}>
-              {index + 1}. {point}
-            </small>
-          ))}
+        <div className="flex flex-col print:text-sm">
+        <div className='flex justify-between'>
+                    <div dangerouslySetInnerHTML={{ __html: points }}></div>
+                </div>
         </div>
       </div>
-      <div className="flex justify-between">
+      <div className="flex justify-between print:text-xs">
         <div className="print:hidden">
           <small className="italic">
             Invoice was created on a computer and is valid without the signature
@@ -43,11 +41,11 @@ const Footer = ({ data }) => {
           <small className="italic">signature and seal.</small>
         </div> */}
       </div>
-      <div className="flex items-center mt-4 justify-center">
+      <div className="flex items-center mt-4 justify-center print:text:xs">
         <strong className="text-gray-600" style={{ height: "13px" }}>
           ******************
         </strong>
-        <strong className="text-gray-600">This Is An Electronically Generated Report</strong>
+        <strong className="text-gray-600 uppercase">This Is An Electronically Generated Report</strong>
         <strong className="text-gray-600" style={{ height: "13px" }}>
           ******************
         </strong>

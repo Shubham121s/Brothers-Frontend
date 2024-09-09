@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dialog, Notification, Toast } from "../../../../../../components/ui";
 import { toggleEditCategoryDialog } from "../store/stateSlice";
-import { updateCategory, updateNotes } from "../store/dataSlice";
+import { updateNotes ,getAllCategories} from "../store/dataSlice";
 import NoteForm from "./NoteForm";
 
 const NoteEditDialog = () => {
@@ -12,6 +12,7 @@ const NoteEditDialog = () => {
     (state) => state.note.state.editCategoryDialog
   );
   const initialData = useSelector((state) => state.note.state.selectedCategory);
+  const tableData = useSelector((state) => state.note.data.tableData);
 
   const onDialogClose = () => {
     dispatch(toggleEditCategoryDialog(false));
@@ -24,6 +25,7 @@ const NoteEditDialog = () => {
     );
     setSubmitting(false);
     if (action.payload.status < 300) {
+      dispatch(getAllCategories(tableData));
       Toast.push(
         <Notification
           title={"Successfully updated"}
