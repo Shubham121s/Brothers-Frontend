@@ -59,9 +59,9 @@ const DrawingTableTools = () => {
         <Button size="sm" onClick={onClearAll}>
           Clear All
         </Button>
-        {/* <Button size="sm" variant='solid' onClick={onAddUser}>
+        <Button size="sm" variant='solid' color="purple-500" onClick={onAddUser}>
                     Add Drawing
-                </Button> */}
+                </Button>
       </div>
     </div>
   );

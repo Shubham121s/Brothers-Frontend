@@ -49,9 +49,7 @@ const validationSchema1 = Yup.object().shape({
       return true;
     })
     .required("Required"),
-  process_attachment: Yup.string().required("Process Attachment Required"),
-  raw_attachment: Yup.string().required("Raw Attachment Required"),
-  finish_attachment: Yup.string().required("Finish Attachment Required"),
+  
 });
 
 const validationSchema2 = Yup.object().shape({
@@ -354,11 +352,7 @@ const ProductForm = forwardRef((props, ref) => {
                       <FormItem
                         className="mb-4"
                         label="Process Sheet"
-                        invalid={
-                          errors.process_attachment &&
-                          touched.process_attachment
-                        }
-                        errorMessage={errors.process_attachment}
+                        
                       >
                         <Field name="process_attachment">
                           {({ field, form }) => (
@@ -393,10 +387,7 @@ const ProductForm = forwardRef((props, ref) => {
                       <FormItem
                         className="mb-4"
                         label="Raw Attachment"
-                        invalid={
-                          errors.raw_attachment && touched.raw_attachment
-                        }
-                        errorMessage={errors.raw_attachment}
+                        
                       >
                         <Field name="raw_attachment">
                           {({ field, form }) => (
@@ -429,10 +420,7 @@ const ProductForm = forwardRef((props, ref) => {
                       </FormItem>
                       <FormItem
                         label="Finish Attachment"
-                        invalid={
-                          errors.finish_attachment && touched.finish_attachment
-                        }
-                        errorMessage={errors.finish_attachment}
+                        
                       >
                         <Field name="finish_attachment">
                           {({ field, form }) => (

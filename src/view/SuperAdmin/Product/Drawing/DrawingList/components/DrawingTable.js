@@ -21,6 +21,7 @@ import {
   toggleEditDrawingDialog,
 } from "../store/stateSlice";
 import EditDrawingDialog from "./EditDrawingDialog";
+import NewDrawingDialog from "./NewDrawingDialog";
 
 import { apiPostDownloadDrawingAttachment } from "../../../../../../services/SuperAdmin/Product/DrawingService";
 import {
@@ -32,33 +33,20 @@ import DrawingDeleteConfirmationDialog from "./DrawingDeleteConfirmationDialog";
 const { Tr, Th, Td, THead, TBody } = Table;
 
 const DownloadColumn = ({ row }) => {
-  const onDownload = async (pdf_attachment_id, filename) => {
-    try {
-      const response = await apiPostDownloadDrawingAttachment({
-        pdf_attachment_id,
-      });
-
-      if (response.data) {
-        const blob = new Blob([response?.data], {
-          type: "application.pdf",
-        });
-        console.log(blob);
-        const blobUrl = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = blobUrl;
-        link.download = `${filename}-${row.drawing_revision_number}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(blobUrl);
-      }
-    } catch (error) {
-      console.log("error downloading", error);
-    }
+  const onDownload = async (URL) => {
+    
+      // const response = await apiPostDownloadDrawingAttachment({
+      //   pdf_attachment_id,
+      // });
+      console.log(URL)
+      const splitString = URL?.split("/uploads/");
+      const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`;
+      window.open(transformedString, "_blank");
+     
   };
   return (
     <div className="flex gap-x-4 justify-center">
-      <Tooltip
+      {row.process_attachment_path && <Tooltip
         title={
           <div>
             Download <strong className="text-yellow-400">Process</strong> pdf
@@ -68,14 +56,14 @@ const DownloadColumn = ({ row }) => {
         <span
           className={`cursor-pointer text-lg`}
           onClick={() => {
-            onDownload(row.process_attachment, "Process Sheet");
+            onDownload(row.process_attachment_path);
           }}
         >
           <HiOutlineDocumentDownload />
         </span>
-      </Tooltip>
+      </Tooltip>}
 
-      <Tooltip
+      {row.raw_attachment_path && <Tooltip
         title={
           <div>
             Download <strong className="text-yellow-400">Raw</strong> pdf
@@ -85,13 +73,13 @@ const DownloadColumn = ({ row }) => {
         <span
           className={`cursor-pointer text-lg`}
           onClick={() => {
-            onDownload(row.raw_attachment, "Raw Attachment");
+            onDownload(row.raw_attachment_path);
           }}
         >
           <HiOutlineDocumentDownload />
         </span>
-      </Tooltip>
-      <Tooltip
+      </Tooltip>}
+      {row.finish_attachment_path &&<Tooltip
         title={
           <div>
             Download <strong className="text-yellow-400">Finish</strong> pdf
@@ -101,12 +89,12 @@ const DownloadColumn = ({ row }) => {
         <span
           className={`cursor-pointer text-lg`}
           onClick={() => {
-            onDownload(row.finish_attachment, "Finish Attachment");
+            onDownload(row.finish_attachment_path);
           }}
         >
           <HiOutlineDocumentDownload />
         </span>
-      </Tooltip>
+      </Tooltip>}
     </div>
   );
 };
@@ -280,6 +268,7 @@ const DrawingTable = ({ data }) => {
         </TBody>
       </Table>
       <EditDrawingDialog />
+      <NewDrawingDialog/>
       <DrawingDeleteConfirmationDialog />
     </>
   );

@@ -18,14 +18,6 @@ const popNotification = (keyword, type, message) => {
   );
 };
 
-// const formData = new FormData()
-//         formData.append('process_attachment', values.process_attachment)
-//         formData.append('raw_attachment', values.raw_attachment)
-//         formData.append('finish_attachment', values.finish_attachment)
-//         formData.append('drawing_revision_number', values.drawing_revision_number)
-//         formData.append('raw_weight', values.raw_weight)
-//         formData.append('finish_weight', values.finish_weight)
-//         formData.append('product_id', data.product_id)
 
 const EditDrawingDialog = ({ data }) => {
   const navigate = useNavigate();
@@ -39,12 +31,7 @@ const EditDrawingDialog = ({ data }) => {
   );
 
   const handleFormSubmit = async (values, setSubmitting) => {
-    console.log(values);
-    const Ids = [
-      selectedDrawing?.raw_attachment,
-      selectedDrawing?.finish_attachment,
-      selectedDrawing?.process_attachment,
-    ];
+try{
     setSubmitting(true);
     const formData = new FormData();
     formData.append("process_attachment", values.process_attachment);
@@ -53,10 +40,10 @@ const EditDrawingDialog = ({ data }) => {
     formData.append("revision_number", values.revision_number);
     formData.append("raw_weight", values.raw_weight);
     formData.append("finish_weight", values.finish_weight);
-    formData.append("Delete", JSON.stringify(Ids));
     formData.append("drawing_id", values.drawing_id);
     const response = await apiUpdateDrawingByDrawingId(formData);
     if (response.data?.success) {
+      setSubmitting(false);
       popNotification(
         "Successfully updated",
         "success",
@@ -65,9 +52,15 @@ const EditDrawingDialog = ({ data }) => {
       onDialogClose();
       handleDiscard();
     } else {
+      setSubmitting(false);
       popNotification("Unsuccessful", "danger", "Product not updated");
     }
+  }
+  catch(error){
     setSubmitting(false);
+    popNotification("Unsuccessful", "danger", "Product not updated");
+  }
+    
   };
 
   const handleDiscard = () => {

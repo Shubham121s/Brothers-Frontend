@@ -33,13 +33,11 @@ const validationSchema = Yup.object().shape({
       return true;
     })
     .required("Required"),
-  process_attachment: Yup.string().required("Process Attachment Required"),
-  raw_attachment: Yup.string().required("Raw Attachment Required"),
-  finish_attachment: Yup.string().required("Finish Attachment Required"),
+  
 });
 
 const DrawingForm = forwardRef((props, ref) => {
-  const { data, initialData, onFormSubmit, onDiscard } = props;
+  const { data, initialData, onFormSubmit, onDiscard,type } = props;
 
   const onSetFormFile = (form, field, file) => {
     console.log(file);
@@ -74,10 +72,7 @@ const DrawingForm = forwardRef((props, ref) => {
                   <FormItem
                     className="mb-4"
                     label="Process Sheet"
-                    invalid={
-                      errors.process_attachment && touched.process_attachment
-                    }
-                    errorMessage={errors.process_attachment}
+                    
                   >
                     <Field name="process_attachment">
                       {({ field, form }) => (
@@ -112,8 +107,7 @@ const DrawingForm = forwardRef((props, ref) => {
                   <FormItem
                     className="mb-4"
                     label="Raw Attachment"
-                    invalid={errors.raw_attachment && touched.raw_attachment}
-                    errorMessage={errors.raw_attachment}
+                    
                   >
                     <Field name="raw_attachment">
                       {({ field, form }) => (
@@ -146,10 +140,7 @@ const DrawingForm = forwardRef((props, ref) => {
                   </FormItem>
                   <FormItem
                     label="Finish Attachment"
-                    invalid={
-                      errors.finish_attachment && touched.finish_attachment
-                    }
-                    errorMessage={errors.finish_attachment}
+                   
                   >
                     <Field name="finish_attachment">
                       {({ field, form }) => (
@@ -202,7 +193,7 @@ const DrawingForm = forwardRef((props, ref) => {
                     icon={<AiOutlineSave />}
                     type="submit"
                   >
-                    Update
+                    {type==="new" ? "Add" : "Update"}
                   </Button>
                 </div>
               </StickyFooter>

@@ -46,6 +46,14 @@ export async function apiPostNewDrawing(data) {
     data,
   });
 }
+
+export async function apiPostNewDrawingRegister(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/product/drawing/register/new",
+    method: "post",
+    data,
+  });
+}
 export async function apiPostDownloadDrawingAttachment(data) {
   return ApiService.fetchData({
     url: "v1/web/company/product/drawing/download/id",

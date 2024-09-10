@@ -1,11 +1,12 @@
 import React from "react";
 import { Dialog, Notification, Toast } from "../../../../../../components/ui";
 import DrawingForm from "./../../DrawingForm";
-import { apiPostNewDrawing } from "../../../../../../services/SuperAdmin/Product/DrawingService";
-import { useNavigate } from "react-router-dom";
+import { apiPostNewDrawingRegister } from "../../../../../../services/SuperAdmin/Product/DrawingService";
+import { useLocation, useNavigate } from "react-router-dom";
 import FormData from "form-data";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleNewDrawingDialog } from "../store/stateSlice";
+import { getAllDrawingsByProductId } from "../store/dataSlice";
 
 const popNotification = (keyword, type, message) => {
   Toast.push(
@@ -18,14 +19,19 @@ const popNotification = (keyword, type, message) => {
   );
 };
 
-const NewDrawingDialog = ({ data = {}, fetchData }) => {
+const NewDrawingDialog = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location=useLocation();
 
   const newDrawingDialog = useSelector(
     (state) => state.product_details.state.newDrawingDialog
   );
 
+  const product_id = location.pathname.substring(
+    location.pathname.lastIndexOf("/") + 1
+  );
+ 
   const handleFormSubmit = async (values, setSubmitting) => {
     const formData = new FormData();
     formData.append("process_attachment", values.process_attachment);
@@ -34,9 +40,10 @@ const NewDrawingDialog = ({ data = {}, fetchData }) => {
     formData.append("revision_number", values.revision_number);
     formData.append("raw_weight", values.raw_weight);
     formData.append("finish_weight", values.finish_weight);
-    formData.append("product_id", data.product_id);
-    setSubmitting(false);
-    const response = await apiPostNewDrawing(formData);
+    formData.append("product_id", product_id);
+    setSubmitting(true);
+    console.log(values)
+    const response = await apiPostNewDrawingRegister(formData);
     setSubmitting(false);
     if (response.data?.success) {
       popNotification(
@@ -45,7 +52,7 @@ const NewDrawingDialog = ({ data = {}, fetchData }) => {
         "Product Successfully created"
       );
       onDialogClose();
-      return fetchData?.();
+      dispatch(getAllDrawingsByProductId({ product_id }))
     } else {
       return popNotification("Unsuccessful", "error", "Product not created");
     }
@@ -60,6 +67,12 @@ const NewDrawingDialog = ({ data = {}, fetchData }) => {
   };
 
   return (
+    <Dialog
+    width={600}
+    isOpen={newDrawingDialog}
+    onClose={onDialogClose}
+    onRequestClose={onDialogClose}
+  >
     <div className="flex flex-col h-full justify-between">
       <h5>New Drawing Revision & Attachment Information</h5>
       <p className="mb-6">
@@ -71,6 +84,7 @@ const NewDrawingDialog = ({ data = {}, fetchData }) => {
         onFormSubmit={handleFormSubmit}
       />
     </div>
+    </Dialog>
   );
 };
 
