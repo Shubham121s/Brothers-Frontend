@@ -29,8 +29,8 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
         </div>
         <div className="col-span-2 h-full">
           <div className="h-full flex gap-2 justify-end items-center">
-            <h6 className="text-gray-700 font-medium">
-              01/{pageNo < 10 ? `0${pageNo}` : pageNo}
+            <h6 className="text-gray-700 font-medium print:text-xs">
+            {pageNo < 10 ? `0${pageNo}` : pageNo}/{pageCount < 10 ? `0${pageCount}` : pageCount}
               {/* {pageCount < 10 ? `0${pageCount}` : pageCount} */}
             </h6>
           </div>

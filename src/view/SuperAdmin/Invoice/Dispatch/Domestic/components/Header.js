@@ -35,8 +35,9 @@ const Header = (props) => {
         <div className="col-span-1 h-full">
           <div className="h-full flex justify-end items-center">
             <h6 className="text-gray-700 font-medium">
-              01/{pageNo < 10 ? `0${pageNo}` : pageNo}
+            {pageNo < 10 ? `0${pageNo}` : pageNo}/{pageCount < 10 ? `0${pageCount}` : pageCount}
               {/* {pageCount < 10 ? `0${pageCount}` : pageCount} */}
+              {/* {pageNo < 10 ? `0${pageNo}` : pageNo} */}
             </h6>
           </div>
         </div>
