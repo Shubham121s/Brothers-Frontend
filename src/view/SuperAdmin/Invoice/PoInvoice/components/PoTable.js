@@ -36,7 +36,7 @@ const TFootRows = ({ data = [], className }) => {
     >
       <Td
         style={{ border: ".2px solid black", padding: "3px" }}
-        colSpan="6"
+        colSpan="8"
       ></Td>
       <Td
         className={`font-semibold ${className}`}
@@ -72,7 +72,18 @@ const PoTable = ({ data = [], className, currency_type = "INR" }) => {
           );
         },
       },
-
+      {
+        header: <span className={className}>Product</span>,
+        accessorKey: "Product",
+        cell: (props) => {
+          const row = props.row.original;
+          return (
+            <div className={`text-center ${className}`}>
+              {`${row?.Product?.name}`}
+            </div>
+          );
+        },
+      },
       {
         header: <span className={className}>item code</span>,
         accessorKey: "item_code",

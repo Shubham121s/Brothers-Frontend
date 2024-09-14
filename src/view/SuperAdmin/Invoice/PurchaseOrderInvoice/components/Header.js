@@ -18,7 +18,7 @@ const Header = ({ data, className }) => {
           <div className="col-span-1 pb-0">
           <h6 className=" text-gray-600">BROTHERS INDUSTRIES</h6>
       <p className="flex font-medium text-gray-600 print:text-sm flex-wrap mb-1 uppercase">
-        Gat No.882 ,Kirloskarwadi Road, Sawantpur,
+        Gate No.882 ,Kirloskarwadi Road, Sawantpur,
       </p>
       <p className="flex font-medium text-gray-600 print:text-sm flex-wrap mb-1 uppercase">
         Tal: Palus, Dist.: Sangli, Pin-416310,

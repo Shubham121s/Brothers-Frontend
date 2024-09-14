@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import ForeignInvoice from '../../../Invoice/Dispatch/Foreign'
 import { Dialog } from '../../../../../components/ui'
 import DomesticInvoice from '../../../Invoice/Dispatch/Domestic'
+import InvoiceExcel from '../../../Excel/Excel'
 
 const InvoiceDialog = () => {
     const dispatch = useDispatch()
@@ -31,6 +32,7 @@ const InvoiceDialog = () => {
                     <ForeignInvoice dispatch_invoice_id={selectedInvoice?.dispatch_invoice_id} />
                 </div>
             }
+            {/* <InvoiceExcel /> */}
         </Dialog>
     )
 }

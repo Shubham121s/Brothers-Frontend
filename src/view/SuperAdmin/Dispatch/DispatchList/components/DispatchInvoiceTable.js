@@ -22,6 +22,7 @@ import { MdDetails } from "react-icons/md";
 import DetailDialog from "./DetailsDialog";
 import DeleteInvoiceConfirmationDialog from "./DeleteConfirmationDialog";
 
+
 const statusColor = {
   confirm: {
     label: "Dispatched",
