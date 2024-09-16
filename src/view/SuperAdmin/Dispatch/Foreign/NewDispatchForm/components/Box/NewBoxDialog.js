@@ -17,7 +17,7 @@ const NewBoxDialog = (props) => {
         dispatch(toggleNewBoxDialog(false))
     }
 
-
+console.log(boxNo)
 
     return (
         <Dialog

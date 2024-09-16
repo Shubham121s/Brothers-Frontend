@@ -22,12 +22,16 @@ const BoxForm = forwardRef((props, ref) => {
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
-        handleFormSubmit?.(values);
+        if(type==="edit"){
+          handleFormSubmit?.({...values,index:initialData?.index});
+        }else{
+          handleFormSubmit?.({...values,index:index});
+        }
+        
         onDiscard?.();
       }}
     >
-      {({ values, touched, errors }) => {
-        values.index = index - 1;
+      {({ values, touched, errors,setFieldValue }) => {
         return (
           <Form>
             <FormContainer>

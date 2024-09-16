@@ -44,7 +44,7 @@ const NewDispatchItemDialog = (props) => {
     const find = dispatchList[locationIndex]?.DispatchLists.find((f) => {
       if (
         f?.Po?.number === values?.Po?.number &&
-        f?.product_id === values?.PoList?.Product?.product_id
+        f?.PoList?.po_list_id === values?.PoList?.po_list_id
       )
         return f;
     });

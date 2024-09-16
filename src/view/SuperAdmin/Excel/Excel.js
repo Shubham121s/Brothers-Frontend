@@ -1,5 +1,6 @@
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+import { htmlToText } from 'html-to-text';
 
 const generateInvoiceExcel = (invoiceData) => {
   // Create a new workbook and add a worksheet
@@ -20,7 +21,7 @@ const generateInvoiceExcel = (invoiceData) => {
     }
     worksheet.pageSetup.printArea="A1:J30"
   worksheet.views = [
-    { state: 'normal', zoomScale: 82 }
+    { state: 'normal', zoomScale: 70 }
   ];
 
   //ADD IMAGE
@@ -104,12 +105,19 @@ bottom: { style: 'medium' }  // Add a thin left border to each cell
   };
 
 //   const cell = worksheet.getCell('A1');
-worksheet.mergeCells('A2:A7');
-worksheet.getRow(`1`).height = 50;
-worksheet.getRow(`7`).height = 80;
+worksheet.mergeCells('A2:B2');
 worksheet.getCell('A2').value = {
   richText: [
-    { text: 'BROTHERS INDUSTRIES\n',font: { bold: true,size:45 }, }, // Normal text
+    { text: 'BROTHERS INDUSTRIES',font: { bold: true,size:45}, },
+  ]
+};
+worksheet.getRow(2).height=50
+worksheet.mergeCells('B3:B7');
+worksheet.mergeCells('A3:A7');
+// worksheet.getRow(`1`).height = 50;
+worksheet.getRow(`7`).height = 80;
+worksheet.getCell('A3').value = {
+  richText: [
     { text: 'GAT NO.882 ,KIRLOSKARWADI ROAD, SAWANTPUR,\n', font: { size:18 } }, // Bold invoice number
     { text: 'MAHARASHTRA, INDIA\n', font: { size:18 } },
     { text: 'PHONE: +91) 7588777800, 9764705724\n', font: { size:18 } },
@@ -118,14 +126,14 @@ worksheet.getCell('A2').value = {
   ]
 };
 
-worksheet.getCell('A2').border = {
+worksheet.getCell('A3').border = {
   top: {style:'medium',},
   left: {style:'medium', },
   bottom: {style:'medium',},
   right: {style:'medium', }
 };
 
-worksheet.getCell('A2').alignment = {
+worksheet.getCell('A3').alignment = {
   vertical: 'top', 
   horizontal: 'left', 
   wrapText: true,
@@ -135,57 +143,97 @@ worksheet.getCell('A2').alignment = {
 //INVOICE NUMBER INVOICE DATE
 
 
-// worksheet.mergeCells('B2:J2');
-//   worksheet.getCell('B2').value = {
-//     richText: [
-//       { text: 'INVOICE NO - ' }, // Normal text
-//       { text: '123456987', font: { bold: true } }, // Bold invoice number
-//       { text: '  |  ' },
-//       { text: 'INVOICE NO - ' },
-//       { text: '2024-05-15', font: { bold: true } },
-//     ]
-//   };
-//   worksheet.getCell(`B2`).border = {
-//     right: { style: 'medium' },
-//     bottom: { style: 'medium' },
-//   };
-//   worksheet.getCell('B2').alignment = {
-//     vertical: 'top', 
-//     horizontal: 'center', 
-//     wrapText: true,
-//     shrinkToFit: true
-//   };
+worksheet.mergeCells('C2:F2');
+  worksheet.getCell('C2').value = {
+    richText: [
+      { text: 'INVOICE NO - ',font: { size:18 } }, // Normal text
+      { text: '123456987', font: { bold: true,size:19 } }, // Bold invoice number
+    ]
+  };
+  worksheet.getCell(`C2`).border = {
+    right: { style: 'medium' },
+    bottom: { style: 'medium' },
+  };
+  worksheet.getCell('C2').alignment = {
+    vertical: 'center', 
+    horizontal: 'left', 
+    wrapText: true,
+    shrinkToFit: true
+  };
+
+  worksheet.mergeCells('G2:J2');
+  worksheet.getCell('G2').value = {
+    richText: [
+      { text: 'INVOICE Date - ',font: { size:18 } }, // Normal text
+      { text: '2024-05-15', font: { bold: true,size:15 } }, // Bold invoice number
+    ]
+  };
+  worksheet.getCell(`G2`).border = {
+    right: { style: 'medium' },
+    bottom: { style: 'medium' },
+  };
+  worksheet.getCell('G2').alignment = {
+    vertical: 'center', 
+    horizontal: 'left', 
+    wrapText: true,
+    shrinkToFit: true
+  };
 
 //BUYER ORDER NUMBER
+worksheet.getRow(3).height=20
+worksheet.mergeCells('C3:J3');
+  worksheet.getCell('C3').value = {
+    richText: [
+      { text: 'BUYER ORDER NO', font: { bold: true,size:18 } }, // Bold invoice number
+    ]
+  };
+  worksheet.getCell('C3').alignment = {
+    vertical: 'center', 
+    horizontal: 'center', 
+    wrapText: true,
+    shrinkToFit: true
+  };
+  worksheet.getCell(`C3`).border = {
+    right: { style: 'medium' },
+    bottom: { style: 'medium' },
+  };
+  worksheet.mergeCells('C4:C7');
+  worksheet.mergeCells('D4:D7');
+  worksheet.mergeCells('E4:E7');
+  worksheet.mergeCells('F4:F7');
+  worksheet.mergeCells('G4:G7');
+  worksheet.mergeCells('H04:H7');
+  worksheet.mergeCells('I4:I7');
+  worksheet.mergeCells('J4:J7');
+  let arr = ['C4', 'D4', 'E4', 'F4', 'G4', 'H4', 'I4', 'J4']; 
 
-// worksheet.mergeCells('B3:J3');
-//   worksheet.getCell('B3').value = {
-//     richText: [
-//       { text: 'BUYER ORDER NO', font: { bold: true } }, // Bold invoice number
-//     ]
-//   };
-//   worksheet.getCell('B3').alignment = {
-//     vertical: 'top', 
-//     horizontal: 'center', 
-//     wrapText: true,
-//     shrinkToFit: true
-//   };
-//   worksheet.getCell(`B3`).border = {
-//     right: { style: 'medium' },
-//     bottom: { style: 'medium' },
-//   };
-//   invoiceData.orderNumbers.forEach((order, index) => {
-//     let arr = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']; // Array of columns
-//     let columnIndex = Math.floor(index / 4); // Determine the current column based on the index
-//     let rowIndex = (index % 4) + 4; // Determine the row (4, 5, 6, 7) repeating every 4 iterations
-
-//     // Get the column letter from 'arr' and set the cell value in the correct position
-//     worksheet.getCell(`${arr[columnIndex]}${rowIndex}`).value = `${index + 1}: ${order}`;
-// });
+  // Loop through invoiceData.orderNumbers to assign values to the merged cells
+  invoiceData.orderNumbers.forEach((order, index) => {
+    if (index < arr.length) {
+      worksheet.getCell(`${arr[index]}`).value = {
+        richText: [
+          { text: `${index + 1}: `, font: {  size: 16 } }, // Bold index
+          { text: `${order}`, font: { bold: true, size: 16 } },       // Bold order number
+        ]
+      };
+  
+      // Optional: Add alignment and other styles for better presentation
+      worksheet.getCell(`${arr[index]}`).alignment = {
+        vertical: 'middle',
+        horizontal: 'left',
+        wrapText: true,
+      };
+  
+      // worksheet.getCell(`${arr[index]}`).border = {
+      //   right: { style: 'medium' },
+      //   bottom: { style: 'medium' }
+      // };
+    }
+  });
 
 //CONSIGNEE , BUYER
 worksheet.getRow(9).height=120
-worksheet.mergeCells('A8:C8');
+worksheet.mergeCells('A8:B8');
 worksheet.getCell('A8').value = `CONSIGNEE`;
   worksheet.getCell('A8').alignment = {
     vertical: 'top', 
@@ -193,26 +241,32 @@ worksheet.getCell('A8').value = `CONSIGNEE`;
     wrapText: true,
     shrinkToFit: true
   };
+  worksheet.getCell('A8').font = {
+   bold:true,
+   size:15
+  };
   worksheet.getCell('A8').border={
     bottom: { style: 'thin', color: { argb: 'FFFFFFFF' } },
     right: { style: 'medium' },
   }
 
-  worksheet.mergeCells('A9:C9');
+  worksheet.mergeCells('A9:B9');
   const richText2 = [
     {
         text: 'HYOSUNG GOODSPRINGS\n',
-        font: { bold: true }
+        font: { bold: true,size:15 }
     },
     {
-        text: '431, UNGNAMDONG, SEONGSANGU, CHANGWONSI, GYEONGSANGNAMDO,\nKOREA, KOREA, 51559\n'
+        text: '431, UNGNAMDONG, SEONGSANGU, CHANGWONSI, GYEONGSANGNAMDO,\nKOREA, KOREA, 51559\n',
+        font:{size:15}
     },
     {
       text: 'EMAIL - ',
-      font: { bold: true }
+      font: { bold: true,size:15 }
   },
   {
     text: 'CHULMIN424HYOSANG.COM',
+    font: { size:15 }
   }
   ];
 
@@ -230,26 +284,45 @@ worksheet.getCell(`A9`).border = {
   bottom: { style: 'medium' },
 };
 
-worksheet.mergeCells('D8:F8');
-  worksheet.getCell('D8').value = `BUYER`;
-  worksheet.getCell('D8').alignment = {
+worksheet.mergeCells('C8:F8');
+  worksheet.getCell('C8').value = `BUYER`;
+  worksheet.getCell('C8').font = {size:15,bold:true};
+  worksheet.getCell('C8').alignment = {
     vertical: 'top', 
     horizontal: 'center', 
     wrapText: true,
     shrinkToFit: true,
   };
-  worksheet.getCell('D8').border={
+  worksheet.getCell('C8').border={
     bottom: { style: 'thin', color: { argb: 'FFFFFFFF' } },
     right: { style: 'medium' },
   }
 
-worksheet.mergeCells('D9:F9');
-worksheet.getCell('D9').value = 'HYOSUNG GOODSPRINGS \n431, UNGNAMDONG, CHANGWONSI, SEONGSANGU,\n KOREA, 51559 \nCONTACT NAME - BAE CHUL MIN \nCONTACT -';
-worksheet.getCell('D9').border={
+worksheet.mergeCells('C9:F9');
+const richText3 = [
+  {
+      text: 'HYOSUNG GOODSPRINGS\n',
+      font: { bold: true,size:15 }
+  },
+  {
+      text: '431, UNGNAMDONG, CHANGWONSI, SEONGSANGU,\n KOREA, 51559 \n',
+      font:{size:15}
+  },
+  {
+    text: 'CONTACT - ',
+    font: { bold: true,size:15 }
+},
+{
+  text: '12345689',
+  font: { size:15 }
+}
+];
+worksheet.getCell('C9').value = { richText:richText3 };
+worksheet.getCell('C9').border={
   bottom: { style: 'medium' },
   right: { style: 'medium' },
 }
-worksheet.getCell('D9').alignment = {
+worksheet.getCell('C9').alignment = {
   vertical: 'top', 
   horizontal: 'left', 
   wrapText: true,
@@ -269,9 +342,42 @@ worksheet.mergeCells('G8:J8');
   }
 
 
-
+  const richText4 = [
+    {
+        text: 'IEC CODE -',
+        font: { bold: true,size:15 }
+    },
+    {
+        text: 'GZUPS0011Q\n',
+        font:{size:15}
+    },
+    {
+      text: 'GSTIN - ',
+      font: { bold: true,size:15 }
+  },
+  {
+    text: '27GZUPS0011Q1ZK\n',
+    font: { size:15 }
+  },
+  {
+    text: 'END USE CODE - ',
+    font: { bold: true,size:15 }
+},
+{
+  text: 'GNX 200\n',
+  font: { size:15 }
+},
+{
+  text: 'PAYMENT - ',
+  font: { bold: true,size:15 }
+},
+{
+text: 'BY 30 DAYS T/T',
+font: { size:15 }
+}
+  ];
   worksheet.mergeCells('G9:J9');
-worksheet.getCell('G9').value = 'IEC CODE - GZUPS0011Q \nGSTIN - 27GZUPS0011Q1ZK \nEND USE CODE - GNX 200 \nPAYMENT - BY 30 DAYS T/T';
+worksheet.getCell('G9').value = { richText:richText4}
 worksheet.getCell('G9').border={
   bottom: { style: 'medium' },
   right: { style: 'medium' },
@@ -285,9 +391,51 @@ worksheet.getCell('G9').alignment = {
 
 
 //PRE CARRIEGE BY
-worksheet.getRow(10).height=120
-  worksheet.mergeCells('A10:C10');
-worksheet.getCell('A10').value = 'PRECARRIEGE BY - BY CIF UPTO PORT \nPLACE OF RECEIPT - NHAVA SHEVA \nVESSEL / FLIGHT NO - GNX 200 \nPORT OF DISCHARGE - PUSAN \nNOTIFY - BUYER/APPLICANT MENTIONED ABOVE';
+worksheet.getRow(10).height=125
+  worksheet.mergeCells('A10:B10');
+  const richText5 = [
+    {
+        text: 'PRECARRIEGE BY -',
+        font: { bold: true,size:15 }
+    },
+    {
+        text: 'BY CIF UPTO PORT\n',
+        font:{size:15}
+    },
+    {
+      text: 'PLACE OF RECEIPT - ',
+      font: { bold: true,size:15 }
+  },
+  {
+    text: 'NHAVA SHEVA\n',
+    font: { size:15 }
+  },
+  {
+    text: 'VESSEL / FLIGHT NO - ',
+    font: { bold: true,size:15 }
+},
+{
+  text: 'GNX 200\n',
+  font: { size:15 }
+},
+{
+  text: 'PORT OF DISCHARGE - ',
+  font: { bold: true,size:15 }
+},
+{
+text: 'PUSAN\n',
+font: { size:15 }
+},
+{
+  text: 'NOTIFY - ',
+  font: { bold: true,size:15 }
+},
+{
+text: 'BUYER/APPLICANT MENTIONED ABOVE',
+font: { size:15 }
+}
+  ];
+worksheet.getCell('A10').value = {richText:richText5}
 worksheet.getCell('A10').alignment = {
   vertical: 'top', 
   horizontal: 'left', 
@@ -299,33 +447,65 @@ worksheet.getCell('A10').border={
   right: { style: 'medium' },
 }
 
-worksheet.mergeCells('D10:F10');
-worksheet.getCell('D10').value = `COUNTRY OF ORIGIN OF GOODS - INDIA
-COUNTRY OF FINAL DESTINATION - KOREA
-PORT OF LOADING - NHAVA SHEVA
-FINAL DESTINATION - KOREA
-`;
-worksheet.getCell('D10').border={
+//DESTINATIONS
+worksheet.mergeCells('C10:F10');
+const richText6 = [
+  {
+      text: 'COUNTRY OF ORIGIN OF GOODS -',
+      font: { bold: true,size:15 }
+  },
+  {
+      text: 'INDIA\n',
+      font:{size:15}
+  },
+  {
+    text: 'COUNTRY OF FINAL DESTINATION - ',
+    font: { bold: true,size:15 }
+},
+{
+  text: 'KOREA\n',
+  font: { size:15 }
+},
+{
+  text: 'PORT OF LOADING - ',
+  font: { bold: true,size:15 }
+},
+{
+text: 'NHAVA SHEVA\n',
+font: { size:15 }
+},
+{
+text: 'FINAL DESTINATION - ',
+font: { bold: true,size:15 }
+},
+{
+text: 'KOREA\n',
+font: { size:15 }
+},
+];
+worksheet.getCell('C10').value = {richText:richText6}
+worksheet.getCell('C10').border={
   bottom: { style: 'medium' },
   right: { style: 'medium' },
 }
-worksheet.getCell('D10').alignment = {
+worksheet.getCell('C10').alignment = {
   vertical: 'top', 
   horizontal: 'left', 
   wrapText: true,
   shrinkToFit: true
 };
 
+//BOX ALIGNMENT
 worksheet.mergeCells('G10:J10');
 let richText = [];
 invoiceData.DispatchBoxLists.forEach((box) => {
     richText.push({
         text: `BOX NO ${box.box_no}`,
-        font: { bold: true,size:8 }
+        font: { bold: true,size:12 }
     });
     richText.push({
-        text: ` - (${box.box_height}X${box.box_breadth}X${box.box_length}) ${box.box_size_type.toUpperCase()}-(${Number(box.tare_weight).toFixed(3)} Kg), `,
-        font: {size:8 }
+        text: ` - (${box.box_height}X${box.box_breadth}X${box.box_length}) ${box.box_size_type.toUpperCase()}-(${Number(box.tare_weight).toFixed(3)} Kg)\n`,
+        font: {size:12 }
     });
 });
 
@@ -345,35 +525,249 @@ worksheet.getCell('G10').alignment = {
 
 //Items Table
 
-  worksheet.addRow(['Project No', 'PO & Serial No', 'Delivery Date', 'Product Name', 'Item Code', 'HSN Code', 'Box No', 'Quantity', 'Rate (USD)', 'Total (USD)']);
-  worksheet.getRow(worksheet.lastRow.number).font = boldStyle; // Make the table header bold
+// Add the table header row with uppercase headings, larger font size, and center alignment
+const headerRow = worksheet.addRow([
+  'PROJECT NO', 
+  'PO & SERIAL NO', 
+  'DELIVERY DATE', 
+  'PRODUCT NAME', 
+  'ITEM CODE', 
+  'HSN CODE', 
+  'BOX NO', 
+  'QUANTITY', 
+  'RATE (USD)', 
+  'TOTAL (USD)'
+]);
 
-  invoiceData.items.forEach((item) => {
-    worksheet.addRow([
-      item.projectNo,
-      item.serialNo,
-      item.deliveryDate,
-      item.productName,
-      item.itemCode,
-      item.hsnCode,
-      item.boxNo,
-      item.qty,
-      item.rate,
-      item.total,
-    ]);
+// Define bold and larger font style for the header row
+const boldLargeStyle = { bold: true, size: 15 }; // Adjust size as needed
+
+// Apply the style and alignment to each cell in the header row
+headerRow.eachCell((cell) => {
+  cell.font = boldLargeStyle;
+  cell.alignment = { 
+    vertical: 'middle', 
+    horizontal: 'center', 
+    wrapText: true // This will wrap text if too long
+  };
+});
+
+// Define font style and alignment for the items
+const itemStyle = { size: 15 }; // Font size 14
+const itemAlignment = { vertical: 'middle', horizontal: 'left', wrapText: true };
+
+// Add data rows from invoiceData.items
+invoiceData.items.forEach((item) => {
+  const row = worksheet.addRow([
+    item.projectNo,
+    item.serialNo,
+    item.deliveryDate,
+    item.productName,
+    item.itemCode,
+    item.hsnCode,
+    item.boxNo,
+    item.qty,
+    item.rate,
+    item.total,
+  ]);
+
+  // Apply font size and alignment for each cell in the row
+  row.eachCell((cell,index) => {
+    cell.font = itemStyle;
+    cell.alignment = itemAlignment;
   });
+});
 
   // Add the total row
-  worksheet.addRow(['', '', '', '', '', '', 'TOTAL', invoiceData.totalQty, '', invoiceData.totalAmount]);
+  const rows = [
+    ['1 USE = 82 INR', '', '', '', '', '', 'TOTAL (PAGE 1)', invoiceData.totalQty, '', invoiceData.totalAmount],
+    ['', '', '', '', '', '', 'TOTAL (PAGE 1 TO 1)', invoiceData.totalQty, '', invoiceData.totalAmount],
+    ['', '', '', '', '', '', '', 'IGST', '', '18%'],
+    ['', '', '', '', '', '', '', '','GRAND TOTAL', '32654168'],
+    [`AMOUNT IN WORDS - ${invoiceData.amountInWords}`]
+  ];
+  
+  // Define item style and alignment
+  const rrStyle = { size: 14 }; // Font size 14
+  const iiAlignment = { vertical: 'middle', horizontal: 'left', wrapText: true }; // Middle vertically, left horizontally
+  
+  // Loop through rows and add them to the worksheet
+  let lastRowNumber = 0; 
+  rows.forEach((rowData, rowIndex) => {
+    const row = worksheet.addRow(rowData);
+  
+    // Set height of each row
+    row.height = 30; // You can adjust this value as needed. Default is usually 15, so 30 doubles it
+  
+    // Apply font style and alignment for each cell in the row
+    row.eachCell((cell) => {
+      cell.font = rrStyle;
+      cell.alignment = iiAlignment;
+    });
+    lastRowNumber=row.number+1
+  });
+  
+//PACKING DETAILS
+  worksheet.mergeCells(`A${lastRowNumber}:B${lastRowNumber}`);
+  const richText7 = [
+    {
+        text: 'PACKING DETAILS -',
+        font: { bold: true,size:15 }
+    },
+    {
+        text: 'WOODEN BOX\n',
+        font:{size:15}
+    },
+    {
+      text: 'NO OF BOX - ',
+      font: { bold: true,size:15 }
+  },
+  {
+    text: '8\n',
+    font: { size:15 }
+  },
+  {
+    text: 'NET WEIGHT - ',
+    font: { bold: true,size:15 }
+  },
+  {
+  text: '25 Kg\n',
+  font: { size:15 }
+  },
+  {
+  text: 'GROSS WEIGHT - ',
+  font: { bold: true,size:15 }
+  },
+  {
+  text: '26.00 Kg\n',
+  font: { size:15 }
+  },
+  ];
+  worksheet.getCell(`A${lastRowNumber}`).value={richText:richText7};
+  worksheet.getRow(`${lastRowNumber}`).height=118;
+  worksheet.getCell(`A${lastRowNumber}`).alignment = {
+    vertical: 'top',
+    horizontal: 'left',
+    wrapText: true,
+    shrinkToFit: true
+};
 
-  // Add static footer content
-  worksheet.addRow([]);
-  worksheet.addRow([`AMOUNT IN WORDS - ${invoiceData.amountInWords}`]);
-  worksheet.addRow([`NO OF BOX - ${invoiceData.noOfBox}`]);
-  worksheet.addRow([`NET WEIGHT - ${invoiceData.netWeight}`]);
-  worksheet.addRow([`GROSS WEIGHT - ${invoiceData.grossWeight}`]);
-  worksheet.addRow([`SHIPPING TERMS - ${invoiceData.shippingTerms}`]);
-  worksheet.addRow([`FREIGHT - ${invoiceData.freight}`]);
+//FRIEGHT SHIPPING LINE
+
+worksheet.mergeCells(`C${lastRowNumber}:F${lastRowNumber}`);
+  const richText8 = [
+    {
+        text: 'FRIEGHT -',
+        font: { bold: true,size:15 }
+    },
+    {
+        text: 'PRE-PAID\n',
+        font:{size:15}
+    },
+    {
+      text: 'EXCISE DOCUMENT - ',
+      font: { bold: true,size:15 }
+  },
+  {
+    text: '\n',
+    font: { size:15 }
+  },
+  {
+    text: 'SHIPPING TERMS - ',
+    font: { bold: true,size:15 }
+  },
+  {
+  text: 'CIF\n',
+  font: { size:15 }
+  },
+  {
+  text: 'SHIPPING LINE - ',
+  font: { bold: true,size:15 }
+  },
+  {
+  text: 'BY AIR\n',
+  font: { size:15 }
+  },
+  {
+    text: 'INSURANCE - ',
+    font: { bold: true,size:15 }
+    },
+    {
+    text: 'BROTHER INDUSTRIES\n',
+    font: { size:15 }
+    },
+  ];
+  worksheet.getCell(`C${lastRowNumber}`).value={richText:richText8};
+  worksheet.getCell(`C${lastRowNumber}`).alignment = {
+    vertical: 'top',
+    horizontal: 'left',
+    wrapText: true,
+    shrinkToFit: true
+};
+
+//BANK DETAILS
+
+worksheet.mergeCells(`G${lastRowNumber}:J${lastRowNumber}`);
+  const richText9 = [
+    {
+        text: 'BENEFICIARY NAME -',
+        font: { bold: true,size:15 }
+    },
+    {
+        text: 'BROTHER INDUSTRIES\n',
+        font:{size:15}
+    },
+    {
+      text: 'BANK NAME - ',
+      font: { bold: true,size:15 }
+  },
+  {
+    text: 'BANK OF MAHARASTRA\n',
+    font: { size:15 }
+  },
+  {
+    text: 'BANK ACCOUNT NO - ',
+    font: { bold: true,size:15 }
+  },
+  {
+  text: '60262968113\n',
+  font: { size:15 }
+  },
+  {
+  text: 'IFSC CODE - ',
+  font: { bold: true,size:15 }
+  },
+  {
+  text: 'MAHBOOOOO3O\n',
+  font: { size:15 }
+  },
+  {
+    text: 'SWIFT CODE - ',
+    font: { bold: true,size:15 }
+    },
+    {
+    text: 'MAHBINBBKOL\n',
+    font: { size:15 }
+    },
+    {
+      text: 'BANK AD CODE - ',
+      font: { bold: true,size:15 }
+      },
+      {
+      text: '02300676000009',
+      font: { size:15 }
+      },
+  ];
+  worksheet.getCell(`G${lastRowNumber}`).value={richText:richText9};
+  worksheet.getCell(`G${lastRowNumber}`).alignment = {
+    vertical: 'top',
+    horizontal: 'left',
+    wrapText: true,
+    shrinkToFit: true
+};
+
+//NOTE 
+
  
   // Save the Excel file
   workbook.xlsx.writeBuffer().then((buffer) => {
@@ -428,11 +822,61 @@ const invoiceData = {
     "box_breadth": 19,
     "box_size_type": "mm",
     "tare_weight": 0
+},
+{
+  "dispatch_box_list_id": "c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e",
+  "box_no": 2,
+  "box_length": 45,
+  "box_height": 22,
+  "box_breadth": 19,
+  "box_size_type": "mm",
+  "tare_weight": 0
+},
+{
+  "dispatch_box_list_id": "c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e",
+  "box_no": 2,
+  "box_length": 45,
+  "box_height": 22,
+  "box_breadth": 19,
+  "box_size_type": "mm",
+  "tare_weight": 0
+},
+{
+  "dispatch_box_list_id": "c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e",
+  "box_no": 2,
+  "box_length": 45,
+  "box_height": 22,
+  "box_breadth": 19,
+  "box_size_type": "mm",
+  "tare_weight": 0
+},
+{
+  "dispatch_box_list_id": "c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e",
+  "box_no": 2,
+  "box_length": 45,
+  "box_height": 22,
+  "box_breadth": 19,
+  "box_size_type": "mm",
+  "tare_weight": 0
+},
+{
+  "dispatch_box_list_id": "c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e",
+  "box_no": 2,
+  "box_length": 45,
+  "box_height": 22,
+  "box_breadth": 19,
+  "box_size_type": "mm",
+  "tare_weight": 0
 }
 ],
   items: [
     { projectNo: '2352056-004', serialNo: 'EO2023120118-27', deliveryDate: '13-Aug-2024', productName: 'BEARING END COVER', itemCode: 'DPHH200052GAA', hsnCode: '84139190', boxNo: 1, qty: 1, rate: 15575.80, total: 15575.80 },
     { projectNo: '2353008-021', serialNo: 'EO2024010049-36', deliveryDate: '04-Jul-2024', productName: 'BEARING HOUSING', itemCode: 'DPEH140060GAA', hsnCode: '84139190', boxNo: 1, qty: 2, rate: 75973.45, total: 151946.90 },
+    { projectNo: '2352056-003', serialNo: 'EO2023120118-26', deliveryDate: '24-Jul-2024', productName: 'BEARING END COVER', itemCode: 'DPHH200052GAA', hsnCode: '84139190', boxNo: 1, qty: 1, rate: 15575.80, total: 15575.80 },
+    { projectNo: '2352056-003', serialNo: 'EO2023120118-26', deliveryDate: '24-Jul-2024', productName: 'BEARING END COVER', itemCode: 'DPHH200052GAA', hsnCode: '84139190', boxNo: 1, qty: 1, rate: 15575.80, total: 15575.80 },
+    { projectNo: '2352056-003', serialNo: 'EO2023120118-26', deliveryDate: '24-Jul-2024', productName: 'BEARING END COVER', itemCode: 'DPHH200052GAA', hsnCode: '84139190', boxNo: 1, qty: 1, rate: 15575.80, total: 15575.80 },
+    { projectNo: '2352056-003', serialNo: 'EO2023120118-26', deliveryDate: '24-Jul-2024', productName: 'BEARING END COVER', itemCode: 'DPHH200052GAA', hsnCode: '84139190', boxNo: 1, qty: 1, rate: 15575.80, total: 15575.80 },
+    { projectNo: '2352056-003', serialNo: 'EO2023120118-26', deliveryDate: '24-Jul-2024', productName: 'BEARING END COVER', itemCode: 'DPHH200052GAA', hsnCode: '84139190', boxNo: 1, qty: 1, rate: 15575.80, total: 15575.80 },
     { projectNo: '2352056-003', serialNo: 'EO2023120118-26', deliveryDate: '24-Jul-2024', productName: 'BEARING END COVER', itemCode: 'DPHH200052GAA', hsnCode: '84139190', boxNo: 1, qty: 1, rate: 15575.80, total: 15575.80 },
   ],
   totalQty: 4,
@@ -444,6 +888,8 @@ const invoiceData = {
   shippingTerms: 'CIF',
   freight: 'PREPAID',
 };
+
+
 
 // Example usage: Call the function to generate the Excel file
 const handleDownload = () => {
