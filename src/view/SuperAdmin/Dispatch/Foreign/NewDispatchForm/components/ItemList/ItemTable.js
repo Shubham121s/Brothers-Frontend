@@ -71,9 +71,9 @@ const ActionColumn = (props) => {
 
   return (
     <div className="flex justify-center text-lg gap-x-4">
-      <span className="cursor-pointer hover:text-red-500" onClick={onEdit}>
+      {/* <span className="cursor-pointer hover:text-red-500" onClick={onEdit}>
         <HiOutlinePencil />
-      </span>
+      </span> */}
       <span className="cursor-pointer hover:text-red-500" onClick={onDelete}>
         <HiOutlineTrash />
       </span>
@@ -102,12 +102,12 @@ const ItemTable = ({
         columns: [
           {
             header: "project no",
-            accessorKey: "project_number",
+            accessorKey: "prohect_no",
             cell: (props) => {
               const row = props.row.original;
               return (
                 <div className="uppercase text-center">
-                  {`${row?.project_number || "-"}`}
+                  {`${row?.PoList?.project_no || "-"}`}
                 </div>
               );
             },
