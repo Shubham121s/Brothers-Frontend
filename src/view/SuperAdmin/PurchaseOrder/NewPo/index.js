@@ -56,6 +56,20 @@ const NewPO = () => {
       );
       handleDiscard();
     }
+    else{
+      Toast.push(
+        <Notification
+          title={"Error"}
+          type="danger"
+          duration={2500}
+        >
+          {action.payload?.data?.message}
+        </Notification>,
+        {
+          placement: "top-center",
+        }
+      );
+    }
   };
 
   const handleDiscard = () => {

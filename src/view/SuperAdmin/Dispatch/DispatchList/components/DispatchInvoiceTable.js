@@ -129,7 +129,7 @@ const columns = [
     },
   },
   {
-    header: "Buyer Name",
+    header: "Customer Name",
     accessorKey: "DispatchConsignee.name",
     cell: (props) => {
       const { DispatchConsignee } = props.row.original;
