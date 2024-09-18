@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const ConsigneeAndBuyerDetails = ({ title, data, address }) => {
   return (
@@ -9,21 +9,23 @@ const ConsigneeAndBuyerDetails = ({ title, data, address }) => {
       <h6 className="text-gray-700 print:text-sm uppercase">{data?.name}</h6>
       <p className="flex font-medium text-gray-500 print:text-sm flex-wrap uppercase">
         {address?.address}
-        {", "}
+        {', '}
         {address?.country}
-        {", "}
+        {', '}
         {address?.zip_code}
       </p>
-      {title === "Consignee" && (
-        <div className="flex gap-1 justify-start uppercase">
-          <p className="text-gray-700 font-semibold print:text-sm">Email</p>
+      {title === 'Consignee' && (
+        <div className="flex gap-1 justify-start ">
+          <p className="text-gray-700 font-semibold print:text-sm uppercase">
+            Email
+          </p>
           <p className="text-gray-700 print:text-sm">-</p>
-          <p className="text-gray-500 font-medium print:text-sm uppercase">
+          <p className="text-gray-500 font-medium print:text-sm ">
             {data?.email}
           </p>
         </div>
       )}
-      {title === "buyer" && (
+      {title === 'buyer' && (
         <>
           <div className="flex gap-1 justify-start uppercase">
             <p className="text-gray-700 font-semibold print:text-sm">
@@ -44,7 +46,7 @@ const ConsigneeAndBuyerDetails = ({ title, data, address }) => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ConsigneeAndBuyerDetails;
+export default ConsigneeAndBuyerDetails

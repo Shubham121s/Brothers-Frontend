@@ -1,27 +1,27 @@
-import dayjs from "dayjs";
-import React from "react";
-import { dispatchList } from "../utils/dispatchList";
+import dayjs from 'dayjs'
+import React from 'react'
+import { dispatchList } from '../utils/dispatchList'
 const InvoiceDetails = ({ data, location_code }) => {
   const POLists = dispatchList(data?.DispatchLocations)?.map((item) =>
     String(item?.Po?.number)
-  );
-  const POInvoice = Array.from(new Set(POLists));
+  )
+  const POInvoice = Array.from(new Set(POLists))
   // data?.invoice_date
   return (
     <div className="h-full">
       <div
         className="grid grid-cols-2"
-        style={{ borderBottom: "1px dashed black" }}
+        style={{ borderBottom: '1px dashed black' }}
       >
         <div
           className="flex gap-1 items-center"
-          style={{ borderRight: "1px dashed black" }}
+          style={{ borderRight: '1px dashed black' }}
         >
           <p className="text-center text-gray-500 print:text-xs">INVOICE NO</p>
           <p className="text-center text-gray-500 print:text-xs">-</p>
           <h6
             className="text-center text-gray-700 font-semibold"
-            style={{ fontSize: "16px" }}
+            style={{ fontSize: '16px' }}
           >
             {data?.invoice_no}
           </h6>
@@ -32,10 +32,10 @@ const InvoiceDetails = ({ data, location_code }) => {
           </p>
           <p className="text-center text-gray-500 print:text-xs">-</p>
           <h6
-            className="text-center text-gray-700 font-semibold"
-            style={{ fontSize: "11px" }}
+            className="text-center text-gray-700 font-semibold uppercase"
+            style={{ fontSize: '11px' }}
           >
-            {dayjs().format("DD MMM, YYYY")}
+            {dayjs().format('DD MMM, YYYY')}
           </h6>
         </div>
       </div>
@@ -43,7 +43,7 @@ const InvoiceDetails = ({ data, location_code }) => {
       {location_code ? (
         <div
           className="flex gap-1 items-center"
-          style={{ marginTop: "-5px", borderBottom: "1px dashed black" }}
+          style={{ marginTop: '-5px', borderBottom: '1px dashed black' }}
         >
           <p className="font-normal text-center text-gray-500 print:text-xs">
             LOCATION
@@ -51,7 +51,7 @@ const InvoiceDetails = ({ data, location_code }) => {
           <p className="text-center text-gray-500 print:text-xs">-</p>
           <h6
             className="text-center text-gray-700 font-semibold"
-            style={{ fontSize: "13px" }}
+            style={{ fontSize: '13px' }}
           >
             {location_code}
           </h6>
@@ -65,21 +65,24 @@ const InvoiceDetails = ({ data, location_code }) => {
           {POInvoice.map((item, index) => {
             return (
               <div className="flex flex-wrap ">
-                <div className="flex ml-2" key={item}>
+                <div
+                  className="flex ml-2"
+                  key={item}
+                >
                   <p className="text-gray-500 print:text-xs">{index + 1}</p>
                   <p className="text-gray-500 print:text-xs">:</p>
                   <p className="text-gray-700 print:text-xs">
                     {item}
-                    {index === POInvoice.length - 1 ? null : ","}
+                    {index === POInvoice.length - 1 ? null : ','}
                   </p>
                 </div>
               </div>
-            );
+            )
           })}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default InvoiceDetails;
+export default InvoiceDetails

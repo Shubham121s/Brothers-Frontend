@@ -1,5 +1,5 @@
-export const WeightDetails = ({ worksheet, data, lastRowNumber }) => {
-  worksheet.mergeCells(`A${lastRowNumber + 6}:B${lastRowNumber + 6}`)
+export const WeightDetails = (worksheet, LastRowNumber, data) => {
+  worksheet.mergeCells(`A${LastRowNumber + 6}:B${LastRowNumber + 6}`)
   const richText7 = [
     {
       text: 'PACKING DETAILS -',
@@ -34,24 +34,24 @@ export const WeightDetails = ({ worksheet, data, lastRowNumber }) => {
       font: { size: 15 }
     }
   ]
-  worksheet.getCell(`A${lastRowNumber + 6}`).value = { richText: richText7 }
-  worksheet.getRow(`${lastRowNumber + 6}`).height = 118
-  worksheet.getCell(`A${lastRowNumber + 6}`).alignment = {
+  worksheet.getCell(`A${LastRowNumber + 6}`).value = { richText: richText7 }
+  worksheet.getRow(`${LastRowNumber + 6}`).height = 118
+  worksheet.getCell(`A${LastRowNumber + 6}`).alignment = {
     vertical: 'top',
     horizontal: 'left',
     wrapText: true,
     shrinkToFit: true,
     indent: 1
   }
-  worksheet.getCell(`A${lastRowNumber + 6}`).border = {
+  worksheet.getCell(`A${LastRowNumber + 6}`).border = {
     bottom: { style: 'mediumDashDot' },
     left: { style: 'medium' },
     right: { style: 'mediumDashDot' }
   }
 }
 
-export const ShippingDetails = ({ worksheet, data, lastRowNumber }) => {
-  worksheet.mergeCells(`C${lastRowNumber + 6}:F${lastRowNumber + 6}`)
+export const ShippingDetails = (worksheet, LastRowNumber, data) => {
+  worksheet.mergeCells(`C${LastRowNumber + 6}:F${LastRowNumber + 6}`)
   const richText8 = [
     {
       text: 'FRIEGHT -',
@@ -94,22 +94,22 @@ export const ShippingDetails = ({ worksheet, data, lastRowNumber }) => {
       font: { size: 15 }
     }
   ]
-  worksheet.getCell(`C${lastRowNumber + 6}`).value = { richText: richText8 }
-  worksheet.getCell(`C${lastRowNumber + 6}`).alignment = {
+  worksheet.getCell(`C${LastRowNumber + 6}`).value = { richText: richText8 }
+  worksheet.getCell(`C${LastRowNumber + 6}`).alignment = {
     vertical: 'top',
     horizontal: 'left',
     wrapText: true,
     shrinkToFit: true,
     indent: 1
   }
-  worksheet.getCell(`C${lastRowNumber + 6}`).border = {
+  worksheet.getCell(`C${LastRowNumber + 6}`).border = {
     bottom: { style: 'mediumDashDot' },
     right: { style: 'mediumDashDot' }
   }
 }
 
-export const BankDetails = ({ worksheet, data, lastRowNumber }) => {
-  worksheet.mergeCells(`G${lastRowNumber + 6}:J${lastRowNumber + 6}`)
+export const BankDetails = (worksheet, LastRowNumber, data) => {
+  worksheet.mergeCells(`G${LastRowNumber + 6}:J${LastRowNumber + 6}`)
   const richText9 = [
     {
       text: 'BENEFICIARY NAME -',
@@ -160,20 +160,21 @@ export const BankDetails = ({ worksheet, data, lastRowNumber }) => {
       font: { size: 15 }
     }
   ]
-  worksheet.getCell(`G${lastRowNumber + 6}`).value = { richText: richText9 }
-  worksheet.getCell(`G${lastRowNumber + 6}`).alignment = {
+  worksheet.getCell(`G${LastRowNumber + 6}`).value = { richText: richText9 }
+  worksheet.getCell(`G${LastRowNumber + 6}`).alignment = {
     vertical: 'top',
     horizontal: 'left',
     wrapText: true,
     shrinkToFit: true,
     indent: 1
   }
-  worksheet.getCell(`G${lastRowNumber + 6}`).border = {
+  worksheet.getCell(`G${LastRowNumber + 6}`).border = {
     bottom: { style: 'mediumDashDot' },
     right: { style: 'medium' }
   }
+  return LastRowNumber + 10
 }
 
-export const NoteDetails = ({ worksheet, data, lastRowNumber }) => {}
+export const NoteDetails = (worksheet, LastRowNumber, data) => {}
 
-export const SignatureDetails = ({ worksheet, data, lastRowNumber }) => {}
+export const SignatureDetails = (worksheet, LastRowNumber, data) => {}
