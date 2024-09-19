@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const GstAndOtherDetails = ({ company, shipping }) => {
   return (
@@ -27,6 +27,11 @@ const GstAndOtherDetails = ({ company, shipping }) => {
         </p>
       </div>
       <div className="flex gap-1  justify-start uppercase">
+        <p className="text-gray-700 font-semibold print:text-sm">HSN NO</p>
+        <p className="text-gray-700 print:text-sm">-</p>
+        <p className="text-gray-500 font-medium print:text-sm">84139190</p>
+      </div>
+      <div className="flex gap-1  justify-start uppercase">
         <p className="text-gray-700 font-semibold print:text-sm">PAYMENT</p>
         <p className="text-gray-700 print:text-sm">-</p>
         <p className="text-gray-500 font-medium print:text-sm">
@@ -34,7 +39,7 @@ const GstAndOtherDetails = ({ company, shipping }) => {
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default GstAndOtherDetails;
+export default GstAndOtherDetails

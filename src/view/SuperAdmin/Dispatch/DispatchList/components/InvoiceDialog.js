@@ -22,7 +22,7 @@ const InvoiceDialog = () => {
 
   return (
     <Dialog
-      width={600}
+      width={700}
       isOpen={invoiceDialog}
       onClose={onDialogClose}
       onRequestClose={onDialogClose}

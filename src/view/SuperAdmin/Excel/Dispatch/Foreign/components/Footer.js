@@ -1,4 +1,14 @@
+import { dispatchList } from '../../../../Invoice/Dispatch/Foreign/utils/dispatchList'
 export const WeightDetails = (worksheet, LastRowNumber, data) => {
+  const netWeight = dispatchList(data?.DispatchLocations)?.reduce(
+    (sum, item) => sum + item.item_quantity * item.item_weight,
+    0
+  )
+  const boxWeight = data?.DispatchBoxLists?.reduce(
+    (sum, item) => sum + item.tare_weight,
+    0
+  )
+
   worksheet.mergeCells(`A${LastRowNumber + 6}:B${LastRowNumber + 6}`)
   const richText7 = [
     {
@@ -14,7 +24,7 @@ export const WeightDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: '8\n',
+      text: data?.DispatchBoxLists?.length + '\n',
       font: { size: 15 }
     },
     {
@@ -22,7 +32,7 @@ export const WeightDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: '25 Kg\n',
+      text: netWeight?.toFixed(3) + 'Kg\n',
       font: { size: 15 }
     },
     {
@@ -30,7 +40,7 @@ export const WeightDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: '26.00 Kg\n',
+      text: (boxWeight + netWeight)?.toFixed(3) + 'Kg',
       font: { size: 15 }
     }
   ]
@@ -58,7 +68,7 @@ export const ShippingDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'PRE-PAID\n',
+      text: data?.DispatchShippingAndOtherDetail?.freight + '\n',
       font: { size: 15 }
     },
     {
@@ -66,7 +76,7 @@ export const ShippingDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: '\n',
+      text: data?.DispatchShippingAndOtherDetail?.excise_document + '\n',
       font: { size: 15 }
     },
     {
@@ -74,7 +84,7 @@ export const ShippingDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'CIF\n',
+      text: data?.DispatchShippingAndOtherDetail?.shipping_term + '\n',
       font: { size: 15 }
     },
     {
@@ -82,7 +92,7 @@ export const ShippingDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'BY AIR\n',
+      text: data?.DispatchShippingAndOtherDetail?.shipping_line + '\n',
       font: { size: 15 }
     },
     {
@@ -90,7 +100,7 @@ export const ShippingDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'BROTHER INDUSTRIES\n',
+      text: data?.DispatchShippingAndOtherDetail?.shipping_insurance,
       font: { size: 15 }
     }
   ]
@@ -116,7 +126,7 @@ export const BankDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'BROTHER INDUSTRIES\n',
+      text: data?.DispatchBankDetail?.beneficiary_name + '\n',
       font: { size: 15 }
     },
     {
@@ -124,7 +134,7 @@ export const BankDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'BANK OF MAHARASTRA\n',
+      text: data?.DispatchBankDetail?.bank_name + '\n',
       font: { size: 15 }
     },
     {
@@ -132,7 +142,7 @@ export const BankDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: '60262968113\n',
+      text: data?.DispatchBankDetail?.account_no + '\n',
       font: { size: 15 }
     },
     {
@@ -140,7 +150,7 @@ export const BankDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'MAHBOOOOO3O\n',
+      text: data?.DispatchBankDetail?.ifsc_code + '\n',
       font: { size: 15 }
     },
     {
@@ -148,7 +158,7 @@ export const BankDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'MAHBINBBKOL\n',
+      text: data?.DispatchBankDetail?.swift_code + '\n',
       font: { size: 15 }
     },
     {
@@ -156,7 +166,7 @@ export const BankDetails = (worksheet, LastRowNumber, data) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: '02300676000009',
+      text: data?.DispatchBankDetail?.bank_ad_code,
       font: { size: 15 }
     }
   ]

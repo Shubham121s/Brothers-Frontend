@@ -6,7 +6,6 @@ import { currencyToINR } from '../../../../../Invoice/Dispatch/Foreign/utils/cur
 import NumberFormat from '../../../../../Invoice/Dispatch/Foreign/utils/numberFormat'
 
 export const TableData = (worksheet, data, pageData) => {
-  let lastRowNumbers = 0
   const headerRow = worksheet.addRow([
     'PROJECT NO',
     'PO & SERIAL NO',
@@ -70,14 +69,14 @@ export const TableData = (worksheet, data, pageData) => {
       )?.box_no,
       item?.item_quantity,
       (
-        parseFloat(item?.PoList?.unit_price) *
-        parseFloat(data?.DispatchShippingAndOtherDetail?.convert_rate)
+        Number(item?.PoList?.unit_price) *
+        Number(data?.DispatchShippingAndOtherDetail?.convert_rate)
       ).toFixed(2),
       (
         (
-          parseFloat(item?.PoList?.unit_price) *
-          parseFloat(data?.DispatchShippingAndOtherDetail?.convert_rate)
-        )?.toFixed(2) * parseFloat(item?.item_quantity)
+          Number(item?.PoList?.unit_price) *
+          Number(data?.DispatchShippingAndOtherDetail?.convert_rate)
+        )?.toFixed(2) * parseInt(item?.item_quantity)
       ).toFixed(2)
     ])
 
@@ -91,6 +90,18 @@ export const TableData = (worksheet, data, pageData) => {
   })
 
   //FOOTER
+  const footerStyle = { size: 15 }
+  const footerAlignment = {
+    vertical: 'middle',
+    horizontal: 'center',
+    wrapText: true
+  }
+  const footerBorderStyle = {
+    left: { style: 'medium' },
+    right: { style: 'medium' },
+    top: { style: 'medium' },
+    bottom: { style: 'medium' }
+  }
 
   const {
     bill_type,
@@ -105,61 +116,104 @@ export const TableData = (worksheet, data, pageData) => {
     convert_rate
   )
   const pageAmount = InvoiceTotal(pageData, convert_rate)
-  const GSTAmount = parseFloat(totalAmount * (GST_RATE / 100)).toFixed(2)
-  const GrandTotal = parseFloat(totalAmount) + parseFloat(GSTAmount)
+  const GSTAmount = Number(totalAmount * (GST_RATE / 100)).toFixed(2)
+  const GrandTotal = Number(totalAmount) + parseFloat(GSTAmount)
 
   worksheet.mergeCells(`A${lastRowNumbers + 1}:B${lastRowNumbers + 1}`)
-  worksheet.getCell(`A${lastRowNumbers + 1}`).value = `1 USD = ${parseFloat(
+  worksheet.getCell(`A${lastRowNumbers + 1}`).value = `1 USD = ${Number(
     convert_rate
   ).toFixed(2)} INR`
+
+  worksheet.getCell(`A${lastRowNumbers + 1}`).font = footerStyle
+  worksheet.getCell(`A${lastRowNumbers + 1}`).alignment = footerAlignment
+  worksheet.getCell(`A${lastRowNumbers + 1}`).border = footerBorderStyle
 
   // TOTAL Page 1
 
   worksheet.mergeCells(`F${lastRowNumbers + 1}:G${lastRowNumbers + 1}`)
   worksheet.getCell(`F${lastRowNumbers + 1}`).value = `TOTAL(page {${1}})`
+  worksheet.getCell(`F${lastRowNumbers + 1}`).font = footerStyle
+  worksheet.getCell(`F${lastRowNumbers + 1}`).alignment = footerAlignment
+  worksheet.getCell(`F${lastRowNumbers + 1}`).border = footerBorderStyle
 
   //TOTAL QUNTITY PAGE 1
   worksheet.getCell(`H${lastRowNumbers + 1}`).value = pageQuantity
+  worksheet.getCell(`H${lastRowNumbers + 1}`).font = footerStyle
+  worksheet.getCell(`H${lastRowNumbers + 1}`).alignment = footerAlignment
+  worksheet.getCell(`H${lastRowNumbers + 1}`).border = footerBorderStyle
 
   //TOTAL AMOUNT PAGE 1
   worksheet.getCell(`J${lastRowNumbers + 1}`).value = (
     <NumberFormat value={pageAmount} />
   )
+  worksheet.getCell(`J${lastRowNumbers + 1}`).font = footerStyle
+  worksheet.getCell(`J${lastRowNumbers + 1}`).alignment = footerAlignment
+  worksheet.getCell(`J${lastRowNumbers + 1}`).border = footerBorderStyle
 
   //TOTAL PAGE 1 TO 1
   worksheet.mergeCells(`E${lastRowNumbers + 2}:G${lastRowNumbers + 2}`)
   worksheet.getCell(`E${lastRowNumbers + 2}`).value = `Total (page 1 to {${1}})`
+  worksheet.getCell(`E${lastRowNumbers + 2}`).font = footerStyle
+  worksheet.getCell(`E${lastRowNumbers + 2}`).alignment = footerAlignment
+  worksheet.getCell(`E${lastRowNumbers + 2}`).border = footerBorderStyle
 
   //TOTAL QUANTITY PAGE 1 to 9
   worksheet.getCell(`H${lastRowNumbers + 2}`).value = totalQuantity
+  worksheet.getCell(`H${lastRowNumbers + 2}`).font = footerStyle
+  worksheet.getCell(`H${lastRowNumbers + 2}`).alignment = footerAlignment
+  worksheet.getCell(`H${lastRowNumbers + 2}`).border = footerBorderStyle
 
   //TOTAL AMOUNT PAGE 1 TO 0
   worksheet.getCell(`J${lastRowNumbers + 2}`).value = (
     <NumberFormat value={totalAmount} />
   )
+  worksheet.getCell(`J${lastRowNumbers + 2}`).font = footerStyle
+  worksheet.getCell(`J${lastRowNumbers + 2}`).alignment = footerAlignment
+  worksheet.getCell(`J${lastRowNumbers + 2}`).border = footerBorderStyle
 
   //IGST
   worksheet.getCell(`H${lastRowNumbers + 3}`).value = 'IGST'
+  worksheet.getCell(`H${lastRowNumbers + 3}`).font = footerStyle
+  worksheet.getCell(`H${lastRowNumbers + 3}`).alignment = footerAlignment
+  worksheet.getCell(`H${lastRowNumbers + 3}`).border = footerBorderStyle
   //IGST VALUE
   worksheet.getCell(`I${lastRowNumbers + 3}`).value = GST_RATE + '%'
+  worksheet.getCell(`I${lastRowNumbers + 3}`).font = footerStyle
+  worksheet.getCell(`I${lastRowNumbers + 3}`).alignment = footerAlignment
+  worksheet.getCell(`I${lastRowNumbers + 3}`).border = footerBorderStyle
   //IGST AMOUNT
   worksheet.getCell(`J${lastRowNumbers + 3}`).value = (
     <NumberFormat value={GSTAmount} />
   )
+  worksheet.getCell(`J${lastRowNumbers + 3}`).font = footerStyle
+  worksheet.getCell(`J${lastRowNumbers + 3}`).alignment = footerAlignment
+  worksheet.getCell(`J${lastRowNumbers + 3}`).border = footerBorderStyle
 
   //GRAND TOTAL
   worksheet.getCell(`I${lastRowNumbers + 4}`).value = 'GRAND TOTAL'
+  worksheet.getCell(`I${lastRowNumbers + 4}`).font = footerStyle
+  worksheet.getCell(`I${lastRowNumbers + 4}`).alignment = footerAlignment
+  worksheet.getCell(`I${lastRowNumbers + 4}`).border = footerBorderStyle
   //GRAND TOTAL AMOUNT
   worksheet.getCell(`J${lastRowNumbers + 4}`).value = (
     <NumberFormat value={GrandTotal} />
   )
+  worksheet.getCell(`J${lastRowNumbers + 4}`).font = footerStyle
+  worksheet.getCell(`J${lastRowNumbers + 4}`).alignment = footerAlignment
+  worksheet.getCell(`J${lastRowNumbers + 4}`).border = footerBorderStyle
 
   //AMOUNT IN WORDS
   worksheet.mergeCells(`A${lastRowNumbers + 5}:B${lastRowNumbers + 5}`)
   worksheet.getCell(`A${lastRowNumbers + 5}`).value = 'AMOUNT IN WORDS'
+  worksheet.getCell(`A${lastRowNumbers + 5}`).font = footerStyle
+  worksheet.getCell(`A${lastRowNumbers + 5}`).alignment = footerAlignment
+  worksheet.getCell(`A${lastRowNumbers + 5}`).border = footerBorderStyle
 
   //AMOUNT WORDS
   worksheet.mergeCells(`C${lastRowNumbers + 5}:J${lastRowNumbers + 5}`)
   worksheet.getCell(`C${lastRowNumbers + 5}`).value = currencyToINR(GrandTotal)
+  worksheet.getCell(`C${lastRowNumbers + 5}`).font = footerStyle
+  worksheet.getCell(`C${lastRowNumbers + 5}`).alignment = footerAlignment
+  worksheet.getCell(`C${lastRowNumbers + 5}`).border = footerBorderStyle
   return lastRowNumbers
 }

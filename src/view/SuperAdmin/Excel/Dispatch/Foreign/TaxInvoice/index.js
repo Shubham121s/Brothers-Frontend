@@ -2,249 +2,38 @@ import React, { useRef } from 'react'
 import { Button } from '../../../../../../components/ui'
 import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
-import { TABLE_ROW_COUNT } from '../constant'
-import {
-  InvoiceTitle,
-  CompanyDetails,
-  InvoiceNumber,
-  InvoiceDate,
-  BuyerOrderDetails,
-  ConsigneeDetails,
-  BuyerDetails,
-  GSTandOtherDetails,
-  PortDetails,
-  DestinationDetails,
-  BoxDetails
-} from '../components/Header'
-import { TableData } from './components/TaxTable'
-import {
-  WeightDetails,
-  ShippingDetails,
-  BankDetails,
-  NoteDetails,
-  SignatureDetails
-} from '../components/Footer'
+// import { TABLE_ROW_COUNT } from '../constant'
+import { dispatchList } from '../../../../Invoice/Dispatch/Foreign/utils/dispatchList'
+import { InvoiceQuantity } from '../../../../Invoice/Dispatch/Foreign/utils/quantity'
+import { InvoiceTotal } from '../../../../Invoice/Dispatch/Foreign/utils/amount'
+import { currencyToINR } from '../../../../Invoice/Dispatch/Foreign/utils/currencyConverter'
+import { FormatLakhStyle } from '../../../../Invoice/Dispatch/Foreign/utils/numberFormat'
+import dayjs from 'dayjs'
+import { RiFileExcel2Line } from 'react-icons/ri'
 
-const TaxInvoiceExcel = () => {
-  const data = {
-    dispatch_invoice_id: '98672b7d-773e-452a-b3e5-030a0a886eef',
-    invoice_date: '2024-09-12',
-    invoice_no: 'BI24-25/202',
-    invoice_type: 'foreign',
-    status: 'pending',
-    createdAt: '2024-09-12T11:34:18.000Z',
-    DispatchConsignee: {
-      dispatch_consignee_id: '306897ef-98b9-4270-a2f1-4740a4e95758',
-      customer_id: '8',
-      vender_code: null,
-      name: 'HYOSUNG GOODSPRINGS',
-      mobile: null,
-      phone: null,
-      email: 'chulmin424@hyosang.com',
-      pan: 'CWQPS2369C',
-      gst_no: '123',
-      DispatchConsigneeAddress: {
-        dispatch_address_id: 'e657adcc-2075-4a5b-b907-35a359b6dba5',
-        address_id: '8',
-        address:
-          '43-1,UNGNAM-DONG,SEONGSAN-GU,CHANGWON-SI,GYEONGSANGNAM-DO,KOREA',
-        city: 'GYEONGSANGNAM-DO',
-        zip_code: 51559,
-        state: 'SEONGSAN-GU',
-        country: 'KOREA'
-      }
-    },
-    DispatchBuyer: {
-      dispatch_buyer_id: 'dccb271b-d6d3-400f-9ad6-ae321b9bdb9d',
-      customer_id: '8',
-      vender_code: null,
-      name: 'HYOSUNG GOODSPRINGS',
-      mobile: null,
-      phone: null,
-      email: 'chulmin424@hyosang.com',
-      pan: 'CWQPS2369C',
-      gst_no: '123'
-    },
-    DispatchShippingAddress: {
-      dispatch_shipping_address_id: '4fdf5036-281a-4107-b756-01515a603dde',
-      shipping_address_id: '8',
-      address: '43-1, UNGNAM-DONG, CHANGWON-SI, SEONGSAN-GU,',
-      city: 'GYEONGSANGNAM-DO',
-      zip_code: 51559,
-      state: 'SEONGSAN-GU,',
-      country: 'KOREA',
-      contact_person: 'BAE CHUL MIN',
-      contact_phone: null
-    },
-    DispatchBoxLists: [
-      {
-        dispatch_box_list_id: 'c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e',
-        box_no: 1,
-        box_length: 31,
-        box_height: 30,
-        box_breadth: 17,
-        box_size_type: 'inch',
-        tare_weight: 0
-      }
-    ],
-    DispatchLocations: [
-      {
-        dispatch_location_id: '05e81a71-5bae-438b-b954-952d7dfa8ba3',
-        location_code: null,
-        DispatchLists: [
-          {
-            dispatch_list_id: '4bb97dda-44fe-40fc-8bd7-47933915f80c',
-            item_quantity: 2,
-            item_weight: 14,
-            dispatch_location_id: '05e81a71-5bae-438b-b954-952d7dfa8ba3',
-            dispatch_box_id: 'c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e',
-            product_id: '141fc219-3a35-491d-a16d-dff759cebc99',
-            item_name: 'BEARING HOUSING',
-            item_code: 'DPEH140060GAA',
-            pump_model: null,
-            unit_measurement: 'no',
-            hsn_code: '84139190',
-            description: null,
-            gst_percentage: 0,
-            Po: {
-              po_id: 'b09e411b-fb93-43fb-80de-363c5ce6eea6',
-              number: 'E02024010049',
-              date: '2024-01-11',
-              currency_type: 'USD'
-            },
-            PoList: {
-              po_list_id: 'a32cd088-fb9e-4c1c-8052-6baacdef6171',
-              project_no: '2353008-021',
-              serial_number: '36',
-              quantity: 2,
-              unit_price: 917,
-              net_amount: 0,
-              delivery_date: '2024-07-04',
-              description: 'NA',
-              accept_delivery_date: '2024-07-04',
-              accept_description: 'OK'
-            }
-          },
-          {
-            dispatch_list_id: '7d258595-6d02-494c-9ab6-4d3d23482c2f',
-            item_quantity: 1,
-            item_weight: 14,
-            dispatch_location_id: '05e81a71-5bae-438b-b954-952d7dfa8ba3',
-            dispatch_box_id: 'c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e',
-            product_id: '9f201505-6a86-4ac0-b83f-f52c8a08db04',
-            item_name: 'BEARING END COVER',
-            item_code: 'DPHH200052GAA',
-            pump_model: null,
-            unit_measurement: 'no',
-            hsn_code: '84139190',
-            description: null,
-            gst_percentage: 0,
-            Po: {
-              po_id: '05c31520-8a81-4abb-94a3-64984164ac8f',
-              number: '1-EO2023120118',
-              date: '2023-12-27',
-              currency_type: 'USD'
-            },
-            PoList: {
-              po_list_id: 'e83fad32-be5b-4541-8d65-cbc8a37de803',
-              project_no: '2352056-004',
-              serial_number: '27',
-              quantity: 1,
-              unit_price: 188,
-              net_amount: 0,
-              delivery_date: '2024-08-13',
-              description: 'NA',
-              accept_delivery_date: '2024-08-13',
-              accept_description: 'OK'
-            }
-          },
-          {
-            dispatch_list_id: '91c10661-3512-42ee-b520-ef40a5e65aef',
-            item_quantity: 1,
-            item_weight: 14,
-            dispatch_location_id: '05e81a71-5bae-438b-b954-952d7dfa8ba3',
-            dispatch_box_id: 'c1f12d62-1e3b-4b85-b8cb-b166b4c29c6e',
-            product_id: '9f201505-6a86-4ac0-b83f-f52c8a08db04',
-            item_name: 'BEARING END COVER',
-            item_code: 'DPHH200052GAA',
-            pump_model: null,
-            unit_measurement: 'no',
-            hsn_code: '84139190',
-            description: null,
-            gst_percentage: 0,
-            Po: {
-              po_id: '05c31520-8a81-4abb-94a3-64984164ac8f',
-              number: '1-EO2023120118',
-              date: '2023-12-27',
-              currency_type: 'USD'
-            },
-            PoList: {
-              po_list_id: '57215044-138b-496b-aecc-3f9cf4e3dcbb',
-              project_no: '2352056-003',
-              serial_number: '26',
-              quantity: 1,
-              unit_price: 188,
-              net_amount: 0,
-              delivery_date: '2024-07-24',
-              description: 'NA',
-              accept_delivery_date: '2024-07-24',
-              accept_description: 'OK'
-            }
-          }
-        ]
-      }
-    ],
-    DispatchNote: {
-      dispatch_note_id: 'eb31e113-7dc4-4f75-bd04-0536ffa2459b',
-      id: 1,
-      title: 'SUPPLY MEANT FOR EXPORT ON PAYMENT OF IGST – DUTY PAID EXPORTS',
-      note: '<p>I/We, in regard to my/our claim under RoDTEP scheme made in this Shipping Bill or Bill of Export, hereby declare that:</p><ol><li>1. I/ We undertake to abide by the provisions, including conditions, restrictions, exclusions and time-limits as provided under RoDTEP scheme, and relevant notifications, regulations, etc., as amended from time to time.</li><li>2. Any claim made in this shipping bill or bill of export is not with respect to any duties or taxes or levies which are exempted or remitted or credited under any other mechanism outside RoDTEP.</li><li>3. I/We undertake to preserve and make available relevant documents relating to the exported goods for the purposes of audit in the manner and for the time period prescribed in the Customs Audit Regulations, 2018.</li></ol>'
-    },
-    DispatchBankDetail: {
-      dispatch_bank_id: '7a576e4a-67c2-495d-b718-e444cad652eb',
-      beneficiary_name: 'BROTHER INDUSTRIES',
-      branch_name: null,
-      bank_name: 'BANK OF MAHARASTRA',
-      account_no: 60262968113,
-      ifsc_code: 'MAHBOOOOO3O',
-      swift_code: 'MAHBINBBKOL',
-      bank_ad_code: '0230067-6000009'
-    },
-    DispatchShippingDetail: {
-      dispatch_shipping_details_id: '642dc8a0-4463-4517-aecf-b56af3f2897c',
-      pre_carriage_by: 'BY CIF UPTO PORT',
-      place_of_receipt: 'NHAVA SHEVA',
-      port_of_discharge: 'PUSAN',
-      country_of_goods: 'INDIA',
-      destination: 'KOREA',
-      port_of_loading: 'NHAVA SHEVA',
-      final_destination: 'KOREA'
-    },
-    DispatchCompanyDetail: {
-      dispatch_company_details_id: 'f6b2626b-c219-4cdc-8872-bd10fd04b8bb',
-      iec_code: 'GZUPS0011Q ',
-      gstin: '27GZUPS0011Q1ZK',
-      itc_code: '84139190',
-      duty_drawback_serial_no: '8413B'
-    },
-    DispatchShippingAndOtherDetail: {
-      dispatch_shipping_and_other_details_id:
-        '82443218-6f7c-4097-a54c-4227ea1ebc3f',
-      end_use_code: 'GNX 200',
-      packing_details: '',
-      bill_type: 'GST',
-      payment_term: 'BY 30 DAYS T/T',
-      i_gst: 18,
-      remark: '',
-      vehicle_no: '',
-      excise_document: '',
-      freight: 'PRE-PAID',
-      shipping_term: 'CIF',
-      shipping_line: 'BY SEA',
-      shipping_insurance: 'BROTHER INDUSTRIES',
-      convert_rate: 82.85
-    }
-  }
+// import {
+//   InvoiceTitle,
+//   CompanyDetails,
+//   InvoiceNumber,
+//   InvoiceDate,
+//   BuyerOrderDetails,
+//   ConsigneeDetails,
+//   BuyerDetails,
+//   GSTandOtherDetails,
+//   PortDetails,
+//   DestinationDetails,
+//   BoxDetails
+// } from '../components/Header'
+// import { TableData } from './components/TaxTable'
+// import {
+//   WeightDetails,
+//   ShippingDetails,
+//   BankDetails,
+//   NoteDetails,
+//   SignatureDetails
+// } from '../components/Footer'
+
+const TaxInvoiceExcel = ({ data }) => {
   const RenderPages = () => {
     const pages = []
     let pageCount = 0
@@ -255,7 +44,7 @@ const TaxInvoiceExcel = () => {
         paperSize: 9,
         orientation: 'landscape',
         fitToPage: true,
-        fitToHeight: 1,
+        fitToHeight: 0,
         fitToWidth: 1
       }
     })
@@ -267,9 +56,18 @@ const TaxInvoiceExcel = () => {
       header: 0.3,
       footer: 0.3
     }
-    worksheet.pageSetup.printArea = 'A1:J30'
-    worksheet.views = [{ state: 'normal', zoomScale: 70 }]
 
+    worksheet.views = [{ state: 'normal', zoomScale: 60 }]
+    worksheet.getColumn('A').width = 90
+    worksheet.getColumn('B').width = 23
+    worksheet.getColumn('C').width = 23
+    worksheet.getColumn('D').width = 23
+    worksheet.getColumn('E').width = 23
+    worksheet.getColumn('F').width = 23
+    worksheet.getColumn('G').width = 23
+    worksheet.getColumn('H').width = 23
+    worksheet.getColumn('I').width = 23
+    worksheet.getColumn('J').width = 23
     if (data) {
       const dispatchLocationsLength = data?.DispatchLocations?.length || 1
 
@@ -286,25 +84,978 @@ const TaxInvoiceExcel = () => {
           data?.DispatchLocations?.[i]
         const dispatchListLength = DispatchLists?.length
         for (let i = 0; i < Math.ceil(dispatchListLength / 8); i++) {
-          InvoiceTitle(worksheet, 'TAX INVOICE', PageStart)
-          CompanyDetails(worksheet, PageStart)
-          InvoiceNumber(worksheet, PageStart, data?.invoice_no)
-          InvoiceDate(worksheet, PageStart, data?.invoice_date)
-          BuyerOrderDetails(worksheet, PageStart, data)
-          ConsigneeDetails(worksheet, PageStart, data)
-          BuyerDetails(worksheet, PageStart, data)
-          GSTandOtherDetails(worksheet, PageStart, data)
-          PortDetails(worksheet, PageStart, data)
-          DestinationDetails(worksheet, PageStart, data)
-          BoxDetails(worksheet, PageStart, data)
-          LastRowNumber = TableData(
-            worksheet,
-            data,
+          const myBase64Image =
+            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAYAAABS3GwHAAAAAXNSR0IArs4c6QAAIABJREFUeF7snQd0FNX+x+/MbO+9Zjeb3hNCQugQCL2DBJWigAgiYnt2fQo+EUSFp6I+FQWVmtC7SEkIpPfeNmXTs0k22+vM/M9GeX+fNRDweR4z53hyZO+9c+/3+/vMnblz7x0IEAehwD2sAHQPt51oOqEAIAAgguCeVoAA4J62n2g8AQARA/e0AgQA97T9ROMJAIgYuKcVIAC4p+0nGk8AQMTAPa0AAcA9bT/ReAIAIgbuaQUIAO5p+4nGEwAQMXBPK0AAcE/bTzSeAICIgXtaAQKAe9p+ovEEAEQM3NMKEADc0/YTjScAIGLgnlaAAOCetp9oPAEAEQP3tAIEAPe0/UTjCQDuYAzgOA4DACCweTMObdqEDaZoHMe9HnjzeQ/8Z38BBEE3/20wxRFpblEBAoBbFOz3kuM4TgYFBWQAgBuKj3f/UdEDwKSlwUCjIYHeXrjJbMY0EgkGKipQkJzsDXycAOCPVBza7wQAQ9Pvh8s2jkOtqVm0tvaKICYZYcnVvs3COZO7IQj6VQh+7CkQ0FDAsHcZWbDewoJQlAxIDhznUlxutqSfxVeZgUbjgiAI85ZPgHAHjPqVIggA7oCuOI4jObsPihydbfOoJJKEIxJdY8n55WqbzQSSkwduhbwBPHC7sxlATb57KWYxhc7HqSJgdynoLreA7PEwUMwNuelkK0qj6SAqWSfzBUYQnuyFyAvAoG6p7kBz7qkiCADugN11+85xLqedHQlZbcvoCCwCqCdLJBVnDR8eXS6Ni+sH4eFukJaGAImE1lvRwC0rKZBrO1vkbsjjw0QxBRuHuHQUp6EQCpkh1GHD0HYKk1HtHxFaFRQ7oU00dqwdgiDPHagqUcTPFCAAuAMhUbj/qO/FlMNrTZ1dyVTcwyBBUFNwWMj1kRMnHeUE8uq5HqZZDwCN4nKJLR16/6rK8uEVuvro/n6DL2a1iah2F4XuwWAUR4EVwnCMTraLfZTlkcPiz4TFD78hpbA7QGKik7gNugNmEQDcWRG99/Nntr43sjw390VHryGChnkcCI5DfC67U8Jjnw8K8b9BE/E7OhobffXtfQEwIAUYHI7IbtTm68RQBnA4EarNiVJdGOYBHpIJdbE9AOMI+bx2mUx+mccXXg2Ojs30Dw7uBmw2OpiH6zvbwv/t0ogeYIj+ekd+vnjmxSWGztanJTRGh1LAa+xuaQ5u0daFcwDoiB858rgoJLiiqbI0qbakOs5mtEtdCMzCxFybQKPSCTjcboYbszM9sMuBuujN+vaAHl1zGBVFqVQavYsvlRUkTJn6r5AxY0oAi+WEIiIsQ6wykf0nChAADDEcvAB89dKrC609PYsDpJKiqODApvLc7GE1+XkLyWaTOCoi8hRdJS9trKlb3NPSFYa6AHBSSC1Awq9WRoTWaVSabh6J6mRDZI/J5aBV1lb4tpSXRtCdjiCXB5PR2JwOiUL9TciwYel0vtRU1dzcMzM+vANasgQdYtWJ7AMvbYhjSAp4b4Eu7t4d6+rtDxGQyHVRIQHmmpLCkI6S0lVdxcVJCpkoFxIKKhuq6+9HPAhbKFM2s1XyU0YOM5vnq9T7KpUehoeEMCAy4kCdUGO7jmrSNckY/f2TGptapplsThYMkMpRkyZfYCqVep3NouMJwy6NeXaJfUgVJzIPKEAAMMRA8A5ttty4IUcAYCtI0g7AQ/HO/HxVa272moozpx8VcNk1mFBQo62sW8Jjiqy+oWGXAkbH7RNEhJY7+tsYjbmFPr26di4OkSiwG8LZHI49OCrc4zL3B2VlZid19PTHuix2yrDhI66LI0Kb9DjaROJQj6Q7nbpNg3zbPMQm/k9nJwC4A/a2ZGbSGTBMFowcaQMFBZCtuVmkvXHjwfwjR14X89iNkERUW1uuXSSXqJs1MZEfBkxMOEdWCj2O8pKEkrSM6a11jSrMDZFhDACxQGiMTIirFgcEVueWlXKatM0PWJtaY+RyZUvImJFlJgatzUlFzvZFhqUvWbLEdQeqf08XQQBwB+zHf+xJoR/n8uDff8+t/O67RbkHD70v5nF0kExSX1feME+lDsoLHT/hddWsqOKq9GvBDl3rol5t49ye9m4lQEkAuDwIl8m0qAL8SwTBwWchiaS2LK9ofk9x+QNMMgXzi48thnykDXqntcAnKmp//Lp1xjtQ/Xu6CAKAu2C//uRJdse1a/MKDh74UMbntOBSWUNtZeMcpW/I6bjZc9+kRSj7C04euK+jrPwBsscTDGEwhUZh2h0mCw3YHTCZTu/jqFQ5fmPGpvT1mditaZmvu+1mMVsuqRDGRuQ36btN4+ZO+yjg4XW6u1D9e6pIAoC7YDf+3XfM0rMX5hamHvzYCwCQyBqqqxvnyHyDv5316Lqtte1l0vobGRs766pmM8g0nMPhNbNY/F6boZ9n6dZrnA4nh6NUNKqHx32mCospKT9++g19W2MciUltCRobn93Q200bPj5xa+jfXiokXo4NzUACgKHp96u5vQBUnD07N//I4Y9lPLYOk8q1VVUN88Qq/70Lntz4/qWzB6f3VtWsQS3WIDKfVyeVyw5Rycwm3OlU9bS2Jxu7OmMoNLpF4Ku5GD5p0sGu0sqJ5dnXHuLzGVhUwrDmNosZMHxUW8bt+Pw0MUViaAYSAAxNv98EoPTMmXlFxw7ukvN4Oo9Eqq2qaZwr8vXfO2PZiq+unjr0qLFOu5gCkygUjfpU1MTxOyWhUQ02rVZTnp7+VFdVzXzgsNOYcmV5bNK0HRjupl07cuhFMZssHxYbZe5wOt02JmPL9Fe374GCgpx3oQn3TJEEAHfB6oFboPNn5hWlHNjlIxS2OAUSbU1j82xZQPDe8UkTMjJOnnzU3tI+GiFRLKKE+H8ETpqUEjJjRm/zlSuC+muXV7QWFj/h6jH40HjCluHTZnxAlfC12cdSXqA5jXFRYSHObo/H2eFyv7dkz5FdkEJhuwtNuGeKJAC4C1Z7ASg7d3p+4ZGDH/kIhC1ugURb1dw6SxEc/E18eGhr/vcXV7o79H6AxmgPnTtvVfwDizO8k93A+fOUgrSLM6sufr/Z0dYZTaGzDfGTp33GDQu4WHz25FP29sYZoYG+mAHADq3VvmvlFwffhUJDzXehCfdMkQQAd8FqLwDFF87NL0499JGUy20GYh9tVWPjXLGf/74ICd/TUlB0n6fHICDxBPX+U6cujVq2pASaNMlz9epVkjzvysjM/Ye34vq+8XSEYYkePeGQZPiwryvSLq7pram4P1Atg0wUmr3ZjX62/OMd26GIMX13oQn3TJEEAHfB6oFboIsX5+WnHNwlYbGbYJlPXZW2YQFfpT4YQidzjFU1M4DJSqXKFWWiiaPvj/n88/qBlV+bNsE6BSfs7Mcfvce2OKZQ3RRnSEzCBZ+Ro3bU5WQs6yjNX+mnlJKMVJqzAyZ/PvvNLdvZY8d234Um3DNFEgDcBau9ABRduDC3KCXlYx+hsNHBF9dV1msXKQP8jvhDmKC/qnoSYnPCLF+/XG5M7ENR+79s9A5nbtq0CV7hJwq8+ME/31XAtAmQGcXVQeHpqoRx2+vzM5bqywpXh2jU1Fa3291Gof9rwSuvbGNNmdJ1F5pwzxRJAHAXrPYCkH/2wtyyo6kfa6SKRiODU1ulrVukCQ0+qXLaxMaqqnEkN4Zxg4IyuGHRa8L279bdBOCRALH/2V2fvBPMEcY7eqwUiY9fjmrk6O312RnLzVVlD4dq1IxasxXtZDA+Wrhly1aiBxiagQQAQ9PvN4dBi85emFuaemSXWiJrtnAEdVWN2gWqkKDjCodJZKqrmUB2oxgnOOgaJzxiTeSePa3eaRTemaW6Lz4Ou/zN1//w4wqCrD0WpszfP1MYHb67Ju3KWndNzSIVX0htdLjcZj5/+9wtH73HnxTbfxeacM8USQBwF6weuAXy9gCpRz9WiSRNDr6krkLXsEAZGHBE6jAKrA31kyCXE+IGBmQwgsIeifv22xYvAN6HYHFlQWzpqQsvKmhMpdFg4ilCgy7xAv1Ol5098wxo0CbxERq5C5CsHqn0rWVHDn0AqVTEtOgheEgAMATxfivrwEPwmYvzyo6k7lIIxU12obi+vLlxgTRAcyiADGg9lWUzMbudTpKKigTBwQ+MO3pm4BkAv3qVlJV5baKtvmkpxeII1ht6eZrI0G/JEk5tceqxV2htXcMZgATbeHw9xT9g8/zzZ3ZDEETMCB2ChwQAQxDv9wCoOH9xXklKyi6ZQNTkEEvqyxobFgo0qv3DZCK3Li97kdtsFLiZTK0iPmZ+UvKqGu8Kr/zPPiObdG2zJCRSYn99Q1x7XzfNb0T0TjLqIOWmHHmDozf5IziCw76aevHw+DfG7/n8CDEVYmgGEgAMTb/ffAYoPX9xXlnq4V0KkbjJKhLWlTU2LBL6+X2bGBXWUnTh/MOu3h5fjM5oj5g7e1X87EXXoFmznBUpKRSXrn2irbVzSb+uKcYFoaUhI6OP9ZTmJTZdz15J67WJUYTqJvsHXPWdMObN+J07s4j9goZmIAHA0PT7bQDOXphbcuzwxyqJuNHC59eVNDfdJ/Tz/3rxjJm5333z5QZHe2c0Qqf3DVu4+GXf8MgU/tq1ptbUVJql35GgvZG1waLv8BP5SPYGRftWV585/ZKxvHYsZHDQPXS2hRQY9E34gjnvRLz0EjEdeoj+EQAMUcBfyz4wG/TChbmF3tmgAl6jQyatLWlsWMz10exdvfTBY2e+/HKDqbl5ColMcsuHx3+hGDV8J2PRMn392Wsae1vrFKrBMAGymfpl/tLv0b42WVtO5kaXrssfuCDEwxXpBNHR7428b/4+/qpVxAjQEP0jABiigL8HQMHRQx8LucwGTKWsLa1vTGYqlF8tfeypT6/v3f2IobpmKYTjLJqP+nJA/IiXg+esaM4szx3RWV63UMOgM1RiXhaZ6ulsyL22qK+oYAFmsLABme3BJfK86Fmz32CEBd3wW7XKcReqf08VSQBwF+weGAXy9gBHD30s4rO1Hrm0ukzbdD9Tofxy+dNPv1905MTUjpLSjY7+/iCqQFgTlDDy7dCHFqcVVrWr24oqR0YIhFQNl2VuLitQtFWXzPK0NkZhbhQBfEkHyz8odcTsBZ+Ko0MaQWIiSiyIGZqBBABD0+93ngHOzs0/nvKxXCyos4mFVeXaxqVcH80XS9ZteKe/utq35OLFV/WNjZPoLLY5dNTovWHz5ux2CH0sbRXVXBUMKd0tzRPq83Kmd9ZWhtItBibGoDoxjX9B+MyZO2UK1fei1autxPbpQzePAGDoGv6ihB9ehJ2dW3z8yMdqmajexOdUl2ub7+ep/L5Y+PgT28hGIyX7xLE1HbX1KyE3yhdpfK+JoyI/n7B+fRboc0BFZ8+O6a2qeLC/sWm8rU0n5LisOEMpbfIEBR+bsPqhvflccW0icfW/I84RANwRGf+zkJsAlB0/vstPIW7uZ9NqyhpbFvE1gbvnrXpkG0Wp7G88dmyitqhwk7GlPRqnULpkMVEHZj3zzBfAbsev7D20rKOy8iF3d48vzWIm81CnKzh+eBp9/JgdnFHBWYKZy8zErc+dMY4A4M7o+B+l3JwKUXns6C5/hbjNzKI3FDfoZvD8g3cvWrX+bZGPQF+Tez2gKiPzUUOjbrHZZuczZbI8qa/6cPzEiXUlhaWh3eXVM1BDfzRiNCqYdhsSOCwmy2/mtPfYY0deBWPHWggA7oxxBAB3RsdfAFB+7rs53rlA/lKx3s5hthQ1No3jBQZ/PmvlirelK1boa77azmrLqh7R26B9qaO5bRQgkRwckah4wtSpx1wURlW/tjmor61tjrG5aSylz8iTq1WNgZMnf85OSDiUU5bbmQgABm3aNPAZpbvQhHumSAKAu2C1twfwAlBx+Oguf5HAjnKY+rxmXRgrMPhf4x9eujVo9Wo9jm+Ca7YDWWNB6fr2+qZFRrM5gEym9AWFhlwQyGSXpepAU7u2LkZfUzce6+iJQsgURBAU+D0UqPpWGB1eTlGLUBKVb1SNGUNMhhuChwQAQxDvt7L+AMC5OeWHju4K4HEpMIdlz29pZVMCQz4du+L+bSHr1vV48+Z/tolBbrGMaqtpfKS2onqG3WSkC4WCVpWvb05o/IizgEbrNze3h3eVVCzsaO2IgHgsPTc48IjfzInfM8VilElj1UqSkvTEdIjbN5EA4Pa1+82cNwEoO5jykQ+VwiMz6Gi5wYST/AM+HbNq+dabAHiXQNrj4uRlly4tLMnNXWjs7o4m4yhTJhE3ylWyU6qw0EKR0s9deS5jTFVVzTQnQDUMtSwrOGnscTqdg+JWtIGr8C/SrFpovLkt411ozv90kQQAd8HemwAUHz70Ed9uE5IRKt6BkNywr9+nUx5d+bbixx7Ae2o8JYVeVVcXoGtoSOpq0C7XN2gjmZDHJRXyG/3CQvN8R4871dvYba4uq1rcpGt8EKOTTaGjhh8nI3ScQmZY/YcNOyhfcX8N0QvcnpEEALen2+/mGgDgu3Nzig/u/4jdbxQhgAz1M9kOXOP36chHV719swcYAMC7se533zGamuoiy9Ovr2gszJsN9fepBCyaS6ZWVzI1/gdD4iZdrq+oisvLvrHO4XYEqQM1WRKRot+JAoTjIznkFyn9XrJkA/HlmNvwkgDgNkT7oyw/TIY7O7f44Lcf8YxmIYyTIQODbccDAj9JfHjpVp8nnuj9aRnez6x27tkjaCwvH9lUmPeIubFuKsllpTHYLANNKi+MnTTzc4wm7C7Kvj6nVde0msuim6Kj48pau/VUwKIWR4we/an/2rUtxNDoHznzy98JAG5dsz/MMQDAxTPzSvd/8yHfaBVCOAXqY3LsuH/AxxPWrdqqWrPmF3v5XN20iTQsKEiZd/rksraSgpWoQe8HAwyiCYRdvlHD9/jFjrzY2NWjKL2R8RzscgQNj4krNtgdHgPuNqiioj7ihoZmRRDfC/hDb36egADgliX74wx4SgqrJvvagtL933zA67cLIEADPWyuw+Pruytx2aqtqmd/CYD3SzN958+zG65cHN6ck/uEra15hsdkYJCoNDtTpiiKHDPha1TqW1Zw5ftlxhbdQyHBQV1ilW9TRXsLRRgcdCIoYdSegCVLiO8F/LE9/5GCAOAWBRtMci8Atdlpi8r37dvJ6bcLAEQHPWyew+mj2pX00K8DMPA8cPUqqaevT1xwcP+q3sqyde7ONhXJ+5TAEfT7xg7/NjRp+te5aTeG60oK3xAJuIzw4cMLy9tb+bBAVCIKDXsj8cUX24jRoME49P9pCABuTa9BpR4AIOvqfWXf7N/JNzv4KE4F3SyOw6ny+WjKg09u9X15meHXCvIOi3aNHk3vvHw5ofy7s6+D9tbxNLcLcZCoLoav3/W42Qv+2ddrclRnZWwyGbpjw+OG5VpJZE6LyWITBgY9tvCDDyqJ0aBBWfTvRAQAt6bXoFLjJ79ka9MKFxV//e1OvtXJd3vIoIfFsbvUPh8lLV25zfflx38VgIFeAMchkJYmTXn5hTeh5qZlDIuV4d39FhPJmiMSp32giRqWkXXm6LP1FSUL/YMDKrgaf6xE18oXh4Y+njx//sDa4kFVkkg0oAABwF0IBPzLL9nVxcX3lR/4ZofA6uK73QjQM5k2zFf9UeL6Ve/4Pv7bAAxAkJ/PuPiPzY+7ikqeIut7fWwwAA423ygIjT4+eknyZ9lnjs5vqyhZw2Mx3fKI8OrSrj6ZfFjMv0S+UfvG/MrzxV1o4v9MkQQAd8FKLwA1RUWLyw7tf09gdQrcbhj00BlW3N93V+LDD25XPfvs7+7o7O0Fih9/fH7Xhcub4bb2aBcFBjY620NR+uaOT17yZkVxblB7Wf6zsMMm942OSasy2314oeFXuRrV9kkvvth6F5r0P1skAcBdsBY/eZJdeelScsXB/e/xrXY+iiKgh0G3IgF+u8atX7v914ZBf16Nio0bYxtPnN9B6dFPgBhU2EFj4BhL0Bg2ZuwHdjqq116/9py7tztCEx2T1uyBlUAmr6LLxK/OfffdurvQpP/ZIgkA7oK1vfv2cbry8pLLD3z7Htdi42E4CfTQaVYkwP/jCRsf2u7z8H++CPu1KhQ/9piy9ULah4i+ez6Fy4RwOtNtQRGrKjLyW+HwkO9Kzp583tbRMjYgIjrTQGWLOmGyni4QPZW857Ny4oXY4E0lABi8VoNOie/bx6nIzXqg4uD+d9heAIC3B2BYYT/fjydvXD0oAOo2bhS35BRtM9XXL6WwaBBfJO7u7DTwmUrlmcjk2Z9kHdn/rLO9ZU5gUHgNJpBD+R1dNpgveGz9mePElyMH7RTxEHwLUg0+ad9nn3HbKsoerDzw7Vam1crzQAgwMOhWyM/3X2PXP/JO0Oon9X9UWvNLW/ldFXmvN+TmriEzyHigb0BNfUVtJOBx0kdsWPP3nENfPulsb18a5BvQzfUJ7D9XVoVRJeJHH7/8XTYxFPpH6v7/70QPMHitBp3SC0BHRdmDFQf2bWVaLTwPBAEDneZAAvx3j3t47Ra/DRs6f68w70Nw/ebNbFNF3QvVOZkbAAI8YYFBec0lVRPdTHrWyKc3vJiX+uU6R3PLaj+pyuwTEq2/UFENCQIDNize8NgV7+eWBl3ZezwhAcBdCAAvAC1lZctqDx3YwrJaeG4IA0Ya1UUK8t+X8OCyzQFP//6Wht7vBOg3f8Jo0eY/VZl54xkX6nRGhoSmd5VUzLGSyQUTnn3yb5lH9652NunW+fIknsDo+M7va+pgn9jYZyY98+QZKCKC2DF6kL4SAAxSqFtJ5gWgvaxyWc3BA1vYVhPPAzzATCO76SGh50YsnPuq7MU3vW9sf3Mtr7cH6PnqK1b7jfzHStOvPGfz2NGY0JC0zrLKuU4KpXD8ExuevX507wpU175ByeIDv7Bo4/VGnVs9Iv75MasfPgoRyyQHbRcBwKClGnzCAQBKqpfVHTq8hW018HDgAlYagjKCQ7NDEie/qN7+x7s69364j9NRkbWm6PLlFyxuGz4sOPBaZ0XVLBeVVjz6sceeyTny7QOgvWOjhMwgy/2CXQVdXZaACeNeHrF+/QEoJsa7aRZxDEIBAoBBiHSrSfo+S+G2l+QsqzmUsoVj6eMhkBPYKACjavyrlSPHPB/2xZ6Lf7Svf++HH3K6SqvWFVy9/JwNdeHRQYE32stKpzmotOJxj61/uuTYgWRPW/tTHA+g0vkSXOtyGiNmznh9+Jw530CzZplutc73anoCgLvgvBeAttKCpdUHDr/NMffwKIgDuBAch5XKdsHwuBeHb3vyKOQ36Xc3tvUC0FpUurH0WvrTLhxFI4L8c3SFxUkOGrVo9GOPP6U9efQ+p675GcRso7tJVFzPpJkSFi3aHLNy4VdQ/FRiWvQgfSUAGKRQt5LM+ya4/FJ+cvmBQ++xjd18GmwHGILiqIDfLxo1amv8qsd2Q3Pm/OaEOO+5Wne9Ley8Xvp8dW7uOhyBXcF+mvymwqJEF4NdMGrd4083nTy0yK3TPYMbTAwHiQz6+Nz+2AVzN8UtX7UHGjWK6AEGaRgBwCCFupVk3SlXWR2Z1+ZWHDq6k9HXLqYBCwxDHuBk0uzyCeM/j1i4YAf94XW/+3GLhn9ukbZdzdzcUlK+nMygW/yUytL6wuKxbg6vYNSadU+3Hj+0yNOiexoz9DNtZAroFQkM0fPmvOp3//J94nHjvBNIiWMQChAADEKkW02CX71Kq08vHlV/6vzrWEdTrNvUwUVQB4RSyW5aZPhlxYi4N6PmP5D3e+P19e+/pSo/fnK7uallnsrPr51NpplqSysjXRzujbGPbHiy8fCXD4H21o2Q0UQzkUigWyLsiZw1+7mxj6xNheLjbbda53s1PQHAHXTeu6AFTJwIA7sdMXdYNO3Xrq9uLyucr2+u1UB2IwUmIbhHIW0Sx8a8Nnnl+lNg2jTbbw2HlrzzWkjRvoM7oV5D4ugx48v6u/vkDbUNcgeTe2n0I6ufafpm93qko309yWYn9yEQ3iYTd4ZOnrJxyt9eOE28Bxi8qQQAg9fqd1MOBP+MGSybx8RiuN0YcJHI+muFoxoKc6fqGqtG23o6g2goTnEwqWZpZNTH4dOn7FaPn9oCxce7f14wjueTb7y4J7H2/Nl/MKz2sNHjJ12rK68Z0dXdz6bKFMcSli9/p+pfu55GWppWUpwupI9Cxpukwmbf0WPWLVhDvAm+FUsJAG5Frd9I631x5f3AHXA6lUwqJsMwzImQ0W7UhNLNzR2hFQU5C1rLKubSbXaew+3ElFERl0MnT9wesPDBHBAd/R+9wMDi+JwcdvHBzx5qyUh/WogDdkjsqHOFGTkzXRiCaIbF7YmeOiUlf9fO54BWu4TqdkNGFgurlQtruKFhj6w+djqHmAs0eFMJAAav1a+mHLjyJySwLp85HtLd2TKcCnAlwNwuN462RY1PrFMGRTmKLlwY2Zidtxjq649zmftZAo2qVhoV/pn/1KmpSmVg50+fBQYWxuv1AdeO73/Srq2ep+Jw9CyWuLW0sGw8TmP1xk+f/S6NzW5oOpHyIqStT6J6MGDicNwdIX5p1KCAZ1d8c6iCmA49eFMJAAav1a8DcPUqyWg2qzJPn7yvrjhrHmo1yUgAx+g8buewSUknAseMTzPpjUj5mfNzuyqrV3t6enzILJpFHB54NmTGjHcDI0ZUgsTEgXW8A1+Lb2ykNV+6NDk9dd9zNEtfaFRocEaftj2ysqElAONwy+asffyFlsIyhSEz7SVyszaS7AHAyOU5yFMn7uVGh2wb+9qW5iE26Z7KTgAwRLv7z5zh11w4O7G5onR5d0vjeMxh4ZJgGCLRmf1yTUi6yMf3ov+YcRVNlZXShuzsB+2dnROcLpuAJRNXioP898ZMGPe9bHycDoQnerc5x/V7z0l02vz7W4pzH+TgDo6Cx9Npy6rjuix2CsVHeXruo2t3FKfn6yQ0AAAgAElEQVSenGIqyH2Soe9Ser8c388TmMRzp20RjwzfE7LuuYGdp4ljcAoQAAxOp1+/+uM4pD+wNzA/JWVtV0VpssdkkCEeDxmGEeABJDeFLeoW+wcUBo4ZfQSW8EvaC8viW6or1uhbWobBZJKD7+tTlDBj+leiuPDrRpK4WyORYNqssuDWnMy1NLs5VkIHaF9bm09tRa0PxmJ1akYnfDxs5Ojv8g+krjMUFy7nWK0cgNAws0jUpZyRtFE1fswF2UMPEfOAbsFTAoBbEOsXozUpKZT8rIwJTTnXX7A11k+AbXYqDHCAQxTgwcgAojA8LIVCx/ZXn2ZrfE74h4S4c85fXNyp1U63Wy2+dAG3XxwadJKlVFxW+PpX+6sDzeZut0ZXnP0gzWqKAA4jRdegDets7abz1MrMqNnTd0J2m77+u8uv2KpqprA8GBWnMN2Yr7pUOnHcxtiJYwogYnvEW3KUAOCW5PrPxHh2Nufo2288ZKksf57R16OEUQ+CQQjuBlQcwAwIABKO0il2XMSuk4QGHY6fM/tie2WdT3dNzX3a6prpdtTJxjh0nU9ISFZoWHSmr19gMxmlMC3ahtHdDTVj6+uq/fXdXSLMDdmDo6P2h8xO/KI1J8u3Mzv3TVTXEU7FEMRN59ikcQnHFeMSXle/8VITMQJ0a4YSANyaXv9OPTBcuX+3Mm3vN38zV5av41jMdAiBAMTkmDCYY8QRBsVqsQmcuJMMWBQzx0dyWT0s+lD4uMTm1oKyEQXXrs8w2i1hRuDgC+VSnUIsKaZBFB3FQ4W4MKw26Ltita3Nvk6Px8YkMaujR8YflsYE3Ki5dGa2sbz6SdBjlOIYBQd8aWtA4uR/+ceN+IxL7Al0y24SANyyZD9k8A5/NrPhmKqLl1/rLSiYz3bYEZROxZkq/1qePLjSYPYImxtrhwGniY3AbhQwyZ2ysOD0uGmzD6JuZm9deVlIn9Ewra6lZpzTaWGxYMiE2Jw2kosMMUgUhhvgXBMJhkU+qiIfifxIYExkvt3cympKv/yUVaudDOwow4xSPFz/8BuBExK3cWJD0vxWrfrdGaa32dT/6WwEALdpL56SgpSX5o7XXc9801xcNJ7pdgI3l+3mh8Vc9I2ekN7U0sPTluWOpGK2INxhkFhRB4WrUdeJ/MK/VUQlXJVrwt21+Tkjc/IvJdlM+hAmjglgq4tOdiMwBaa4XQhisTHpOnVE9PUxk6eeAjaTo/Ly8YmmxqoN7vZ2DYohiJ3C75GED08JnDjtn2GvPaklbn9u3UwCgFvX7IceICUFSf/+zLSekuK30erqYSyPB3cKBFZZ/Kid/glTztbXN6P9XbpQNuyao2+qndBt6JThLJYJsCVVwTFjjiVMm5Gua2zCqusLAlmYcwTitEe6ekw+sBOm0OlMM4nDrjNSSNeZCp+y+IRRXXUZF2Mq0y8+7O5tH0uyWVhOmAqxVCHFPjEJ/1RGjj7p98yq/ttsyj2djQDgNu33AnDl3OlZ+uLCrVBDbQQLxXCnUGBSj5/897jVTx0DdFWfsfqavKcyd051Xvb0jq6WCAuKi1ESC/X1Df5O4as+5x8UUM4OULs9hq4Qva4pvK+p0wdyQVQOh2/iq9X1dI0yFyKR+joKCxW68uJpzdVlS1FzjxwBKMCYPKMsPP5c+NiJH/iPGlVE7ARxe0YSANyebgM9wOXvz8/U5xVsBdqaSA6E4w4Ox6qZnPRmxEOPHqWGJHWApuu09qtXNbqmypjOzo7Jre0dk9w2l4hBYrSLRKLqyITYNMWY4VkkGHL3tbQxexs6KIgHIbPYPA9XpbAzFQqLu61ZXHX18pTGqvIJxt6ucA/qYAAa2cVV+ZeoYhO+8omKP+nb0dEFbdqE3WZT7ulsBAC3ab8XgOtpaVPb8nLfxuurhwkpiMNCpaG8qNg9nLjRx9mhQWXVvb2USKnUKoLdkoqs65Mq8goWuftNUR6zTcBhs21+YcEZZLX4HFUiqRdKlAYyLLRRcRKMOjFyj0HHtXZ1ikkmQ3hvXfWcroa6SIfNzPCQIA8k4HbKI6LPh02asidw6rwiKCiI2BL9Nn0kALhN4bwAFOQXT9DlZf7DWV0xWi3gtBlQjG5kcRuRgLAzvNiYo+39FjlfKsxfMHo0VnTxuF9rvXYsZrDNaK2tGYe73Uw6l9mO89g1Un//YlVgeL1UoOihw1y8x9jDadVW+/bU14Q4ezoDYLMxwG0xCh2oE/EwGSZRYFCaOjxivzwiPsOXz++GlixBb7MZ93w2AoDbDIGUlBQkRqcbXn3l+zcsFeXTg2SSRjMEqJ0enIyoA64yg0IPdbk9CpmYlzL7pZf6QVMa1VKi96+5nj2/4NKl+bZ+QyAKY0yYRfdIfX3LpEp1FZPK0zMQusdpd/K6O1oCe5obImzd7TLEaSORYIBiNJIN43CaAhLGHIqfPfMQd9HSZgiCiOC/TQ+92QgAblM8HN8Et+7z8b/x7cHnTdUVK/15PLM0IKAVZXH6XEJpZasVtRhJ1F4KV7h76daX+gEoIJlSG9hNRUVBVUVFcbjTlWTq74szmAxSFpPez6DR+nCH20bGIJwG06hup4trsxiEqMvOxAEKwXSKle+jqGDJZd+zlaoLEeOmlPGTk03E1OfbNPDHbAQAt6mf902wJeO86Pi2HetM1VXPyikUZnBMbLlA6dPSC1M6q7v6lS4mN01AZn8x88M3vIvUoc2bN4NHOByqg8lUdJRUz9NVVkztbm2IQiCUB2Mo1W2zQGQPwOkQDYJxAGGoG8BUGMXIiBVn0tvVMTHXYqZMPkrhSPL5lZVm4sH3Ns37STYCgNvUcOAL7yUljLMfvje3s7z8ZbyvL5LL5XWxRWJjPyCbrRSWRRIc9oFIwbs4+plnBt7QDsz337QJ7ktIYNVm5If1NdQPc5h6xtgtfSNshl4/l9VMQ9wogF0QoCE0lESnumlcRj9DwC9305BcocYvN2zi+CK+f0THry2lvM2m3NPZCACGYL939VZJ7o3hFdcznu3R1k9z2110Nk/gcVPoJhJPnDtsStIbI+NjKn8+Rj+w+W1qKsPVjync+sYx1SV50zua6mIwm5UFu9wwZsMgOpXlZnDZNpZY0KkID8kQ+PldQWT8Gp3B1Ru/bt0v1hEPoRn3dFYCgCHY7w3kmq92yWoysmd3tuiW9Hb3xtCZHIwpENayhZLjMeMmHwpbu7zr16Yo4DiOgEsFLENTkW9p9rWQrqZGNQxQLgUgTOCCYBJCdZAoJCOFRe3RRITXaaJi68EIcS/QJDqJ+/4hmPazrAQAQ9Dyx0+aIoWVlUFV5cUPNJZXT6dSqJg6ICgnYmT8fl4Yu0I1Zol3pdevHt7bodbwcKrLYKA4GTYG303nwwDmQTCFBJHJVpvTaUBsNiMukdh8AHCB5GSMCP4hGPYrWQkAhqjnjztC8LMzM6O1VVURFAoF9/Hza5iYlFQk4XB6/2iKgrcXAWlpMNAAEmgl0W32PjrDQ4YBl+sCOG4HfL4ThId73/KiRPAP0SwCgDsv4EAvkJoKZ7W2Uvr1ehZdKMTZFost7o03HLcyO3OgnM2boYGNtbxHYqI36G9+QwAhALjz3hHvAe6QpgNbo4SHQyAiAgHh4d6g9V6t79jcHG8vcSfLu0PN/p8ohrgFugM2DtzGpKZC3nv0H4uDiIC9A8L+CUUQANwBkQd6AO84/48zMr23M8T9+h0Q9k8oggDgTxCZOMVfVwECgL+uN0TN/gQFCAD+BJGJU/x1FSAA+Ot6Q9TsT1CAAOBPEJk4xV9XAQKAv643RM3+BAUIAP4EkYlT/HUVIAD463pD1OxPUIAA4E8QmTjFX1cBAoC/rjdEzf4EBQgA/gSRiVP8dRX40wG4U/Nk/qicgenFP67D9f79o/R/XYtuvWZ3qq03y/m5lrdeo1/m+L06/lH9/+j3W6nfHQFgMBX6iZjeiWPe2WI357r/bn1/FP8Xsyt/65w/M20g32+VcdfAwPGBxg22jbdi2K+l/akWv9fWwZznZ2UNePXj9jneWPnVFWmDBeRX6vkLjQZT/x/KGbi8DSqGfq/ddwwAAACcmgpAcjIAP/4dmBp8Mwh+bJhXUDgVACz5/2v1m8v8rl7FSWRyDd2bdOzYEO/3dP+9CZR3CnJaWhqcmJjoFeGmSb9oa1oagBITB+qEJyf/YGAKjiPJP+yJNLDoZGC3Bu8a3R+Om6LiqampcHJysvd3LCUFR7xt+8nv3rb9Ys7/D/WqZMjlEghFu53h4eGe35sajeM46cc6DLRtYGr1/+/X9B/a/Oy3gXr9RFc8NRVAyck/1P/n57yZ90c9vOUO1P1m/lQAQPIPevzbswocpzTn1NOUdDYaHS317mzh/R368TzgxzwDf8VpANLrf9A4LQ0giYnAW5+BQm+W+7N48Or9bw+8v6UBgCQCgKcBAOl/8Gvg+Jnv5Bs1NTQ+KsC7w8WOxCGulLtjALS2AprHB+CkVgB5PADXaIDnxyvGv4MEx3FKRwcgWeUANXYARIoC3McHeHc4+MVyP68xpaVdDIvbLPOQyViQmNKlUChsNyPca2gHADTQAYDVClAaDcDe89783Xv+ykoA8/mAhP5wHteP5qOtra00MpkMS6VS77m99fTmozQ1/VB3bxnGQIDFAeANRm+wuL11b2oCsEYDsPp6AAUGDpzJ9fOrvDdoekqblTScRJb4Mrs9PT32oKAg10/B+Wkburq66G63FPPxAd4VZHhFRQVFKBSSvf+WlQVc3oC+GeiVlYAsFHaRMUyKGwyVnvDwcHdBASDFxQGoEgAQ/kNAeUEaCPAfg34gzisBIPM7OkgwLId6e4E7IgLy1gl4LzLskA6KVC7HfQDwLrj/Nxj19X3sPmu/DIcw28jowM4fy/ZqQirtAiSGFHi8PsbJgcerjVe71laACsIAVSAFmKMeYKRAAPUWFKBxcXHeOt2E3FtPbywgcvkPceL9z6uFWSr1/j/wyuv93ettUBA0sPepNya8deq094pgFwTx1NyucLHYe2G87cVHQwbAW6m9aWnUa+cyw/t7+xgoCmAIxXAIJjsVark5SKjpeObpBcZNmzdDNg89qKPPJDaYHYBOYyAIyYPx+QLjsMjQ9rUPzum72ZD8/Hzy5ct14nJtuT+Xw9Y4YQi3udAmpVzcvCRpTVd8HPBs+iSV2VJfEm6zYHST3YHBEAmGYBj3xrNGLrcKRIrmsvIyEZmEy2gUslXkx6l897nnnKmpqfi13Bp1f7/RF4dwK43F1qq4E00UUZd/cVGJ2OZyQQC4gcvtwThsNpArBTpnu7ary8oMJUMsngv3YIBEAggNYGI53eAfHtjx0pIlRq8OZwo66KdTDwWQERCB4Sjd6uht8Q9UNQGxWLfpZx+v826taDRSRTcK84NpJKozOCa43md0hCX/6zN+HeYeGZ1Cc7D5XO17b/zN4A2cc+fOUcvrW3xqKiqVConcOH/+lKaGBpcr9eRRPzsGcV2IC2JRqRCFjNikIr4tJCyie/3S2SZv3GzevBkGXKlPi7ZBiSEkz4TEaTUrFyQavcCtffoVuc3pDoRh3OPBSNUHPt1muHr1KulGkU5aW68N5nKofg6b2+K0mur8I8KbpSIVKT8zS+MEgGFwWFEKRILtDhdKRWCIBuGGGYtmt5bkFWt0XZ0c3GXHMASBaAyqQy2X94cq4jofeWScZVtKCkebV+dn7DNxwgMCOqclRrZcvHgRr+t2RBkNJqrbjUNsGs37iTVEIub1+4bGau0tRVaGOFzS0toUhOIuNYShMIp7GmQSRd2m59d3D+b27tfS3BEA9uxJFaVcuvqkxWz1x1AUgWESTqXQHL6+vnWhYWHnbI8uKG1f9zniJDes6ezqG2W1u+kwQgFkCsmlUkgaRsSEX5w1eUS+n5+fA+A4dPxEGre0umHS9Zzc2VaH3Q8FOMTicRpjoyK/GzNy+OWFSQmGv7+32zc/J/txpwtTO9wAxqGB+Me9Fz+lQtYgE0uOlJWUjiaRSBPIJKSBTCLvHB76UScAm+HM/KaZHtyzlEolGzh0+p746aMq2xv7HigsrJjoRjEKgDDM2w42g2ZnMxmpHgPlWqe5fSOFzIrFEMSDkXGUygButZ+sJio49MLzK5NLNgMAjcxuUn/55e6lHZ1dY51uG4tKBx2RUcHnRg2PObVq4cL/+IBFSkomvb1dO+78pSvL6Uy6IWna5H1MNqM540rG4pb2tvEUGq1PKZd+/fk/3yz0ApCSckFQXFY8q6CgaKZUIiqdP3fWoR4b4kpNPbLc5sGjMAhAJBLAeSyawVepaA0KDEgL9uGUzpo1y7ljxw56W59jdmV19Sy3y2mcPnX2h889sULnverOuX9tktPtWgFDkJ0GkT45dXR36Zcnr7Nbtdop6VevJLtcThUEQS6pWFQaFBZySMAX0jMyshabrHapGwOYx4MiMAQwBAI4gnvyVy5fdfrshbPzu/t6Y1HUAyAYwthsptlP5VM5etzEC9qisXU00dGw3LzsZYYevSY8JPTSzMmzj3/09QeQ3eJ8AcNhP48HQ6gUCMMxN8lHoSgdmTBmv1yANdd1uSdlZmcv7O3tDoFxD8znc6ojI0P2v/PaS9f+qwDs2HPI58yZq5+bbdYY1OOGERjBqCSqSyyW1Kp91d8qIkNOVVfecDo7nNvbO7rmWm1uFkBIOImMuMQCjjZYrTrioxIdeWbd8s5z5+op53IvRJn1pgdq67XzrTab0gVQwOFz2gPUqnMhwX774sZElF8/lxWQU5D7ocOFhbk8MMnb8XhNgL0AKCUlMpn0vYqisvkYgBbTqZRSHILXXDnxuXbt2rXk0gbjGhzDXmMz6N08LvWVCSMn3qhq73itqLQ62YViDIB7UBzzkFh0mpnNom8XkblHypt0H8MINQlHYBQlYR4KA3aJhdxatVKxLz525MmWvjq3ucs9sbS44qmubv0Ih8vCYrGQ3rBA9bdJE8buWL1kif6nJn158iS7r8mw+PSZy68xmMzOmTOm/UMo5pefPXvhBV1r6yISldyrVCrfmxi78Oi6dfG2lLNXZVnXs9YW5Bc8KpNIM+ZMn/W2BQG2gwePb7K7sEkeHMAIhGIsFqVPJhbp2EzeBSqddUZM3tDSDTYzIAe0vryqco3b5e6eNnnKhjeeW++9a0KnJj+ywuFwepe0WekU5MnR0f7piCDUr6GhYW1VRcUyu80iJiEwJpdJSsPDQ7cKJDJG2tWMZw1mu68bh3DUgyIIABgCezAIc59/5OFHPj1x9szG3j7DVBRHvbeTGJPFNEtEgnK1SnVg0uzR54syG+Nys3Ne7enuiowMD/l2ctKUf376yXbY7kS+gWDKMBTDERKCowBzkNQ+PukTE6e8xWTzmzML8h+tra5a1tvXHQDjLkgm5tWGh4Vs/eDtTQf+qwC89vEB9ZWL6YfNVkuUx+0AMI57EIgKaDSGSeWjPBedEPVBQWFlExl1f9za1jXfanMwUO+lmkzCaAgwqyXctMjQgJ1kT1++v/9U0dmsKw83NXUusVhswQCgDBvqgBAaYhVwmNro0KCD48eOP1BQcIOfk1v0pc2BRbkwMjwwMAADQII8mMZHWqSQybYVFZbch6EgmUGnVcAweem1M5/VeQHIrerb4EHRTTw2vZPHpT/vFx6Tbuk3byuqak52eFAW7rG5YcwDMyhkK5fLfstfpU7JL67e7XR7puLeKCPhbhIFgUgQMMmlstOL5i76sLG7sSs/PetvPf2mZXa7XeLxOBEGFXPKJfxDU+PH/P35n3XTH+47x+nv7Fh6+szVN+hMevvceVNfF0qlpSePnHm9ubXjARhC7MH+mq+HD494/4UNSzoPnryuSL+etjEvp2CDSqnMmDY56XUPmdr/zf6j260ubDqGQxCKO3EqGTjYTIYFgciVPnKf3W899/LZnfs3kz027Jmi8vL1bjfaNXf69DVv/m19sTc4x9235hG7zb4NBpiFQ6OunbD0hbT+quyknLy8ly1m43DU7aCSIAwXCXna8ODgLXKlinTletbz3X1mfxcOQzg2IDsOMBuGQI5T69c/9cGRIyde6NLrZ+CQ97Ydw2lUiptGofTy+ezzj657bEt5UV3otetZm3s6O6IjI4K+njF2wrYd/3oPcntIRwGJNhyHYQABJ4bgVsjXR3V1WmLSmwhd6jh05uSmvt7eCU6HhQPjVlwmZLeqVPJt33764b/+uwC8f0z93ZWLpy12awgEXL2oy9lGgmgCCCBKuVxeGB4Z/Gp1fV0umcT4oq2lY57L6YJwEtKFISQO5jRxlVxGdUig+g05D5wBjIDIvNLKlxt13TNwQMKoFMRgx2zABZw8OgyRgjTqi5HhQW+bTFZbYUnJPy12T4zNBfFcLpxMIkFONg02aJSSYqmAsysnt3SZG8WTWUxmJRlBllw/90Xt2rWfka+VXHjKg+ObxTxGh4DLfJYnU6YBQNpZVN16nxPDqBTI1QZ7nC4GmeQQ8ngf+ihk53MLK7+2Ot1TyAyKCaFCvQCC+A6rnSMXy3KmT0na7MCsdRfPXvrQZLVOhRC40+Nx9XOpEEPEY1waPSpm06bnnuv5qUleALrbu1ecPvX9mzQmvXX+gumvyuSSktTD5zY36zqWeW/mAtSKi/HDQ/4ermGW2ek+svS09GdyMvM3+ql8rk9KnPAqCuO9+1IuvG91YrMQCsWOA1cPCfYgJAThATdu91X4fBkfPWJXt73I5LBgL+SXlz3ucbu65s2ctXL43x4vTN4M8JFFax612KzvkSFg5jNpqx9c/cS13BtZK7Ozc17HMcDAMaeOBGHeq60pOMj/A5VKA9Iz8za0602hZoeHh+EkmE6G7SRgN0KI7eyalY9/dfjwib939vTMINHIZhiG+iEA+JDHQ+NxGTmrVy7b2NhqE19Ly3yzu7MtNiY8eM+0pIlvffjhB5DTjZ6CKKxhCJVsgYFNT8KsmK+PMnPSuEmf2CCW9NCJk++arXYVGUbbYHe/UynlOmVS4Wff/uujL/6bAMCbtx1Sn864dtrhcanFIuZVY0/3KRrCHelwepbQGVS9VMR9yYq6v4Nw6p7Ozr5ZVDLSI1Urz/aZrdG9na0jOIjLKOeztowbMe7Lhj7jkrLq+qcNRkcIm8XTKmSiDCdwgR5j12hjT08wA0HaAwL9Xhk3NrqwoKh6bb/FPUzXbogz9Ft4dAa1I1SjzNPIBZVUBD9z/rv0J1woWMxiMmsAAi3OO/9l7ZNPfkQ5k532BEIi/UMiYLYJOJRnuSJ5OolE25FboUt2A8QeGiA9TkI9egYCu3gC5pXG2p66hua6fRhMmiRTyytFUmGuyWSOatW1xwo4/NbwgMC3/fwUpSfOnt1psVqHCaXSQwB3FfhJBQFcLqUlOjbi63VLlhh/DkBne8eK06fS3qQz6a1zF0x9VSmXlBw+fHFzY3P7chRFYTGHXjVx7LB/zJg441SlUSfOz8j5W3ZWweP+KuW1qZMnvIpCZMPXh46/b3WAGVK5TMvl09Nh2M3o7eoZbzRYRRK+8EZIgN82KgctMBi7Xiyuqn7M6XJ13jd15kPTR4WVJIJEEPPOw2sdLtf7FBJk4NGoq8fOnpXVWFr/QlV13QYymdJJQ6Av2GyE5O+rkqiUilMSqRQvKK5c2NzVF6Nt0Y9wuXG6XCRsVIjoxTBsypyaOO/a3m8Pv6k3GKZJFIpynoBbaND3JPT39QYx6HDd/EVJr7g8UkfapcxN3R0tsTFhgXunJU1468MvPofcds8phMKK5omFlRIB9TIZslrlAlF9ZHh0dnlzd9LVG5kvW50eTCkR7oGc+r7gAF+FWMhPe+vlpy78dwH45wn1ie++P4PDuDg6Juir2ACfd7My6xe2dnZscnscMJdDewGFhCfJFNee7i7jdAGXWTdv0eItGYUFSXXlRUthh4EmYdPfXbw0+cMrGUUv1zW1P4R6ELJC7nMhKWnCEYSOgvSMa4vqquum281Gfkhw0Gv3P7DgcE9vf0Jbd19MbkHVA21tXSoOh1U+d9rEg0E+0rp2bU3VoZMX/u7EoMUMGr2GhlAWZ373We3mzXspe86e30CiUN6UCmjtApYXAEk6mUzfkVOhW+wBpO5HViZvClAIm2hk2MOn0VvXPPaa0+UxHSBR6Ylhw8KvjJ049mBRYcn40qLyJUwKw6OQid4bGReZd/zUmffMVodv3KiEVx568L6Txs72SIulF4/yl96Ij4//9xCu1yzvg2ZDXd2KUyeu/oPOZLTOXZD0qlLuW3Lw0Ik3G1u6lnmHZFhkT+/oEWGfhIRqPhLLgxlXrl//W/b13PV+KkX6jBlJrzgxl+nAvjPv25z41NCIsKzxYxM+szuMjPRrGQ92tPSM5tAZvRq16q2wcM2Ral35c6XV1eucTkfnopmzV8waEVyamJgIwqcsX+fGPO/TSUgvi4KsDk+amNdT2bylubl9OYvFLh4xMuGxkFAfnA5AuIDPLmGRKXh9S+eIgsqmuIyc4hVON8YLC/DPGj0y7ASLaq2k01Sd33x7YKu+35QUER11YcSohGM30q/Na6yrnk6jAv3UGeO3Uuia5muXs15vb2sZHh3hv3fGpB8AQN3YSYTGiVBrAq7MnTVhl0JKMgoojD5tj9l4LT3zsbzi8vUOD2i/b3HyEzHhfB1ktkQgiLNl0fTp5f9VALb985gm9fzFkygCJJGRAV9Fh4a8XVWind3Y1PyWy+OARAL2yzSO3zm7Tb+7va17Bo/DKkmcOvnJisaWMfWVxc87+jrlGqXkg4dXr9n9z0+/3mo022bQqDSdn9rvncQx47JJTBzPys+ZVFtVs763Rx8VHKD5OiEhYgdDIEdb27tDS4urX2vWtcaw2Kz0+bOmbfFTS1tLszNtGTl579rdyGIKlVbLZrKS04/trN65M5X26clzTzhdrk1iDrmLzyY/I5X7XPUCkF3WsNgN4JaNj8T4Y9sAACAASURBVK3aECCXa1kkDyqgasxLH1tC9XiwAzCVnqgJ1JwfPSbh7cKSilhtjXYTGYdYIiF/x9jRsXnfXbi0zeJwquITRv59xf33Hew3d7Fsfe24YtGstkkQNDC+ffPwAtBUXb3ixOlr/6Azaa3zF01/RS4VlR4+fGFzY6t+OUQiI2TUZlfL2GkJCcNfCAobZr2YlvFUzvXcJ3x9ZOkzp055BSJb+/fvv7DDbHNPCwkPuRQRFb2FyoHMuWm5M7s6ep9w2z1chVSyY/6D8z7PyLm8vqCkZIPLYe9cMGPmyvdeerQQbAZ4zPUV6xwedAeVBPWxqNTVw6KCc7u6+rc0tXSsYLN5xSMnjFk7bFigHjU5hCwOs4sHAGg0mhXXcysir2UVbgMwSRoZ6H8sPi7sUyHb3Y6QuczDB06/09nTNzksOurQ2Anjv8jPyR5fnJf9LIMBucaNH/4+kxVUc/163uvtbbphkeEBe2fPTXrrw20fQE4AnyIzuaF+gSHHp0we8XaoQtIv49Dtl3JzoOIK7QtFldWPohjSPH/xfeunTQuv6a9u4pFowDInMbH3dt+6D3kYdJP3zeWnxzSnT353HIVwRUiYZn+YX+h7TXW6Ka2trS96MIdVqhD+XQhJM7pcPZ+3tHRP53DoeapA9Qo3xEhoqCnf2teuCwrx0+x6cMWKlLfe+2SHC/XEifns9ISEERtDp4Y1B5vN+JWy3qjs61mb2jo7Zmp8ZGm+avHL0umjSnrSawPrtM2fNDQ2j2XQ6WeWzFr8xJhhVP0n+05xdG36j61O5D4KhdrAF/LWcxmMOgabSius0q02Go1PC1lIl4BDeUapUF3x3gLllGsXu3GoZeH0cU9ZetsaOBjsEovlxr3HTlNxHOyHKbRJMrXipE+g+qmW2uawni7DVxCKioQ83s4JE0flfH/h4jaL3eUbERG5Ux3gf1CjEPZMHuFjDgwM/MULMy8AzTW1y0+cuvrWwDPAoimvyKXS0sOHz21ubOtZTmdzPcDRD1hUd8ew4WEbo4aNrbueWfJYfmbeRl+lKH3m9EmvkGHcsO/wiR1mq3taeETQGZFQ9FLicLHufFbn6CZt2w59d1+0VCz+fMnqRTsyc68/lFtQ6AWga+m8WSuj1CsLlyyB0Ngpy9c7PNj7JBLUz2XQVoeHBWUZurvfamrueJjG5tZqggJeUCn9q2bNnGBpL71qS05OxtLSmqi7jh0KKyyp3U8mU32iggO+UAf5bgmd4G+G662Bh1NOvNup75sUGh315YxZs94vLymKu3j21A42B0FGj43eyWBqqm7cKPh7W1vrsOjo4D2zZ03dsn37duBxk85QWPxgv6Cg43weZTvN02uSCOUWHIKx1s7ul0sra9dgAGmLHR77ilosLVWryf3BYrE1MTHxtvdNHToA3k2huCHqsxfSjrsxjyYwSHUpPCzkSGVR7dje3r5ZXD43089f+S5Cpzc0VDXsbmvvns7nc3LkGsVDDgwZ9X/tnXdYVNe+9/fs2dN7A6bAMJQBhl7U2OnFghVMrDEaTTMnmmpJhAQrYoslmhg1iNgRiB0EVHqX3svADMMAA8P0+t4h8bwmJ+eetPvc530Z//J5WHvN/pXP/q2111rf3dveflA2IHRwdOCcWBq3Ju/k2dQ9Kq3KycOVc2mql/uX27fETUwe93xznZWbW7J9cFD6BoWEabChkj64deFg0YZtR5zFg5KzXT3CWSAclhkbF/nWvvfWjqx9dx+1ub3hlFwDLIND6CF7NjUVhYIPGWAQsk8yPkM2MhZGxUNCOhG1zdaGkQeHkIeqGrrjDACg8uAxriB0GgmdgpPZ0OmF17OfDhhNwGUIjQnmOHIy3Pi8D1oau7wkksHzSBgcy6CSD82cFVRyN/teilyh9qQz7J7ac9m5Hj6e5VMD3SuD/RwnFp1+XQFeBmDxksjtdiRG3dWsO4ltvYOrbTn2IkAzitKrpAgnZ9bXvv7B2U2N/avLS4vf47Lo+fPCgnfCsOOj6al3D6s0hggfX48Mui1p+5HdH/Ts3JvqWf28/WBvtyiCw2Rfi14UmVzeWBpX8/z521qVQrwsKnxdEH9ztWWVeWrM+rfUOn0KAgJlZAJ249QpvML+zpGdzS3tb0EYohxHZdz2cvcuCp09o8zFRtvr6emps2wbWfVJsndldWu62Qxj+Xu6foND05IcsEIl2z3E7VLa9UPSkbFgLz+/72IWhB5pq29/JTvr5kE8Hm6aG+x/EIlzaHucU/iFZEAc6OvrcXHxopg9X36VYjYYDFkQluxpw2ZWU3DmhxhQoWLbUhoFfN/qirq2N8prat/TGWAmEon8wN3VpcqT71zoPkdQN+8vfCXzLwNgWQFNOHDd/n7+4wy1QevGYtMbXBwdy9qbevw0Wp29K98ldfG8kJN5d+6Odw6Pn+sXSaNIFGIVm8fbIhsfmy7p79+llA2SOCzW8ZiFcU0X0m9/rlCOM4Kn+x32YZJPvvtuvMLyG4mnruPyHpduG5QOfYRFmMQMCvGde9dPPN78frKTSDZ8tru7e47JYMiMXRT25v7t78jWb9nLqGt5fmpUDVsKQmgtx4bSiETCtHoQDklHdXYymYLDICI6bSnobVQyqQCEIZJrmnviTTAYgklFtWFhRoUNmSiiMxjnsh8WVxhN5nQIhQ22d+Jmu7q6JrS3tnj3C0WHiRislsu22zfV36csM/vHAyNj47MhFHacy+U2OjiyctFYVMYsT3qbZUHqtwHIT0Jj0X2Ll/4MwO07iS1C0Wpnd0EdXK+ABvvbHZks2mPfgLmne3tk88uLS9/mcWj5CyPn7NCBo/LraXdTtDpzuF+A4BaJQdp5NGFr95HzeY4FuUVftbV2xttzuffnhM46WNtataCuqWmzRjEmWhYTsXbKjk21cQBgfmX+62+rtKZDCAQooxHxG8OjAp62V3W897y+6R86EE1Gkug9zk7OT/k8VhYAaUoASefQ7t27gc07T/oVVT5P0xsMrCAv91NsFm0vVi1UOrmHuH17Mf3Q0Oh4iIevb5pngPfZ4V7xrKKnOR/j8eB49LyZXxpMJPGjR4W7pVLpFD9/7x/CooP3puw7btTpDZkINMGXRKMMUYjwPiyo1NszGQ/D5oSkFlXUhxWWVn6iUGs5EIQa4bu41NraMm6jzIbsA7vfE/+vDYEmADh23f7+/ccZ4xqVJxoFG8aiMWKd2miLRmNBPz+fc0tWLDz1/fmL4/LB0XP9/YPzMFhMn7PA7YywXxwwNCReiAT0o07OjslTp0eNp169s0suHyUujJiRNJPvdD4+fsaEvv7Ww9cwjVX173f3CD9DwTSj9rb099bFHb+fX3WE19cnPtXe0RFiNpmyomcsePPIkY0jcRu2UjuE4lOjGnA5DESbSWjECASZTSYQhI1pYBiFSkuwJaA67GiYD2kUx3yzeTy5uql7hRkAsESUYRRt1usZZLKQyWQk5xXX5xkNwBUYEhXC5HJKnV0cr1oAkPRL4hhUSuuUAO8kJt2uprKq9IPuHuGrKo2eQqbQR5AYRAsSCctaFD3r5purl/X9GoCultbVmVkFSRZ/LFwavp3H4DxPvXbjy7Z+yWpnD0EVg4Dpa3peMhuDRYinz4z6RizRepU+K9zkxKblxUTN2mm2AHD5XopWa5wAwJZB3rk/YWv3ye8L7B88frK7rbVjjQPXIW/6nOn7O0QtIRVVte8YVArJwoiwVSmfb66z3M+0heveUWoMyQgIGqHicRvXzJ+aV98qXlBf3/JZ/4jCx4wlqXF4QjcOBZaz6bhLs70XF27aFGi0APCkrDLNbAZYU708Tjk7s/bt3rJKcT4t1/3C5ZuHpDJFGNeV/4TJZj8a7Oud1i9sCyPi4G0rVkZ9Ih00wvKflCdKBoeCvL0FF+fOnbNn/8EUIxxEZMNReH8sAadGwbVKHKg08bisa8uXLDlaXNtkV1tZv1MsHpqtM5kRVAp5AImAV2ORiNTNCYfvzvt5v9AfnQz/HRUA3JNyyz4r51GGXDnubTRptGajSYlG4FA0KkPj7s6/MiXQ90RBWaFYJpJ91y+WxMIhuNZF4FHS29fPl42ImQwKvsI3wOcQm+lBuZyRs2t0dAy3NGb2bt8Z0y6tD+FNfF/LAkBHfcd7LW0d2xGAatyVx3r//fXz72QVNDp2tnd93draHgbATNnRMbFvHknYIAtevJ40otCcGtdB8SYYGoYFDWoIBEwmOGhWaCFIrTNgbIioDiYF8yGPaFMwChqSa5q74s0AgMfCtSqkSWeyAMBi2iUVVzc9MhjBdBMAhdtwbHq4zpzans5ud6lYbMe2sXmwdl3cfh2kaB1qHVj65FnJZvGgTIBE4TB6k9FIImNzF0eHJW1767WKf5kEt7Wtun27YA8aixPGLg3ZMQHAjeuJHf2Da5wEgjJvF+7Tp7n3l2j1GsrMOdE/yEbhhNJnz97gcSiPIyNn7sKBannalawUjUYf4evrnkGnEXccSvq46/S1XPbdrCdftLV3rXNwsH86dfa0ff2D3TOKSyreB/S6wQURYSuTd2y0vDkxT1u47t1xtT4ZgsOH6QTMhrdXROQMDGi9SiorP65p7Y7QIYh4o9kMx6PMEr49IznyldDvN21aoHnjk6N+z0qr0uBIBHOKj9spTzfeAScKoFDoqG4XL2ekSMbGI2xY9l0MG3qHuLfXS6uUWVbGC7Z9sP6T0upmTllJ3VcDA0P+AnePCyERoUlH9x0360Djj3Ak3g+BRhkgQKnFAEqAx2WmbVy1fm+PrFNR+qzto/rGluUqrd7OBAJICASUtnTa2aRPv9wfFET9xWvm3wvC3wPAyVv2tzLvZ2p0OlciGdOCgMMrkXAc22A0e0IQrIPJoqa4cG0Lq2s6TgiFA4uNZhOcRKeJ5OPjNBA0ip24dqnOXPtMCsvd+/K1+4mjY6OERVFz9nr5uny/eeFPrw8TzmRjC5/WfNjX3/8xDmEcdLFn/GPz6ogHt+6Wc3tFkpMdnd2hgNmUvTx6/psJCRtkfovXk0zjmm/kBuRyEMLp2TRiAw4DVxlhIHxgWGk3NCx3tCGiOm3I6A/d3R3zZSPq5PK69hUAAAMdmeQmFGhQ0wkEsY0N7fztZxWVgNJgASAMQ0KPYrDoIb1eQ4bMpm47Gu37FWtX32bCh4Zr28WC4uKq8LFx9XS1zhQ0PDrOwuERdUF+gj0n93yc8a8VoH11RnZBEhqLFS5eErKDPTEHyErs7JesdhIICv28Xa/UlxTF9PSLZjs6eRWhsezRitLSFTw26fH8mDk7EZBGfjU9+7BSqYnwEjhnUmwpn51I+rhr3/kMx5K86i9b27tWcLicnNmzZ+7vFLUFl5ZWvw8YDIOLIiNe3/fZ65UWAPzmrXlXrTOkQHD4EImAfWPrioicsTEDvayyPqRDOjpXAycEDMlkboBuHObCoZ1cETklZe3atTILAEXlNWkgAs4K8HA85epC3rd7yxbF+bSn7j9cvXlIPDwahSGQRpFI1Kher6JQCZgmAg52ZcO6FemVNXVez4prksRiaaCHm/uFsNkzk765eBHQqIyZZjjGD0vED9lSMZ1oQGFi21Luxb264pyagpTdO5c9t6e7L9hohgVIZaN+SpWcxLal39q4ds3u+EUz2n9v0r/c7m8BIPHoFYfM7NwsPWC29/Byuztz5is/9HWK/Soqal4fHpHQOBz6gdlTgn6oqGlM6ekVLdEZ9CgYAjJodDoUk0nLfW1p7G4jYK7TAOjQHy5l7xuVjdIj5k497s/kHnv33RDFBADH7xJznhTuHJGNvU8jIjqcmNRt84N35d4vTuRKJWOne4WiEMBgzF4SFT0BgKUCDMm1Z8aN6OVINEH+ip/gJtOGMKTTm9CV9R1+XT3CmQwiuptOQH3o7+CZN2gaTS6tblkBwOCa0JkBWWQMcoSAQw+T6ITc7y7fFipHVJfNZigchoRp9EadGYNGmLkOnIyZvkH7XOx0LfHx8UbLBjc1pLLv6hEHVz9vjGvvEc1Go2ASgSvnYOrxpJO/BqC9pWt1VnZeEgqLFcYuCd/hYEepu3r19gQALh6C/CmBPkcGujtmFpWUb8YT7aQ0W4/W+tqqeVw28XFs9OwJAK5de5gyPq6IdPdwzCKSMJ9+m7yr+/Njl/g1la37O7q753PsWdnhUSEH6hrqYqpr698z64zD8fNjNgkcVhZa3gIJwldt0ZqMh5EQNEjGoTYU3fru4dmzZ+F6NIOoMREDatqFi+sankfLh0VsPoeaunz+zMSNq1aJ3tx+3L+oouYSAANZ3m6cUzgsdq8DVq10cAl1v3Tj1qF+iSzajERp/2vLCYBBQgY/L8G1QH+XozidbbNY3zL9yZOSvWLRYKCnu8eFmLDwr1J/uAoOjSsyjDCkL5XBaJoa4J6PgSn1FDyyIipkyYPmZpJ8QHcPB9cj3fpFovCSisrlIrHQi8O2ebpmxaLP18ZFl/yZecDfAoBlCHTr/oNsIwRn+vh7pi9atOjr9oYOl3sPHm6VSPpnOHPtjk0J8j5dUd54QCQeWoBAo3QINFouGZQ4sGzpOVs2rd1hYiEahno0ASe/Tj2uUmn5HjzuDQ8vymeHPtw08Y5353d3uPk5xYlSychKFg1by2EQt6We+rxwW+Ipp46OrhNdXcJQEIBlh4aHv3l49wbZglXvkHul42fkBtQyFIYonuLNT+Q7Mnv1ZiPqcUHJQpFYsoqKQ/bTCZhtHEdOvt4IO1Re0xpnhoHSpQvCDxIRQD8KiVUyqMT2oxcu6cekqstwBCqUTCEOmAC9Ua1W0u1saDej58V8/tHK0N4EAIAtEIvRGKMRnZNbwcsrqgrr6Bn4CIKbTA525KOZ36fs/zUAbc3da7J+zP8KhcP2LVoWsd2BQZwAoEPYv9rVU/Bo6tSAffKBAVZhUVmCzoQh4UmOA729XT4OHEJObPTcnQaDSpFx80GKpQIIPJ0zGRTC9vh9H/SmfXo6qLW94/CgdGAKi22TvmTpvOSK6tpF1dWN7xs1hrFl8+dvYxOd72/aFGjyiFz3D5XecBCPRQ3YkAgb8y4fe2g5tNTdDUAlzc12BTV1/iUVZa+NSvoXuTnQMqNC5+zYuiGuc8uuEwG5JdWXTICJ6evueNqWQd07W2CnHDPZ8n9IvXZIPDIeRWbYipVqNdZs1EJ+Xh6XY8Ln7HMgjIsKGkQzHuc92zsgHgrw9fI+Fx0Sui897RrUPzySAUfhPewc7B9P8fe8gIc0SgICEC2PndMmkzENRAEAby/vJhWX1LnlP8tf3C/qf4PDpDcsiAlJ9OLRckNCQn6x1vJ7KsJfBiAhwQzq8bfs7+fkZJkgyNbbx/NC8KypKSYT2vaHS5e3i0XCpa481tmpfj5Hikur90uGZNE0G8YAgUjqbWxqmkWnEIpXxs/bheAzKuhqov2OpMNnjTpgOg2PL3Pi2r0dGRjY3QMAwMhIX0BZaVOCRDIUyrUh5XNsyJ+knthR/WHit65tHe3H2rt6wpBwKDt00aI3D2+N+xkAxRm5Eb0MicF3ctiM1VHhU5rlYyr0j7cyNyiVyu0UHHqASkBvY9gyC8wQKrn8eUscAEI9619b+gEK0HXC0Xid3mBUnLuYhdbIR9LRGEKwI8+hHo4yj3d3dQbi8Zh7c0LmfHZwy4qur9vvIVRFUlsmga3UGMyG+/ml3u294h8gs45gQ8V+/SD12Je/BqClrXtNVlbBV2gstm/xsujtDgzsTwD09KzmCzzuz5wxLcGolOsLnlUkDwzrg0C0jWFsbJjmwCbkxETO3gkzGBVXbmSnqFX6CG8ffjbTzjaBTSUOlFTXhQqFAwdUqjE204727WurFh8pqapeVlXRvM2gNGjnh0V86ebHvWbQqsFj31/9YFSt2k0lEftsqYRNu9bNy+nuHsWLxXI4aXqQVtY7Rsq4m7lhSNy/w41DfRg6I2C7kw22Ob9OGpBXXJlqMBqY/l7OpwWulL1zvb1V3WLA5ZuL6YeG5epInrvg+di4gigbljD4To63Qqb7fxkz3VF8Pa/mlZzcJ3slA0N+fj7e38VGLjiQlnoJ1TkguYXEkVx5fPfrfq5OKQyCfgxEwtROM7wVpgE1tr9bhMbRyMpBxSiUfyc/pqe39yjLhtodFjp7T8ym+LuesJ8O+fyRf38LAGb0dU523uNsIxxkeXp5XAkLiTghGhDz7t9/9L5E3Bfq4sg+GzTF/0hlSdU+ydBIJJ3BaMGRyE9bmlrW41CgxJPP3Rv/3o6bmpFm/KGUc0dHZYpYOAAMsm0ZyfOiI55p9BpkcXVVaFun6E3FmJLPY9G/dePZ7T+974PebYnnnFo72k50dvWEwuGwHxfGxb25990lI5YK0DM4/o2lAqBxxFYcFr286tre5vWJF5BlBfff0en1iWQCdoBBxm2j0i0AIJKrGzrijQAwsCx2/l4iCik0mswGIk7ffen8Y/WgfCQdgyXMdXZxfoohIOob656vRWOQDV5854TXUz4pKEtLsyt5WhrKZTt1LFqxoiXt6gOPouLyNCTciLK3Ix/L/u7A3v8EAJtKeX7jRvqXnd09q908PR5Mnzr1cyoaK3r0tPiD5q7B17VmHEmnV6O4bGJOZNSMnTCNWX7l5t0UrdoQ5cznFjpzOd+qlBptY2NzuEIx/ioEGU0ctk3KkqWR3ze0dCzKyy393KAxY7xdBWlhs0PP9Y8K8bfzHr89KJOtZNpQ2rhM2tvBLlOK+iWNUyQjo/Q5UbGVSBLLfPr8d28Lu1o/cneg34mc88qODze91rrpi2OBhcW1qWYYwPQXOJ2mUUgTFUALsFxOfJ+aMjyuDvf09y/Qm8xge0tDkC2NXDpjamBSYIxvWXPB82kPHz/dKxFJ/Hy9vL9bNj88+duL6QiRePgWHEN0c3B2fejt43QBCxkVNljUEN2W0dfe3u7a2y3iOds71ntPmSlKv3FtQW1NVYodndIZHT73q1kByx8EBcH+8PeT/zIAlmN3uw5fYd95mPej3mR24Lu73ps1a86lvp4+n9Ky8tWSQZGziwPzVMjsWccKi0r3SwaHI0lUUgUGS7wg7BUmASY1lUHBnlz7+rpkKkDT/vDg5hctbV0bVEodjmNnmxseMvuqCqbHFZZWLuzqFofCDEYUj2P30coV88+/ETtT+fonyTypePhUV48wBATNP8atXLlp96YFwyFL1pOkY/pv5AbEchyR3IxAY5Y/v7G3dfPms/Anjffe1xuMX9Ip+H4bKmkbkWr3BIQjkqubu1bozGZVxNxZNyzjfyQc1EEQIj/zzv02mXT8MhpNnOPozLtDo+FvV1dX7UFAgNHRnnsodvvac/337/vkPyn5iMt1KZ4yNfJxZX27R/7TJ19jUXCND5+TnHp4x/FfA9Da0rM6Mzvv50lwxA42g/H81vUriZ09XWvcPNxypgUG7WBhGc3VvV1RuU8rD46pAWcY3Ag4sEmPQ0Nm7sRC2OGL6RlH9BrjPBaH0eLq5JirkivxjY2NwRqtyp5Ow3e6OLK/nBkedXt4oD362o17B/QakMOk2lVGh4edFg2LbZ/WVK8SjQz7cjk2VXwX+/cdAaBxaEy2YWhs3GPKzNnpWixV9TCn4K2OloaVbg6215fOn/3F2yuXdlvmAMWVVZcgCMnyceN+w0QikrBYtZLrFcn/9sKlFOnYeKjv1ClZFDpj5FlebhwGAodmTAtInuNBTW0eNk95nPdsj6hfHOgtcD+3InZe8qnz6TCpZDjDCGG87Ry5z308nQtwoFFDJWFbaFTboqaG2nCxSDyHy3W958DlV5ZVlS6prKr42I5GbliyIPKLTWtjC/7M0ci/BYD939x2uJl9P0Oh0fDJZFITFocth5lBe+nQyBSdXg3xuKyUWd6C88VV9YekQ8NRJAqhzIblcLCzo/tzxYh0Op2Cy57m550YOde79VJO/ZLmpuatMpncF4vBCak0aqkJAlGDIzK/cbnSkYIntDhx2Z999vqnOYGBgGHDtv08sXTkdI9QFAKDwX5ctXTl5u1bYoYsAAyOac4o9YileAK5EYPAxJdnHmiNj09ENA1U/UNnMCXSyQQhjUj6kGhj9wQGR6XUNHXEqbQ60InDeo6EQBUaBWlwRExqd7coX9w7kIZEE+c4OTtlMB2Y5xpqa79UjMv4LKZN2oLFMYdLi/ICO9o7d6GQRCEcSa7Tm5AsoUQUT8Qiu2cEeH516st3r/7WJDgjKzcJjcEIFy9b8BmPSqlLv34psaevZ627h3uOb6DXDgEDV1fTDXjnFpYdGBgeDwEgE+jAJuWGhc7eiYLhRlIv3zyiUuvnk8n4ISKe0G7QGrBjsiFXM0wPY9pRH3oJnA4I5r1SpWwR+l+5nH1cqTD4YSDcIJPByjcAOlKfTDplVKOk8nis+1O83HbYoJSjZSWNO+Rq7VQ4hlKihqE0cqV67ujIgLcTk/7tq2HhezdujJVutrwFqqxKQyAhlhef9w2TzU4K4r2hUoLFrmfOfZ8yolCF+k2bdpXNdax+/ODOe2atmuTE5aTFr1q2p72pyyO/4OkekUgc4Onhfj52Ycz+c99dAqVDoxl6GOSLo1EHaGRiJxrUGZgMRjnfiXujuLQoTj6qiMZhybUanbFLb9L7jwxLQhhU8qNVr8btWh8X1vS/Ngn++uw93uUfM6+PyOXeJrNJBwNgShgIR5hMJiwOj+134nGTHJ1Zt1srmo4PyUaiSSRCedDsadtryxrf7ulsX21rOdrmxtstcKE9aB8DHBqbW7YLhQNLtDoAYwbgKsu5Ur3JgEHCEUZPN5dr0wO9Dn7yRmyrxeCVWxOcRqSK07394hA4HLqzbNmizYBkyVB+zXri8JjirFKPWILDk+tQSORrFVnHWmK2HEeJqnM/0JuMCVQCUUgjET7E2zILQBB9uLqxbfmYUoXHQnA1HDCbMFikikzF79PpgXRxj/ASCk2c68J3vcHjqMyIjQAADk9JREFUOx7ubu/+sK21KdaGQSuIXRSz79GjO34SycinWo0ZD4J4lRFEoDQ6LYlEQhctjA7flfju0me/BqCzuXPVzcwHe1BYbO/yuNhPHSjYhvRrVxP6+vvWebi7PfLz8di5c+ummoSD1+zKm5s/b2rvfR0ADSgOi5QTHjJzJwKOlV26fPewXK6KRWMgA2ACNGYDCEJwEwKLBYY5HPqZxdHzTvU2Ph62FQiYV6/nnpBKFRFGNQyBgKMUcAgGKkxarB5uUrs5O16MnvvKQfP4CC773r39Kq0pVGtGanVwlMlgNOPhgE7PpJEOzVsw7dhHa9aoLQAUV5SnQRDI8nJz/oZMp+05vnuL6sLNfJfTZ8+njKo1oQHTpqXy+W43Hz6484VCNuxHI+KLNm/YuKWtU8gsKCz6SiyeAOCHqKiQpKvn08HeYfltHQD3A1AoAwgYNSiYAXBis/K8Pd1P5ublrtPq9PNREM5gNJt1WoMaA5qNSBqZ+P2RxC8+9/fn/eLI6e+dB/wtFeDo6TuOV368eVUml/uZYABoWW+FIKSGQCAOEUnEEjaLfYJJJ1U1Pa/7Wjo0FEMmE4tfmTtzW319x/Lu5tZtBBSocXXkHvXgO12AMxCm0vLmFSLJ8CqJdGyKSm3AmEEQhkShxqkUUq2vh/vF4NCpt1eGBE3sEXo74YhTZ2ffiZ5uYRgcDmWvWrP6bZf1MSOnlqwnjI6Nn1IbEMtwOGItAoKtKsn+pj0x8QIqMyfjXYPRkEjCE/oZVOKHHA/vJ2PDikPVjS3xSrWGiIDBzCajAYbBIuQUCinRhki5VN/YdAFCoINdXPjX3fmCvV3izviG+rotWAxa5OvreVStV2h7u0XvDg/KA01mFMoIgACEQQ7a2pCvLggOObF1Q1THy0+oic1w7R0rb2U+TEIh0X3L4xZ8yqIQG25cv/qFsF+4xs3NNcffS/D5Zx++VZuQcA1fJ+lc19rR+YlCNcay51AexcTM3QnoKeNXr98+JB9TLwAhS++gAYPGK3EYSIZBA5U2DPzF9FOJOZYzvecyM/HZWYXvSSQjq4aHFO6AAYSDIAyAoeAqHBXf6MyzP7NsdcT1gepmwsOcvI+GZYqVMpWebgRRMDgSoaEQcc+ZDFqyT5hP1u64OMPmT/b6FZdVpSEgiCXgu55mOfL2HPjkDQsArt+eO588opAH+wYFXQgMCDqfX5D/dn9n23I8CtkfGOC5k0jiqItLy3aLJRI/by+Pi/NCQ/akpd0EewcHb+nhKH8DCMLNJj2AMOsAJ3tObmBAwMGKipIZ8nHVao3S4GAymxBmmMGAx6HbbKm0IykJR394oRzxexP/Rbu/DIDlLRBEv2x/+3b2xTG12heBhGAmvR5CY/Bjjk68Zjs2M5PP5d4UDreNdFR1pQwODkZQaeQiZ2/Pj4Yl8uC+zq5dRqWS5sZzuBoocD8qCOCJn9Z3e/QNSFZWVDWslI1p6JYD72QKsV/g5notyMvzivssfqtlA5RlG8b2/ad5tY1tB9s7u0LhcDD71VXLP9y96TVZRHw8XjZsOKQzIpdiscTncAC2sfDuma4jR66j0m58v95gMn9OxBPEFAppB9fTt2hUOvpVTWNLnN5gJCLgoEmn0YBoDFxGY1D30HDUm21tzSdMADzY2dnplm+Q/1ctjS1Tm5pbvoIBJjTHgZUaGhX6qLyw4tXGxo5lej2MqjcCBqoNtcHP3/PYrKk+d1fFTBt/GYBreXn49uc9cTdv5yRAECSKXTbvCycmueFG+o1Pu3p7XnVzc8kP8PP/6uN/bKy3aBLdfnZwTmdvd5J4oM/LwZ72aP688EQMQNKkXb+TJB9TxwAwwIyAozQ2NiwJhYzpsWEQbwJI0/2Tu98ZtIyNz5w5g+hWgq/U17W+29HaG6nXmtFmkxkgUPBDfA+Xe54+7t+ROZjnOLEeWdvSsLS2qel9sXSUbwIRcAKRIHNx5v3o5+Xz9Y63lljOEgObtib6FJeVn0ej0HYefJezBCYm+eTu3arLPz5xPvft+T2iYeksT3+/i3PDQr9rqK6eV1FY9A8kHICxOXan+M5+9aWVFZ9KBqUCH2+v1LDo2UdSL14DB0XDP5hRWH+tGUCazXoAbtQBXDarYO7s2fsMJj22qqrmva5O4StGoxGHwsDVLDvbRwG+noeTPnmr4s+M/y12/GUALEn49fl79NT0i2/L1SpHNBoFGHR6OBZLUAg8BT1uHm6FkX7Tqw8c+IdBi7RZPSSV+tJolBYPP6dUqVjtKuwRxWnlY3QXB075VIHL7bc+ekt651kdubi8bFbO42dRSpWBYQbhcCKJ0BcU4P1ofsis4qjpgtEXWjk7j31n87ymaVVLa6cnhDBXrngz7tLuVasUM+LjUcCoca3WiJqGwRC60ETM2ZzLR4euX2+Ep5z4KFhvNC/FY7GjNCo53XGaV+twx3h8bUvrK0ajGYeCQJNSoYKh0ZDClkHKoNuyy9ob6t/Q60GBs5NjaaBH0I1aYR2nrbV9rVFvJLLYzMJ33tn89HbWnWm1VQ0hJjOCodUbdTQGuSUiam5GlH9sk2W+8jIAeXld6PKm4mm3bt2NB+EI2fxFEdccHYjC25cyF/X0C2fy+S71Qd5TMj74YF2vxcevf5Ls1NsrXNXV08mzZ1FrFy+YdxNEIA03rj1eIR9TWiqvGYVA6dgs3gidjhf7ePOe+DnOqw8J+ekcgqWP64+LWbcy7y1saeiabjKABJPeaMQRcNKgqd5FMaGhOfOCBYMWsbGnlW3+TwqLF0llchcYHInE4nBST2/3J7FLFj5YEMgftvS38aNdDmXF1e+gMWiyO5+fA7dFZ5/fvVt7/W657dlvv3lVNCRxFwT45kdEROT0dnQIcu7eXQIHABSdTs/z8AlorSirih0clLJ9vL2ezZsfeef7c9+CAwOKdyAMnqc2mRAAaAQAvdrsYMdqnBsSnOHq5mS4dT1jfmtLpx8Ig5EgJGzcwYFZvGhpbNbqqNkDf2b8/7cBUFzch96d8jlnWKnF4JAIQKHVwrB4osHHVaC2dXMc2f36YnliYiLQ0DnGlMtGyDZce1VoYJg4p6oAKRuU2oGAAcPl2I8yCHxxQkK87syZCsSw9jn5cWmVHZ1hS4OQGIRSrRrkMDkir0if0c2BgQbgJzU38Ot79xAlj8rYzU2deCQAyk8kvdcfFBSkj4uLg2vQJAeDHkM2GaFxvh1PePz4FmNiImAqLY2nKWGAHR7AaCEIEmdmnlO++elBVmNDFxlAgBDWZIINyKRGCh5t4NjbDbqxCKNPakRcUAdgmS5OY87UaaJBoBHdWFfOMQIQ0oXrKHtz+bqhSw+zSH2dHUw6zZ42rlRqlBrD4LJl4eI3Ymf+QtXO4niLLlCfHCDlPHjCNgFwXUh0qIhsGNAUVjfbDIoGaI5OXPmMgBDpmjWRE5sBPz50CNPROsJu62xFE0nksciFsyTUcVvz3aKHTLlGRzZqzCY8EgmwOI56HBGt9ue5yDZtCpe/nBjn8/LQpQUldlKR3JZKoFEVY2qtWqUe4QncpBEBjCHLjtWJnbdfpxEaygqZGKodC4MloMYU8iE6nSaaIwgdio/3nHjXHrd1K6arpsMBjyUhHLl2Q442uMGEhATT8bt3UY/O32WJx6Q4wRRv2QLfJdKqoRpc0Z0sOzgaBDEgZdgriKusrO1mDIkHMdP9Zo76u88ZrKw8C9R2KRwxODJOCzfBzGYTTKPRmdhkitzD318y111gTs+/z1BJ5bYMhg1FrpKN4bEY8bKwFQPz5rn+YqftHxkG/S0V4GcpvN9U5/otib78/AnFNSAkBDBaDn8DAGCRyfunXN8LA/LMZojWO0Yw6NQQAbCTu7j8UonthSalZeXy52smZBJfkmO0yA6+UEuz/A20aOy8JCc4IT34Qo/S0ofl3ixSij+roE3859fSiS+rruUDAGiR83uhetbW1oYyGGzxEETQu7gAyp9Vz35TJ/RlWcNfSRVa/PHi/MDLfn1h5z8lE1/q4+W4T0gY/hvpRrgYAFB9jd1EHADpkEiO0sUF0P9WnBr75GSTXoOgoW3GmUxA/eun7H+n2/pidPEru35xTy9f/1IMwPz/isNPIZjwwcsSkLBKsRiNUBHwDGe8gglMqOn9aVW4v6UC/BZtv0fg1GLXT6X5//bwWw4+e7YSmjULAxMIBC8k/363IOrE08zyAfd/46QXYq0vaW7+nFiWe/v3wqu/AOifs6mf2lv6qgQA+Hg+YA4O/leo/93T6dc++1mrdCL4L1/z+3z7T43RfxEhfnHvjQAAV1cC5sDACVnKF3KIvxAurqgwIzAYACYQ/CQf+XJ8XvKdJan/bUxetPvv7P7l9RYxlZ9b/1zlX7p2Qq/V0zMOLhD8UwLyd+fDb93DX64Af6Tc/JW2L572f3as99/99gsNzT/yNLFc85/a/6fg/0Zi/7NS/Czg+2/VmH+PH/7I77+A9z/Z9OKe/y4A/lNOvKRvOnGLv8fu/9Tny3//fwaAP2LU/xdtLd83+J0S8v9f2PsrI/4ovH/WB1YA/qznrNf9j3rACsD/qHutnVs98JMHrBXAmgmT2gNWACZ1+K3GWwGw5sCk9oAVgEkdfqvxVgCsOTCpPWAFYFKH32q8FQBrDkxqD1gBmNThtxpvBcCaA5PaA1YAJnX4rcZbAbDmwKT2gBWASR1+q/FWAKw5MKk9YAVgUoffarwVAGsOTGoPWAGY1OG3Gm8FwJoDk9oDVgAmdfitxlsBsObApPaAFYBJHX6r8VYArDkwqT1gBWBSh99qvBUAaw5Mag9YAZjU4bcabwXAmgOT2gNWACZ1+K3GWwGw5sCk9oAVgEkdfqvxVgCsOTCpPWAFYFKH32q8FQBrDkxqD1gBmNThtxr/fwD4a1fNE1PNwAAAAABJRU5ErkJggg=='
+          const imageId = workbook.addImage({
+            base64: myBase64Image,
+            extension: 'png'
+          })
+
+          worksheet.addImage(imageId, {
+            tl: { col: 0, row: PageStart - 1 },
+            ext: { width: 100, height: 50 },
+            offset: { x: 200, y: 100 }
+          })
+
+          worksheet.mergeCells(`A${PageStart}:J${PageStart}`)
+          worksheet.getCell(`A${PageStart}`).value = 'TAX INVOICE'
+
+          worksheet.getCell(`A${PageStart}`).font = {
+            bold: true,
+            size: 60
+          }
+          worksheet.getRow(`${PageStart}`).height = 50
+
+          worksheet.getCell(`A${PageStart}`).border = {
+            right: { style: 'medium' },
+            left: { style: 'medium' },
+            top: { style: 'medium' },
+            bottom: { style: 'mediumDashDot' }
+          }
+          worksheet.getCell(`A${PageStart}`).alignment = {
+            vertical: 'middle',
+            horizontal: 'center',
+            wrapText: true,
+            shrinkToFit: true
+          }
+          // InvoiceTitle(worksheet, PageStart, 'TAX INVOICE', workbook)
+          // CompanyDetails(worksheet, PageStart)
+          worksheet.mergeCells(`A${PageStart + 1}:B${PageStart + 1}`)
+          worksheet.getCell(`A${PageStart + 1}`).value = {
+            richText: [
+              { text: 'BROTHERS INDUSTRIES', font: { bold: true, size: 45 } }
+            ]
+          }
+          worksheet.getCell(`A${PageStart + 1}`).alignment = {
+            indent: 1
+          }
+          worksheet.getCell(`A${PageStart + 1}`).border = {
+            right: { style: 'mediumDashDot' },
+            left: { style: 'medium' }
+          }
+          worksheet.getRow(PageStart + 1).height = 50
+
+          worksheet.mergeCells(`B${PageStart + 2}:B${PageStart + 6}`)
+          worksheet.getCell(`B${PageStart + 2}`).border = {
+            right: { style: 'mediumDashDot' },
+            bottom: { style: 'mediumDashDot' }
+          }
+          worksheet.mergeCells(`A${PageStart + 2}:A${PageStart + 6}`)
+
+          worksheet.getRow(PageStart + 6).height = 80
+          worksheet.getCell(`A${PageStart + 2}`).value = {
+            richText: [
+              {
+                text: 'GAT NO.882 ,KIRLOSKARWADI ROAD, SAWANTPUR,\n',
+                font: { size: 18 }
+              },
+              { text: 'MAHARASHTRA, INDIA\n', font: { size: 18 } },
+              {
+                text: 'PHONE: +91) 7588777800, 9764705724\n',
+                font: { size: 18 }
+              },
+              {
+                text: 'EMAIL: brothersindustries07@gmail.com\n',
+                font: { size: 18 }
+              },
+              { text: 'WEBSITE: www.brothers.net.in', font: { size: 18 } }
+            ]
+          }
+
+          worksheet.getCell(`A${PageStart + 2}`).border = {
+            left: { style: 'medium' },
+            bottom: { style: 'mediumDashDot' }
+          }
+
+          worksheet.getCell(`A${PageStart + 2}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+
+          // InvoiceNumber(worksheet, PageStart, data?.invoice_no)
+          worksheet.mergeCells(`C${PageStart + 1}:F${PageStart + 1}`)
+          worksheet.getCell(`C${PageStart + 1}`).value = {
+            richText: [
+              { text: 'INVOICE NO - ', font: { size: 18 } }, // Normal text
+              { text: data?.invoice_no, font: { bold: true, size: 19 } } // Bold invoice number
+            ]
+          }
+          worksheet.getCell(`C${PageStart + 1}`).border = {
+            right: { style: 'mediumDashDot' },
+            bottom: { style: 'mediumDashDot' }
+          }
+          worksheet.getCell(`C${PageStart + 1}`).alignment = {
+            vertical: 'middle',
+            horizontal: 'center',
+            wrapText: true,
+            shrinkToFit: true
+          }
+
+          // InvoiceDate(worksheet, PageStart, data?.invoice_date)
+
+          worksheet.mergeCells(`G${PageStart + 1}:J${PageStart + 1}`)
+          worksheet.getCell(`G${PageStart + 1}`).value = {
+            richText: [
+              { text: 'INVOICE Date - ', font: { size: 18 } }, // Normal text
+              { text: data?.invoice_date, font: { bold: true, size: 15 } } // Bold invoice number
+            ]
+          }
+          worksheet.getCell(`G${PageStart + 1}`).border = {
+            right: { style: 'medium' },
+            bottom: { style: 'mediumDashDot' }
+          }
+          worksheet.getCell(`G${PageStart + 1}`).alignment = {
+            vertical: 'middle',
+            horizontal: 'center',
+            wrapText: true,
+            shrinkToFit: true
+          }
+
+          // BuyerOrderDetails(worksheet, PageStart, data)
+          console.log('BuyerOrderDetails')
+          const POLists = dispatchList(data?.DispatchLocations)?.map((item) =>
+            String(item?.Po?.number)
+          )
+          const POInvoice = Array.from(new Set(POLists))
+          worksheet.getRow(PageStart + 2).height = 20
+          worksheet.mergeCells(`C${PageStart + 2}:J${PageStart + 2}`)
+          worksheet.getCell(`C${PageStart + 2}`).value = {
+            richText: [
+              { text: 'BUYER ORDER NO', font: { bold: true, size: 18 } }
+            ]
+          }
+          worksheet.getCell(`C${PageStart + 2}`).alignment = {
+            vertical: 'center',
+            horizontal: 'center',
+            wrapText: true,
+            shrinkToFit: true
+          }
+          worksheet.getCell(`C${PageStart + 2}`).border = {
+            right: { style: 'medium' },
+            bottom: { style: 'mediumDashDot' }
+          }
+          worksheet.mergeCells(`C${PageStart + 3}:C${PageStart + 6}`)
+          worksheet.mergeCells(`D${PageStart + 3}:D${PageStart + 6}`)
+          worksheet.mergeCells(`E${PageStart + 3}:E${PageStart + 6}`)
+          worksheet.mergeCells(`F${PageStart + 3}:F${PageStart + 6}`)
+          worksheet.mergeCells(`G${PageStart + 3}:G${PageStart + 6}`)
+          worksheet.mergeCells(`H${PageStart + 3}:H${PageStart + 6}`)
+          worksheet.mergeCells(`I${PageStart + 3}:I${PageStart + 6}`)
+          worksheet.mergeCells(`J${PageStart + 3}:J${PageStart + 6}`)
+          let arr = [
+            `C${PageStart + 3}`,
+            `D${PageStart + 3}`,
+            `E${PageStart + 3}`,
+            `F${PageStart + 3}`,
+            `G${PageStart + 3}`,
+            `H${PageStart + 3}`,
+            `I${PageStart + 3}`,
+            `J${PageStart + 3}`
+          ]
+
+          arr.forEach((order, index) => {
+            worksheet.getCell(`${order}`).border = {
+              right: {
+                style: `${
+                  arr.length - 1 === index ? 'medium' : 'mediumDashDot'
+                }`
+              },
+              bottom: { style: 'mediumDashDot' }
+            }
+          })
+
+          POInvoice.forEach((order, index) => {
+            if (index < arr.length) {
+              worksheet.getCell(`${arr[index]}`).value = {
+                richText: [
+                  { text: `${index + 1}: `, font: { size: 16 } },
+                  { text: `${order}`, font: { bold: true, size: 16 } }
+                ]
+              }
+
+              worksheet.getCell(`${arr[index]}`).alignment = {
+                vertical: 'middle',
+                horizontal: 'left',
+                wrapText: true
+              }
+            }
+          })
+
+          // ConsigneeDetails(worksheet, PageStart, data)
+          console.log('ConsigneeDetails')
+          worksheet.getRow(PageStart + 8).height = 120
+          worksheet.mergeCells(`A${PageStart + 7}:B${PageStart + 7}`)
+          worksheet.getCell(`A${PageStart + 7}`).value = `CONSIGNEE`
+          worksheet.getCell(`A${PageStart + 7}`).alignment = {
+            vertical: 'top',
+            horizontal: 'center',
+            wrapText: true,
+            shrinkToFit: true
+          }
+          worksheet.getCell(`A${PageStart + 7}`).font = {
+            bold: true,
+            size: 15
+          }
+          worksheet.getCell(`A${PageStart + 7}`).border = {
+            right: { style: 'mediumDashDot' },
+            left: { style: 'medium' }
+          }
+
+          worksheet.mergeCells(`A${PageStart + 8}:B${PageStart + 8}`)
+          const richText2 = [
+            {
+              text: (data?.DispatchConsignee?.name || '') + '\n',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchConsignee?.DispatchConsigneeAddress?.address ||
+                  '') + ', ',
+              font: { size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchConsignee?.DispatchConsigneeAddress?.country ||
+                  '') + ', ',
+              font: { size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchConsignee?.DispatchConsigneeAddress?.zip_code ||
+                  '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'EMAIL - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: data?.DispatchConsignee?.email || '',
+              font: { size: 15 }
+            }
+          ]
+
+          worksheet.getCell(`A${PageStart + 8}`).value = { richText: richText2 }
+
+          // Set alignment and wrapping
+          worksheet.getCell(`A${PageStart + 8}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+          worksheet.getCell(`A${PageStart + 8}`).border = {
+            left: { style: 'medium' },
+            right: { style: 'mediumDashDot' },
+            bottom: { style: 'mediumDashDot' }
+          }
+
+          // BuyerDetails(worksheet, PageStart, data)
+          console.log('BuyerDetails')
+          worksheet.mergeCells(`C${PageStart + 7}:F${PageStart + 7}`)
+          worksheet.getCell(`C${PageStart + 7}`).value = `BUYER`
+          worksheet.getCell(`C${PageStart + 7}`).font = { size: 15, bold: true }
+          worksheet.getCell(`C${PageStart + 7}`).alignment = {
+            vertical: 'top',
+            horizontal: 'center',
+            wrapText: true,
+            shrinkToFit: true
+          }
+          worksheet.getCell(`C${PageStart + 7}`).border = {
+            right: { style: 'mediumDashDot' },
+            left: { style: 'medium' }
+          }
+
+          worksheet.mergeCells(`C${PageStart + 8}:F${PageStart + 8}`)
+          const richText3 = [
+            {
+              text: (data?.DispatchBuyer?.name || '') + '\n',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchShippingAddress?.address || '') + ', ',
+              font: { size: 15 }
+            },
+            {
+              text: (data?.DispatchShippingAddress?.country || '') + ', ',
+              font: { size: 15 }
+            },
+            {
+              text: (data?.DispatchShippingAddress?.zip_code || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'CONTACT NAME - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingAddress?.contact_person || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'CONTACT - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: data?.DispatchShippingAddress?.contact_phone || '',
+              font: { size: 15 }
+            }
+          ]
+          worksheet.getCell(`C${PageStart + 8}`).value = { richText: richText3 }
+          worksheet.getCell(`C${PageStart + 8}`).border = {
+            right: { style: 'mediumDashDot' },
+            bottom: { style: 'mediumDashDot' }
+          }
+          worksheet.getCell(`C${PageStart + 8}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+
+          // GSTandOtherDetails(worksheet, PageStart, data)
+          worksheet.mergeCells(`G${PageStart + 7}:J${PageStart + 7}`)
+          worksheet.getCell(`G${PageStart + 7}`).value = ``
+          worksheet.getCell(`G${PageStart + 7}`).alignment = {
+            vertical: 'top',
+            horizontal: 'center',
+            wrapText: true,
+            shrinkToFit: true
+          }
+          worksheet.getCell(`G${PageStart + 7}`).border = {
+            right: { style: 'medium' }
+          }
+
+          const richText4 = [
+            {
+              text: 'IEC CODE -',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchCompanyDetail?.iec_code || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'GSTIN - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchCompanyDetail?.gstin || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'END USE CODE - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingAndOtherDetail?.end_use_code || '') +
+                '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'PAYMENT - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: data?.DispatchShippingAndOtherDetail?.payment_term || '',
+              font: { size: 15 }
+            }
+          ]
+          worksheet.mergeCells(`G${PageStart + 8}:J${PageStart + 8}`)
+          worksheet.getCell(`G${PageStart + 8}`).value = { richText: richText4 }
+          worksheet.getCell(`G${PageStart + 8}`).border = {
+            bottom: { style: 'mediumDashDot' },
+            right: { style: 'medium' }
+          }
+          worksheet.getCell(`G${PageStart + 8}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+
+          // PortDetails(worksheet, PageStart, data)
+          worksheet.getRow(PageStart + 9).height = 125
+          worksheet.mergeCells(`A${PageStart + 9}:B${PageStart + 9}`)
+          const richText5 = [
+            {
+              text: 'PRE-CARRIEGE BY -',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingDetail?.pre_carriage_by || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'PLACE OF RECEIPT - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingDetail?.place_of_receipt || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'VESSEL / FLIGHT NO - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: 'GNX 200\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'PORT OF DISCHARGE - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingDetail?.port_of_discharge || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'NOTIFY - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: 'BUYER/APPLICANT MENTIONED ABOVE',
+              font: { size: 15 }
+            }
+          ]
+          worksheet.getCell(`A${PageStart + 9}`).value = { richText: richText5 }
+          worksheet.getCell(`A${PageStart + 9}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+          worksheet.getCell(`A${PageStart + 9}`).border = {
+            right: { style: 'mediumDashDot' },
+            left: { style: 'medium' },
+            bottom: { style: 'medium' }
+          }
+
+          // DestinationDetails(worksheet, PageStart, data)
+          worksheet.mergeCells(`C${PageStart + 9}:F${PageStart + 9}`)
+          const richText6 = [
+            {
+              text: 'COUNTRY OF ORIGIN OF GOODS -',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingDetail?.country_of_goods || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'COUNTRY OF FINAL DESTINATION - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchShippingDetail?.destination || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'PORT OF LOADING - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingDetail?.port_of_loading || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'FINAL DESTINATION - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingDetail?.final_destination || '') + '\n',
+              font: { size: 15 }
+            }
+          ]
+          worksheet.getCell(`C${PageStart + 9}`).value = { richText: richText6 }
+          worksheet.getCell(`C${PageStart + 9}`).border = {
+            bottom: { style: 'medium' },
+            right: { style: 'mediumDashDot' }
+          }
+          worksheet.getCell(`C${PageStart + 9}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+
+          // BoxDetails(worksheet, PageStart, data)
+          worksheet.mergeCells(`G${PageStart + 9}:J${PageStart + 9}`)
+          let richText = []
+
+          data?.DispatchBoxLists.forEach((box) => {
+            richText.push({
+              text: `BOX NO ${box.box_no}`,
+              font: { bold: true, size: 12 }
+            })
+            richText.push({
+              text: ` - (${box.box_height}X${box.box_breadth}X${
+                box.box_length
+              }) ${box.box_size_type.toUpperCase()}-(${Number(
+                box.tare_weight
+              ).toFixed(3)} Kg)\n`,
+              font: { size: 12 }
+            })
+          })
+
+          worksheet.getCell(`G${PageStart + 9}`).value = { richText }
+          worksheet.getCell(`G${PageStart + 9}`).border = {
+            bottom: { style: 'medium' },
+            right: { style: 'medium' }
+          }
+          worksheet.getCell(`G${PageStart + 9}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+
+          // LastRowNumber = TableData(
+          //   worksheet,
+          //   data,
+          //   DispatchLists?.slice(i * 8, i * 8 + 8)
+          // )
+          const headerRow = worksheet.addRow([
+            'PROJECT NO',
+            'PO & SERIAL NO',
+            'DELIVERY DATE',
+            'PRODUCT NAME',
+            'ITEM CODE',
+            'HSN CODE',
+            'BOX NO',
+            'QUANTITY',
+            'RATE (INR)',
+            'TOTAL (INR)'
+          ])
+
+          const boldLargeStyle = { bold: true, size: 15 }
+
+          headerRow.eachCell((cell) => {
+            cell.border = {
+              left: { style: 'medium' },
+              right: { style: 'medium' },
+              top: { style: 'medium' },
+              bottom: { style: 'medium' }
+            }
+            cell.font = boldLargeStyle
+            cell.alignment = {
+              vertical: 'middle',
+              horizontal: 'center',
+              wrapText: true
+            }
+          })
+
+          const itemStyle = { size: 15 }
+          const itemAlignment = {
+            vertical: 'middle',
+            horizontal: 'left',
+            wrapText: true
+          }
+          const borderStyle = {
+            left: { style: 'medium' },
+            right: { style: 'medium' },
+            top: { style: 'medium' },
+            bottom: { style: 'medium' }
+          }
+
+          const findBox = (boxArray = [], searchKey, searchValue) => {
+            const foundObject = boxArray.find(
+              (obj) => obj[searchKey] === searchValue
+            )
+            return foundObject
+          }
+
+          DispatchLists?.slice(i * 8, i * 8 + 8).forEach((item) => {
+            const row = worksheet.addRow([
+              item?.PoList?.project_no,
+              item?.Po?.number + '-' + item?.PoList?.serial_number,
+              dayjs(item?.PoList?.delivery_date).format('DD-MMM-YYYY'),
+              item?.item_name,
+              item?.item_code,
+              item?.hsn_code,
+              findBox(
+                data.DispatchBoxLists,
+                'dispatch_box_list_id',
+                item?.dispatch_box_id
+              )?.box_no,
+              item?.item_quantity,
+              (
+                Number(item?.PoList?.unit_price) *
+                Number(data?.DispatchShippingAndOtherDetail?.convert_rate)
+              ).toFixed(2),
+              (
+                (
+                  Number(item?.PoList?.unit_price) *
+                  Number(data?.DispatchShippingAndOtherDetail?.convert_rate)
+                )?.toFixed(2) * parseInt(item?.item_quantity)
+              ).toFixed(2)
+            ])
+
+            row.eachCell((cell, index) => {
+              cell.font = itemStyle
+              cell.alignment = itemAlignment
+              cell.border = borderStyle
+            })
+            //last row count
+            LastRowNumber = row.number
+          })
+
+          //FOOTER
+          const footerStyle = { size: 15 }
+          const footerAlignment = {
+            vertical: 'top',
+            horizontal: 'center',
+            wrapText: true
+          }
+          const footerBorderStyle = {
+            left: { style: 'medium' },
+            right: { style: 'medium' },
+            top: { style: 'medium' },
+            bottom: { style: 'medium' }
+          }
+
+          const {
+            bill_type,
+            i_gst = 0,
+            convert_rate
+          } = data?.DispatchShippingAndOtherDetail
+          const GST_RATE = bill_type === 'NON GST' ? 0 : i_gst
+          const pageQuantity = InvoiceQuantity(
             DispatchLists?.slice(i * 8, i * 8 + 8)
           )
-          WeightDetails(worksheet, LastRowNumber)
-          ShippingDetails(worksheet, LastRowNumber)
-          PageStart = BankDetails(worksheet, LastRowNumber)
+          const totalQuantity = InvoiceQuantity(
+            dispatchList(data?.DispatchLocations)
+          )
+          const totalAmount = InvoiceTotal(
+            dispatchList(data?.DispatchLocations),
+            convert_rate
+          )
+          const pageAmount = InvoiceTotal(
+            DispatchLists?.slice(i * 8, i * 8 + 8),
+            convert_rate
+          )
+          const GSTAmount = Number(totalAmount * (GST_RATE / 100)).toFixed(2)
+          const GrandTotal = Number(totalAmount) + parseFloat(GSTAmount)
+
+          worksheet.mergeCells(`A${LastRowNumber + 1}:B${LastRowNumber + 1}`)
+          worksheet.getCell(`A${LastRowNumber + 1}`).value = `1 USD = ${Number(
+            convert_rate
+          ).toFixed(2)} INR`
+
+          worksheet.getCell(`A${LastRowNumber + 1}`).font = footerStyle
+          worksheet.getCell(`A${LastRowNumber + 1}`).alignment = footerAlignment
+          worksheet.getCell(`A${LastRowNumber + 1}`).border = footerBorderStyle
+
+          // TOTAL Page 1
+
+          worksheet.mergeCells(`F${LastRowNumber + 1}:G${LastRowNumber + 1}`)
+          worksheet.getCell(
+            `F${LastRowNumber + 1}`
+          ).value = `TOTAL(page {${1}})`
+          worksheet.getCell(`F${LastRowNumber + 1}`).font = footerStyle
+          worksheet.getCell(`F${LastRowNumber + 1}`).alignment = footerAlignment
+          worksheet.getCell(`F${LastRowNumber + 1}`).border = footerBorderStyle
+
+          //TOTAL QUNTITY PAGE 1
+          worksheet.getCell(`H${LastRowNumber + 1}`).value = pageQuantity
+          worksheet.getCell(`H${LastRowNumber + 1}`).font = footerStyle
+          worksheet.getCell(`H${LastRowNumber + 1}`).alignment = footerAlignment
+          worksheet.getCell(`H${LastRowNumber + 1}`).border = footerBorderStyle
+
+          //TOTAL AMOUNT PAGE 1
+          worksheet.getCell(`J${LastRowNumber + 1}`).value = FormatLakhStyle(
+            pageAmount.toFixed(2)
+          )
+
+          worksheet.getCell(`J${LastRowNumber + 1}`).font = footerStyle
+          worksheet.getCell(`J${LastRowNumber + 1}`).alignment = footerAlignment
+          worksheet.getCell(`J${LastRowNumber + 1}`).border = footerBorderStyle
+
+          //TOTAL PAGE 1 TO 1
+          worksheet.mergeCells(`E${LastRowNumber + 2}:G${LastRowNumber + 2}`)
+          worksheet.getCell(
+            `E${LastRowNumber + 2}`
+          ).value = `Total (page 1 to {${1}})`
+          worksheet.getCell(`E${LastRowNumber + 2}`).font = footerStyle
+          worksheet.getCell(`E${LastRowNumber + 2}`).alignment = footerAlignment
+          worksheet.getCell(`E${LastRowNumber + 2}`).border = footerBorderStyle
+
+          //TOTAL QUANTITY PAGE 1 to 9
+          worksheet.getCell(`H${LastRowNumber + 2}`).value = totalQuantity
+          worksheet.getCell(`H${LastRowNumber + 2}`).font = footerStyle
+          worksheet.getCell(`H${LastRowNumber + 2}`).alignment = footerAlignment
+          worksheet.getCell(`H${LastRowNumber + 2}`).border = footerBorderStyle
+
+          //TOTAL AMOUNT PAGE 1 TO 0
+          worksheet.getCell(`J${LastRowNumber + 2}`).value = FormatLakhStyle(
+            totalAmount.toFixed(2)
+          )
+          console.log(totalAmount, typeof totalAmount)
+          worksheet.getCell(`J${LastRowNumber + 2}`).font = footerStyle
+          worksheet.getCell(`J${LastRowNumber + 2}`).alignment = footerAlignment
+          worksheet.getCell(`J${LastRowNumber + 2}`).border = footerBorderStyle
+
+          //IGST
+          worksheet.getCell(`H${LastRowNumber + 3}`).value = 'IGST'
+          worksheet.getCell(`H${LastRowNumber + 3}`).font = footerStyle
+          worksheet.getCell(`H${LastRowNumber + 3}`).alignment = footerAlignment
+          worksheet.getCell(`H${LastRowNumber + 3}`).border = footerBorderStyle
+          //IGST VALUE
+          worksheet.getCell(`I${LastRowNumber + 3}`).value = GST_RATE + '%'
+          worksheet.getCell(`I${LastRowNumber + 3}`).font = footerStyle
+          worksheet.getCell(`I${LastRowNumber + 3}`).alignment = footerAlignment
+          worksheet.getCell(`I${LastRowNumber + 3}`).border = footerBorderStyle
+          //IGST AMOUNT
+          worksheet.getCell(`J${LastRowNumber + 3}`).value =
+            FormatLakhStyle(GSTAmount)
+          worksheet.getCell(`J${LastRowNumber + 3}`).font = footerStyle
+          worksheet.getCell(`J${LastRowNumber + 3}`).alignment = footerAlignment
+          worksheet.getCell(`J${LastRowNumber + 3}`).border = footerBorderStyle
+
+          //GRAND TOTAL
+          worksheet.getCell(`I${LastRowNumber + 4}`).value = 'GRAND TOTAL'
+          worksheet.getCell(`I${LastRowNumber + 4}`).font = footerStyle
+          worksheet.getCell(`I${LastRowNumber + 4}`).alignment = footerAlignment
+          worksheet.getCell(`I${LastRowNumber + 4}`).border = footerBorderStyle
+          //GRAND TOTAL AMOUNT
+          worksheet.getCell(`J${LastRowNumber + 4}`).value = FormatLakhStyle(
+            GrandTotal.toFixed(2)
+          )
+          worksheet.getCell(`J${LastRowNumber + 4}`).font = footerStyle
+          worksheet.getCell(`J${LastRowNumber + 4}`).alignment = footerAlignment
+          worksheet.getCell(`J${LastRowNumber + 4}`).border = footerBorderStyle
+
+          //AMOUNT IN WORDS
+          worksheet.mergeCells(`A${LastRowNumber + 5}:B${LastRowNumber + 5}`)
+          worksheet.getCell(`A${LastRowNumber + 5}`).value = 'AMOUNT IN WORDS'
+          worksheet.getCell(`A${LastRowNumber + 5}`).font = footerStyle
+          worksheet.getCell(`A${LastRowNumber + 5}`).alignment = footerAlignment
+          worksheet.getCell(`A${LastRowNumber + 5}`).border = footerBorderStyle
+
+          //AMOUNT WORDS
+          worksheet.mergeCells(`C${LastRowNumber + 5}:J${LastRowNumber + 5}`)
+          worksheet.getCell(`C${LastRowNumber + 5}`).value =
+            currencyToINR(GrandTotal)
+          worksheet.getCell(`C${LastRowNumber + 5}`).font = footerStyle
+          worksheet.getCell(`C${LastRowNumber + 5}`).alignment = footerAlignment
+          worksheet.getCell(`C${LastRowNumber + 5}`).border = footerBorderStyle
+
+          // WeightDetails(worksheet, LastRowNumber, data)
+          const netWeight = dispatchList(data?.DispatchLocations)?.reduce(
+            (sum, item) => sum + item.item_quantity * item.item_weight,
+            0
+          )
+          const boxWeight = data?.DispatchBoxLists?.reduce(
+            (sum, item) => sum + item.tare_weight,
+            0
+          )
+
+          worksheet.mergeCells(`A${LastRowNumber + 6}:B${LastRowNumber + 6}`)
+          const richText7 = [
+            {
+              text: 'PACKING DETAILS -',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: 'WOODEN BOX\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'NO OF BOX - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchBoxLists?.length || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'NET WEIGHT - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (netWeight?.toFixed(3) || '') + 'Kg\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'GROSS WEIGHT - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: ((boxWeight + netWeight)?.toFixed(3) || '') + 'Kg',
+              font: { size: 15 }
+            }
+          ]
+          worksheet.getCell(`A${LastRowNumber + 6}`).value = {
+            richText: richText7
+          }
+          worksheet.getRow(`${LastRowNumber + 6}`).height = 118
+          worksheet.getCell(`A${LastRowNumber + 6}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+          worksheet.getCell(`A${LastRowNumber + 6}`).border = {
+            bottom: { style: 'mediumDashDot' },
+            left: { style: 'medium' },
+            right: { style: 'mediumDashDot' }
+          }
+
+          // ShippingDetails(worksheet, LastRowNumber, data)
+          worksheet.mergeCells(`C${LastRowNumber + 6}:F${LastRowNumber + 6}`)
+          const richText8 = [
+            {
+              text: 'FRIEGHT -',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingAndOtherDetail?.freight || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'EXCISE DOCUMENT - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingAndOtherDetail?.excise_document || '') +
+                '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'SHIPPING TERMS - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingAndOtherDetail?.shipping_term || '') +
+                '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'SHIPPING LINE - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                (data?.DispatchShippingAndOtherDetail?.shipping_line || '') +
+                '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'INSURANCE - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text:
+                data?.DispatchShippingAndOtherDetail?.shipping_insurance || '',
+              font: { size: 15 }
+            }
+          ]
+          worksheet.getCell(`C${LastRowNumber + 6}`).value = {
+            richText: richText8
+          }
+          worksheet.getCell(`C${LastRowNumber + 6}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+          worksheet.getCell(`C${LastRowNumber + 6}`).border = {
+            bottom: { style: 'mediumDashDot' },
+            right: { style: 'mediumDashDot' }
+          }
+
+          // PageStart = BankDetails(worksheet, LastRowNumber, data)
+          worksheet.mergeCells(`G${LastRowNumber + 6}:J${LastRowNumber + 6}`)
+          const richText9 = [
+            {
+              text: 'BENEFICIARY NAME -',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchBankDetail?.beneficiary_name || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'BANK NAME - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchBankDetail?.bank_name || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'BANK ACCOUNT NO - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchBankDetail?.account_no || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'IFSC CODE - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchBankDetail?.ifsc_code || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'SWIFT CODE - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: (data?.DispatchBankDetail?.swift_code || '') + '\n',
+              font: { size: 15 }
+            },
+            {
+              text: 'BANK AD CODE - ',
+              font: { bold: true, size: 15 }
+            },
+            {
+              text: data?.DispatchBankDetail?.bank_ad_code || '',
+              font: { size: 15 }
+            }
+          ]
+          worksheet.getCell(`G${LastRowNumber + 6}`).value = {
+            richText: richText9
+          }
+          worksheet.getCell(`G${LastRowNumber + 6}`).alignment = {
+            vertical: 'top',
+            horizontal: 'left',
+            wrapText: true,
+            shrinkToFit: true,
+            indent: 1
+          }
+          worksheet.getCell(`G${LastRowNumber + 6}`).border = {
+            bottom: { style: 'mediumDashDot' },
+            right: { style: 'medium' }
+          }
+
+          PageStart = LastRowNumber + 10
+
           LastRowNumber = 0
           // pageNo += 1
         }
@@ -324,6 +1075,7 @@ const TaxInvoiceExcel = () => {
         variant="solid"
         color="blue-500"
         onClick={RenderPages}
+        icon={<RiFileExcel2Line />}
       >
         Tax Invoice
       </Button>
