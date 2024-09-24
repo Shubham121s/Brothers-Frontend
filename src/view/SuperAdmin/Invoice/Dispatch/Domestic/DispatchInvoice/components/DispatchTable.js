@@ -26,7 +26,8 @@ const TableFooterRows = ({
     c_gst = 0,
     s_gst = 0,
     packing_charges = 0,
-    remark = ''
+    remark = '',
+    fright_charges = 0
   } = data?.DispatchShippingAndOtherDetail
   const GST_RATE =
     bill_type === 'NON GST' ? 0 : bill_type === 'IGST' ? i_gst : c_gst + s_gst
@@ -35,13 +36,22 @@ const TableFooterRows = ({
   const totalAmount = InvoiceTotal(dispatchList(data?.DispatchLocations))
   const pageAmount = InvoiceTotal(pageData)
   const packingAmount = parseFloat(packing_charges ? packing_charges : 0)
-  const GSTAmount = parseFloat(totalAmount * (GST_RATE / 100)).toFixed(2)
+  const fightAmount = parseFloat(fright_charges ? fright_charges : 0)
+  const GSTAmount = parseFloat(
+    (totalAmount + packingAmount) * (GST_RATE / 100)
+  ).toFixed(2)
   const GrandTotal = Math.round(
-    Number(totalAmount) + Number(packingAmount) + Number(GSTAmount)
+    Number(totalAmount) +
+      Number(packingAmount) +
+      Number(GSTAmount) +
+      fightAmount
   )
-  const RoundOff = Math.abs(
-    Number(totalAmount) + Number(packingAmount) + Number(GSTAmount) - GrandTotal
-  )
+  const RoundOff =
+    Number(totalAmount) +
+    Number(packingAmount) +
+    Number(GSTAmount) +
+    fightAmount -
+    GrandTotal
 
   return (
     <>
@@ -251,6 +261,33 @@ const TableFooterRows = ({
           colSpan="1"
           className={className}
         >
+          Fright Charges
+        </Td>
+        <Td
+          style={{ border: '.5px solid black', padding: '3px' }}
+          colSpan="1"
+        ></Td>
+        <Td style={{ border: '.5px solid black', padding: '3px' }}>
+          <NumberFormat value={fightAmount.toFixed(2)} />
+        </Td>
+      </Tr>
+      <Tr
+        style={{
+          border: '.5px solid black',
+          padding: '3px',
+          textAlign: 'center'
+        }}
+        className={className}
+      >
+        <Td
+          style={{ border: '.5px solid black', padding: '3px' }}
+          colSpan="5"
+        ></Td>
+        <Td
+          style={{ border: '.5px solid black', padding: '3px' }}
+          colSpan="1"
+          className={className}
+        >
           Round Off
         </Td>
         <Td
@@ -405,7 +442,16 @@ const DispatchTable = (props) => {
         accessorKey: 'product_name',
         cell: (props) => {
           const row = props.row.original
-          return <p className="uppercase text-center">{row?.item_name}</p>
+          return (
+            <div>
+              <p className="uppercase">{row?.item_name}</p>
+              <div className="">
+                <div
+                  dangerouslySetInnerHTML={{ __html: row?.remarks || '' }}
+                ></div>
+              </div>
+            </div>
+          )
         }
       },
       {

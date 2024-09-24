@@ -1,23 +1,23 @@
 import {
   flexRender,
   getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import React, { memo } from "react";
-import { Table } from "../../../../../../../components/ui";
+  useReactTable
+} from '@tanstack/react-table'
+import React, { memo } from 'react'
+import { Table } from '../../../../../../../components/ui'
 // import NumberFormat from '../../../utils/numberFormat'
 // import { InvoiceQuantity } from '../../../utils/quantity'
 // import { InvoiceWeight } from '../../../utils/weight'
 // import { InvoiceTotal } from '../../../utils/amount'
 import {
   setSelectedBox,
-  toggleEditBoxDialog,
-} from "../../../NewDispatch/store/stateSlice";
-import { useDispatch } from "react-redux";
-import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
-import NewBoxDialog from "./NewBoxDialog";
-import EditBoxDialog from "./EditBoxDialog";
-const { Tr, Th, Td, THead, TBody, TFoot } = Table;
+  toggleEditBoxDialog
+} from '../../../NewDispatch/store/stateSlice'
+import { useDispatch } from 'react-redux'
+import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
+import NewBoxDialog from './NewBoxDialog'
+import EditBoxDialog from './EditBoxDialog'
+const { Tr, Th, Td, THead, TBody, TFoot } = Table
 
 const TableFooterRows = ({ pageNo, singlePageData = [] }) => {
   return (
@@ -36,8 +36,8 @@ const TableFooterRows = ({ pageNo, singlePageData = [] }) => {
                 </Td>
             </Tr> */}
     </>
-  );
-};
+  )
+}
 
 const Box = [
   {
@@ -45,37 +45,37 @@ const Box = [
     breadth: 12,
     height: 43,
     tare: 223,
-    size: "inch",
+    size: 'inch'
   },
   {
     length: 10,
     breadth: 12,
     height: 43,
     tare: 223,
-    size: "inch",
+    size: 'inch'
   },
   {
     length: 10,
     breadth: 12,
     height: 43,
     tare: 223,
-    size: "inch",
+    size: 'inch'
   },
   {
     length: 10,
     breadth: 12,
     height: 43,
     tare: 223,
-    size: "inch",
+    size: 'inch'
   },
   {
     length: 10,
     breadth: 12,
     height: 43,
     tare: 223,
-    size: "inch",
-  },
-];
+    size: 'inch'
+  }
+]
 
 const ActionColumn = ({
   row,
@@ -83,20 +83,23 @@ const ActionColumn = ({
   handleDeleteBox,
   values,
   setFieldValue,
-  dispatchList,
+  dispatchList
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const onEdit = () => {
-    dispatch(toggleEditBoxDialog(true));
-    dispatch(setSelectedBox({ ...row, index: index + 1 }));
-  };
+    dispatch(toggleEditBoxDialog(true))
+    dispatch(setSelectedBox({ ...row, index: index + 1 }))
+  }
   const onDelete = () => {
-    handleDeleteBox?.(values, index, setFieldValue, dispatchList);
-  };
+    handleDeleteBox?.(values, index, setFieldValue, dispatchList)
+  }
 
   return (
     <div className="flex text-lg">
-      <span className={`cursor-pointer p-1`} onClick={onEdit}>
+      <span
+        className={`cursor-pointer p-1`}
+        onClick={onEdit}
+      >
         <HiOutlinePencil />
       </span>
       <span
@@ -106,8 +109,8 @@ const ActionColumn = ({
         <HiOutlineTrash />
       </span>
     </div>
-  );
-};
+  )
+}
 
 const BoxTable = (props) => {
   const {
@@ -117,85 +120,83 @@ const BoxTable = (props) => {
     values = [],
     setFieldValue,
     dispatchList,
-    handleEditBox,
-  } = props;
+    handleEditBox
+  } = props
 
   const columns = [
     {
-      header: "Box no",
-      accessorKey: "box",
+      header: 'Box no',
+      accessorKey: 'box',
       cell: (props) => {
-        const { index } = props.row;
+        const { index } = props.row
         return (
           <div className="uppercase text-center">
-            {`BOX NO ${index + 1 || "-"}`}
+            {`BOX NO ${index + 1 || '-'}`}
           </div>
-        );
-      },
+        )
+      }
     },
     {
-      header: "length",
-      accessorKey: "box_length",
+      header: 'length',
+      accessorKey: 'box_length',
       cell: (props) => {
-        const row = props.row.original;
+        const row = props.row.original
         return (
           <div className="uppercase text-center">
             {Number(row?.box_length)?.toFixed(2)}
           </div>
-        );
-      },
+        )
+      }
     },
     {
-      header: "breadth",
-      accessorKey: "box_breadth",
+      header: 'breadth',
+      accessorKey: 'box_breadth',
       cell: (props) => {
-        const row = props.row.original;
+        const row = props.row.original
         return (
           <div className="uppercase text-center">
             {Number(row?.box_breadth)?.toFixed(2)}
           </div>
-        );
-      },
+        )
+      }
     },
     {
-      header: "height",
-      accessorKey: "box_height",
+      header: 'height',
+      accessorKey: 'box_height',
       cell: (props) => {
-        const row = props.row.original;
+        const row = props.row.original
         return (
           <div className="uppercase text-center">
             {Number(row?.box_height)?.toFixed(2)}
           </div>
-        );
-      },
+        )
+      }
     },
     {
-      header: "size in",
-      accessorKey: "box_size_type",
+      header: 'size in',
+      accessorKey: 'box_size_type',
       cell: (props) => {
-        const row = props.row.original;
-        return (
-          <div className="uppercase text-center">{row?.box_size_type}</div>
-        );
-      },
+        const row = props.row.original
+        return <div className="uppercase text-center">{row?.box_size_type}</div>
+      }
     },
     {
-      header: "tare (kg)",
-      accessorKey: "tare_weight",
+      header: 'Box wt. (kg)',
+      accessorKey: 'tare_weight',
       cell: (props) => {
-        const row = props.row.original;
+        const row = props.row.original
         return (
           <div className="uppercase text-center">
             {Number(row?.tare_weight)?.toFixed(3)}
           </div>
-        );
-      },
+        )
+      }
     },
     {
-      header: "",
-      accessorKey: "action",
+      header: '',
+      accessorKey: 'action',
       cell: (props) => {
-        const { original, index } = props.row;
+        const { original, index } = props.row
         return (
           <ActionColumn
             row={original}
@@ -205,28 +206,31 @@ const BoxTable = (props) => {
             handleDeleteBox={handleDeleteBox}
             dispatchList={dispatchList}
           />
-        );
-      },
-    },
-  ];
+        )
+      }
+    }
+  ]
 
   const table = useReactTable({
     data: values,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+    getCoreRowModel: getCoreRowModel()
+  })
 
   const handleNewBox = (box) => {
-    handleNewBoxAdd(values, box, setFieldValue);
-  };
+    handleNewBoxAdd(values, box, setFieldValue)
+  }
 
   const handleEditBoxs = (box) => {
-    handleEditBox(values, box, setFieldValue);
-  };
+    handleEditBox(values, box, setFieldValue)
+  }
 
   return (
     <>
-      <Table compact={true} className="mb-5">
+      <Table
+        compact={true}
+        className="mb-5"
+      >
         <THead className={className}>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
@@ -234,8 +238,8 @@ const BoxTable = (props) => {
                 return (
                   <Th
                     style={{
-                      border: ".5px solid #e0e0e0",
-                      textAlign: "center",
+                      border: '.5px solid #e0e0e0',
+                      textAlign: 'center'
                     }}
                     key={header.id}
                     colSpan={header.colSpan}
@@ -245,7 +249,7 @@ const BoxTable = (props) => {
                       header.getContext()
                     )}
                   </Th>
-                );
+                )
               })}
             </Tr>
           ))}
@@ -256,25 +260,31 @@ const BoxTable = (props) => {
               <Tr key={row.id}>
                 {row.getVisibleCells().map((cell) => {
                   return (
-                    <Td key={cell.id} style={{ border: ".5px solid #e0e0e0" }}>
+                    <Td
+                      key={cell.id}
+                      style={{ border: '.5px solid #e0e0e0' }}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
                       )}
                     </Td>
-                  );
+                  )
                 })}
               </Tr>
-            );
+            )
           })}
         </TBody>
       </Table>
-      <NewBoxDialog handleNewBox={handleNewBox} boxNo={values.length + 1} />
+      <NewBoxDialog
+        handleNewBox={handleNewBox}
+        boxNo={values.length + 1}
+      />
       <EditBoxDialog
         boxNo={values.length + 1}
         handleEditBoxs={handleEditBoxs}
       />
     </>
-  );
-};
-export default memo(BoxTable);
+  )
+}
+export default memo(BoxTable)

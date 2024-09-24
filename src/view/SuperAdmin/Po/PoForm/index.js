@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useEffect } from "react";
+import React, { forwardRef, useState, useEffect } from 'react'
 import {
   FormContainer,
   Button,
@@ -6,31 +6,41 @@ import {
   Toast,
   Notification,
   FormItem,
-  Select,
-} from "../../../../components/ui";
-import { StickyFooter } from "../../../../components/shared";
-import { Form, Formik, Field } from "formik";
-import cloneDeep from "lodash/cloneDeep";
-import { AiOutlineSave } from "react-icons/ai";
-import * as Yup from "yup";
-import CustomerInformationFields from "./components/CustomerInformationFields";
-import ItemTable from "./components/ItemTable";
-import { useDispatch } from "react-redux";
-import { toggleNewPoItemDialog } from "../NewPo/store/stateSlice";
-import { toggleEditPoItemDialog } from "../EditPo/store/stateSlice";
-import PoNumberInformationFields from "./components/PoNumberInformationFields";
-import PoDateInformationFields from "./components/PoDateInformationFields";
-import PoCurrencyInformationFields from "./components/PoCurrencyInformationFields";
-import ItemForm from "./ItemForm";
-import dayjs from "dayjs";
-import { isEmpty } from "lodash";
+  Select
+} from '../../../../components/ui'
+import { StickyFooter } from '../../../../components/shared'
+import { Form, Formik, Field } from 'formik'
+import cloneDeep from 'lodash/cloneDeep'
+import { AiOutlineSave } from 'react-icons/ai'
+import * as Yup from 'yup'
+import CustomerInformationFields from './components/CustomerInformationFields'
+import ItemTable from './components/ItemTable'
+import { useDispatch } from 'react-redux'
+import { toggleNewPoItemDialog } from '../NewPo/store/stateSlice'
+import { toggleEditPoItemDialog } from '../EditPo/store/stateSlice'
+import PoNumberInformationFields from './components/PoNumberInformationFields'
+import PoDateInformationFields from './components/PoDateInformationFields'
+import PoCurrencyInformationFields from './components/PoCurrencyInformationFields'
+import ItemForm from './ItemForm'
+import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
+import { apiIsPONumberExists } from '../../../../services/SuperAdmin/Po/PoService'
+import { debounce } from 'lodash'
+
+var isPOExist = false
 
 const validationSchema = Yup.object().shape({
-  Customer: Yup.object().required("Required"),
-  number: Yup.string().required("Required"),
-  date: Yup.date().required("Required"),
-  currency_type: Yup.string().required("Required"),
-});
+  Customer: Yup.object().required('Required'),
+  number: Yup.string()
+    .required('Required')
+    .test('isPOExist', 'PO Number Already Exists', function (value) {
+      return (
+        !isPOExist || this.createError({ message: 'PO Number Already Exists' })
+      )
+    }),
+  date: Yup.date().required('Required'),
+  currency_type: Yup.string().required('Required')
+})
 
 const PoForm = forwardRef((props, ref) => {
   const {
@@ -40,102 +50,119 @@ const PoForm = forwardRef((props, ref) => {
     customers = [],
     products = [],
     type,
-    number = "",
+    number = '',
     Notes = [],
-    Condition = [],
-  } = props;
-  const dispatch = useDispatch();
+    Condition = []
+  } = props
+  const dispatch = useDispatch()
   const [data, setData] = useState(() => {
-    if (type === "edit" && initialData && initialData.PoLists) {
-      return initialData.PoLists;
+    if (type === 'edit' && initialData && initialData.PoLists) {
+      return initialData.PoLists
     }
-    return [];
-  });
-  const [index, setIndex] = useState(-1);
+    return []
+  })
+  const [index, setIndex] = useState(-1)
 
   useEffect(() => {
-    if (type === "edit" && initialData && initialData.PoLists) {
-      setData(initialData.PoLists);
+    if (type === 'edit' && initialData && initialData.PoLists) {
+      setData(initialData.PoLists)
     }
-  }, [type, initialData]);
+  }, [type, initialData])
 
-  const [item, setItem] = useState({});
-  const [itemtype, setType] = useState(false);
+  const [item, setItem] = useState({})
+  const [itemtype, setType] = useState(false)
 
   const toggleAddBtn = () => {
-    if (type === "edit") {
-      dispatch(toggleEditPoItemDialog(true));
+    if (type === 'edit') {
+      dispatch(toggleEditPoItemDialog(true))
     } else {
-      dispatch(toggleNewPoItemDialog(true));
+      dispatch(toggleNewPoItemDialog(true))
     }
-  };
+  }
 
   const handleOnAddItem = (item) => {
     if (itemtype) {
-      console.log(item);
+      console.log(item)
       setData((data) =>
         data.map((f, Index) =>
           Index === index
             ? { ...f, ...item, delivery_date: new Date(item?.delivery_date) }
             : f
         )
-      );
-      setIndex(-1);
+      )
+      setIndex(-1)
     } else {
-      setData((data) => [...data, item]);
+      setData((data) => [...data, item])
     }
-    setItem({});
-    setType(false);
-  };
+    setItem({})
+    setType(false)
+  }
 
   const onRemoveItem = (index) => {
-    let array = [...data];
-    let indexValue = array.indexOf(index);
+    let array = [...data]
+    let indexValue = array.indexOf(index)
     if (indexValue === -1) {
-      array.splice(index, 1);
-      setData(array);
-      setItem({});
-      setType(false);
+      array.splice(index, 1)
+      setData(array)
+      setItem({})
+      setType(false)
     }
-  };
+  }
 
   const onEditItem = (data, index) => {
-    if (type === "edit") {
-      dispatch(toggleEditPoItemDialog(true));
+    if (type === 'edit') {
+      dispatch(toggleEditPoItemDialog(true))
     } else {
-      dispatch(toggleNewPoItemDialog(true));
+      dispatch(toggleNewPoItemDialog(true))
     }
-    setIndex(index);
-    setItem(data);
-    setType(true);
-  };
+    setIndex(index)
+    setItem(data)
+    setType(true)
+  }
 
+  const handleCheck = async (e) => {
+    try {
+      const response = await apiIsPONumberExists({ number: e.target.value })
+      if (response.status === 200) {
+        isPOExist = false
+      }
+    } catch (error) {
+      isPOExist = true
+    }
+  }
+
+  const debouncedHandleCheck = debounce(handleCheck, 1000)
   return (
     <>
       <Formik
         enableReinitialize={true}
         innerRef={ref}
         initialValues={{
-          ...initialData,
+          ...initialData
         }}
+        validateOnBlur={true}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          const formData = cloneDeep({ ...values, items: [...data] });
+          const formData = cloneDeep({ ...values, items: [...data] })
           if (data.length === 0) {
-            setSubmitting(false);
+            setSubmitting(false)
             return Toast.push(
-              <Notification title={"Required"} type="danger" duration={2500}>
+              <Notification
+                title={'Required'}
+                type="danger"
+                duration={2500}
+              >
                 PO List Required
               </Notification>,
               {
-                placement: "top-center",
+                placement: 'top-center'
               }
-            );
+            )
           }
-          onFormSubmit?.(formData, setSubmitting);
+          onFormSubmit?.(formData, setSubmitting)
         }}
       >
-        {({ values, touched, errors, isSubmitting }) => {
+        {({ values, touched, errors, isSubmitting, handleChange }) => {
           return (
             <Form>
               <FormContainer>
@@ -159,6 +186,10 @@ const PoForm = forwardRef((props, ref) => {
                           errors={errors.number}
                           touched={touched.number}
                           type={type}
+                          debouncedHandleCheck={debouncedHandleCheck}
+                          isPOExist={isPOExist}
+                          values={values.number}
+                          handleChange={handleChange}
                         />
                         <PoDateInformationFields
                           errors={errors.date}
@@ -202,11 +233,11 @@ const PoForm = forwardRef((props, ref) => {
                           itemtype
                             ? {
                                 ...item,
-                                delivery_date: new Date(item.delivery_date),
+                                delivery_date: new Date(item.delivery_date)
                               }
                             : {}
                         }
-                        type={itemtype ? "edit" : "new"}
+                        type={itemtype ? 'edit' : 'new'}
                         mode={type}
                         setItem={setItem}
                         setType={setType}
@@ -252,8 +283,8 @@ const PoForm = forwardRef((props, ref) => {
                                     className="flex justify-between"
                                   >
                                     <div>
-                                      {index + 1}. <strong>{n.label}:</strong>{" "}
-                                      <span>{n.value || "-"}</span>
+                                      {index + 1}. <strong>{n.label}:</strong>{' '}
+                                      <span>{n.value || '-'}</span>
                                     </div>
                                     <br />
                                   </div>
@@ -293,12 +324,17 @@ const PoForm = forwardRef((props, ref) => {
                               />
                             )}
                           </Field>
-                          {!isEmpty(values?.Condition?.condition) ? <Card className='mt-2'>
-                <div className='flex justify-between'>
-                    <div dangerouslySetInnerHTML={{ __html: values?.Condition?.condition }}></div>
-                </div>
-            </Card> : null
-            }
+                          {!isEmpty(values?.Condition?.condition) ? (
+                            <Card className="mt-2">
+                              <div className="flex justify-between">
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: values?.Condition?.condition
+                                  }}
+                                ></div>
+                              </div>
+                            </Card>
+                          ) : null}
                         </FormItem>
                       </Card>
                     </div>
@@ -309,11 +345,11 @@ const PoForm = forwardRef((props, ref) => {
                   stickyClass="border-t bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
                 >
                   <h5 className="flex gap-1 items-center text-gray-600">
-                    Total{" "}
+                    Total{' '}
                     <h4 className="text-blue-500">
                       {Array.isArray(data) ? data.length : 0}
-                    </h4>{" "}
-                    {data.length === 1 ? "item" : "items"} in list
+                    </h4>{' '}
+                    {data.length === 1 ? 'item' : 'items'} in list
                   </h5>
                   <div className="md:flex items-center">
                     <Button
@@ -331,30 +367,30 @@ const PoForm = forwardRef((props, ref) => {
                       icon={<AiOutlineSave />}
                       type="submit"
                     >
-                      {type === "edit" ? "Update" : "Save"}
+                      {type === 'edit' ? 'Update' : 'Save'}
                     </Button>
                   </div>
                 </StickyFooter>
               </FormContainer>
             </Form>
-          );
+          )
         }}
       </Formik>
     </>
-  );
-});
+  )
+})
 
 PoForm.defaultProps = {
-  type: "new",
+  type: 'new',
   initialData: {
-    po_id: "",
+    po_id: '',
     date: new Date(),
-    number: "",
+    number: '',
     Customer: null,
-    currency_type: "",
+    currency_type: '',
     Note: null,
-    Condition: null,
-  },
-};
+    Condition: null
+  }
+}
 
-export default PoForm;
+export default PoForm

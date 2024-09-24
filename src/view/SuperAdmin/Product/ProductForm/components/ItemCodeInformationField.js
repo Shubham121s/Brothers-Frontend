@@ -2,47 +2,51 @@ import React, { memo } from 'react'
 import { FormItem, Input } from '../../../../../components/ui'
 import { Field } from 'formik'
 
-const PoNumberInformationFields = (props) => {
+const ItemCodeInformationField = (props) => {
   const {
     errors,
     touched,
-    type,
+    label,
+    name,
+    placeholder = '',
+    type = 'text',
+    isCodeExixts = false,
     debouncedHandleCheck,
-    isPOExist = false,
-    values = '',
-    handleChange
+    handleChange,
+    values = ''
   } = props
   const handleFieldChange = (e) => {
     handleChange(e)
 
     debouncedHandleCheck(e)
   }
+
   return (
     <FormItem
       className="mb-4"
-      label="PO Number"
+      label={label}
       invalid={errors && touched}
       errorMessage={errors}
     >
       <Field
         className={`${
-          values
-            ? isPOExist && type !== 'edit'
+          values.item_code
+            ? isCodeExixts && type !== 'edit'
               ? 'bg-red-100'
               : 'bg-emerald-100'
             : ''
         }`}
-        type="text"
+        type={type}
         autoComplete="off"
-        name="number"
-        value={values}
-        placeholder="PO Number"
+        name={name}
+        placeholder={placeholder}
         component={Input}
-        disabled={type === 'edit'}
-        onChange={handleFieldChange}
+        onChange={(e) => {
+          handleFieldChange(e)
+        }}
       />
     </FormItem>
   )
 }
 
-export default memo(PoNumberInformationFields)
+export default memo(ItemCodeInformationField)

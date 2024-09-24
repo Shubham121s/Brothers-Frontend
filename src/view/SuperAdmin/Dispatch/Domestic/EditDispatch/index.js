@@ -1,113 +1,121 @@
-import React, { useEffect, useState } from "react";
-import {
-  Card,
-  Button,
-  Toast,
-  Notification,
-} from "../../../../../components/ui";
-import ConsigneeAndBuyerDetails from "./components/ConsigneeAndBuyer/ConsigneeAndBuyerDetails";
-import ShippingAddress from "./components/ShippingAndShippingAddress/ShippingAddress";
-import TransportDetails from "./components/ShippingAndShippingAddress/TransportDetails";
-import EditDispatchItemDialog from "./components/ItemList/EditDispatchItemDialog";
-import { injectReducer } from "../../../../../store";
-import EditDispatchForeignReducer from "./store";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react'
+import { Card, Button, Toast, Notification } from '../../../../../components/ui'
+import ConsigneeAndBuyerDetails from './components/ConsigneeAndBuyer/ConsigneeAndBuyerDetails'
+import ShippingAddress from './components/ShippingAndShippingAddress/ShippingAddress'
+import TransportDetails from './components/ShippingAndShippingAddress/TransportDetails'
+import EditDispatchItemDialog from './components/ItemList/EditDispatchItemDialog'
+import { injectReducer } from '../../../../../store'
+import EditDispatchForeignReducer from './store'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   addProductToInvoice,
   getDomesticInvoiceDetailsByInvoiceId,
-  putDomesticInvoiceDetailsByInvoiceId,
-} from "./store/dataSlice";
+  putDomesticInvoiceDetailsByInvoiceId
+} from './store/dataSlice'
 import {
   Container,
   DoubleSidedImage,
-  Loading,
-} from "../../../../../components/shared";
-import isEmpty from "lodash/isEmpty";
-import { useLocation, useNavigate } from "react-router-dom";
-import ItemTable from "./components/ItemList/ItemTable";
-import DeleteProductConfirmationDialog from "./components/ItemList/DeleteConfirmationDialog";
-import PackingChargesInformationField from "./components/GSTAndOther/PackingChargesInformationField";
-import { StickyFooter } from "../../../../../components/shared";
-import NewItemDialog from "./components/ItemList/NewItemDialog";
-import { toggleAddDispatchItemDialog } from "./store/stateSlice";
-import { getAllPosByCustomerId } from "./store/dataSlice";
+  Loading
+} from '../../../../../components/shared'
+import isEmpty from 'lodash/isEmpty'
+import { useLocation, useNavigate } from 'react-router-dom'
+import ItemTable from './components/ItemList/ItemTable'
+import DeleteProductConfirmationDialog from './components/ItemList/DeleteConfirmationDialog'
+import PackingChargesInformationField from './components/GSTAndOther/PackingChargesInformationField'
+import { StickyFooter } from '../../../../../components/shared'
+import NewItemDialog from './components/ItemList/NewItemDialog'
+import { toggleAddDispatchItemDialog } from './store/stateSlice'
+import { getAllPosByCustomerId } from './store/dataSlice'
+import FrightChargesInformationField from './components/GSTAndOther/FrightChargesInformationField'
 
-injectReducer("edit_domestic_dispatch", EditDispatchForeignReducer);
+injectReducer('edit_domestic_dispatch', EditDispatchForeignReducer)
 
 const pushNotification = (message, type, title) => {
   return Toast.push(
-    <Notification title={title} type={type} duration={2500}>
+    <Notification
+      title={title}
+      type={type}
+      duration={2500}
+    >
       {message}
     </Notification>,
     {
-      placement: "top-end",
+      placement: 'top-end'
     }
-  );
-};
+  )
+}
 
 const EditDispatch = () => {
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [StateDispatchList, setList] = useState(null);
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const [StateDispatchList, setList] = useState(null)
   const data = useSelector(
     (state) => state.edit_domestic_dispatch.data.invoiceDetails
-  );
+  )
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
-  const [charges, setCharges] = useState(0);
+  const [charges, setCharges] = useState(0)
+  const [fright, setFright] = useState(0)
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    fetchData()
+  }, [])
 
   useEffect(() => {
     if (data) {
-      setList(data);
+      setList(data)
     }
-  }, [data]);
+  }, [data])
 
   const fetchData = async () => {
     const dispatch_invoice_id = location.pathname.substring(
-      location.pathname.lastIndexOf("/") + 1
-    );
+      location.pathname.lastIndexOf('/') + 1
+    )
     if (dispatch_invoice_id) {
       const action = await dispatch(
         getDomesticInvoiceDetailsByInvoiceId({ dispatch_invoice_id })
-      );
+      )
       setCharges(
         action.payload.data.data?.DispatchShippingAndOtherDetail
           ?.packing_charges
           ? action.payload.data.data?.DispatchShippingAndOtherDetail
               ?.packing_charges
-          : ""
-      );
+          : 0
+      )
+      setFright(
+        action.payload.data.data?.DispatchShippingAndOtherDetail?.fright_charges
+          ? action.payload.data.data?.DispatchShippingAndOtherDetail
+              ?.fright_charges
+          : 0
+      )
       dispatch(
         getAllPosByCustomerId({
           customer_id: action.payload.data.data?.DispatchConsignee?.customer_id,
-          currency_type: "INR",
+          currency_type: 'INR'
         })
-      );
+      )
     }
-  };
+  }
 
   const UpdateIvoice = () => {
     dispatch(
       putDomesticInvoiceDetailsByInvoiceId({
         dispatch_invoice_id: data.dispatch_invoice_id,
         packing_charges: charges,
+        fright_charges: fright
       })
-    );
-    navigate("/super/admin/dispatch-list");
-  };
+    )
+    navigate('/super/admin/dispatch-list')
+  }
 
   const addNewItemInPoList = async (dispatchList) => {
     setList((prevData) => ({
       ...prevData,
-      DispatchLocations: dispatchList,
-    }));
-  };
+      DispatchLocations: dispatchList
+    }))
+  }
 
   return (
     <Container className="h-full">
@@ -158,6 +166,10 @@ const EditDispatch = () => {
                     setCharges={setCharges}
                     charges={charges}
                   />
+                  <FrightChargesInformationField
+                    setFright={setFright}
+                    fright={fright}
+                  />
                 </div>
               </Card>
             </div>
@@ -167,8 +179,8 @@ const EditDispatch = () => {
                   <div
                     className={
                       StateDispatchList.DispatchLocations.length - 1 === index
-                        ? ""
-                        : "mb-5"
+                        ? ''
+                        : 'mb-5'
                     }
                   >
                     <div className="flex justify-between items-center h-full mb-2">
@@ -193,9 +205,9 @@ const EditDispatch = () => {
                             dispatch(
                               toggleAddDispatchItemDialog({
                                 option: true,
-                                locationIndex: index,
+                                locationIndex: index
                               })
-                            );
+                            )
                           }}
                         >
                           Add Item
@@ -213,7 +225,7 @@ const EditDispatch = () => {
                       dispatchList={StateDispatchList.DispatchLocations}
                     />
                   </div>
-                );
+                )
               })}
               <EditDispatchItemDialog
                 dispatchList={StateDispatchList.DispatchLocations}
@@ -249,7 +261,7 @@ const EditDispatch = () => {
         </div>
       )}
     </Container>
-  );
-};
+  )
+}
 
-export default EditDispatch;
+export default EditDispatch
