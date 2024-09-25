@@ -1,59 +1,59 @@
-import React, { forwardRef, useState } from "react";
-import { FormContainer, Button, Card } from "../../../../components/ui";
-import { StickyFooter, ConfirmDialog } from "../../../../components/shared";
-import { Form, Formik } from "formik";
-import cloneDeep from "lodash/cloneDeep";
-import { HiOutlineTrash } from "react-icons/hi";
-import { AiOutlineSave } from "react-icons/ai";
-import * as Yup from "yup";
-import InputInformationFields from "./components/InputInformationFields";
-import SelectInformationFields from "./components/SelectInformationFields";
+import React, { forwardRef, useState } from 'react'
+import { FormContainer, Button, Card } from '../../../../components/ui'
+import { StickyFooter, ConfirmDialog } from '../../../../components/shared'
+import { Form, Formik } from 'formik'
+import cloneDeep from 'lodash/cloneDeep'
+import { HiOutlineTrash } from 'react-icons/hi'
+import { AiOutlineSave } from 'react-icons/ai'
+import * as Yup from 'yup'
+import InputInformationFields from './components/InputInformationFields'
+import SelectInformationFields from './components/SelectInformationFields'
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required("Required"),
-  code: Yup.string().required("Required"),
-  status: Yup.boolean().required("Required"),
-  type: Yup.string().required("Required"),
+  name: Yup.string().required('Required'),
+  code: Yup.string().required('Required'),
+  status: Yup.boolean().required('Required'),
+  type: Yup.string().required('Required'),
   city: Yup.string(),
   // email: Yup.email().typeError("It should be a email"),
-  mobile: Yup.number().typeError("It should be a number"),
-  phone: Yup.number().typeError("It should be a number"),
+  mobile: Yup.string().required('Required'),
+  phone: Yup.string().required('Required'),
   gst_no: Yup.string(),
   CustomerPermanentAddress: Yup.object().shape({
-    address: Yup.string().required("Required"),
-    country: Yup.string().required("Required"),
-    city: Yup.string().required("Required"),
-    zip_code: Yup.number().required("Required"),
-    state: Yup.string().required("Required"),
-  }),
-});
+    address: Yup.string().required('Required'),
+    country: Yup.string().required('Required'),
+    city: Yup.string().required('Required'),
+    zip_code: Yup.number().required('Required'),
+    state: Yup.string().required('Required')
+  })
+})
 
 export const customerType = [
-  { label: "Customer", value: "customer" },
-  { label: "Supplier", value: "supplier" },
-  { label: "Both", value: "both" },
-];
+  { label: 'Customer', value: 'customer' },
+  { label: 'Supplier', value: 'supplier' },
+  { label: 'Both', value: 'both' }
+]
 export const customerStatus = [
-  { label: "Active", value: true },
-  { label: "In-Active", value: false },
-];
+  { label: 'Active', value: true },
+  { label: 'In-Active', value: false }
+]
 
 const DeleteProductButton = ({ onDelete, onLoading, type }) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const onConfirmDialogOpen = () => {
-    setDialogOpen(true);
-  };
+    setDialogOpen(true)
+  }
 
   const onConfirmDialogClose = () => {
-    setDialogOpen(false);
-  };
+    setDialogOpen(false)
+  }
 
   const handleConfirm = () => {
-    setLoading(true);
-    onDelete?.({ setDialogOpen, setLoading });
-  };
+    setLoading(true)
+    onDelete?.({ setDialogOpen, setLoading })
+  }
 
   return (
     <>
@@ -81,23 +81,23 @@ const DeleteProductButton = ({ onDelete, onLoading, type }) => {
         <p>Are you sure you want to delete? This action cannot be undone.</p>
       </ConfirmDialog>
     </>
-  );
-};
+  )
+}
 
 const CustomerForm = forwardRef((props, ref) => {
-  const { type, initialData, onFormSubmit, onDiscard, onDelete } = props;
+  const { type, initialData, onFormSubmit, onDiscard, onDelete } = props
 
   return (
     <Formik
       enableReinitialize={true}
       innerRef={ref}
       initialValues={{
-        ...initialData,
+        ...initialData
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        const formData = cloneDeep(values);
-        onFormSubmit?.(formData, setSubmitting);
+        const formData = cloneDeep(values)
+        onFormSubmit?.(formData, setSubmitting)
       }}
     >
       {({ values, touched, errors, isSubmitting }) => (
@@ -105,7 +105,10 @@ const CustomerForm = forwardRef((props, ref) => {
           <FormContainer>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="lg:col-span-1">
-                <Card divider className="bg-pink-50 mb-4">
+                <Card
+                  divider
+                  className="bg-pink-50 mb-4"
+                >
                   <h5>Basic Information</h5>
                   <p className="mb-4">
                     Section to config basic customer/supplier information
@@ -274,7 +277,7 @@ const CustomerForm = forwardRef((props, ref) => {
                   icon={<AiOutlineSave className="mr-1" />}
                   type="submit"
                 >
-                  {type === "edit" ? "Update" : "Save"}
+                  {type === 'edit' ? 'Update' : 'Save'}
                 </Button>
               </div>
             </StickyFooter>
@@ -282,31 +285,31 @@ const CustomerForm = forwardRef((props, ref) => {
         </Form>
       )}
     </Formik>
-  );
-});
+  )
+})
 
 CustomerForm.defaultProps = {
-  type: "edit",
+  type: 'edit',
   initialData: {
-    customer_id: "",
-    name: "",
-    status: "",
-    mobile: "",
-    email: "",
-    code: "",
-    vender_code: "",
+    customer_id: '',
+    name: '',
+    status: '',
+    mobile: '',
+    email: '',
+    code: '',
+    vender_code: '',
     CustomerPermanentAddress: {
-      address: "",
-      country: "",
-      city: "",
-      zip_code: "",
-      state: "",
-      state_code: "",
+      address: '',
+      country: '',
+      city: '',
+      zip_code: '',
+      state: '',
+      state_code: ''
     },
-    gst_no: "",
-    pan: "",
-    type: "",
-  },
-};
+    gst_no: '',
+    pan: '',
+    type: ''
+  }
+}
 
-export default CustomerForm;
+export default CustomerForm

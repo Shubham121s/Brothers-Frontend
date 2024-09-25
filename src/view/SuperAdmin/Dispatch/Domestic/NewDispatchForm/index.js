@@ -28,10 +28,25 @@ import SGSTInformationField from './components/GSTandOther/SGSTInformationField'
 import InvoiceNumberField from './components/invoiceNumberField'
 import PackingChargesInformationField from './components/GSTandOther/PackingChargers'
 import FreightChargesField from './components/GSTandOther/FreightChargesField'
+import { debounce } from 'lodash'
+import { apiCheckInvoiceNumber } from '../../../../../services/SuperAdmin/Invoice/DispatchServices'
+
+var isInvoiceNumberExist = false
 
 const validationSchema = Yup.object().shape({
   DispatchConsignee: Yup.object().required('Required'),
-  invoice_no: Yup.string().required('Required'),
+  invoice_no: Yup.string()
+    .required('Required')
+    .test(
+      'isInvoiceNumberExist',
+      'Invoice Number Already Exists',
+      function (value) {
+        return (
+          !isInvoiceNumberExist ||
+          this.createError({ message: 'Invoice Number Already Exists' })
+        )
+      }
+    ),
   DispatchBuyer: Yup.object().required('Required'),
   DispatchShippingAddress: Yup.object().required('Required'),
   DispatchList: Yup.array(
@@ -143,6 +158,21 @@ const NewDomesticForm = forwardRef((props, ref) => {
     setFieldValue?.('DispatchList', filterDispatchList)
   }
 
+  const handleCheck = async (e) => {
+    try {
+      const response = await apiCheckInvoiceNumber({
+        invoice_no: e.target.value
+      })
+      if (response.status === 200) {
+        isInvoiceNumberExist = false
+      }
+    } catch (error) {
+      isInvoiceNumberExist = true
+    }
+  }
+
+  const debouncedHandleCheck = debounce(handleCheck, 500)
+
   return (
     <>
       <Suspense fallback={<Loading loading={true} />}>
@@ -170,7 +200,14 @@ const NewDomesticForm = forwardRef((props, ref) => {
             onFormSubmit?.(formData, setSubmitting)
           }}
         >
-          {({ values, touched, errors, setFieldValue, isSubmitting }) => {
+          {({
+            values,
+            touched,
+            errors,
+            setFieldValue,
+            isSubmitting,
+            handleChange
+          }) => {
             console.log(values)
             return (
               <Form key="invoiceForm">
@@ -226,6 +263,9 @@ const NewDomesticForm = forwardRef((props, ref) => {
                         <InvoiceNumberField
                           touched={touched?.invoice_no}
                           errors={errors?.invoice_no}
+                          debouncedHandleCheck={debouncedHandleCheck}
+                          isInvoiceNumberExist={isInvoiceNumberExist}
+                          handleChange={handleChange}
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-2">

@@ -219,7 +219,7 @@ const ProductForm = forwardRef((props, ref) => {
       isCodeExixts = true
     }
   }
-  const debouncedHandleCheck = debounce(handleCheck, 1000)
+  const debouncedHandleCheck = debounce(handleCheck, 500)
 
   return (
     <>

@@ -10,11 +10,14 @@ const PoNumberInformationFields = (props) => {
     debouncedHandleCheck,
     isPOExist = false,
     values = '',
-    handleChange
+    handleChange,
+    setFieldError
   } = props
   const handleFieldChange = (e) => {
     handleChange(e)
-
+    if (errors && errors.number) {
+      setFieldError('number', '')
+    }
     debouncedHandleCheck(e)
   }
   return (

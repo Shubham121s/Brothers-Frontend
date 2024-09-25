@@ -140,7 +140,7 @@ const PoForm = forwardRef((props, ref) => {
     }
   }
 
-  const debouncedHandleCheck = debounce(handleCheck, 1000)
+  const debouncedHandleCheck = debounce(handleCheck, 500)
 
   return (
     <>
@@ -171,7 +171,14 @@ const PoForm = forwardRef((props, ref) => {
           onFormSubmit?.(formData, setSubmitting)
         }}
       >
-        {({ values, touched, errors, isSubmitting, handleChange }) => {
+        {({
+          values,
+          touched,
+          errors,
+          isSubmitting,
+          handleChange,
+          setFieldError
+        }) => {
           if (values.category_id !== category && type !== 'edit') {
             setCategory(values.category_id)
           }
@@ -212,6 +219,7 @@ const PoForm = forwardRef((props, ref) => {
                           isPOExist={isPOExist}
                           values={values.number}
                           handleChange={handleChange}
+                          setFieldError={setFieldError}
                         />
                         <PoCurrencyInformationFields
                           errors={errors.currency_type}

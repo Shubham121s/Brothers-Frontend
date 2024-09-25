@@ -131,7 +131,7 @@ const PoForm = forwardRef((props, ref) => {
     }
   }
 
-  const debouncedHandleCheck = debounce(handleCheck, 1000)
+  const debouncedHandleCheck = debounce(handleCheck, 500)
   return (
     <>
       <Formik
