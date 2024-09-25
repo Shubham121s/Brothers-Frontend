@@ -1,25 +1,33 @@
-import ApiService from "../../ApiService";
+import ApiService from '../../ApiService'
 
 export async function apiGetPurchaseOrderDetailsByPurchaseORderId(data) {
   return ApiService.fetchData({
-    url: "v1/web/company/purchase/order/id",
-    method: "post",
-    data,
-  });
+    url: 'v1/web/company/purchase/order/id',
+    method: 'post',
+    data
+  })
 }
 
 export async function apiUpdatePurchaseOrderStatus(data) {
   return ApiService.fetchData({
-    url: "v1/web/company/purchase/order/status",
-    method: "post",
-    data,
-  });
+    url: 'v1/web/company/purchase/order/status',
+    method: 'post',
+    data
+  })
 }
 
 export async function apiDeletePurchaseOrder(data) {
   return ApiService.fetchData({
-    url: "v1/web/company/purchase/order/delete/id",
-    method: "delete",
-    data,
-  });
+    url: 'v1/web/company/purchase/order/delete/id',
+    method: 'delete',
+    data
+  })
+}
+
+export async function apiCheckPoNumber(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/purchase/order/check/number',
+    method: 'post',
+    data
+  })
 }

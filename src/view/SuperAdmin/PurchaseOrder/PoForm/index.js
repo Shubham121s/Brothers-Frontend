@@ -25,11 +25,20 @@ import ItemForm from './ItemForm'
 import { apiGetAllProductsCategoryId } from '../../../../services/SuperAdmin/Product/IndexService'
 import { toggleEditPoItemDialog } from '../EditPo/store/stateSlice'
 import { debounce } from 'lodash'
+import { apiCheckPoNumber } from '../../../../services/SuperAdmin/PruchaseOrder/PurchaseOrderService'
 // import { apiGetAllProductByCategorySelected } from "../../../../services/SuperAdmin/PurchaseOrder/PurchaseOrderService";
+
+var isPOExist = false
 
 const validationSchema = Yup.object().shape({
   Customer: Yup.object().required('Required'),
-  number: Yup.string().required('Required'),
+  number: Yup.string()
+    .required('Required')
+    .test('isPOExist', 'PO Number Already Exists', function (value) {
+      return (
+        !isPOExist || this.createError({ message: 'PO Number Already Exists' })
+      )
+    }),
   date: Yup.date().required('Required'),
   currency_type: Yup.string().required('Required')
 })
@@ -120,18 +129,18 @@ const PoForm = forwardRef((props, ref) => {
     fetchData()
   }, [category])
 
-  // const handleCheck = async (e) => {
-  //   try {
-  //     const response = await apiIsPONumberExists({ number: e.target.value })
-  //     if (response.status === 200) {
-  //       isPOExist = false
-  //     }
-  //   } catch (error) {
-  //     isPOExist = true
-  //   }
-  // }
+  const handleCheck = async (e) => {
+    try {
+      const response = await apiCheckPoNumber({ number: e.target.value })
+      if (response.status === 200) {
+        isPOExist = false
+      }
+    } catch (error) {
+      isPOExist = true
+    }
+  }
 
-  // const debouncedHandleCheck = debounce(handleCheck, 1000)
+  const debouncedHandleCheck = debounce(handleCheck, 1000)
 
   return (
     <>
@@ -141,7 +150,7 @@ const PoForm = forwardRef((props, ref) => {
         initialValues={{
           ...initialData
         }}
-        // validationSchema={validationSchema}
+        validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
           const formData = cloneDeep({ ...values, items: [...data] })
           if (data.length === 0) {
@@ -162,7 +171,7 @@ const PoForm = forwardRef((props, ref) => {
           onFormSubmit?.(formData, setSubmitting)
         }}
       >
-        {({ values, touched, errors, isSubmitting }) => {
+        {({ values, touched, errors, isSubmitting, handleChange }) => {
           if (values.category_id !== category && type !== 'edit') {
             setCategory(values.category_id)
           }
@@ -199,6 +208,10 @@ const PoForm = forwardRef((props, ref) => {
                         <PoNumberInformationFields
                           errors={errors.number}
                           touched={touched.number}
+                          debouncedHandleCheck={debouncedHandleCheck}
+                          isPOExist={isPOExist}
+                          values={values.number}
+                          handleChange={handleChange}
                         />
                         <PoCurrencyInformationFields
                           errors={errors.currency_type}
