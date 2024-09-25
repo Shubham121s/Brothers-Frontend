@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useMemo, useState } from "react";
+import React, { forwardRef, useEffect, useMemo, useState } from 'react'
 import {
   FormContainer,
   Button,
@@ -6,32 +6,33 @@ import {
   Toast,
   FormItem,
   Select,
-  Notification,
-} from "../../../../components/ui";
-import { StickyFooter } from "../../../../components/shared";
-import { Form, Formik, Field } from "formik";
-import cloneDeep from "lodash/cloneDeep";
-import { AiOutlineSave } from "react-icons/ai";
-import * as Yup from "yup";
-import CustomerInformationFields from "./components/CustomerInformationFields";
-import ItemTable from "./components/ItemTable";
-import { useDispatch } from "react-redux";
-import { toggleNewPoItemDialog } from "../NewPo/store/stateSlice";
-import PoNumberInformationFields from "./components/PoNumberInformationFields";
-import PoDateInformationFields from "./components/PoDateInformationFields";
-import PoCurrencyInformationFields from "./components/PoCurrencyInformationFields";
-import CategoryInformationField from "./components/CategoryInformationField";
-import ItemForm from "./ItemForm";
-import { apiGetAllProductsCategoryId } from "../../../../services/SuperAdmin/Product/IndexService";
-import { toggleEditPoItemDialog } from "../EditPo/store/stateSlice";
+  Notification
+} from '../../../../components/ui'
+import { StickyFooter } from '../../../../components/shared'
+import { Form, Formik, Field } from 'formik'
+import cloneDeep from 'lodash/cloneDeep'
+import { AiOutlineSave } from 'react-icons/ai'
+import * as Yup from 'yup'
+import CustomerInformationFields from './components/CustomerInformationFields'
+import ItemTable from './components/ItemTable'
+import { useDispatch } from 'react-redux'
+import { toggleNewPoItemDialog } from '../NewPo/store/stateSlice'
+import PoNumberInformationFields from './components/PoNumberInformationFields'
+import PoDateInformationFields from './components/PoDateInformationFields'
+import PoCurrencyInformationFields from './components/PoCurrencyInformationFields'
+import CategoryInformationField from './components/CategoryInformationField'
+import ItemForm from './ItemForm'
+import { apiGetAllProductsCategoryId } from '../../../../services/SuperAdmin/Product/IndexService'
+import { toggleEditPoItemDialog } from '../EditPo/store/stateSlice'
+import { debounce } from 'lodash'
 // import { apiGetAllProductByCategorySelected } from "../../../../services/SuperAdmin/PurchaseOrder/PurchaseOrderService";
 
 const validationSchema = Yup.object().shape({
-  Customer: Yup.object().required("Required"),
-  number: Yup.string().required("Required"),
-  date: Yup.date().required("Required"),
-  currency_type: Yup.string().required("Required"),
-});
+  Customer: Yup.object().required('Required'),
+  number: Yup.string().required('Required'),
+  date: Yup.date().required('Required'),
+  currency_type: Yup.string().required('Required')
+})
 
 const PoForm = forwardRef((props, ref) => {
   const {
@@ -41,37 +42,37 @@ const PoForm = forwardRef((props, ref) => {
     customers = [],
     categories = [],
     productsData = [],
-    type,
-  } = props;
-  const dispatch = useDispatch();
-  const [category, setCategory] = useState(null);
-  const [products, setProducts] = useState([]);
+    type
+  } = props
+  const dispatch = useDispatch()
+  const [category, setCategory] = useState(null)
+  const [products, setProducts] = useState([])
 
   const [data, setData] = useState(() => {
-    if (type === "edit" && initialData && initialData.PurchaseOrderLists) {
-      return initialData.PurchaseOrderLists;
+    if (type === 'edit' && initialData && initialData.PurchaseOrderLists) {
+      return initialData.PurchaseOrderLists
     }
-    return [];
-  });
+    return []
+  })
 
-  console.log(initialData);
+  console.log(initialData)
 
   useEffect(() => {
-    if (type === "edit" && initialData && initialData.PurchaseOrderLists) {
-      setData(initialData.PurchaseOrderLists);
+    if (type === 'edit' && initialData && initialData.PurchaseOrderLists) {
+      setData(initialData.PurchaseOrderLists)
     }
-  }, [type, initialData]);
+  }, [type, initialData])
 
-  const [item, setItem] = useState({});
-  const [itemtype, setType] = useState(false);
+  const [item, setItem] = useState({})
+  const [itemtype, setType] = useState(false)
 
   const toggleAddBtn = () => {
-    if (type === "edit") {
-      dispatch(toggleEditPoItemDialog(true));
+    if (type === 'edit') {
+      dispatch(toggleEditPoItemDialog(true))
     } else {
-      dispatch(toggleNewPoItemDialog(true));
+      dispatch(toggleNewPoItemDialog(true))
     }
-  };
+  }
 
   const handleOnAddItem = (item) => {
     if (itemtype) {
@@ -81,43 +82,56 @@ const PoForm = forwardRef((props, ref) => {
             ? { ...f, ...item, delivery_date: new Date(f.delivery_date) }
             : f
         )
-      );
+      )
     } else {
-      setData((data) => [...data, item]);
+      setData((data) => [...data, item])
     }
-    setItem({});
-    setType(false);
-  };
+    setItem({})
+    setType(false)
+  }
 
   const onRemoveItem = (index) => {
-    let array = [...data];
-    let indexValue = array.indexOf(index);
+    let array = [...data]
+    let indexValue = array.indexOf(index)
     if (indexValue === -1) {
-      array.splice(index, 1);
-      setData(array);
+      array.splice(index, 1)
+      setData(array)
     }
-  };
+  }
 
   const onEditItem = (data) => {
-    if (type === "edit") {
-      dispatch(toggleEditPoItemDialog(true));
+    if (type === 'edit') {
+      dispatch(toggleEditPoItemDialog(true))
     } else {
-      dispatch(toggleNewPoItemDialog(true));
+      dispatch(toggleNewPoItemDialog(true))
     }
-    setItem(data);
-    setType(true);
-  };
+    setItem(data)
+    setType(true)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await apiGetAllProductsCategoryId({
-        category_id: category,
-      });
+        category_id: category
+      })
 
-      setProducts(response?.data?.data);
-    };
-    fetchData();
-  }, [category]);
+      setProducts(response?.data?.data)
+    }
+    fetchData()
+  }, [category])
+
+  // const handleCheck = async (e) => {
+  //   try {
+  //     const response = await apiIsPONumberExists({ number: e.target.value })
+  //     if (response.status === 200) {
+  //       isPOExist = false
+  //     }
+  //   } catch (error) {
+  //     isPOExist = true
+  //   }
+  // }
+
+  // const debouncedHandleCheck = debounce(handleCheck, 1000)
 
   return (
     <>
@@ -125,28 +139,32 @@ const PoForm = forwardRef((props, ref) => {
         enableReinitialize={true}
         innerRef={ref}
         initialValues={{
-          ...initialData,
+          ...initialData
         }}
         // validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          const formData = cloneDeep({ ...values, items: [...data] });
+          const formData = cloneDeep({ ...values, items: [...data] })
           if (data.length === 0) {
-            setSubmitting(false);
+            setSubmitting(false)
             return Toast.push(
-              <Notification title={"Required"} type="danger" duration={2500}>
+              <Notification
+                title={'Required'}
+                type="danger"
+                duration={2500}
+              >
                 PO List Required
               </Notification>,
               {
-                placement: "top-center",
+                placement: 'top-center'
               }
-            );
+            )
           }
-          onFormSubmit?.(formData, setSubmitting);
+          onFormSubmit?.(formData, setSubmitting)
         }}
       >
         {({ values, touched, errors, isSubmitting }) => {
-          if (values.category_id !== category && type !== "edit") {
-            setCategory(values.category_id);
+          if (values.category_id !== category && type !== 'edit') {
+            setCategory(values.category_id)
           }
           return (
             <Form>
@@ -217,16 +235,16 @@ const PoForm = forwardRef((props, ref) => {
                       <ItemForm
                         handleOnAddItem={handleOnAddItem}
                         currency_type={values.currency_type}
-                        products={type === "edit" ? productsData : products}
+                        products={type === 'edit' ? productsData : products}
                         initialData={
                           itemtype
                             ? {
                                 ...item,
-                                delivery_date: new Date(item.delivery_date),
+                                delivery_date: new Date(item.delivery_date)
                               }
                             : {}
                         }
-                        type={itemtype ? "edit" : "new"}
+                        type={itemtype ? 'edit' : 'new'}
                         mode={type}
                         setItem={setItem}
                         setType={setType}
@@ -239,8 +257,8 @@ const PoForm = forwardRef((props, ref) => {
                   stickyClass="border-t bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700"
                 >
                   <h5 className="flex gap-1 items-center text-gray-600">
-                    Total <h4 className="text-blue-500">{data.length}</h4>{" "}
-                    {data.length === 1 ? "item" : "items"} in list
+                    Total <h4 className="text-blue-500">{data.length}</h4>{' '}
+                    {data.length === 1 ? 'item' : 'items'} in list
                   </h5>
                   <div className="md:flex items-center">
                     <Button
@@ -258,29 +276,29 @@ const PoForm = forwardRef((props, ref) => {
                       icon={<AiOutlineSave />}
                       type="submit"
                     >
-                      {type === "edit" ? "Update" : "Save"}
+                      {type === 'edit' ? 'Update' : 'Save'}
                     </Button>
                   </div>
                 </StickyFooter>
               </FormContainer>
             </Form>
-          );
+          )
         }}
       </Formik>
     </>
-  );
-});
+  )
+})
 
 PoForm.defaultProps = {
-  type: "new",
+  type: 'new',
   initialData: {
-    purchase_order_id: "",
+    purchase_order_id: '',
     date: new Date(),
-    number: "",
+    number: '',
     Customer: null,
-    currency_type: "INR",
-    category_id: "",
-  },
-};
+    currency_type: 'INR',
+    category_id: ''
+  }
+}
 
-export default PoForm;
+export default PoForm

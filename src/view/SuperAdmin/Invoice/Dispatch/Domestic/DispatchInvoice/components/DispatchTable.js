@@ -36,6 +36,7 @@ const TableFooterRows = ({
   const totalAmount = InvoiceTotal(dispatchList(data?.DispatchLocations))
   const pageAmount = InvoiceTotal(pageData)
   const packingAmount = parseFloat(packing_charges ? packing_charges : 0)
+  const packingTotalAmount = packingAmount + packingAmount * (GST_RATE / 100)
   const fightAmount = parseFloat(fright_charges ? fright_charges : 0)
   const GSTAmount = parseFloat(
     (totalAmount + packingAmount) * (GST_RATE / 100)
@@ -133,23 +134,25 @@ const TableFooterRows = ({
       >
         <Td
           style={{ border: '.5px solid black', padding: '3px' }}
-          colSpan="2"
+          colSpan="5"
         ></Td>
         <Td
           style={{ border: '.5px solid black', padding: '3px' }}
-          colSpan="3"
+          colSpan="1"
           className={`uppercase ${className}`}
         >
           P & F Charges
         </Td>
         <Td
           style={{ border: '.5px solid black', padding: '3px' }}
-          colSpan="2"
+          colSpan="1"
           className={`uppercase ${className}`}
-        ></Td>
+        >
+          {GST_RATE}%
+        </Td>
 
         <Td style={{ border: '.5px solid black', padding: '3px' }}>
-          <NumberFormat value={packingAmount} />
+          <NumberFormat value={packingTotalAmount.toFixed(2)} />
         </Td>
       </Tr>
       {bill_type === 'IGST' ? (

@@ -266,6 +266,7 @@ const ProductForm = forwardRef((props, ref) => {
                       touched={touched?.item_code}
                       placeholder="Item Code"
                       label="Item Code"
+                      type={type}
                       values={values}
                       handleChange={handleChange}
                       debouncedHandleCheck={debouncedHandleCheck}

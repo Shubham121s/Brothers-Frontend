@@ -17,8 +17,9 @@ const ItemCodeInformationField = (props) => {
   } = props
   const handleFieldChange = (e) => {
     handleChange(e)
-
-    debouncedHandleCheck(e)
+    if (type == 'new') {
+      debouncedHandleCheck(e)
+    }
   }
 
   return (
@@ -29,7 +30,7 @@ const ItemCodeInformationField = (props) => {
       errorMessage={errors}
     >
       <Field
-        type={type}
+        type="text"
         autoComplete="off"
         name={name}
         placeholder={placeholder}
