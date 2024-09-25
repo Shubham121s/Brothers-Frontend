@@ -25,13 +25,6 @@ const PoNumberInformationFields = (props) => {
       errorMessage={errors}
     >
       <Field
-        className={`${
-          values
-            ? isPOExist && type !== 'edit'
-              ? 'bg-red-100'
-              : 'bg-emerald-100'
-            : ''
-        }`}
         type="text"
         autoComplete="off"
         name="number"

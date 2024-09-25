@@ -29,13 +29,6 @@ const ItemCodeInformationField = (props) => {
       errorMessage={errors}
     >
       <Field
-        className={`${
-          values.item_code
-            ? isCodeExixts && type !== 'edit'
-              ? 'bg-red-100'
-              : 'bg-emerald-100'
-            : ''
-        }`}
         type={type}
         autoComplete="off"
         name={name}
