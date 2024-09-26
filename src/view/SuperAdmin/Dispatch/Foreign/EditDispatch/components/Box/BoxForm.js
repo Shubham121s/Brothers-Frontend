@@ -1,28 +1,28 @@
-import React, { forwardRef } from "react";
-import { Button, FormContainer } from "../../../../../../../components/ui";
-import * as Yup from "yup";
-import { Form, Formik } from "formik";
-import BoxInformationFields from "./BoxInformationFields";
+import React, { forwardRef } from 'react'
+import { Button, FormContainer } from '../../../../../../../components/ui'
+import * as Yup from 'yup'
+import { Form, Formik } from 'formik'
+import BoxInformationFields from './BoxInformationFields'
 
 const validationSchema = Yup.object().shape({
-  box_length: Yup.number().required("Required"),
-  box_breadth: Yup.number().required("Required"),
-  box_height: Yup.number().required("Required"),
-  tare_weight: Yup.number().required("Required"),
-  box_size_type: Yup.string().required("Required"),
-});
+  box_length: Yup.number().required('Required'),
+  box_breadth: Yup.number().required('Required'),
+  box_height: Yup.number().required('Required'),
+  tare_weight: Yup.number().required('Required'),
+  box_size_type: Yup.string().required('Required')
+})
 
 const BoxForm = forwardRef((props, ref) => {
-  const { initialData, handleFormSubmit, onDiscard, index, type } = props;
+  const { initialData, handleFormSubmit, onDiscard, index, type } = props
   return (
     <Formik
       innerRef={ref}
       initialValues={{
-        ...initialData,
+        ...initialData
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        handleFormSubmit?.(values, setSubmitting);
+        handleFormSubmit?.(values, setSubmitting)
       }}
     >
       {({ values, touched, errors, isSubmitting }) => {
@@ -30,7 +30,7 @@ const BoxForm = forwardRef((props, ref) => {
         return (
           <Form>
             <FormContainer>
-              <h4>{type === "new" ? "New" : "Update"} Box Information</h4>
+              <h4>{type === 'new' ? 'New' : 'Update'} Box Information</h4>
               <p className="mb-4">Section to config new box information</p>
               <BoxInformationFields
                 index={index}
@@ -53,27 +53,28 @@ const BoxForm = forwardRef((props, ref) => {
                   type="submit"
                   loading={isSubmitting}
                 >
-                  {type === "edit" ? "Update Box" : "Add Box"}
+                  {type === 'edit' ? 'Update Box' : 'Add Box'}
                 </Button>
               </div>
             </FormContainer>
           </Form>
-        );
+        )
       }}
     </Formik>
-  );
-});
+  )
+})
 
 BoxForm.defaultProps = {
-  type: "edit",
+  type: 'edit',
   initialData: {
-    index: "",
-    box_length: "",
-    box_breadth: "",
-    box_height: "",
-    box_size_type: "",
-    tare_weight: "",
-  },
-};
+    index: '',
+    box_length: '',
+    box_breadth: '',
+    box_height: '',
+    box_size_type: '',
+    tare_weight: '',
+    box_no: ''
+  }
+}
 
-export default BoxForm;
+export default BoxForm

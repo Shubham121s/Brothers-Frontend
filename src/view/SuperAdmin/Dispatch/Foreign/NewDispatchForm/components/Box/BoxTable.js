@@ -129,10 +129,9 @@ const BoxTable = (props) => {
       accessorKey: 'box',
       cell: (props) => {
         const { index } = props.row
+        const row = props.row.original
         return (
-          <div className="uppercase text-center">
-            {`BOX NO ${index + 1 || '-'}`}
-          </div>
+          <div className="uppercase text-center">{`BOX NO ${row?.box_no}`}</div>
         )
       }
     },

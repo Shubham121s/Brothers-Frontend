@@ -1,192 +1,209 @@
-import React from "react";
-import { EXECUTIVE, SUPER_ADMIN } from "../../constants/roles.constant";
+import React from 'react'
+import {
+  EXECUTIVE,
+  SUPER_ADMIN,
+  ADMIN,
+  SUB_ADMIN
+} from '../../constants/roles.constant'
 
 const superAdminRoute = [
   {
-    key: "dashboard",
+    key: 'dashboard',
     path: `/super/admin/dashboard`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Dashboard")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/Dashboard')),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   // SUPER ADMIN
 
   // USER
   // **************START***************
   {
-    key: "user.list",
+    key: 'user.list',
     path: `/super/admin/company/user`,
-    component: React.lazy(() => import("../../view/SuperAdmin/User")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/User')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   // **************END***************
 
   // CUSTOMER
   // **************START***************
   {
-    key: "customer.new",
+    key: 'customer.new',
     path: `/super/admin/customer/new`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Customer/NewCustomer")
+      import('../../view/SuperAdmin/Customer/NewCustomer')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   {
-    key: "customer.list",
+    key: 'customer.list',
     path: `/super/admin/customer/list`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Customer/CustomerList")
+      import('../../view/SuperAdmin/Customer/CustomerList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   {
-    key: "customer.details",
+    key: 'customer.details',
     path: `/super/admin/customer-details/:customerId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Customer/CustomerDetails")
+      import('../../view/SuperAdmin/Customer/CustomerDetails')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   {
-    key: "customer.edit",
+    key: 'customer.edit',
     path: `/super/admin/customer/edit/:customerId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Customer/EditCustomer")
+      import('../../view/SuperAdmin/Customer/EditCustomer')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   // **************END***************
 
   // PO
   // **************START*************
   {
-    key: "po.new",
+    key: 'po.new',
     path: `/super/admin/po/new`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Po/NewPo")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/Po/NewPo')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "po.new",
+    key: 'po.new',
     path: `/super/admin/po/list`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Po/PoList")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/Po/PoList')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "po.new",
+    key: 'po.new',
     path: `/super/admin/po-details/:poId`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Po/PoDetails")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/Po/PoDetails')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "po.edit",
+    key: 'po.edit',
     path: `/super/admin/po-Edit/:poId`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Po/EditPo")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/Po/EditPo')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "po.setting",
+    key: 'po.setting',
     path: `/super/admin/po/setting`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Po/PoSetting")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/Po/PoSetting')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   // **************END***************
 
   // PRODUCT
   // **************START***************
   {
-    key: "product.settings",
+    key: 'product.settings',
     path: `/super/admin/product/settings`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Product/ProductSetting")
+      import('../../view/SuperAdmin/Product/ProductSetting')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   {
-    key: "product.list",
+    key: 'product.list',
     path: `/super/admin/product/list`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Product/ProductList")
+      import('../../view/SuperAdmin/Product/ProductList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   {
-    key: "product.new",
+    key: 'product.new',
     path: `/super/admin/product/new`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Product/NewProduct")
+      import('../../view/SuperAdmin/Product/NewProduct')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   {
-    key: "product.edit",
+    key: 'product.edit',
     path: `/super/admin/product/edit/:productId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Product/EditProduct")
+      import('../../view/SuperAdmin/Product/EditProduct')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   // **************END***************
 
   // DRAWING
   // **************START***************
   {
-    key: "product.drawing.list",
+    key: 'product.drawing.list',
     path: `/super/admin/product/drawing/:productId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Product/Drawing/DrawingList")
+      import('../../view/SuperAdmin/Product/Drawing/DrawingList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
   // **************END***************
 
   // FOREIGN DISPATCH
   // **************START***************
   {
-    key: "invoice.dispatch.new",
+    key: 'invoice.dispatch.new',
     path: `/super/admin/dispatch/foreign/new`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Dispatch/Foreign/NewDispatch")
+      import('../../view/SuperAdmin/Dispatch/Foreign/NewDispatch')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "invoice.dispatch.edit",
+    key: 'invoice.dispatch.edit',
     path: `/super/admin/dispatch/foreign/edit/:invoiceId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Dispatch/Foreign/EditDispatch")
+      import('../../view/SuperAdmin/Dispatch/Foreign/EditDispatch')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
+  },
+  // **************END***************
+
+  //SETTINGS INVOICE
+  // **************START***************
+  {
+    key: 'invoice.dispatch.setting',
+    path: `/super/admin/dispatch/invoice/setting`,
+    component: React.lazy(() =>
+      import('../../view/SuperAdmin/Dispatch/Foreign/NewDispatch')
+    ),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   // **************END***************
 
   // DOMESTIC DISPATCH
   // **************START***************
   {
-    key: "invoice.dispatch.new",
+    key: 'invoice.dispatch.new',
     path: `/super/admin/dispatch/domestic/new`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Dispatch/Domestic/NewDispatch")
+      import('../../view/SuperAdmin/Dispatch/Domestic/NewDispatch')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "invoice.dispatch.edit",
+    key: 'invoice.dispatch.edit',
     path: `/super/admin/dispatch/domestic/edit/:invoiceId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Dispatch/Domestic/EditDispatch")
+      import('../../view/SuperAdmin/Dispatch/Domestic/EditDispatch')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   // **************END***************
 
   // PATTERN DISPATCH
   // **************START***************
   {
-    key: "invoice.pattern.new",
+    key: 'invoice.pattern.new',
     path: `/super/admin/dispatch/pattern/new`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Dispatch/Pattern/NewPattern")
+      import('../../view/SuperAdmin/Dispatch/Pattern/NewPattern')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   // {
   //   key: "invoice.dispatch.edit",
@@ -194,147 +211,147 @@ const superAdminRoute = [
   //   component: React.lazy(() =>
   //     import("../../view/SuperAdmin/Dispatch/Domestic/EditDispatch")
   //   ),
-  //   authority: [SUPER_ADMIN],
+  //   authority: [SUPER_ADMIN,ADMIN],
   // },
   // **************END***************
 
   // DISPATCH
   // **************START***************
   {
-    key: "invoice.dispatch.list",
+    key: 'invoice.dispatch.list',
     path: `/super/admin/dispatch-list`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Dispatch/InvoiceList")
+      import('../../view/SuperAdmin/Dispatch/InvoiceList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "invoice.domestic.view",
+    key: 'invoice.domestic.view',
     path: `/super/admin/domestic/invoice/view/:invoiceId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Invoice/Dispatch/Domestic")
+      import('../../view/SuperAdmin/Invoice/Dispatch/Domestic')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   // **************END***************
 
   // TEST
   // **************START***************
   {
-    key: "invoice.dispatch.list",
+    key: 'invoice.dispatch.list',
     path: `/test`,
-    component: React.lazy(() => import("../../view/SuperAdmin/Test")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/Test')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   // **************END***************
 
   {
-    key: "master.planner",
+    key: 'master.planner',
     path: `/super/admin/master/product/planner`,
-    component: React.lazy(() => import("../../view/SuperAdmin/ProductPlanner")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/ProductPlanner')),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
 
   // TEST
   // **************START***************
   {
-    key: "workers",
+    key: 'workers',
     path: `/super/admin/workers`,
-    component: React.lazy(() => import("../../view/SuperAdmin/worker")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/worker')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
 
   {
-    key: "workers",
+    key: 'workers',
     path: `/super/admin/worker/attendance`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/worker/workerAttendence")
+      import('../../view/SuperAdmin/worker/workerAttendence')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
 
   {
-    key: "workersLedger",
+    key: 'workersLedger',
     path: `super/admin/worker/details`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/worker/workerLedger")
+      import('../../view/SuperAdmin/worker/workerLedger')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
 
   // **************END***************
   {
-    key: "stock",
+    key: 'stock',
     path: `super/admin/master/stock`,
-    component: React.lazy(() => import("../../view/SuperAdmin/stock")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/stock')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
 
   {
-    key: "purchaseOrder.new",
+    key: 'purchaseOrder.new',
     path: `/super/admin/purchaseOrder/new`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/PurchaseOrder/NewPo")
+      import('../../view/SuperAdmin/PurchaseOrder/NewPo')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "purchaseOrder.edit",
+    key: 'purchaseOrder.edit',
     path: `/super/admin/purchaseOrder/edit/:purchaseOrderId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/PurchaseOrder/EditPo")
+      import('../../view/SuperAdmin/PurchaseOrder/EditPo')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "purchaseOrder.list",
+    key: 'purchaseOrder.list',
     path: `/super/admin/purchaseOrder/list`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/PurchaseOrder/PoList")
+      import('../../view/SuperAdmin/PurchaseOrder/PoList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "purchaseOrder.list",
+    key: 'purchaseOrder.list',
     path: `/super/admin/purchase/order/details/:purchaseId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/PurchaseOrder/PoDetails")
+      import('../../view/SuperAdmin/PurchaseOrder/PoDetails')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "purchaseOrder.inward",
+    key: 'purchaseOrder.inward',
     path: `/purchase/order/inward/:purchaseOrderId`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/PurchaseOrder/Inward")
+      import('../../view/SuperAdmin/PurchaseOrder/Inward')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "purchaseOrder.inward.list",
+    key: 'purchaseOrder.inward.list',
     path: `/super/admin/purchaseOrder/inward/list`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/PurchaseOrder/InwardList")
+      import('../../view/SuperAdmin/PurchaseOrder/InwardList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "purchaseOrder.inward.grn",
+    key: 'purchaseOrder.inward.grn',
     path: `/super/admin/inward/details/:grn`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/PurchaseOrder/GRN")
+      import('../../view/SuperAdmin/PurchaseOrder/GRN')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   //Enquiry
   //*********START********* */
   {
-    key: "enquiry.list",
+    key: 'enquiry.list',
     path: `/super/admin/enquiry/List`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Sales/Enquiry/EnquiryList")
+      import('../../view/SuperAdmin/Sales/Enquiry/EnquiryList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
 
   //*********END********* */
@@ -342,42 +359,42 @@ const superAdminRoute = [
   //Quotation
   //*********START********* */
   {
-    key: "quotation.list",
+    key: 'quotation.list',
     path: `/super/admin/quotation`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Sales/Quotation/QuotationList")
+      import('../../view/SuperAdmin/Sales/Quotation/QuotationList')
     ),
-    authority: [SUPER_ADMIN],
+    authority: [SUPER_ADMIN, ADMIN]
   },
   //*********END********* */
 
   //Machine Breakdown
   //*********START********* */
   {
-    key: "machine.list",
+    key: 'machine.list',
     path: `/super/admin/machine/list`,
-    component: React.lazy(() => import("../../view/SuperAdmin/machine")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/machine')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   {
-    key: "machine.breakdown",
+    key: 'machine.breakdown',
     path: `/super/admin/machine/breakdown`,
-    component: React.lazy(() => import("../../view/SuperAdmin/breakdown")),
-    authority: [SUPER_ADMIN],
+    component: React.lazy(() => import('../../view/SuperAdmin/breakdown')),
+    authority: [SUPER_ADMIN, ADMIN]
   },
   //*********END********* */
 
   //Machine Breakdown
   //*********START********* */
   {
-    key: "annual.calibration",
+    key: 'annual.calibration',
     path: `/super/admin/annual/calibration`,
     component: React.lazy(() =>
-      import("../../view/SuperAdmin/Annual-calibration-plan")
+      import('../../view/SuperAdmin/Annual-calibration-plan')
     ),
-    authority: [SUPER_ADMIN],
-  },
+    authority: [SUPER_ADMIN, ADMIN]
+  }
   //*********END********* */
-];
+]
 
-export default superAdminRoute;
+export default superAdminRoute

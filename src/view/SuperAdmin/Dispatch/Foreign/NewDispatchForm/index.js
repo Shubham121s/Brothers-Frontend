@@ -162,7 +162,6 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
 
   const handleNewBoxAdd = (boxes = [], newBox = {}, setFieldValue) => {
     const updatedBox = [...boxes, newBox]
-    console.log(updatedBox)
     setFieldValue?.('DispatchBoxList', updatedBox)
   }
 
@@ -298,7 +297,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
             isSubmitting,
             handleChange
           }) => {
-            console.log(values.DispatchList)
+            console.log(values)
             return (
               <Form key="invoiceForm">
                 <FormContainer key="invoiceFormContainer">
