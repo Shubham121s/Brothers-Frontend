@@ -18,7 +18,9 @@ const PoNumberInformationFields = (props) => {
     if (errors && errors.number) {
       setFieldError('number', '')
     }
-    debouncedHandleCheck(e)
+    if (type == 'new') {
+      debouncedHandleCheck(e)
+    }
   }
   return (
     <FormItem

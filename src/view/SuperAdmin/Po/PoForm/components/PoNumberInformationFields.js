@@ -14,8 +14,9 @@ const PoNumberInformationFields = (props) => {
   } = props
   const handleFieldChange = (e) => {
     handleChange(e)
-
-    debouncedHandleCheck(e)
+    if (type === 'new') {
+      debouncedHandleCheck(e)
+    }
   }
   return (
     <FormItem

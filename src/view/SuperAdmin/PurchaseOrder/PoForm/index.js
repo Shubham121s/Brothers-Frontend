@@ -220,6 +220,7 @@ const PoForm = forwardRef((props, ref) => {
                           values={values.number}
                           handleChange={handleChange}
                           setFieldError={setFieldError}
+                          type={type}
                         />
                         <PoCurrencyInformationFields
                           errors={errors.currency_type}
