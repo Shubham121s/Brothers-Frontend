@@ -27701,6 +27701,11 @@ hr {
     line-height: 1rem;
   }
 
+  .print\:text-ts {
+    font-size: 0.50rem;
+    line-height: 0.9rem;
+  }
+
   .print\:text-xxs {
     font-size: 0.4rem;
     line-height: 0.9rem;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 
 const TransportAndPaymentTerms = ({ data }) => {
   return (
@@ -25,13 +25,13 @@ const TransportAndPaymentTerms = ({ data }) => {
         <p className="text-gray-700 font-semibold print:text-sm">
           PAYMENT TERMS
         </p>
-        <p className="text-gray-700 font-semibold print:text-sm">-</p>
-        <p className="text-gray-500 font-medium print:text-sm uppercase">
+        <p className="text-gray-700 print:text-ts">-</p>
+        <p className="text-gray-500 font-medium print:text-ts uppercase">
           30 days From Date of Invoice
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TransportAndPaymentTerms;
+export default TransportAndPaymentTerms
