@@ -112,7 +112,13 @@ const validationSchema = Yup.object().shape({
 const ForeignDispatchForm = forwardRef((props, ref) => {
   const dispatch = useDispatch()
   const [tableRender, setTableRender] = useState(0)
-  const { initialData, onFormSubmit, customers = [], pushNotification } = props
+  const {
+    initialData,
+    onFormSubmit,
+    customers = [],
+    pushNotification,
+    conditions = []
+  } = props
 
   useEffect(() => {}, [tableRender])
 
@@ -604,6 +610,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                       </h5>
                       <p className="mb-2">Section to config note information</p>
                       <NoteInformationFields
+                        conditions={conditions}
                         touched={touched?.DispatchNote}
                         errors={errors?.DispatchNote}
                         values={values?.DispatchNote}
@@ -678,7 +685,7 @@ ForeignDispatchForm.defaultProps = {
       remark: '',
       convert_rate: ''
     },
-    DispatchNote: NOTE_LIST[0]
+    DispatchNote: ''
   }
 }
 

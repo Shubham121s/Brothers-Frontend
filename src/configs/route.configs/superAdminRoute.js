@@ -169,7 +169,7 @@ const superAdminRoute = [
     key: 'invoice.dispatch.setting',
     path: `/super/admin/dispatch/invoice/setting`,
     component: React.lazy(() =>
-      import('../../view/SuperAdmin/Dispatch/Foreign/NewDispatch')
+      import('../../view/SuperAdmin/Dispatch/Setting/ForeignInvoiceSetting')
     ),
     authority: [SUPER_ADMIN, ADMIN]
   },

@@ -206,15 +206,15 @@ const superAdminNavigationConfig = [
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           },
-          // {
-          //   key: 'invoice.setting',
-          //   path: `/super/admin/dispatch/invoice/setting`,
-          //   title: 'Settings',
-          //   translateKey: 'nav.foreign.setting',
-          //   type: NAV_ITEM_TYPE_ITEM,
-          //   authority: [SUPER_ADMIN, ADMIN],
-          //   subMenu: []
-          // },
+          {
+            key: 'invoice.setting',
+            path: `/super/admin/dispatch/invoice/setting`,
+            title: 'Settings',
+            translateKey: 'nav.foreign.setting',
+            type: NAV_ITEM_TYPE_ITEM,
+            authority: [SUPER_ADMIN, ADMIN],
+            subMenu: []
+          },
           {
             key: 'invoice.list',
             path: `/super/admin/dispatch-list`,

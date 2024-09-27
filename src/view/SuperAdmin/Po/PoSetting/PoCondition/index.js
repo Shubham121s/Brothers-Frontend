@@ -1,18 +1,12 @@
-import React from "react";
-import ConditionTable from "./components/ConditionTable";
-import { injectReducer } from "../../../../../store";
-import poConditionReducer from "./store";
-import ConditionTableTools from "./components/ConditionTableTools";
+import React from 'react'
+import Condition from '../../../Dispatch/Setting/ForeignInvoiceSetting'
 
-injectReducer("condition", poConditionReducer);
-const Condition = () => {
+const Conditions = () => {
   return (
     <>
-      <ConditionTableTools />
-      <ConditionTable />
-      {/* <CategoryNewFormDialog /> */}
+      <Condition type="po" />
     </>
-  );
-};
+  )
+}
 
-export default Condition;
+export default Conditions
