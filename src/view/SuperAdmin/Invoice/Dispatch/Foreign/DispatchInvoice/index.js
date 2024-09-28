@@ -4,9 +4,9 @@ import { useReactToPrint } from 'react-to-print'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import DispatchTable from './components/DispatchTable'
-import { TABLE_ROW_COUNT } from '../constant'
+// import { TABLE_ROW_COUNT } from '../constant'
 
-const DispatchInvoice = ({ data }) => {
+const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
   const componentRef = useRef()
 
   const handlePrint = useReactToPrint({

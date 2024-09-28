@@ -4,9 +4,8 @@ import { useReactToPrint } from 'react-to-print'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import TaxTable from './components/TaxTable'
-import { TABLE_ROW_COUNT } from '../constant'
 
-const TaxInvoice = ({ data }) => {
+const TaxInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
   const componentRef = useRef()
 
   const handlePrint = useReactToPrint({

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { apiGetDispatchForeignInvoiceByInvoiceId } from '../../../../../services/SuperAdmin/Invoice/DispatchServices'
 import {
   Container,
@@ -11,7 +11,7 @@ import PackingInvoice from './PackingInvoice'
 import TaxInvoice from './TaxInvoice'
 import TaxInvoiceExcel from '../../../Excel/Dispatch/Foreign/TaxInvoice'
 
-const ForeignInvoice = ({ dispatch_invoice_id }) => {
+const ForeignInvoice = ({ dispatch_invoice_id, TABLE_ROW_COUNT }) => {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState()
 
@@ -32,16 +32,24 @@ const ForeignInvoice = ({ dispatch_invoice_id }) => {
       setLoading(false)
     }
   }
-
   return (
     <Container className="h-full">
       <Loading loading={loading}>
         {!isEmpty(data) && (
           <>
             <div className="w-full flex gap-4 justify-center">
-              <DispatchInvoice data={data} />
-              <PackingInvoice data={data} />
-              <TaxInvoice data={data} />
+              <DispatchInvoice
+                data={data}
+                TABLE_ROW_COUNT={TABLE_ROW_COUNT}
+              />
+              <PackingInvoice
+                data={data}
+                TABLE_ROW_COUNT={TABLE_ROW_COUNT}
+              />
+              <TaxInvoice
+                data={data}
+                TABLE_ROW_COUNT={TABLE_ROW_COUNT}
+              />
               <TaxInvoiceExcel data={data} />
             </div>
           </>

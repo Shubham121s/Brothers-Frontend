@@ -4,9 +4,8 @@ import { useReactToPrint } from 'react-to-print'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import PackingTable from './components/PackingTable'
-import { TABLE_ROW_COUNT } from '../constant'
 
-const PackingInvoice = ({ data }) => {
+const PackingInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
   const componentRef = useRef()
 
   const handlePrint = useReactToPrint({
