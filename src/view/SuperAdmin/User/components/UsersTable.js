@@ -5,208 +5,213 @@ import { getAllUsers, setTableData } from '../store/dataSlice'
 import useThemeClass from '../../../../utils/hooks/useThemeClass'
 import dayjs from 'dayjs'
 import cloneDeep from 'lodash/cloneDeep'
-import DataTable from './../../../../components/shared/DataTable';
+import DataTable from './../../../../components/shared/DataTable'
 import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
-import { setSelectedUser, toggleDeleteUserDialog, toggleEditUserDialog } from '../store/stateSlice'
+import {
+  setSelectedUser,
+  toggleDeleteUserDialog,
+  toggleEditUserDialog
+} from '../store/stateSlice'
 import UserEditFormDialog from './UserEditDialog'
 import UserDeleteConfirmation from './UserDeleteConfirmation'
 
 const statusColor = {
-    true: {
-        label: 'Active',
-        dotClass: 'bg-emerald-500',
-        textClass: 'text-emerald-500',
-    },
-    false: {
-        label: 'In-Active',
-        dotClass: 'bg-red-500',
-        textClass: 'text-red-500',
-    }
+  true: {
+    label: 'Active',
+    dotClass: 'bg-emerald-500',
+    textClass: 'text-emerald-500'
+  },
+  false: {
+    label: 'In-Active',
+    dotClass: 'bg-red-500',
+    textClass: 'text-red-500'
+  }
 }
-
-
 
 const typeColor = {
-    'super-admin': {
-        label: 'Super Admin',
-        bgClass: 'bg-emerald-100',
-        textClass: 'text-emerald-600',
-    },
-    'executive': {
-        label: 'Executive',
-        bgClass: 'bg-yellow-100',
-        textClass: 'text-yellow-600',
-    }
+  'super-admin': {
+    label: 'Super Admin',
+    bgClass: 'bg-emerald-100',
+    textClass: 'text-emerald-600'
+  },
+  'sub-admin': {
+    label: 'Sub Admin',
+    bgClass: 'bg-orange-100',
+    textClass: 'text-orange-600'
+  },
+  admin: {
+    label: 'Admin',
+    bgClass: 'bg-purple-100',
+    textClass: 'text-purple-600'
+  },
+  executive: {
+    label: 'Executive',
+    bgClass: 'bg-yellow-100',
+    textClass: 'text-yellow-600'
+  }
 }
-
-
 
 const ActionColumn = ({ row }) => {
-    const { textTheme } = useThemeClass()
-    const dispatch = useDispatch()
+  const { textTheme } = useThemeClass()
+  const dispatch = useDispatch()
 
-    const onEdit = () => {
-        dispatch(toggleEditUserDialog(true))
-        dispatch(setSelectedUser(row))
-    }
-    const onDelete = () => {
-        dispatch(toggleDeleteUserDialog(true))
-        dispatch(setSelectedUser(row))
-    }
+  const onEdit = () => {
+    dispatch(toggleEditUserDialog(true))
+    dispatch(setSelectedUser(row))
+  }
+  const onDelete = () => {
+    dispatch(toggleDeleteUserDialog(true))
+    dispatch(setSelectedUser(row))
+  }
 
-    return (
-        <div className="flex justify-end text-lg gap-x-4">
-            <span
-                className={`cursor-pointer hover:${textTheme}`}
-                onClick={onEdit}
-            >
-                <HiOutlinePencil />
-            </span>
-            <span
-                className="cursor-pointer hover:text-red-500"
-                onClick={onDelete}
-            >
-                <HiOutlineTrash />
-            </span>
-        </div>
-    )
+  return (
+    <div className="flex justify-end text-lg gap-x-4">
+      <span
+        className={`cursor-pointer hover:${textTheme}`}
+        onClick={onEdit}
+      >
+        <HiOutlinePencil />
+      </span>
+      <span
+        className="cursor-pointer hover:text-red-500"
+        onClick={onDelete}
+      >
+        <HiOutlineTrash />
+      </span>
+    </div>
+  )
 }
 
-
 const columns = [
-    {
-        header: 'Name',
-        accessorKey: 'name',
-        cell: (props) => {
-            const row = props.row?.original
-            return (
-                <div className='uppercase'>
-                    {row?.name}
-                </div>
-            )
-        },
-    },
-    {
-        header: 'Email',
-        accessorKey: 'email',
-        cell: (props) => {
-            const row = props.row?.original
-            return (
-                <div>
-                    {row?.email}
-                </div>
-            )
-        },
-    },
-    {
-        header: 'mobile',
-        accessorKey: 'mobile',
-    },
-    {
-        header: 'Status',
-        accessorKey: 'status',
-        cell: (props) => {
-            const row = props.row?.original
-            return (
-                <div className="flex items-center">
-                    <Badge className={statusColor[row?.status]?.dotClass} />
-                    <span className={`ml-2 font-semibold capitalize ${statusColor[row?.status]?.textClass}`}>
-                        {statusColor[row?.status]?.label}
-                    </span>
-                </div>
-            )
-        },
-    },
-    {
-        header: 'Type',
-        accessorKey: 'type',
-        cell: (props) => {
-            const row = props.row?.original
-            return (
-                <div>
-                    <Tag className={`${typeColor[row?.type]?.bgClass} ${typeColor[row?.type]?.textClass} border-0`}>
-                        {typeColor[row?.type]?.label}
-                    </Tag>
-                </div>
-            )
-        },
-    },
-    {
-        header: 'Reg. Date',
-        accessorKey: 'lastOnline',
-        cell: (props) => {
-            const row = props.row?.original
-            return (
-                <div className="flex items-center">
-                    {dayjs(row?.createdAt).format('MM/DD/YYYY')}
-                </div>
-            )
-        },
-    },
-    {
-        header: '',
-        accessorKey: 'id',
-        cell: (props) => {
-            const row = props.row?.original
-            return (
-                <ActionColumn row={row} />
-            )
-        },
-    },
+  {
+    header: 'Name',
+    accessorKey: 'name',
+    cell: (props) => {
+      const row = props.row?.original
+      return <div className="uppercase">{row?.name}</div>
+    }
+  },
+  {
+    header: 'Email',
+    accessorKey: 'email',
+    cell: (props) => {
+      const row = props.row?.original
+      return <div>{row?.email}</div>
+    }
+  },
+  {
+    header: 'mobile',
+    accessorKey: 'mobile'
+  },
+  {
+    header: 'Status',
+    accessorKey: 'status',
+    cell: (props) => {
+      const row = props.row?.original
+      return (
+        <div className="flex items-center">
+          <Badge className={statusColor[row?.status]?.dotClass} />
+          <span
+            className={`ml-2 font-semibold capitalize ${
+              statusColor[row?.status]?.textClass
+            }`}
+          >
+            {statusColor[row?.status]?.label}
+          </span>
+        </div>
+      )
+    }
+  },
+  {
+    header: 'Type',
+    accessorKey: 'type',
+    cell: (props) => {
+      const row = props.row?.original
+      return (
+        <div>
+          <Tag
+            className={`${typeColor[row?.type]?.bgClass} ${
+              typeColor[row?.type]?.textClass
+            } border-0`}
+          >
+            {typeColor[row?.type]?.label}
+          </Tag>
+        </div>
+      )
+    }
+  },
+  {
+    header: 'Reg. Date',
+    accessorKey: 'lastOnline',
+    cell: (props) => {
+      const row = props.row?.original
+      return (
+        <div className="flex items-center">
+          {dayjs(row?.createdAt).format('MM/DD/YYYY')}
+        </div>
+      )
+    }
+  },
+  {
+    header: '',
+    accessorKey: 'id',
+    cell: (props) => {
+      const row = props.row?.original
+      return <ActionColumn row={row} />
+    }
+  }
 ]
 
 const UsersTable = () => {
-    const dispatch = useDispatch()
-    const data = useSelector((state) => state.user.data.userList)
-    const loading = useSelector((state) => state.user.data.loading)
-    const { type } = useSelector(
-        (state) => state.user.data.filterData
-    )
+  const dispatch = useDispatch()
+  const data = useSelector((state) => state.user.data.userList)
+  const loading = useSelector((state) => state.user.data.loading)
+  const { type } = useSelector((state) => state.user.data.filterData)
 
-    const { pageIndex, pageSize, query, total } = useSelector(
-        (state) => state.user.data.tableData
-    )
+  const { pageIndex, pageSize, query, total } = useSelector(
+    (state) => state.user.data.tableData
+  )
 
-    const fetchData = useCallback(() => {
-        dispatch(getAllUsers({ pageIndex, pageSize, query, type }))
-    }, [pageIndex, pageSize, query, type, dispatch])
+  const fetchData = useCallback(() => {
+    dispatch(getAllUsers({ pageIndex, pageSize, query, type }))
+  }, [pageIndex, pageSize, query, type, dispatch])
 
-    useEffect(() => {
-        fetchData()
-    }, [fetchData, pageIndex, pageSize, type])
+  useEffect(() => {
+    fetchData()
+  }, [fetchData, pageIndex, pageSize, type])
 
-    const tableData = useMemo(
-        () => ({ pageIndex, pageSize, query, total }),
-        [pageIndex, pageSize, query, total]
-    )
+  const tableData = useMemo(
+    () => ({ pageIndex, pageSize, query, total }),
+    [pageIndex, pageSize, query, total]
+  )
 
-    const onPaginationChange = (page) => {
-        const newTableData = cloneDeep(tableData)
-        newTableData.pageIndex = page
-        dispatch(setTableData(newTableData))
-    }
+  const onPaginationChange = (page) => {
+    const newTableData = cloneDeep(tableData)
+    newTableData.pageIndex = page
+    dispatch(setTableData(newTableData))
+  }
 
-    const onSelectChange = (value) => {
-        const newTableData = cloneDeep(tableData)
-        newTableData.pageSize = Number(value)
-        newTableData.pageIndex = 1
-        dispatch(setTableData(newTableData))
-    }
+  const onSelectChange = (value) => {
+    const newTableData = cloneDeep(tableData)
+    newTableData.pageSize = Number(value)
+    newTableData.pageIndex = 1
+    dispatch(setTableData(newTableData))
+  }
 
-    return (
-        <>
-            <DataTable
-                columns={columns}
-                data={data}
-                loading={loading}
-                pagingData={{ pageIndex, pageSize, query, total }}
-                onPaginationChange={onPaginationChange}
-                onSelectChange={onSelectChange}
-            />
-            <UserEditFormDialog />
-            <UserDeleteConfirmation />
-        </>
-    )
+  return (
+    <>
+      <DataTable
+        columns={columns}
+        data={data}
+        loading={loading}
+        pagingData={{ pageIndex, pageSize, query, total }}
+        onPaginationChange={onPaginationChange}
+        onSelectChange={onSelectChange}
+      />
+      <UserEditFormDialog />
+      <UserDeleteConfirmation />
+    </>
+  )
 }
 
 export default UsersTable
