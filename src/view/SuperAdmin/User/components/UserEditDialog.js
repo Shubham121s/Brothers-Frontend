@@ -6,57 +6,50 @@ import UserForm from './UserForm'
 import { updateUserDetails } from '../store/dataSlice'
 
 const UserEditFormDialog = () => {
+  const dispatch = useDispatch()
 
-    const dispatch = useDispatch()
+  const editUserDialog = useSelector((state) => state.user.state.editUserDialog)
+  const initialData = useSelector((state) => state.user.state.selectedUser)
 
-    const editUserDialog = useSelector(
-        (state) => state.user.state.editUserDialog
-    )
-    const initialData = useSelector(
-        (state) => state.user.state.selectedUser
-    )
+  const onDialogClose = () => {
+    dispatch(toggleEditUserDialog(false))
+  }
 
-    const onDialogClose = () => {
-        dispatch(toggleEditUserDialog(false))
-    }
-
-
-    const handleFormSubmit = async (values, setSubmitting) => {
-        setSubmitting(true)
-        const action = await dispatch(updateUserDetails(values))
-        setSubmitting(false)
-        if (action.payload.status === 200) {
-            Toast.push(
-                <Notification
-                    title={'Successfully updated'}
-                    type="success"
-                    duration={2500}
-                >
-                    User successfully updated
-                </Notification>,
-                {
-                    placement: 'top-center',
-                }
-            )
-            onDialogClose()
-        }
-    }
-
-    return (
-        <Dialog
-            isOpen={editUserDialog}
-            onClose={onDialogClose}
-            onRequestClose={onDialogClose}
+  const handleFormSubmit = async (values, setSubmitting) => {
+    setSubmitting(true)
+    const action = await dispatch(updateUserDetails(values))
+    setSubmitting(false)
+    if (action.payload.status < 300) {
+      Toast.push(
+        <Notification
+          title={'Successfully updated'}
+          type="success"
+          duration={2500}
         >
-            <UserForm
-                type='edit'
-                onFormSubmit={handleFormSubmit}
-                onDiscard={onDialogClose}
-                initialData={initialData}
-            />
-        </Dialog >
-    )
+          User successfully updated
+        </Notification>,
+        {
+          placement: 'top-center'
+        }
+      )
+      onDialogClose()
+    }
+  }
 
+  return (
+    <Dialog
+      isOpen={editUserDialog}
+      onClose={onDialogClose}
+      onRequestClose={onDialogClose}
+    >
+      <UserForm
+        type="edit"
+        onFormSubmit={handleFormSubmit}
+        onDiscard={onDialogClose}
+        initialData={initialData}
+      />
+    </Dialog>
+  )
 }
 
 export default UserEditFormDialog
