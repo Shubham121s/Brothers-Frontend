@@ -1,11 +1,11 @@
-import React, { memo } from "react";
-import { FormItem, Input } from "../../../../../../../components/ui";
+import React, { memo } from 'react'
+import { FormItem, Input } from '../../../../../../../components/ui'
 
 const PackingChargesInformationField = ({ setCharges, charges }) => {
   return (
     <div className="">
       <div className="flex justify-between">
-        <strong>P & F Charges</strong>
+        <strong>P & F CHARGES</strong>
       </div>
       <Input
         type="text"
@@ -14,7 +14,7 @@ const PackingChargesInformationField = ({ setCharges, charges }) => {
         onChange={(e) => setCharges(e.target.value)}
       />
     </div>
-  );
-};
+  )
+}
 
-export default memo(PackingChargesInformationField);
+export default memo(PackingChargesInformationField)

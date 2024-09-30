@@ -264,7 +264,7 @@ const TableFooterRows = ({
           colSpan="1"
           className={className}
         >
-          Fright Charges
+          FREIGHT CHARGES
         </Td>
         <Td
           style={{ border: '.5px solid black', padding: '3px' }}

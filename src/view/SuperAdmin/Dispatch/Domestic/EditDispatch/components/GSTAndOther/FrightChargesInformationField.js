@@ -5,11 +5,11 @@ const FrightChargesInformationField = ({ setFright, fright }) => {
   return (
     <div className="">
       <div className="flex justify-between">
-        <strong>Fright Charges</strong>
+        <strong>FREIGHT CHARGES</strong>
       </div>
       <Input
         type="text"
-        placeholer="Fright Charges"
+        placeholer="Freight Charges"
         value={fright}
         onChange={(e) => setFright(e.target.value)}
       />

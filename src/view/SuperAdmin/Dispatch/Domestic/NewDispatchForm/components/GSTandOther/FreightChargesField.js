@@ -7,12 +7,12 @@ const FreightChargesField = (props) => {
   return (
     <FormItem
       className="mb-4"
-      label="Fright Charges"
+      label="FREIGHT CHARGES"
     >
       <Field
         component={Input}
         name="DispatchShippingAndOtherDetails.fright_charges"
-        placeholder="Fright Charges"
+        placeholder="FREIGHT CHARGES"
       />
     </FormItem>
   )
