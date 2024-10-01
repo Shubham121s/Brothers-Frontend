@@ -1,7 +1,7 @@
 const appConfig = {
-  apiPrefix: 'https://api-erp.brothers.net.in/api/',
+  // apiPrefix: 'https://api-erp.brothers.net.in/api/',
   // apiPrefix: 'https://erp.brothers.5techg.com/api/',
-  // apiPrefix: 'http://localhost:5005/api/',
+  apiPrefix: 'http://localhost:5005/api/',
   authenticatedEntryPath: '/dashboard',
   unAuthenticatedEntryPath: '/sign-in',
   tourPath: '/',
