@@ -180,10 +180,12 @@ const PoTable = ({ data = [], className, currency_type = 'INR' }) => {
       },
       {
         header: <span className={className}>Remarks</span>,
-        accessorKey: 'total',
+        accessorKey: 'description',
         cell: (props) => {
           const row = props.row.original
-          return <></>
+          return (
+            <div className={`text-center ${className}`}>{row?.description}</div>
+          )
         }
       }
     ],
