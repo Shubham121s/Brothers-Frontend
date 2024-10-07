@@ -1,7 +1,9 @@
 import superAdminNavigationConfig from './superAdmin.navigation.config'
+import instrumentNavigationConfig from './Instrument.navigation.config'
 
 const navigationConfig = [
-  ...superAdminNavigationConfig
+  ...superAdminNavigationConfig,
+  ...instrumentNavigationConfig
 ]
 
 export default navigationConfig
