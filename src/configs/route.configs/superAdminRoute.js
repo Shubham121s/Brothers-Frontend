@@ -381,19 +381,12 @@ const superAdminRoute = [
     path: `/super/admin/machine/breakdown`,
     component: React.lazy(() => import('../../view/SuperAdmin/breakdown')),
     authority: [SUPER_ADMIN, ADMIN]
-  },
+  }
   //*********END********* */
 
   //Machine Breakdown
   //*********START********* */
-  {
-    key: 'annual.calibration',
-    path: `/super/admin/annual/calibration`,
-    component: React.lazy(() =>
-      import('../../view/SuperAdmin/Annual-calibration-plan')
-    ),
-    authority: [SUPER_ADMIN, ADMIN]
-  }
+
   //*********END********* */
 ]
 

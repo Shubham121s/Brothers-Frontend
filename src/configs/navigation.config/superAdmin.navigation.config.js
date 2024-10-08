@@ -351,17 +351,6 @@ const superAdminNavigationConfig = [
             subMenu: []
           }
         ]
-      },
-
-      {
-        key: 'annual.calibration',
-        path: `/super/admin/annual/calibration`,
-        title: 'Anual Calibration',
-        translateKey: 'nav.annual.calibration',
-        icon: 'purchase',
-        type: NAV_ITEM_TYPE_ITEM,
-        authority: [SUPER_ADMIN, ADMIN],
-        subMenu: []
       }
     ]
   }
