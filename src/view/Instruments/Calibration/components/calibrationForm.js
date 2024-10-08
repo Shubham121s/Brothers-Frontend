@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useState } from 'react'
 import {
   FormContainer,
   Button,
@@ -6,30 +6,85 @@ import {
   Input,
   Select,
   DatePicker,
-  Card
+  Card,
+  Upload,
+  Toast,
+  Notification
 } from '../../../../components/ui'
 import { isEmpty } from 'lodash'
 import { Field, Form, Formik } from 'formik'
 import cloneDeep from 'lodash/cloneDeep'
 import { AiOutlineSave } from 'react-icons/ai'
 import * as Yup from 'yup'
+import FormData from 'form-data'
+import { putAttachment } from '../store/dataSlice'
+import { useDispatch } from 'react-redux'
 
 const validationSchema = Yup.object().shape({
-  instrument_name: Yup.string().required('Required'),
-
-  instrument_make: Yup.string().required('Required'),
-
-  instrument_no: Yup.string().required('Required'),
-
-  instrument_size: Yup.string().required('Required'),
-
-  instrument_lc: Yup.string().required('Required'),
-
-  instrument_cal_frq: Yup.number().required('Required')
+  calibration_date: Yup.string().required('Required'),
+  calibration_result: Yup.string().required('Required'),
+  calibration_report_no: Yup.string().required('Required'),
+  next_due_date: Yup.string().required('Required'),
+  instrument_id: Yup.object().required('Required')
 })
 
 const CalibrationForm = forwardRef((props, ref) => {
   const { type, initialData, onFormSubmit, onDiscard, InstrumentOption } = props
+  const [showList, setShowList] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
+
+  const onSetFormFile = async (form, field, file, path) => {
+    const formData = new FormData()
+    console.log(path)
+    if (path) {
+      formData.append('filePath', path)
+      if (file[0]) {
+        formData.append('file', file[0])
+      }
+    } else {
+      if (file[0]) {
+        formData.append('file', file[0])
+      }
+    }
+    setLoading(true)
+    const action = await dispatch(putAttachment(formData))
+
+    if (action.payload.status < 300) {
+      form.setFieldValue(field.name, file[0])
+      Toast.push(
+        <Notification
+          title={'Success'}
+          type="success"
+          duration={3000}
+        >
+          {action?.payload?.data?.message}
+        </Notification>,
+        {
+          placement: 'top-center'
+        }
+      )
+      setLoading(false)
+      setShowList(true)
+      form.setFieldValue('certificate', action.payload.data.path || '')
+    } else {
+      Toast.push(
+        <Notification
+          title={'Error'}
+          type="danger"
+          duration={3000}
+        >
+          File Not Uploaded
+        </Notification>,
+        {
+          placement: 'top-center'
+        }
+      )
+    }
+    setLoading(false)
+    form.setFieldValue(field.name, '')
+  }
+
   return (
     <>
       <Formik
@@ -45,6 +100,7 @@ const CalibrationForm = forwardRef((props, ref) => {
         }}
       >
         {({ values, touched, errors, isSubmitting }) => {
+          console.log(errors)
           return (
             <Form>
               <FormContainer>
@@ -58,8 +114,8 @@ const CalibrationForm = forwardRef((props, ref) => {
                       <FormItem
                         className="mb-1"
                         label="Instrument"
-                        invalid={errors.type && touched.type}
-                        errorMessage={errors.type}
+                        invalid={errors.instrument_id && touched.instrument_id}
+                        errorMessage={errors.instrument_id}
                       >
                         <Field name="instrument_id">
                           {({ field, form }) => (
@@ -169,11 +225,13 @@ const CalibrationForm = forwardRef((props, ref) => {
                       label="Certificate No."
                       className="mb-1"
                       invalid={
-                        errors.calibration_result && touched.calibration_result
+                        errors.calibration_report_no &&
+                        touched.calibration_report_no
                       }
-                      errorMessage={errors.calibration_result}
+                      errorMessage={errors.calibration_report_no}
                     >
                       <Field
+                        autoComplete="off"
                         type="text"
                         name="calibration_report_no"
                         values={values.calibration_result}
@@ -191,6 +249,7 @@ const CalibrationForm = forwardRef((props, ref) => {
                       errorMessage={errors.calibration_result}
                     >
                       <Field
+                        autoComplete="off"
                         type="text"
                         name="calibration_result"
                         values={values.calibration_result}
@@ -201,14 +260,10 @@ const CalibrationForm = forwardRef((props, ref) => {
                     </FormItem>
                     <FormItem
                       label="Description"
-                      invalid={
-                        errors.calibration_description &&
-                        touched.calibration_description
-                      }
-                      errorMessage={errors.calibration_description}
                       className="mb-4"
                     >
                       <Field
+                        autoComplete="off"
                         size="sm"
                         type="text"
                         name="calibration_description"
@@ -216,6 +271,47 @@ const CalibrationForm = forwardRef((props, ref) => {
                         placeholder="Description"
                         component={Input}
                       />
+                    </FormItem>
+                    <FormItem
+                      className="mb-2"
+                      label=""
+                    >
+                      <Field name={`file`}>
+                        {({ field, form }) => (
+                          <Upload
+                            size="sm"
+                            showList={true}
+                            className="cursor-pointer h-[15px]"
+                            onChange={(files) =>
+                              onSetFormFile(
+                                form,
+                                field,
+                                files,
+                                values.certificate
+                              )
+                            }
+                            onFileRemove={(files) =>
+                              onSetFormFile(
+                                form,
+                                field,
+                                files,
+                                values.certificate
+                              )
+                            }
+                            uploadLimit={1}
+                          >
+                            <Button
+                              variant=""
+                              type="button"
+                              size="sm"
+                              style={{ width: '233px' }}
+                              loading={loading}
+                            >
+                              Certificate (upload)
+                            </Button>
+                          </Upload>
+                        )}
+                      </Field>
                     </FormItem>
                   </div>
                 </div>
@@ -230,7 +326,7 @@ const CalibrationForm = forwardRef((props, ref) => {
                   <Button
                     size="sm"
                     variant="solid"
-                    loading={isSubmitting}
+                    loading={isSubmitting || loading}
                     icon={<AiOutlineSave className="mr-1" />}
                     type="submit"
                   >
@@ -254,7 +350,9 @@ CalibrationForm.defaultProps = {
     calibration_result: '',
     calibration_report_no: '',
     next_due_date: '',
-    instrument_id: ''
+    instrument_id: '',
+    certificate: '',
+    file: ''
   }
 }
 

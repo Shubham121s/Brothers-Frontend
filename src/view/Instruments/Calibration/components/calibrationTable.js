@@ -13,6 +13,8 @@ import {
 import { toggleDeleteConfirmation } from '../store/stateSlice'
 import CalibrationDeleteConfirmation from './calibrationDeleteConfirmation'
 import NewCalibrationDialog from './newCalibrationDialog'
+import { Tag } from '../../../../components/ui'
+import { FaFileImage } from 'react-icons/fa'
 
 const CalibrationTable = () => {
   const ActionColumn = ({ row }) => {
@@ -30,8 +32,23 @@ const CalibrationTable = () => {
       dispatch(setSelectedAnnual(row))
     }
 
+    const onView = () => {
+      let url = row?.certificate
+      const splitString = url.split('/uploads/')
+      const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`
+      window.open(transformedString, '_blank')
+    }
+
     return (
-      <div className="flex justify-end text-lg">
+      <div className="flex justify-center text-lg">
+        {row?.certificate && (
+          <span
+            className="cursor-pointer p-2 hover:text-emerald-500"
+            onClick={onView}
+          >
+            <FaFileImage />
+          </span>
+        )}
         <span
           className={`cursor-pointer p-2 hover:${textTheme}`}
           onClick={onEdit}
@@ -90,105 +107,114 @@ const CalibrationTable = () => {
   const columns = useMemo(
     () => [
       {
-        header: 'Sr No',
-        accessorKey: 'sr_no',
+        header: 'instrument',
+        accessorKey: 'Instrument',
         cell: (props) => {
           const row = props.row.original
-          return <span>{row.sr_no}</span>
-        }
-      },
-      {
-        header: 'Description',
-        accessorKey: 'calibration_description',
-        cell: (props) => {
-          const row = props.row.original
-          return <span>{row.calibration_description}</span>
-        }
-      },
-      {
-        header: 'Code No.',
-        accessorKey: 'calibration_code_no',
-        cell: (props) => {
-          const row = props.row.original
-          return <span>{row.calibration_code_no}</span>
-        }
-      },
-
-      {
-        header: 'Serial No',
-        accessorKey: 'calibration_serial_no',
-        cell: (props) => {
-          const row = props.row.original
-          return <span>{row.calibration_serial_no}</span>
+          return (
+            <span className="uppercase">
+              {row?.Instrument?.instrument_name}
+            </span>
+          )
         }
       },
       {
         header: 'Maker',
-        accessorKey: 'calibration_maker',
+        accessorKey: 'Instrument',
         cell: (props) => {
           const row = props.row.original
-          return <span>{row.calibration_maker}</span>
-        }
-      },
-      {
-        header: 'Range',
-        accessorKey: 'calibration_range',
-        cell: (props) => {
-          const row = props.row.original
-          return <span>{row.calibration_range}</span>
+          return (
+            <span className="uppercase">
+              {row?.Instrument?.instrument_make}
+            </span>
+          )
         }
       },
 
       {
-        header: 'Calibration frequency',
-        accessorKey: 'calibration_frequency',
+        header: 'ID no.',
+        accessorKey: 'Instrument',
         cell: (props) => {
           const row = props.row.original
-          return <span>{row.calibration_frequency}</span>
+          return (
+            <span className="uppercase">{row?.Instrument?.instrument_no}</span>
+          )
         }
       },
       {
-        header: '01 Calibration Date',
+        header: 'size',
+        accessorKey: 'Instrument',
+        cell: (props) => {
+          const row = props.row.original
+          return (
+            <span className="uppercase">
+              {row?.Instrument?.instrument_size}
+            </span>
+          )
+        }
+      },
+      {
+        header: 'l.c',
+        accessorKey: 'Instrument',
+        cell: (props) => {
+          const row = props.row.original
+          return <span>{row?.Instrument?.instrument_lc || '-'}</span>
+        }
+      },
+
+      {
+        header: 'Cal. frequency',
+        accessorKey: 'Instrument',
+        cell: (props) => {
+          const row = props.row.original
+          return <span>{row?.Instrument?.instrument_cal_frq} Year</span>
+        }
+      },
+      {
+        header: 'Cal. Date',
         accessorKey: 'calibration_date',
         cell: (props) => {
           const row = props.row.original
-          return <span>{row.calibration_date}</span>
+          return <span>{row?.calibration_date}</span>
         }
       },
       {
-        header: 'Calibration Agency',
-        accessorKey: 'calibration_agency',
-        cell: (props) => {
-          const row = props.row.original
-          return <span>{row.calibration_agency}</span>
-        }
-      },
-      {
-        header: 'Cal Result',
-        accessorKey: 'calibration_result',
-        cell: (props) => {
-          const row = props.row.original
-          return <span>{row.calibration_result}</span>
-        }
-      },
-      {
-        header: 'Cal Report No.',
-        accessorKey: 'calibration_report_no',
-        cell: (props) => {
-          const row = props.row.original
-          return <span>{row.calibration_report_no}</span>
-        }
-      },
-      {
-        header: 'Next Due Date',
+        header: 'next cal. date',
         accessorKey: 'next_due_date',
         cell: (props) => {
           const row = props.row.original
-          return <span>{row.next_due_date}</span>
+          return <span>{row?.next_due_date}</span>
         }
       },
       {
-        header: '',
+        header: 'Cal certificate no.',
+        accessorKey: 'calibration_report_no',
+        cell: (props) => {
+          const row = props.row.original
+          return <span>{row?.calibration_report_no}</span>
+        }
+      },
+      {
+        header: 'Cal status',
+        accessorKey: 'calibration_result',
+        cell: (props) => {
+          const row = props.row.original
+          return (
+            <div>
+              <Tag
+                className={`bg-orange-100 
+              text-orange-600
+             border-0`}
+              >
+                {row?.calibration_result}
+              </Tag>
+            </div>
+          )
+        }
+      },
+
+      {
+        header: 'Action',
         id: 'action',
         cell: (props) => <ActionColumn row={props.row.original} />
       }

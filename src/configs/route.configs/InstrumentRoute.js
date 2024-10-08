@@ -7,13 +7,12 @@ import {
 } from '../../constants/roles.constant'
 
 const instrumentRoute = [
-  //   {
-  //     key: 'dashboard',
-  //     path: `/super/admin/dashboard`,
-  //     component: React.lazy(() => import('../../view/SuperAdmin/Dashboard')),
-  //     authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
-  //   },
-  // SUPER ADMIN
+  {
+    key: 'dashboard',
+    path: `//instrument/dashboard`,
+    component: React.lazy(() => import('../../view/Instruments/Dashboard')),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+  },
 
   // **************START***************
   {

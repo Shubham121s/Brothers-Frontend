@@ -6,7 +6,10 @@ import {
   apiUpdateCalibration
 } from '../../../../services/SuperAdmin/machine/CalibrationService'
 
-import { apiAllInstrument } from '../../../../services/Instrument/InstrumentService'
+import {
+  apiAllInstrument,
+  apiCertificateUpload
+} from '../../../../services/Instrument/InstrumentService'
 
 export const getAnnual = createAsyncThunk(
   'calibration/data/getCalibration',
@@ -42,6 +45,14 @@ export const deleteAnnual = createAsyncThunk(
   'calibration/data/deleteCalibration',
   async (data) => {
     const response = await apiDeleteCalibration(data)
+    return response
+  }
+)
+
+export const putAttachment = createAsyncThunk(
+  'calibration/data/attachment',
+  async (data) => {
+    const response = await apiCertificateUpload(data)
     return response
   }
 )
@@ -97,6 +108,7 @@ const dataSlice = createSlice({
       state.loading = true
     },
     [postAnnual.fulfilled]: (state, action) => {},
+    [putAttachment.fulfilled]: (state, action) => {},
     [updateAnnual.fulfilled]: (state, action) => {},
     [deleteAnnual.fulfilled]: (state, action) => {}
   }

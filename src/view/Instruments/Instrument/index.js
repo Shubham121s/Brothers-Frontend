@@ -14,7 +14,7 @@ const InstrumentList = () => {
       {/* <CustomerStatistic /> */}
       <Card className="bg-purple-50">
         <div className="flex justify-between mb-1">
-          <h3>Instruments</h3>
+          <h3>Instruments/Gauges</h3>
           <InstrumentTableTools />
         </div>
 

@@ -39,3 +39,11 @@ export async function apiDeleteInstrument(data) {
     data
   })
 }
+
+export async function apiCertificateUpload(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/instrument/upload/attachment',
+    method: 'put',
+    data
+  })
+}
