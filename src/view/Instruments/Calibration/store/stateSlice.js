@@ -6,7 +6,8 @@ const stateSlice = createSlice({
     deleteConfirmation: false,
     selectedAnnual: '',
     addDialog: false,
-    editDialog: false
+    editDialog: false,
+    imageDialog: false
   },
   reducers: {
     toggleDeleteConfirmation: (state, action) => {
@@ -20,6 +21,9 @@ const stateSlice = createSlice({
     },
     toggleEditDialog: (state, action) => {
       state.editDialog = action.payload
+    },
+    toggleImageDialog: (state, action) => {
+      state.imageDialog = action.payload
     }
   }
 })
@@ -28,7 +32,8 @@ export const {
   toggleDeleteConfirmation,
   setSelectedAnnual,
   toggleNewDialog,
-  toggleEditDialog
+  toggleEditDialog,
+  toggleImageDialog
 } = stateSlice.actions
 
 export default stateSlice.reducer

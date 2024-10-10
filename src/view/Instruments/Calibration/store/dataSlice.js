@@ -5,6 +5,7 @@ import {
   apiPostCalibration,
   apiUpdateCalibration
 } from '../../../../services/SuperAdmin/machine/CalibrationService'
+import { apiDeleteAnyFile } from '../../../../services/DeleteAnyFileService'
 
 import {
   apiAllInstrument,
@@ -53,6 +54,14 @@ export const putAttachment = createAsyncThunk(
   'calibration/data/attachment',
   async (data) => {
     const response = await apiCertificateUpload(data)
+    return response
+  }
+)
+
+export const deleteAnyFile = createAsyncThunk(
+  'calibration/data/file/delete',
+  async (data) => {
+    const response = await apiDeleteAnyFile(data)
     return response
   }
 )
@@ -110,7 +119,8 @@ const dataSlice = createSlice({
     [postAnnual.fulfilled]: (state, action) => {},
     [putAttachment.fulfilled]: (state, action) => {},
     [updateAnnual.fulfilled]: (state, action) => {},
-    [deleteAnnual.fulfilled]: (state, action) => {}
+    [deleteAnnual.fulfilled]: (state, action) => {},
+    [deleteAnyFile.fulfilled]: (state, action) => {}
   }
 })
 

@@ -100,7 +100,6 @@ const CalibrationForm = forwardRef((props, ref) => {
         }}
       >
         {({ values, touched, errors, isSubmitting }) => {
-          console.log(errors)
           return (
             <Form>
               <FormContainer>

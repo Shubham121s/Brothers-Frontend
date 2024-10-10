@@ -10,6 +10,7 @@ import { Field, Form, Formik } from 'formik'
 import cloneDeep from 'lodash/cloneDeep'
 import { AiOutlineSave } from 'react-icons/ai'
 import * as Yup from 'yup'
+import { Locations, In_USE, frequencyType } from '../constant'
 
 const validationSchema = Yup.object().shape({
   instrument_name: Yup.string().required('Required'),
@@ -22,7 +23,10 @@ const validationSchema = Yup.object().shape({
 
   instrument_lc: Yup.string().required('Required'),
 
-  instrument_cal_frq: Yup.number().required('Required')
+  instrument_cal_frq: Yup.number().required('Required'),
+  instrument_freq_type: Yup.string().required('Required'),
+  in_use: Yup.string().required('Required'),
+  location: Yup.string().required('Required')
 })
 
 const InstrumentForm = forwardRef((props, ref) => {
@@ -83,28 +87,29 @@ const InstrumentForm = forwardRef((props, ref) => {
                         component={Input}
                       />
                     </FormItem>
-                    {/* <FormItem
-                    className="mb-4"
-                    label="Type"
-                    invalid={errors.type && touched.type}
-                    errorMessage={errors.type}
-                  >
-                    <Field name="type">
-                      {({ field, form }) => (
-                        <Select
-                          field={field}
-                          form={form}
-                          options={userType}
-                          value={userType.filter(
-                            (type) => type.value === values.type
-                          )}
-                          onChange={(option) =>
-                            form.setFieldValue(field.name, option.value)
-                          }
-                        />
-                      )}
-                    </Field>
-                  </FormItem> */}
+                    <FormItem
+                      className="mb-4"
+                      label="Location"
+                      invalid={errors.location && touched.location}
+                      errorMessage={errors.location}
+                    >
+                      <Field name="location">
+                        {({ field, form }) => (
+                          <Select
+                            field={field}
+                            form={form}
+                            options={Locations}
+                            value={Locations.filter(
+                              (type) => type.value === values.location
+                            )}
+                            onChange={(option) =>
+                              form.setFieldValue(field.name, option.value)
+                            }
+                          />
+                        )}
+                      </Field>
+                    </FormItem>
+
                     <FormItem
                       className="mb-4"
                       label="ID No."
@@ -151,19 +156,60 @@ const InstrumentForm = forwardRef((props, ref) => {
                     </FormItem>
                     <FormItem
                       className="mb-4"
+                      label="In Use"
+                      invalid={errors.in_use && touched.in_use}
+                      errorMessage={errors.in_use}
+                    >
+                      <Field name="in_use">
+                        {({ field, form }) => (
+                          <Select
+                            field={field}
+                            form={form}
+                            options={In_USE}
+                            value={In_USE.filter(
+                              (type) => type.value === values.in_use
+                            )}
+                            onChange={(option) =>
+                              form.setFieldValue(field.name, option.value)
+                            }
+                          />
+                        )}
+                      </Field>
+                    </FormItem>
+                    <FormItem
+                      className="mb-4"
                       label="Calibration Frequency"
                       invalid={
                         errors.instrument_cal_frq && touched.instrument_cal_frq
                       }
                       errorMessage={errors.instrument_cal_frq}
                     >
-                      <Field
-                        type="number"
-                        autoComplete="off"
-                        name="instrument_cal_frq"
-                        placeholder="Calibration Frequency/Year"
-                        component={Input}
-                      />
+                      <div className="flex gap-2">
+                        <Field
+                          type="number"
+                          autoComplete="off"
+                          name="instrument_cal_frq"
+                          placeholder="Calibration Frequency/Year"
+                          component={Input}
+                          style={{ width: '100px' }}
+                        />
+                        <Field name="instrument_freq_type">
+                          {({ field, form }) => (
+                            <Select
+                              field={field}
+                              form={form}
+                              options={frequencyType}
+                              value={frequencyType.filter(
+                                (type) =>
+                                  type.value === values.instrument_freq_type
+                              )}
+                              onChange={(option) =>
+                                form.setFieldValue(field.name, option.value)
+                              }
+                            />
+                          )}
+                        </Field>
+                      </div>
                     </FormItem>
                   </div>
                 </div>
@@ -202,7 +248,10 @@ InstrumentForm.defaultProps = {
     instrument_no: '',
     instrument_size: '',
     instrument_lc: '',
-    instrument_cal_frq: ''
+    instrument_cal_frq: '',
+    instrument_freq_type: '',
+    location: '',
+    in_use: ''
   }
 }
 

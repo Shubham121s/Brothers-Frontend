@@ -5,20 +5,30 @@ import { injectReducer } from '../../../store'
 import instrumentDashboardReducer from './store'
 import CalibrationNearToDate from './components/calibrationNearToDate'
 import { Card } from '../../../components/ui'
+import CalibrationPieChart from './components/CalibrationPieChart'
+import { getInstrumentstaticData } from './store/dataSlice'
+import Statistic from './components/Statistic'
 
 injectReducer('instrument_dashboard', instrumentDashboardReducer)
 
 const Dashboard = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getInstrumentstaticData())
+  }, [])
+
+  const data = useSelector(
+    (state) => state.instrument_dashboard.data.staticData
+  )
   return (
     <Loading loading={false}>
-      {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <SalesReport data={data?.chartData?.[0]} className="col-span-2 bg-slate-50" />
-                <Statistic data={data?.statisticData} />
-                
-            </div> */}
+      <Statistic data={data} />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4">
-        <Card>
+        <Card className="">
           <CalibrationNearToDate />
+        </Card>
+        <Card className="col-span-2">
+          <CalibrationPieChart data={data?.pieChartData} />
         </Card>
         {/* <LatestDispatch data={data?.dispatchList} className="lg:col-span-2 h-max" /> */}
       </div>
