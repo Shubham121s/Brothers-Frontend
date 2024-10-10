@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import DataTable from '../../../../components/shared/DataTable'
 import cloneDeep from 'lodash/cloneDeep'
 import { useDispatch, useSelector } from 'react-redux'
@@ -7,20 +7,25 @@ import useThemeClass from '../../../../utils/hooks/useThemeClass'
 import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
 import {
   setSelectedAnnual,
-  toggleNewDialog,
-  toggleEditDialog
+  toggleEditDialog,
+  toggleImageDialog
 } from '../store/stateSlice'
 import { toggleDeleteConfirmation } from '../store/stateSlice'
 import CalibrationDeleteConfirmation from './calibrationDeleteConfirmation'
 import NewCalibrationDialog from './newCalibrationDialog'
 import { Tag } from '../../../../components/ui'
 import { FaFileImage } from 'react-icons/fa'
+import ImageDialog from './ImageDialog'
 
 const CalibrationTable = () => {
   const ActionColumn = ({ row }) => {
     const dispatch = useDispatch()
     const { textTheme } = useThemeClass()
-    // const navigate = useNavigate()
+
+    const onOpen = () => {
+      dispatch(setSelectedAnnual(row))
+      dispatch(toggleImageDialog(true))
+    }
 
     const onEdit = () => {
       dispatch(toggleEditDialog(true))
@@ -32,23 +37,17 @@ const CalibrationTable = () => {
       dispatch(setSelectedAnnual(row))
     }
 
-    const onView = () => {
-      let url = row?.certificate
-      const splitString = url.split('/uploads/')
-      const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`
-      window.open(transformedString, '_blank')
-    }
-
     return (
-      <div className="flex justify-center text-lg">
+      <div className="flex justify-center items-center text-lg">
         {row?.certificate && (
           <span
             className="cursor-pointer p-2 hover:text-emerald-500"
-            onClick={onView}
+            onClick={onOpen}
           >
             <FaFileImage />
           </span>
         )}
+
         <span
           className={`cursor-pointer p-2 hover:${textTheme}`}
           onClick={onEdit}
@@ -247,6 +246,7 @@ const CalibrationTable = () => {
       />
       <CalibrationDeleteConfirmation />
       <NewCalibrationDialog />
+      <ImageDialog />
     </>
   )
 }

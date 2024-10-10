@@ -45,6 +45,7 @@ const NewCalibrationDialog = () => {
 
   const handleFormSubmit = async (values, setSubmitting) => {
     setSubmitting(true)
+    console.log(values)
     const action = await dispatch(postAnnual(values))
     setSubmitting(false)
     if (action?.payload.status === 201) {

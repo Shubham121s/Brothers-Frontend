@@ -15,3 +15,10 @@ export async function apiGetInstrumentDashboardData(data) {
     data
   })
 }
+
+export async function apiGetInstrumentstaticData() {
+  return ApiService.fetchData({
+    url: 'v1/web/company/instrument/dashboard/static',
+    method: 'get'
+  })
+}
