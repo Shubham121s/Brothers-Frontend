@@ -1,18 +1,20 @@
-import React from "react";
+import React from 'react'
 const Footer = ({ data }) => {
-  const notes = JSON.parse(data?.Note?.notes);
-  var points = data.Condition?.condition;
+  const notes = JSON.parse(data?.Note?.notes)
+  var points = data.Condition?.condition
   return (
     <div className="print:text-xs">
-      <strong className="mb-0 font-bold">NOTES :</strong>
       <div>
         <strong>{data?.Note?.name}</strong>
         <div className="grid grid-cols-2">
           {notes?.map((n, index) => (
-            <div key={index} className="flex justify-between">
+            <div
+              key={index}
+              className="flex justify-between"
+            >
               <small>
-                {index + 1}. <strong>{n.label}:</strong>{" "}
-                <span>{n.value || "-"}</span>
+                {index + 1}. <strong>{n.label}:</strong>{' '}
+                <span>{n.value || '-'}</span>
               </small>
               <br />
             </div>
@@ -24,9 +26,9 @@ const Footer = ({ data }) => {
       <div>
         <strong>{data?.Condition?.name}</strong>
         <div className="flex flex-col print:text-sm">
-        <div className='flex justify-between'>
-                    <div dangerouslySetInnerHTML={{ __html: points }}></div>
-                </div>
+          <div className="flex justify-between">
+            <div dangerouslySetInnerHTML={{ __html: points }}></div>
+          </div>
         </div>
       </div>
       <div className="flex justify-between print:text-xs">
@@ -42,11 +44,19 @@ const Footer = ({ data }) => {
         </div> */}
       </div>
       <div className="flex items-center mt-4 justify-center print:text:xs">
-        <strong className="text-gray-600" style={{ height: "13px" }}>
+        <strong
+          className="text-gray-600"
+          style={{ height: '13px' }}
+        >
           ******************
         </strong>
-        <strong className="text-gray-600 uppercase">This Is An Electronically Generated Report</strong>
-        <strong className="text-gray-600" style={{ height: "13px" }}>
+        <strong className="text-gray-600 uppercase">
+          This Is An Electronically Generated Report
+        </strong>
+        <strong
+          className="text-gray-600"
+          style={{ height: '13px' }}
+        >
           ******************
         </strong>
       </div>
@@ -55,7 +65,7 @@ const Footer = ({ data }) => {
                 <div className='text-xs'>Contact us: +91 7028828831</div>
             </div> */}
     </div>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
