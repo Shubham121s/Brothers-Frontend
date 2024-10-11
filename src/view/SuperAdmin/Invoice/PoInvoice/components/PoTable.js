@@ -23,29 +23,41 @@ const PriceAmount = ({ value }) => {
   )
 }
 
-const TFootRows = ({ data = [], className }) => {
+const TFootRows = ({ data = [], className, Note = '' }) => {
   const totalAmount = InvoiceTotal(data)
   return (
     <Tr
       style={{
         border: '.2px solid black',
-        padding: '3px',
-        textAlign: 'center'
+        padding: '3px'
       }}
       className={className}
     >
       <Td
         style={{ border: '.2px solid black', padding: '3px' }}
         colSpan="8"
-      ></Td>
+        className="uppercase"
+      >
+        <strong>Note</strong> - <span>{Note}</span>
+      </Td>
       <Td
         className={`font-semibold ${className}`}
-        style={{ border: '.2px solid black', padding: '3px' }}
+        style={{
+          border: '.2px solid black',
+          padding: '3px',
+          textAlign: 'center'
+        }}
         colSpan="1"
       >
         TOTAL
       </Td>
-      <Td style={{ border: '.2px solid black', padding: '3px' }}>
+      <Td
+        style={{
+          border: '.2px solid black',
+          padding: '3px',
+          textAlign: 'center'
+        }}
+      >
         <NumericFormat
           displayType="text"
           value={totalAmount.toFixed(2)}
@@ -57,7 +69,12 @@ const TFootRows = ({ data = [], className }) => {
   )
 }
 
-const PoTable = ({ data = [], className, currency_type = 'INR' }) => {
+const PoTable = ({
+  data = [],
+  className,
+  currency_type = 'INR',
+  Note = ''
+}) => {
   const columns = useMemo(
     () => [
       {
@@ -260,7 +277,10 @@ const PoTable = ({ data = [], className, currency_type = 'INR' }) => {
             })}
           </TBody>
           <TFoot>
-            <TFootRows data={data} />
+            <TFootRows
+              data={data}
+              Note={Note}
+            />
           </TFoot>
         </Table>
       </AdaptableCard>

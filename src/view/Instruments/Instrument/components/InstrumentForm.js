@@ -212,6 +212,18 @@ const InstrumentForm = forwardRef((props, ref) => {
                       </div>
                     </FormItem>
                   </div>
+                  <FormItem
+                    className="mb-4"
+                    label="Remark"
+                  >
+                    <Field
+                      type="text"
+                      autoComplete="off"
+                      name="remark"
+                      placeholder="Remark"
+                      component={Input}
+                    />
+                  </FormItem>
                 </div>
                 <div className="flex gap-2 justify-end">
                   <Button
@@ -251,7 +263,8 @@ InstrumentForm.defaultProps = {
     instrument_cal_frq: '',
     instrument_freq_type: '',
     location: '',
-    in_use: ''
+    in_use: '',
+    remark: ''
   }
 }
 

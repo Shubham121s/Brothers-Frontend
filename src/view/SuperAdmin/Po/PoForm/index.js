@@ -26,6 +26,7 @@ import dayjs from 'dayjs'
 import { isEmpty } from 'lodash'
 import { apiIsPONumberExists } from '../../../../services/SuperAdmin/Po/PoService'
 import { debounce } from 'lodash'
+import NoteInformationField from './components/NoteInformationField'
 
 var isPOExist = false
 
@@ -242,6 +243,9 @@ const PoForm = forwardRef((props, ref) => {
                         setItem={setItem}
                         setType={setType}
                       />
+                      <div className="mt-4 grid grid-cols-2">
+                        <NoteInformationField values={values.note} />
+                      </div>
                     </Card>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                       <Card className="bg-blue-50 h-max">
@@ -389,7 +393,8 @@ PoForm.defaultProps = {
     Customer: null,
     currency_type: '',
     Note: null,
-    Condition: null
+    Condition: null,
+    note: ''
   }
 }
 

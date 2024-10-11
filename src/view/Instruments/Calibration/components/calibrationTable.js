@@ -203,7 +203,7 @@ const CalibrationTable = () => {
               <Tag
                 className={`bg-orange-100 
               text-orange-600
-             border-0`}
+             border-0 uppercase`}
               >
                 {row?.calibration_result}
               </Tag>

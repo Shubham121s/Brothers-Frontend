@@ -78,12 +78,11 @@ const ImageDialog = () => {
         contentClassName="pb-0 px-0"
       >
         <div className="px-6 pb-6">
-          <h5 className="mb-4">Image Information</h5>
+          <h5 className="mb-4">File Information</h5>
           <p>
             Here You can{' '}
             <span className="text-emerald-700 font-semibold">View</span> and{' '}
-            <span className="text-red-700 font-semibold">Delete</span> The
-            Image.
+            <span className="text-red-700 font-semibold">Delete</span> The File.
           </p>
           <strong>FileName : {fileName}</strong>
         </div>
