@@ -43,7 +43,7 @@ const Footer = ({ data }) => {
           <small className="italic">signature and seal.</small>
         </div> */}
       </div>
-      <div className="flex items-center mt-4 justify-center print:text:xs">
+      <div className="flex items-center mt-4 justify-center print:text-xs">
         <strong
           className="text-gray-600"
           style={{ height: '13px' }}

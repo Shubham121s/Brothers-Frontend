@@ -1,61 +1,64 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { injectReducer } from "../../../../store/index.js";
-import { useDispatch, useSelector } from "react-redux";
-import acceptPoReducer from "./store/index.js";
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { injectReducer } from '../../../../store/index.js'
+import { useDispatch, useSelector } from 'react-redux'
+import acceptPoReducer from './store/index.js'
 import {
   getAllGRN,
   getPoDetailsByPoId,
-  updatePurchaseOrderStatus,
-} from "./store/dataSlice.js";
+  updatePurchaseOrderStatus
+} from './store/dataSlice.js'
 import {
   Container,
   DoubleSidedImage,
   Loading,
-  StickyFooter,
-} from "../../../../components/shared/index.js";
-import { isEmpty } from "lodash";
-import PoTable from "./components/PoTable";
-import { Button, Card, Tabs } from "../../../../components/ui/index";
-import PoDetails from "./components/PoDetails.js";
-import { HiOutlinePrinter } from "react-icons/hi";
-import { useReactToPrint } from "react-to-print";
-import PurchaseOrderInvoice from "../../Invoice/PurchaseOrderInvoice/index.js";
-import { toggleRemarkDialog } from "./store/stateSlice.js";
-import StatusDialog from "./components/RemarkDialog.js";
+  StickyFooter
+} from '../../../../components/shared/index.js'
+import { isEmpty } from 'lodash'
+import PoTable from './components/PoTable'
+import { Button, Card, Tabs } from '../../../../components/ui/index'
+import { Input } from '../../../../components/ui'
+import PoDetails from './components/PoDetails.js'
+import { HiOutlinePrinter } from 'react-icons/hi'
+import { useReactToPrint } from 'react-to-print'
+import PurchaseOrderInvoice from '../../Invoice/PurchaseOrderInvoice/index.js'
+import { toggleRemarkDialog } from './store/stateSlice.js'
+import StatusDialog from './components/RemarkDialog.js'
 
-injectReducer("accept_po", acceptPoReducer);
-const { TabNav, TabList, TabContent } = Tabs;
+injectReducer('accept_po', acceptPoReducer)
+const { TabNav, TabList, TabContent } = Tabs
 const PoAccept = () => {
-  const [printLoading, setPrintLoading] = useState(false);
-  const componentRef = useRef();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const initialData = useSelector((state) => state.accept_po.data.poDetails);
-  const loading = useSelector((state) => state.accept_po.data.loading);
-  const [POStatus, setPOStatus] = useState(null);
-  const [status, setStatus] = useState(null);
-  const [poLoading, setPoLoading] = useState(false);
+  const [printLoading, setPrintLoading] = useState(false)
+  const [rowCount, setRowCount] = useState(8)
+  const [changeCount, setChangeCount] = useState(8)
+  const componentRef = useRef()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const initialData = useSelector((state) => state.accept_po.data.poDetails)
+  const loading = useSelector((state) => state.accept_po.data.loading)
+  const [POStatus, setPOStatus] = useState(null)
+  const [status, setStatus] = useState(null)
+  const [poLoading, setPoLoading] = useState(false)
 
   useEffect(() => {
-    fetchData();
+    fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [POStatus]);
+  }, [POStatus])
 
   const fetchData = async () => {
     const po_id = location.pathname.substring(
-      location.pathname.lastIndexOf("/") + 1
-    );
+      location.pathname.lastIndexOf('/') + 1
+    )
     if (po_id) {
-      await dispatch(getPoDetailsByPoId({ purchase_order_id: po_id }));
+      await dispatch(getPoDetailsByPoId({ purchase_order_id: po_id }))
     }
-  };
+  }
 
   const onChangeStatus = async (val) => {
     // setPoLoading(true);
-    dispatch(toggleRemarkDialog(true));
-    setStatus(val);
+    dispatch(toggleRemarkDialog(true))
+    setStatus(val)
     // const action = await dispatch(
     //   updatePurchaseOrderStatus({
     //     status: val,
@@ -68,30 +71,50 @@ const PoAccept = () => {
     // } else {
     //   setPoLoading(false);
     // }
-  };
+  }
 
   const handleDiscard = () => {
-    navigate("/po");
-  };
+    navigate('/po')
+  }
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `PurchaseOrder-${initialData?.number}`,
     onAfterPrint: () => {
-      setPrintLoading(false);
+      setPrintLoading(false)
     },
     onBeforePrint: () => {
-      setPrintLoading(true);
-    },
-  });
+      setPrintLoading(true)
+    }
+  })
 
   const PoLists = useMemo(() => {
-    return initialData?.PurchaseOrderLists;
-  }, [initialData]);
+    return initialData?.PurchaseOrderLists
+  }, [initialData])
 
   const onInward = () => {
-    navigate(`/purchase/order/inward/${initialData.purchase_order_id}`);
-  };
+    navigate(`/purchase/order/inward/${initialData.purchase_order_id}`)
+  }
+
+  const handleRowCountChange = (e) => {
+    const value = parseInt(e.target.value, 10)
+    setRowCount(value)
+  }
+
+  const handleChangeCount = (e) => {
+    const value = parseInt(e.target.value)
+    setChangeCount(value)
+  }
+
+  const InvoiceComponent = useMemo(() => {
+    return (
+      <PurchaseOrderInvoice
+        data={initialData}
+        PoLists={PoLists}
+        TABLE_ROW_COUNT={Number(rowCount)}
+      />
+    )
+  }, [initialData, PoLists, rowCount])
 
   return (
     <>
@@ -113,10 +136,8 @@ const PoAccept = () => {
                 onDiscard={handleDiscard}
               />
 
-              <div style={{ display: "none" }}>
-                <div ref={componentRef}>
-                  <PurchaseOrderInvoice data={initialData} PoLists={PoLists} />
-                </div>
+              <div style={{ display: 'none' }}>
+                <div ref={componentRef}>{InvoiceComponent}</div>
               </div>
             </Container>
 
@@ -125,6 +146,17 @@ const PoAccept = () => {
               stickyClass="border-t bg-white border-gray-200"
             >
               <div className="flex items-center gap-4">
+                <div className="flex justify-end items-center">
+                  <p className="mr-1">Products/Page : </p>
+                  <Input
+                    type="number"
+                    value={changeCount}
+                    style={{ width: '50px' }}
+                    size="sm"
+                    onBlur={handleRowCountChange}
+                    onChange={handleChangeCount}
+                  />
+                </div>
                 <Button
                   size="sm"
                   variant="solid"
@@ -134,13 +166,13 @@ const PoAccept = () => {
                 >
                   Print
                 </Button>
-                {initialData?.status === "pending" && (
+                {initialData?.status === 'pending' && (
                   <>
                     <Button
                       size="sm"
                       variant="solid"
                       color="emerald-500"
-                      onClick={() => onChangeStatus("accepted")}
+                      onClick={() => onChangeStatus('accepted')}
                     >
                       Accept
                     </Button>
@@ -148,7 +180,7 @@ const PoAccept = () => {
                       size="sm"
                       variant="solid"
                       color="red-500"
-                      onClick={() => onChangeStatus("rejected")}
+                      onClick={() => onChangeStatus('rejected')}
                     >
                       Reject
                     </Button>
@@ -156,14 +188,14 @@ const PoAccept = () => {
                       size="sm"
                       variant="solid"
                       color="yellow-500"
-                      onClick={() => onChangeStatus("cancelled")}
+                      onClick={() => onChangeStatus('cancelled')}
                     >
                       Cancel
                     </Button>
                   </>
                 )}
-                {(initialData.status === "accepted" ||
-                  initialData.status === "processing") && (
+                {(initialData.status === 'accepted' ||
+                  initialData.status === 'processing') && (
                   <Button
                     size="sm"
                     variant="solid"
@@ -194,7 +226,7 @@ const PoAccept = () => {
         initialData={initialData}
       />
     </>
-  );
-};
+  )
+}
 
-export default PoAccept;
+export default PoAccept
