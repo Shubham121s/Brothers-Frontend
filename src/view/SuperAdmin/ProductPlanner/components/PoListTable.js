@@ -387,6 +387,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     dispatch(getPODates({ DeliveryStatus }))
     dispatch(getPODeliveryDates({ DeliveryStatus }))
     dispatch(getBrotherDeliveryDate({ DeliveryStatus }))
+    dispatch(getAllProjectNumber({ DeliveryStatus }))
   }, [pageIndex, pageSize, sort, query, status, dispatch])
 
   useEffect(() => {

@@ -87,8 +87,17 @@ const ImageDialog = () => {
           <strong>FileName : {fileName}</strong>
         </div>
         <div className="text-right px-6 py-3 bg-gray-100 dark:bg-gray-700 rounded-bl-lg rounded-br-lg">
-          <Button
+          {/* <Button
             className="ltr:mr-2 rtl:ml-2"
+            onClick={handleDownload}
+            variant="solid"
+            color="yellow-600"
+            size="sm"
+          >
+            Download
+          </Button> */}
+          <Button
+            className="ml-2"
             onClick={onViewImage}
             variant="solid"
             color="emerald-600"

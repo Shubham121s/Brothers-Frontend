@@ -78,6 +78,10 @@ const PoListTableTools = ({ DeliveryStatus }) => {
   } = useSelector((state) => state.masterPP.data.tableData)
 
   const onClearAll = () => {
+    dispatch(getPODates({ DeliveryStatus }))
+    dispatch(getPODeliveryDates({ DeliveryStatus }))
+    dispatch(getBrotherDeliveryDate({ DeliveryStatus }))
+    dispatch(getAllProjectNumber({ DeliveryStatus }))
     const newTableData = cloneDeep(tableData)
     dispatch(setAllFilterData([]))
     newTableData.customer = ''
@@ -157,9 +161,23 @@ const PoListTableTools = ({ DeliveryStatus }) => {
   const onEdit = (e, type) => {
     if (type === 'customer') {
       dispatch(getAllPoNumber({ customer_id: e.value, DeliveryStatus }))
-      // dispatch(getPODates({ customer_id: e.value }));
-      // dispatch(getPODeliveryDates({ customer_id: e.value }));
-      // dispatch(getBrotherDeliveryDate({ customer_id: e.value }));
+      dispatch(
+        getPODates({ customer_id: e.value, number: po_no, DeliveryStatus })
+      )
+      dispatch(
+        getPODeliveryDates({
+          customer_id: e.value,
+          number: po_no,
+          DeliveryStatus
+        })
+      )
+      dispatch(
+        getBrotherDeliveryDate({
+          customer_id: e.value,
+          number: po_no,
+          DeliveryStatus
+        })
+      )
       debounceFn(e.value, type)
     } else if (type === 'material_grade') {
       debounceFn(e.value, type)

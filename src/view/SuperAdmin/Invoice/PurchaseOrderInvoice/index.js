@@ -1,25 +1,53 @@
-import React from "react";
-import Header from "./components/Header";
-import PoTable from "./components/PoTable";
-import Footer from "./components/Footer";
+import React from 'react'
+import Header from './components/Header'
+import PoTable from './components/PoTable'
+import Footer from './components/Footer'
 
 const PurchaseOrderInvoice = (props) => {
-  const { data, PoLists = [] } = props;
+  const { data, PoLists = [], TABLE_ROW_COUNT = 8 } = props
+  const pages = []
+  const PoLength = PoLists?.length || 1
 
-  return (
-    <div className="invoice w-full p-4 relative h-full">
-      <div className="w-full h-full absolute top-0" style={{ opacity: 0.15 }}>
-        {/* <img src='/img/logo/logo.png' className='w-full h-full' style={{ objectFit: 'contain', objectPosition: 'center' }}></img> */}
+  let pageCount = 0
+  pageCount += Math.ceil(PoLength?.length / TABLE_ROW_COUNT)
+
+  let pageNo = 1
+  for (let i = 0; i < Math.ceil(PoLength / TABLE_ROW_COUNT); i++) {
+    pages.push(
+      <div
+        key={`page-${pageNo}`}
+        className="page"
+        style={{
+          height: 'calc(1130px - 50px)',
+          paddingLeft: '6%',
+          paddingRight: '2%'
+        }}
+      >
+        <div
+          className="invoice w-full  relative p-3"
+          style={{
+            border: '1px solid black',
+            marginTop: '4px'
+          }}
+        >
+          <Header
+            className={'bg-inherit'}
+            data={data}
+          />
+          <PoTable
+            className={'bg-inherit print:text-xs'}
+            data={PoLists?.slice(
+              i * TABLE_ROW_COUNT,
+              i * TABLE_ROW_COUNT + TABLE_ROW_COUNT
+            )}
+            currency_type={data.currency_type}
+          />
+          <Footer className={'bg-inherit'} />
+        </div>
       </div>
-      <Header className={"bg-inherit"} data={data} />
-      <PoTable
-        className={"bg-inherit print:text-xs"}
-        data={PoLists}
-        currency_type={data.currency_type}
-      />
-      <Footer className={"bg-inherit"} />
-    </div>
-  );
-};
+    )
+  }
+  return pages
+}
 
-export default PurchaseOrderInvoice;
+export default PurchaseOrderInvoice
