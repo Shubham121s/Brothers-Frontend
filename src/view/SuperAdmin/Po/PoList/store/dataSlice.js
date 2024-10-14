@@ -1,73 +1,110 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import {
   apiGetAllPoWithPagination,
   apiDeletePo,
-} from "../../../../../services/SuperAdmin/Po/PoService";
+  apiGetPoNumber,
+  apiGetAllPoNumberOption,
+  apiGetAllPOAOption
+} from '../../../../../services/SuperAdmin/Po/PoService'
 
 export const getAllPoWithPagination = createAsyncThunk(
-  "po/data/list/all",
+  'po/data/list/all',
   async (data) => {
     try {
-      const response = await apiGetAllPoWithPagination(data);
-      return response;
+      const response = await apiGetAllPoWithPagination(data)
+      return response
     } catch (error) {
-      return error.response;
+      return error.response
     }
   }
-);
+)
 
 export const deletePo = createAsyncThunk(
-  "po/data/list/delete",
+  'po/data/list/delete',
   async (data) => {
     try {
-      const response = await apiDeletePo(data);
-      return response;
+      const response = await apiDeletePo(data)
+      return response
     } catch (error) {
-      return error.response;
+      return error.response
     }
   }
-);
+)
+
+export const getAllPoNumber = createAsyncThunk(
+  'po/data/list/po/number',
+  async () => {
+    try {
+      const response = await apiGetAllPoNumberOption()
+      return response
+    } catch (error) {
+      return error.response
+    }
+  }
+)
+
+export const getAllPOANumber = createAsyncThunk(
+  'po/data/list/poa/number',
+  async () => {
+    try {
+      const response = await apiGetAllPOAOption()
+      return response
+    } catch (error) {
+      return error.response
+    }
+  }
+)
 
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
   pageSize: 10,
-  query: "",
-};
+  query: '',
+  poNumber: '',
+  poaNumber: ''
+}
 
 export const initialFilterData = {
-  status: "",
-};
+  status: ''
+}
 
 const dataSlice = createSlice({
-  name: "po/data/list",
+  name: 'po/data/list',
   initialState: {
     loading: false,
     poList: [],
+    poNumbers: [],
+    poaNumbers: [],
     tableData: initialTableData,
-    filterData: initialFilterData,
+    filterData: initialFilterData
   },
   reducers: {
     setTableData: (state, action) => {
-      state.tableData = action.payload;
+      state.tableData = action.payload
     },
     setFilterData: (state, action) => {
-      state.filterData = action.payload;
-    },
+      state.filterData = action.payload
+    }
   },
   extraReducers: {
     [getAllPoWithPagination.fulfilled]: (state, action) => {
-      state.poList = action.payload.data?.data || [];
-      state.tableData.total = action.payload.data.total || 0;
-      state.loading = false;
+      state.poList = action.payload.data?.data || []
+      state.tableData.total = action.payload.data.total || 0
+      state.loading = false
     },
     [getAllPoWithPagination.pending]: (state, action) => {
-      state.loading = true;
+      state.loading = true
     },
-    [deletePo.fulfilled]: (state, action) => {},
-  },
-});
+    [getAllPoNumber.fulfilled]: (state, action) => {
+      state.poNumbers = action.payload.data?.data || []
+    },
+    [getAllPOANumber.fulfilled]: (state, action) => {
+      state.poaNumbers = action.payload.data?.data || []
+    },
+    [deletePo.fulfilled]: (state, action) => {}
+  }
+})
 
-export const { setTableData, setFilterData } = dataSlice.actions;
+export const { setTableData, setFilterData } = dataSlice.actions
 
-export default dataSlice.reducer;
+export default dataSlice.reducer
