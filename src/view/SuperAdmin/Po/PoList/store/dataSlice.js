@@ -61,7 +61,9 @@ export const initialTableData = {
   pageSize: 10,
   query: '',
   poNumber: '',
-  poaNumber: ''
+  poaNumber: '',
+  startDate: '',
+  endDate: ''
 }
 
 export const initialFilterData = {
@@ -84,6 +86,12 @@ const dataSlice = createSlice({
     },
     setFilterData: (state, action) => {
       state.filterData = action.payload
+    },
+    setStartDate: (state, action) => {
+      state.tableData.startDate = action.payload
+    },
+    setEndDate: (state, action) => {
+      state.tableData.endDate = action.payload
     }
   },
   extraReducers: {
@@ -105,6 +113,7 @@ const dataSlice = createSlice({
   }
 })
 
-export const { setTableData, setFilterData } = dataSlice.actions
+export const { setTableData, setFilterData, setStartDate, setEndDate } =
+  dataSlice.actions
 
 export default dataSlice.reducer

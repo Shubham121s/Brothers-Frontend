@@ -205,8 +205,17 @@ const PoTable = () => {
     }
   ]
 
-  const { pageIndex, pageSize, sort, query, total, poNumber, poaNumber } =
-    useSelector((state) => state.po_list.data.tableData)
+  const {
+    pageIndex,
+    pageSize,
+    sort,
+    query,
+    total,
+    poNumber,
+    poaNumber,
+    startDate,
+    endDate
+  } = useSelector((state) => state.po_list.data.tableData)
 
   const fetchData = useCallback(() => {
     dispatch(
@@ -217,10 +226,22 @@ const PoTable = () => {
         query,
         status,
         poNumber,
-        poaNumber
+        poaNumber,
+        startDate,
+        endDate
       })
     )
-  }, [pageIndex, pageSize, sort, query, status, dispatch, poNumber, poaNumber])
+  }, [
+    pageIndex,
+    pageSize,
+    sort,
+    query,
+    status,
+    dispatch,
+    poNumber,
+    poaNumber,
+    endDate
+  ])
 
   useEffect(() => {
     fetchData()

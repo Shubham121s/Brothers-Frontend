@@ -1,19 +1,35 @@
 import React, { useRef, useState } from 'react'
-import { Button, Card, Select } from '../../../../../components/ui'
-import { setTableData, getAllPoWithPagination } from '../store/dataSlice'
+import { Button, Card, Select, DatePicker } from '../../../../../components/ui'
+import {
+  setTableData,
+  getAllPoWithPagination,
+  setEndDate,
+  setStartDate
+} from '../store/dataSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import cloneDeep from 'lodash/cloneDeep'
 import PoTableSearch from './PoTableSearch'
 import { HiOutlineFilter } from 'react-icons/hi'
 import { Months } from './constants'
 
+const dateFormat = 'MMM DD, YYYY'
+
+const { DatePickerRange } = DatePicker
+
 const PoTableTools = () => {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
   const poNumbers = useSelector((state) => state.po_list.data.poNumbers)
   const poaNumbers = useSelector((state) => state.po_list.data.poaNumbers)
+  const startDate = useSelector(
+    (state) => state.po_list.data.tableData.startDate
+  )
+  const endDate = useSelector((state) => state.po_list.data.tableData.endDate)
+
   const [poNumberValues, setPoNumberValues] = useState([])
   const [poaNumberValues, setPoaNumberValues] = useState([])
+
+  const handleDateChange = (value) => {}
 
   const inputRef = useRef()
 
@@ -42,6 +58,10 @@ const PoTableTools = () => {
       setPoaNumberValues(e)
       let poaNumbers = e.map((m) => m.value)
       newTableData.poaNumber = JSON.stringify(poaNumbers)
+    } else if (type === 'months') {
+      console.log(e)
+      newTableData.startDate = e[0]
+      newTableData.endDate = e[1]
     }
 
     newTableData.pageIndex = 1
@@ -60,6 +80,8 @@ const PoTableTools = () => {
     newTableData.query = ''
     newTableData.poNumber = ''
     newTableData.poaNumber = ''
+    newTableData.startDate = ''
+    newTableData.endDate = ''
     inputRef.current.value = ''
     fetchData(newTableData)
   }
@@ -109,13 +131,11 @@ const PoTableTools = () => {
               onChange={(e) => onEdit(e, 'poNumber')}
             />
 
-            <Select
-              isMulti
-              placeholder="Select Months"
+            <DatePickerRange
+              value={[startDate, endDate]}
+              onChange={(e) => onEdit(e, 'months')}
+              inputFormat={dateFormat}
               size="sm"
-              options={Months}
-              value={[]}
-              onChange={(e) => onEdit(e, 'poNumber')}
             />
           </div>
         </Card>

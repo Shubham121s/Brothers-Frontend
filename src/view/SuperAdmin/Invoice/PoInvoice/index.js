@@ -42,6 +42,7 @@ const POInvoice = (props) => {
             )}
             currency_type={data.currency_type}
             Note={data?.note}
+            PoLists={PoLists}
           />
           <Footer
             className={'bg-inherit'}

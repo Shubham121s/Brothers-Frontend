@@ -23,8 +23,8 @@ const PriceAmount = ({ value }) => {
   )
 }
 
-const TFootRows = ({ data = [], className, Note = '' }) => {
-  const totalAmount = InvoiceTotal(data)
+const TFootRows = ({ data = [], PoLists = [], className, Note = '' }) => {
+  const totalAmount = InvoiceTotal(PoLists)
   return (
     <Tr
       style={{
@@ -73,7 +73,8 @@ const PoTable = ({
   data = [],
   className,
   currency_type = 'INR',
-  Note = ''
+  Note = '',
+  PoLists = []
 }) => {
   const columns = useMemo(
     () => [
@@ -280,6 +281,7 @@ const PoTable = ({
             <TFootRows
               data={data}
               Note={Note}
+              PoLists={PoLists}
             />
           </TFoot>
         </Table>
