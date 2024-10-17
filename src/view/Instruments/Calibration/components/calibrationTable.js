@@ -16,6 +16,7 @@ import NewCalibrationDialog from './newCalibrationDialog'
 import { Tag } from '../../../../components/ui'
 import { FaFileImage } from 'react-icons/fa'
 import ImageDialog from './ImageDialog'
+import EditCalibrationDialog from './editCalibrationDialog'
 
 const CalibrationTable = () => {
   const ActionColumn = ({ row }) => {
@@ -73,14 +74,6 @@ const CalibrationTable = () => {
 
   const data = useSelector((state) => state.annual.data.annualList)
   // console.log(data)
-
-  let dataWithSrNo = []
-  if (data) {
-    dataWithSrNo = data.map((item, index) => ({
-      ...item,
-      sr_no: index + 1
-    }))
-  }
 
   useEffect(() => {
     fetchData()
@@ -238,7 +231,7 @@ const CalibrationTable = () => {
     <>
       <DataTable
         columns={columns}
-        data={dataWithSrNo}
+        data={data}
         loading={loading}
         pagingData={tableData}
         onPaginationChange={onPaginationChange}
@@ -246,6 +239,7 @@ const CalibrationTable = () => {
       />
       <CalibrationDeleteConfirmation />
       <NewCalibrationDialog />
+      <EditCalibrationDialog />
       <ImageDialog />
     </>
   )

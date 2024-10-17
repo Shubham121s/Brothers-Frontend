@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Dialog, Notification, Toast } from '../../../../components/ui'
 import { toggleEditDialog, setSelectedAnnual } from '../store/stateSlice'
@@ -28,7 +28,7 @@ const EditCalibrationDialog = () => {
     (state) => state.annual.state.editDialog
   )
   const selectedCalibration = useSelector(
-    (state) => state.instrument.state.selectedAnnual
+    (state) => state.annual.state.selectedAnnual
   )
 
   const tableData = useSelector((state) => state.annual.data.tableData)
@@ -55,7 +55,7 @@ const EditCalibrationDialog = () => {
       pushNotification(
         action?.payload?.data?.message,
         'success',
-        'Successfully added'
+        'Successfully Updated'
       )
       return onDialogClose()
     }
@@ -77,7 +77,9 @@ const EditCalibrationDialog = () => {
         onFormSubmit={handleFormSubmit}
         onDiscard={onDialogClose}
         initialData={{
-          ...selectedCalibration
+          ...selectedCalibration,
+          calibration_date: new Date(selectedCalibration?.calibration_date),
+          next_due_date: new Date(selectedCalibration?.next_due_date)
         }}
         InstrumentOption={InstrumentOption}
       />

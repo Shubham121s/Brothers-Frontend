@@ -25,7 +25,7 @@ const validationSchema = Yup.object().shape({
   calibration_result: Yup.string().required('Required'),
   calibration_report_no: Yup.string().required('Required'),
   next_due_date: Yup.string().required('Required'),
-  instrument_id: Yup.object().required('Required')
+  Instrument: Yup.object().required('Required')
 })
 
 const CalibrationForm = forwardRef((props, ref) => {
@@ -116,7 +116,7 @@ const CalibrationForm = forwardRef((props, ref) => {
                         invalid={errors.instrument_id && touched.instrument_id}
                         errorMessage={errors.instrument_id}
                       >
-                        <Field name="instrument_id">
+                        <Field name="Instrument">
                           {({ field, form }) => (
                             <Select
                               field={field}
@@ -126,7 +126,7 @@ const CalibrationForm = forwardRef((props, ref) => {
                               value={InstrumentOption.filter(
                                 (type) =>
                                   type.value.instrument_id ===
-                                  values.instrument_id.instrument_id
+                                  values?.Instrument?.instrument_id
                               )}
                               onChange={(option) =>
                                 form.setFieldValue(field.name, option.value)
@@ -135,7 +135,7 @@ const CalibrationForm = forwardRef((props, ref) => {
                           )}
                         </Field>
                       </FormItem>
-                      {!isEmpty(values.instrument_id) ? (
+                      {!isEmpty(values.Instrument) ? (
                         <div className=" gap-2 mt-2 h-max">
                           <Card
                             bodyClass="p-4"
@@ -144,26 +144,25 @@ const CalibrationForm = forwardRef((props, ref) => {
                             <div className="flex justify-between">
                               <strong>Maker :</strong>{' '}
                               <span>
-                                {values?.instrument_id.instrument_make || '-'}
+                                {values?.Instrument.instrument_make || '-'}
                               </span>
                             </div>
                             <div className="flex justify-between">
                               <strong>ID No. :</strong>{' '}
                               <span>
-                                {values?.instrument_id.instrument_no || '-'}
+                                {values?.Instrument.instrument_no || '-'}
                               </span>
                             </div>
                             <div className="flex justify-between capitalize">
                               <strong>Size :</strong>{' '}
                               <span>
-                                {values?.instrument_id.instrument_size || '-'}
+                                {values?.Instrument.instrument_size || '-'}
                               </span>
                             </div>
                             <div className="flex justify-between capitalize">
                               <strong>Freq :</strong>{' '}
                               <span>
-                                {values?.instrument_id.instrument_cal_frq ||
-                                  '-'}{' '}
+                                {values?.Instrument.instrument_cal_frq || '-'}{' '}
                                 Year
                               </span>
                             </div>
@@ -349,7 +348,7 @@ CalibrationForm.defaultProps = {
     calibration_result: '',
     calibration_report_no: '',
     next_due_date: '',
-    instrument_id: '',
+    Instrument: '',
     certificate: '',
     file: ''
   }
