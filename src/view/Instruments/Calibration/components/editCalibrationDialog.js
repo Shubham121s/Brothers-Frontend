@@ -50,7 +50,7 @@ const EditCalibrationDialog = () => {
     setSubmitting(true)
     const action = await dispatch(updateAnnual(values))
     setSubmitting(false)
-    if (action?.payload.status === 201) {
+    if (action?.payload.status < 300) {
       dispatch(getAnnual(tableData))
       pushNotification(
         action?.payload?.data?.message,
