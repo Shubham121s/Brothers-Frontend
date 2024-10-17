@@ -141,12 +141,9 @@ const PoTable = ({ data = [], currency = 'INR', po_id }) => {
   const selectedPoItem = useSelector(
     (state) => state.accept_po.state.selectedPoItem
   )
-  const sortedData = [...data].sort(
-    (a, b) => Number(a.serial_number) - Number(b.serial_number)
-  )
 
   const table = useReactTable({
-    data: sortedData,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel()
   })
