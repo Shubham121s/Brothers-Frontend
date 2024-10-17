@@ -1,33 +1,33 @@
-import { memo, useMemo, useState } from "react";
-import { Table } from "../../../../../components/ui";
+import { memo, useMemo, useState } from 'react'
+import { Table } from '../../../../../components/ui'
 import {
   useReactTable,
   getCoreRowModel,
-  flexRender,
-} from "@tanstack/react-table";
-import dayjs from "dayjs";
-import { useDispatch, useSelector } from "react-redux";
-import useThemeClass from "../../../../../utils/hooks/useThemeClass";
-import { HiOutlineEye, HiOutlinePencil } from "react-icons/hi";
-import EditItemDialog from "./EditItemDialog";
-import { setSelectedPoItem, toggleEditPoItemDialog } from "../store/stateSlice";
+  flexRender
+} from '@tanstack/react-table'
+import dayjs from 'dayjs'
+import { useDispatch, useSelector } from 'react-redux'
+import useThemeClass from '../../../../../utils/hooks/useThemeClass'
+import { HiOutlineEye, HiOutlinePencil } from 'react-icons/hi'
+import EditItemDialog from './EditItemDialog'
+import { setSelectedPoItem, toggleEditPoItemDialog } from '../store/stateSlice'
 
-const { Tr, Th, Td, THead, TBody } = Table;
+const { Tr, Th, Td, THead, TBody } = Table
 
 const ActionColumn = ({ row }) => {
-  const { textTheme } = useThemeClass();
-  const dispatch = useDispatch();
+  const { textTheme } = useThemeClass()
+  const dispatch = useDispatch()
 
   const onEdit = () => {
-    dispatch(toggleEditPoItemDialog(true));
-    dispatch(setSelectedPoItem(row));
-  };
+    dispatch(toggleEditPoItemDialog(true))
+    dispatch(setSelectedPoItem(row))
+  }
   const onView = () => {
-    dispatch(toggleEditPoItemDialog(true));
-    dispatch(setSelectedPoItem(row));
-  };
+    dispatch(toggleEditPoItemDialog(true))
+    dispatch(setSelectedPoItem(row))
+  }
 
-  return row?.list_status === "accepted" || row?.list_status === "rejected" ? (
+  return row?.list_status === 'accepted' || row?.list_status === 'rejected' ? (
     <span
       className={`cursor-pointer hover:${textTheme} text-lg`}
       onClick={onView}
@@ -41,125 +41,134 @@ const ActionColumn = ({ row }) => {
     >
       <HiOutlinePencil />
     </span>
-  );
-};
+  )
+}
 
-const PoTable = ({ data = [], currency = "INR", po_id }) => {
+const PoTable = ({ data = [], currency = 'INR', po_id }) => {
   const columns = useMemo(
     () => [
       {
-        header: "po sr no.",
-        accessorKey: "serial_number",
+        header: 'po sr no.',
+        accessorKey: 'serial_number'
       },
       {
-        header: "product",
-        accessorKey: "Product.item_name",
+        header: 'product',
+        accessorKey: 'Product.item_name',
         cell: (props) => {
-          const { name } = props.row.original.Product;
-          return <div className="uppercase">{name}</div>;
-        },
+          const { name } = props.row.original.Product
+          return <div className="uppercase">{name}</div>
+        }
       },
       {
-        header: "drg rev no.",
-        accessorKey: "Drawing.revision_number",
+        header: 'drg rev no.',
+        accessorKey: 'Drawing.revision_number',
         cell: (props) => {
           const {
             Drawing: { revision_number },
-            Product: { drawing_number },
-          } = props.row.original;
+            Product: { drawing_number }
+          } = props.row.original
           return (
             <div className="uppercase">{`${drawing_number}-${revision_number}`}</div>
-          );
-        },
+          )
+        }
       },
       {
-        header: "remarks",
-        accessorKey: "description",
+        header: 'remarks',
+        accessorKey: 'description',
         cell: (props) => {
-          const { description } = props.row.original;
-          return <div className="uppercase">{description}</div>;
-        },
+          const { description } = props.row.original
+          return <div className="uppercase">{description}</div>
+        }
       },
       {
-        header: "po del date.",
-        accessorKey: "delivery_date",
+        header: 'po del date.',
+        accessorKey: 'delivery_date',
         cell: (props) => {
-          const { delivery_date } = props.row.original;
-          return <div>{dayjs(delivery_date).format("DD-MMM-YYYY")}</div>;
-        },
+          const { delivery_date } = props.row.original
+          return <div>{dayjs(delivery_date).format('DD-MMM-YYYY')}</div>
+        }
       },
       {
-        header: "po qty",
-        accessorKey: "quantity",
+        header: 'po qty',
+        accessorKey: 'quantity',
         cell: (props) => {
-          const { quantity } = props.row.original;
-          return <div>{quantity}</div>;
-        },
+          const { quantity } = props.row.original
+          return <div>{quantity}</div>
+        }
       },
       {
         header: `rate (${currency})`,
-        accessorKey: "unit_price",
+        accessorKey: 'unit_price',
         cell: (props) => {
-          const { unit_price } = props.row.original;
-          return <div>{unit_price.toFixed(2)}</div>;
-        },
+          const { unit_price } = props.row.original
+          return <div>{unit_price.toFixed(2)}</div>
+        }
       },
       {
         header: `Amount (${currency})`,
-        accessorKey: "amount",
+        accessorKey: 'amount',
         cell: (props) => {
-          const { quantity, unit_price } = props.row.original;
-          return <div>{(quantity * unit_price).toFixed(2)}</div>;
-        },
+          const { quantity, unit_price } = props.row.original
+          return <div>{(quantity * unit_price).toFixed(2)}</div>
+        }
       },
       {
         header: `br dry date`,
-        accessorKey: "accept_delivery_date",
+        accessorKey: 'accept_delivery_date',
         cell: (props) => {
-          const { accept_delivery_date } = props.row.original;
+          const { accept_delivery_date } = props.row.original
           return (
             <div>
               {accept_delivery_date
-                ? dayjs(accept_delivery_date)?.format("DD-MMM-YYYY")
-                : "-"}
+                ? dayjs(accept_delivery_date)?.format('DD-MMM-YYYY')
+                : '-'}
             </div>
-          );
-        },
+          )
+        }
       },
       {
         header: ``,
-        accessorKey: "action",
+        accessorKey: 'action',
         cell: (props) => {
-          const row = props.row.original;
-          return <ActionColumn row={row} />;
-        },
-      },
+          const row = props.row.original
+          return <ActionColumn row={row} />
+        }
+      }
     ],
     [currency, data]
-  );
+  )
 
   const selectedPoItem = useSelector(
     (state) => state.accept_po.state.selectedPoItem
-  );
+  )
+  const sortedData = [...data].sort(
+    (a, b) => Number(a.serial_number) - Number(b.serial_number)
+  )
 
   const table = useReactTable({
-    data,
+    data: sortedData,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+    getCoreRowModel: getCoreRowModel()
+  })
 
   return (
     <>
-      <Table className="relative" compact={true}>
-        <THead className="sticky" style={{ top: "-.2px" }}>
+      <Table
+        className="relative"
+        compact={true}
+      >
+        <THead
+          className="sticky"
+          style={{ top: '-.2px' }}
+        >
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
                   <Th
                     style={{
-                      textAlign: "center",
-                      border: ".2px dashed lightGray",
+                      textAlign: 'center',
+                      border: '.2px dashed lightGray'
                     }}
                     key={header.id}
                     colSpan={header.colSpan}
@@ -169,23 +178,23 @@ const PoTable = ({ data = [], currency = "INR", po_id }) => {
                       header.getContext()
                     )}
                   </Th>
-                );
+                )
               })}
             </Tr>
           ))}
         </THead>
         <TBody>
           {table.getRowModel().rows.map((row) => {
-            const { list_status } = row.original;
+            const { list_status } = row.original
             return (
               <Tr
                 key={row.id}
                 className={`${
-                  list_status === "rejected"
-                    ? "bg-red-400 text-white"
-                    : list_status === "accepted"
-                    ? "bg-emerald-400 text-white"
-                    : ""
+                  list_status === 'rejected'
+                    ? 'bg-red-400 text-white'
+                    : list_status === 'accepted'
+                    ? 'bg-emerald-400 text-white'
+                    : ''
                 }`}
               >
                 {row.getVisibleCells().map((cell) => {
@@ -193,8 +202,8 @@ const PoTable = ({ data = [], currency = "INR", po_id }) => {
                     <Td
                       key={cell.id}
                       style={{
-                        textAlign: "center",
-                        border: ".2px dashed lightGray",
+                        textAlign: 'center',
+                        border: '.2px dashed lightGray'
                       }}
                     >
                       {flexRender(
@@ -202,10 +211,10 @@ const PoTable = ({ data = [], currency = "INR", po_id }) => {
                         cell.getContext()
                       )}
                     </Td>
-                  );
+                  )
                 })}
               </Tr>
-            );
+            )
           })}
         </TBody>
       </Table>
@@ -215,7 +224,7 @@ const PoTable = ({ data = [], currency = "INR", po_id }) => {
         po_id={po_id}
       />
     </>
-  );
-};
+  )
+}
 
-export default memo(PoTable);
+export default memo(PoTable)

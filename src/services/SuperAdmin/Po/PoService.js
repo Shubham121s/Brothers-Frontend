@@ -139,6 +139,20 @@ export async function apiGetPoNumber(data) {
   })
 }
 
+export async function apiGetAllPoNumberOption() {
+  return ApiService.fetchData({
+    url: 'v1/web/company/po/Number/po/option',
+    method: 'get'
+  })
+}
+
+export async function apiGetAllPOAOption() {
+  return ApiService.fetchData({
+    url: 'v1/web/company/po/poa/option',
+    method: 'get'
+  })
+}
+
 export async function apiGetAllProjectNumbers(data) {
   return ApiService.fetchData({
     url: 'v1/web/company/po-list/po/number',
