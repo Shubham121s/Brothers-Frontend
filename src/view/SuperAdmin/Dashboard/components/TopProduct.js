@@ -1,48 +1,48 @@
-import React, { useMemo } from "react";
+import React, { useMemo } from 'react'
 import {
   Card,
   Button,
   Table,
   Avatar,
   Tag,
-  Tooltip,
-} from "../../../../components/ui";
+  Tooltip
+} from '../../../../components/ui'
 import {
   useReactTable,
   getCoreRowModel,
-  flexRender,
-} from "@tanstack/react-table";
-import { FiPackage } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
-import useThemeClass from "../../../../utils/hooks/useThemeClass";
+  flexRender
+} from '@tanstack/react-table'
+import { FiPackage } from 'react-icons/fi'
+import { Link, useNavigate } from 'react-router-dom'
+import useThemeClass from '../../../../utils/hooks/useThemeClass'
 
-const { Tr, Td, TBody, THead, Th } = Table;
+const { Tr, Td, TBody, THead, Th } = Table
 
 const statusColor = {
   delivered: {
-    label: "Delivered",
-    bgClass: "bg-emerald-100",
-    textClass: "text-emerald-600",
+    label: 'Delivered',
+    bgClass: 'bg-emerald-100',
+    textClass: 'text-emerald-600'
   },
   rejected: {
-    label: "Rejected",
-    bgClass: "bg-red-100",
-    textClass: "text-red-600",
+    label: 'Rejected',
+    bgClass: 'bg-red-100',
+    textClass: 'text-red-600'
   },
   processing: {
-    label: "Processing",
-    bgClass: "bg-yellow-100",
-    textClass: "text-yellow-600",
+    label: 'Processing',
+    bgClass: 'bg-yellow-100',
+    textClass: 'text-yellow-600'
   },
   pending: {
-    label: "Pending",
-    bgClass: "bg-blue-100",
-    textClass: "text-blue-600",
-  },
-};
+    label: 'Pending',
+    bgClass: 'bg-blue-100',
+    textClass: 'text-blue-600'
+  }
+}
 
 const PoAColumn = ({ row }) => {
-  const { textTheme } = useThemeClass();
+  const { textTheme } = useThemeClass()
 
   return (
     <Tooltip
@@ -54,37 +54,37 @@ const PoAColumn = ({ row }) => {
     >
       <Link
         className={`hover:${textTheme} font-semibold`}
-        to={`/super/admin/po-details/${row?.po_id}`}
+        to={`/po-details/${row?.po_id}`}
       >
         {row?.poa}
       </Link>
     </Tooltip>
-  );
-};
+  )
+}
 
 const TopProduct = ({ data = [], className }) => {
   const columns = [
     {
-      header: "POa",
-      accessorKey: "poa",
+      header: 'POa',
+      accessorKey: 'poa',
       cell: (props) => {
-        const row = props.row.original;
-        return <PoAColumn row={row} />;
-      },
+        const row = props.row.original
+        return <PoAColumn row={row} />
+      }
     },
     {
-      header: "PO Number",
-      accessorKey: "number",
+      header: 'PO Number',
+      accessorKey: 'number',
       cell: (props) => {
-        const row = props.row.original;
-        return <div className="uppercase">{row?.number}</div>;
-      },
+        const row = props.row.original
+        return <div className="uppercase">{row?.number}</div>
+      }
     },
     {
-      header: "Status",
-      accessorKey: "status",
+      header: 'Status',
+      accessorKey: 'status',
       cell: (props) => {
-        const row = props.row.original;
+        const row = props.row.original
         return (
           <div className="mr-2">
             <Tag
@@ -95,18 +95,18 @@ const TopProduct = ({ data = [], className }) => {
               {statusColor[row?.status]?.label}
             </Tag>
           </div>
-        );
-      },
-    },
-  ];
+        )
+      }
+    }
+  ]
 
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
+    getCoreRowModel: getCoreRowModel()
+  })
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <Card className={className}>
@@ -115,7 +115,7 @@ const TopProduct = ({ data = [], className }) => {
         <Button
           size="sm"
           onClick={() => {
-            return navigate("/super/admin/po/list");
+            return navigate('/po/list')
           }}
         >
           View POs
@@ -127,13 +127,16 @@ const TopProduct = ({ data = [], className }) => {
             <Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <Th key={header.id} colSpan={header.colSpan}>
+                  <Th
+                    key={header.id}
+                    colSpan={header.colSpan}
+                  >
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext()
                     )}
                   </Th>
-                );
+                )
               })}
             </Tr>
           ))}
@@ -150,15 +153,15 @@ const TopProduct = ({ data = [], className }) => {
                         cell.getContext()
                       )}
                     </Td>
-                  );
+                  )
                 })}
               </Tr>
-            );
+            )
           })}
         </TBody>
       </Table>
     </Card>
-  );
-};
+  )
+}
 
-export default TopProduct;
+export default TopProduct

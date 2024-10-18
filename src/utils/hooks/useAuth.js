@@ -43,9 +43,9 @@ function useAuth() {
           )
         }
         const redirectUrl = query.get(REDIRECT_URL_KEY)
-        console.log(redirectUrl)
+        // console.log(redirectUrl)
         //redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath
-        navigate('/super/admin/dashboard')
+        navigate('/dashboard')
         return {
           status: 'success',
           message: ''

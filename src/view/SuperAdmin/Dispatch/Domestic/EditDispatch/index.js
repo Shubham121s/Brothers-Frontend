@@ -107,7 +107,7 @@ const EditDispatch = () => {
         fright_charges: fright
       })
     )
-    navigate('/super/admin/dispatch-list')
+    navigate('/dispatch-list')
   }
 
   const addNewItemInPoList = async (dispatchList) => {

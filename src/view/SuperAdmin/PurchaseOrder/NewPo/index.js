@@ -1,80 +1,79 @@
-import React, { useEffect } from "react";
-import { Toast, Notification } from "../../../../components/ui";
-import { useNavigate } from "react-router-dom";
-import PoForm from "../PoForm";
-import { useDispatch, useSelector } from "react-redux";
-import { injectReducer } from "../../../../store";
-import newPoReducer from "./store";
+import React, { useEffect } from 'react'
+import { Toast, Notification } from '../../../../components/ui'
+import { useNavigate } from 'react-router-dom'
+import PoForm from '../PoForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { injectReducer } from '../../../../store'
+import newPoReducer from './store'
 import {
   getAllCategories,
   getAllCustomers,
   getAllProductsWithDrawing,
-  postNewPoRegister,
-} from "./store/dataSlice";
+  postNewPoRegister
+} from './store/dataSlice'
 
-injectReducer("new_po", newPoReducer);
+injectReducer('new_po', newPoReducer)
 
 const NewPO = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const fetch = () => {
-    dispatch(getAllCustomers());
-    dispatch(getAllCategories());
-  };
+    dispatch(getAllCustomers())
+    dispatch(getAllCategories())
+  }
 
   useEffect(() => {
-    fetch();
-  }, []);
+    fetch()
+  }, [])
 
-  const customers = useSelector((state) => state.new_po.data.customers);
-  const categories = useSelector((state) => state.new_po.data.categoryList);
-  const products = useSelector((state) => state.new_po.data.products);
+  const customers = useSelector((state) => state.new_po.data.customers)
+  const categories = useSelector((state) => state.new_po.data.categoryList)
+  const products = useSelector((state) => state.new_po.data.products)
 
   const addPo = async (data) => {
-    const action = await dispatch(postNewPoRegister(data));
-    return action;
-  };
+    const action = await dispatch(postNewPoRegister(data))
+    return action
+  }
 
   const handleFormSubmit = async (values, setSubmitting) => {
-    console.log(values);
-    setSubmitting(true);
-    const action = await addPo(values);
-    setSubmitting(false);
+    console.log(values)
+    setSubmitting(true)
+    const action = await addPo(values)
+    setSubmitting(false)
     if (action.payload.status < 300) {
       Toast.push(
         <Notification
-          title={"Successfully added"}
+          title={'Successfully added'}
           type="success"
           duration={2500}
         >
           Purchase Order successfully added
         </Notification>,
         {
-          placement: "top-center",
+          placement: 'top-center'
         }
-      );
-      handleDiscard();
-    }
-    else{
+      )
+      handleDiscard()
+    } else {
       Toast.push(
         <Notification
-          title={"Error"}
+          title={'Error'}
           type="danger"
           duration={2500}
         >
           {action.payload?.data?.message}
         </Notification>,
         {
-          placement: "top-center",
+          placement: 'top-center'
         }
-      );
+      )
     }
-  };
+  }
 
   const handleDiscard = () => {
-    navigate("/super/admin/purchaseOrder/list");
-  };
+    navigate('/purchaseOrder/list')
+  }
 
   return (
     <>
@@ -87,7 +86,7 @@ const NewPO = () => {
         categories={categories}
       />
     </>
-  );
-};
+  )
+}
 
-export default NewPO;
+export default NewPO

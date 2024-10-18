@@ -101,7 +101,7 @@ const NewPO = () => {
   }
 
   const handleDiscard = () => {
-    navigate('/super/admin/po/list')
+    navigate('/po/list')
   }
 
   return (

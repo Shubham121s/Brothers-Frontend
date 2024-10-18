@@ -17,7 +17,7 @@ const superAdminNavigationConfig = [
     subMenu: [
       {
         key: 'dashboard',
-        path: `/super/admin/dashboard`,
+        path: `/dashboard`,
         title: 'Dashboard',
         translateKey: 'nav.dashboard',
         icon: 'dashboard',
@@ -27,7 +27,7 @@ const superAdminNavigationConfig = [
       },
       {
         key: 'user',
-        path: `/super/admin/company/user`,
+        path: `/company/user`,
         title: 'User',
         translateKey: 'nav.user',
         icon: 'user',
@@ -46,7 +46,7 @@ const superAdminNavigationConfig = [
         subMenu: [
           {
             key: 'customer.list',
-            path: `/super/admin/customer/list`,
+            path: `/customer/list`,
             title: 'Customer List',
             translateKey: 'nav.customer.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -55,7 +55,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'customer.new',
-            path: `/super/admin/customer/new`,
+            path: `/customer/new`,
             title: 'New Customer',
             translateKey: 'nav.customer.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -75,7 +75,7 @@ const superAdminNavigationConfig = [
         subMenu: [
           {
             key: 'product.list',
-            path: `/super/admin/product/list`,
+            path: `/product/list`,
             title: 'Product List',
             translateKey: 'nav.product.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -84,7 +84,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'product.new',
-            path: `/super/admin/product/new`,
+            path: `/product/new`,
             title: 'New Product',
             translateKey: 'nav.product.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -93,7 +93,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'product.setting',
-            path: `/super/admin/product/settings`,
+            path: `/product/settings`,
             title: 'Settings',
             translateKey: 'nav.product.setting',
             type: NAV_ITEM_TYPE_ITEM,
@@ -104,7 +104,7 @@ const superAdminNavigationConfig = [
       },
       {
         key: 'stock',
-        path: `/super/admin/master/stock`,
+        path: `/master/stock`,
         title: 'Stock',
         translateKey: 'nav.stock',
         icon: 'stock',
@@ -123,7 +123,7 @@ const superAdminNavigationConfig = [
         subMenu: [
           {
             key: 'purchase.order.list',
-            path: `/super/admin/po/list`,
+            path: `/po/list`,
             title: 'Order List',
             translateKey: 'nav.purchase.order.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -132,7 +132,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'purchase.order.new',
-            path: `super/admin/po/new`,
+            path: `/po/new`,
             title: 'New Order',
             translateKey: 'nav.purchase.order.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -141,7 +141,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'purchase.settings',
-            path: `super/admin/po/setting`,
+            path: `/po/setting`,
             title: 'Settings',
             translateKey: 'nav.purchase.settings',
             type: NAV_ITEM_TYPE_ITEM,
@@ -181,7 +181,7 @@ const superAdminNavigationConfig = [
         subMenu: [
           {
             key: 'foreign.new',
-            path: `/super/admin/dispatch/foreign/new`,
+            path: `/dispatch/foreign/new`,
             title: 'Foreign Invoice',
             translateKey: 'nav.foreign.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -190,7 +190,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'domestic.new',
-            path: `/super/admin/dispatch/domestic/new`,
+            path: `/dispatch/domestic/new`,
             title: 'Domestic Invoice',
             translateKey: 'nav.domestic.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -199,7 +199,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'pattern.new',
-            path: `/super/admin/dispatch/pattern/new`,
+            path: `/dispatch/pattern/new`,
             title: 'Pattern Invoice',
             translateKey: 'nav.pattern.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -208,7 +208,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'invoice.setting',
-            path: `/super/admin/dispatch/invoice/setting`,
+            path: `/dispatch/invoice/setting`,
             title: 'Settings',
             translateKey: 'nav.foreign.setting',
             type: NAV_ITEM_TYPE_ITEM,
@@ -217,7 +217,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'invoice.list',
-            path: `/super/admin/dispatch-list`,
+            path: `/dispatch-list`,
             title: 'Invoice List',
             translateKey: 'nav.invoice.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -228,7 +228,7 @@ const superAdminNavigationConfig = [
       },
       {
         key: 'master.planner',
-        path: `/super/admin/master/product/planner`,
+        path: `/master/product/planner`,
         title: 'Master PP',
         translateKey: 'nav.master.planner',
         icon: 'master',
@@ -238,7 +238,7 @@ const superAdminNavigationConfig = [
       },
       {
         key: 'workers',
-        path: `/super/admin/workers`,
+        path: `/workers`,
         title: 'HR',
         translateKey: 'nav.workers',
         icon: 'worker',
@@ -257,7 +257,7 @@ const superAdminNavigationConfig = [
         subMenu: [
           {
             key: 'purchase.order.list',
-            path: `/super/admin/purchaseOrder/list`,
+            path: `/purchaseOrder/list`,
             title: 'PO List',
             translateKey: 'nav.purchase.order.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -266,7 +266,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'purchase.order.new',
-            path: `super/admin/purchaseOrder/new`,
+            path: `/purchaseOrder/new`,
             title: 'New PO',
             translateKey: 'nav.purchase.order.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -275,7 +275,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'purchase.order.inward',
-            path: `super/admin/purchaseOrder/inward/list`,
+            path: `/purchaseOrder/inward/list`,
             title: 'Inward List',
             translateKey: 'nav.purchase.order.inward',
             type: NAV_ITEM_TYPE_ITEM,
@@ -295,7 +295,7 @@ const superAdminNavigationConfig = [
         subMenu: [
           {
             key: 'enquiry.list',
-            path: `/super/admin/enquiry/List`,
+            path: `/enquiry/List`,
             title: 'Enquiry List',
             translateKey: 'nav.enquiry.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -304,7 +304,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'enquiry.new',
-            path: `/super/admin/enquiry/new`,
+            path: `/enquiry/new`,
             title: 'New Enquiry',
             translateKey: 'nav.enquiry.new',
             type: NAV_ITEM_TYPE_ITEM,
@@ -313,7 +313,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'quotation.list',
-            path: `/super/admin/quotation`,
+            path: `/quotation`,
             title: 'Quotation',
             translateKey: 'nav.quotation.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -333,7 +333,7 @@ const superAdminNavigationConfig = [
         subMenu: [
           {
             key: 'machine.list',
-            path: `/super/admin/machine/List`,
+            path: `/machine/List`,
             title: 'Machines',
             translateKey: 'nav.machine.list',
             type: NAV_ITEM_TYPE_ITEM,
@@ -342,7 +342,7 @@ const superAdminNavigationConfig = [
           },
           {
             key: 'machine.breakdown',
-            path: `/super/admin/machine/breakdown`,
+            path: `/machine/breakdown`,
             title: 'Machine Breakdown',
             translateKey: 'nav.machine.breakdown',
 
