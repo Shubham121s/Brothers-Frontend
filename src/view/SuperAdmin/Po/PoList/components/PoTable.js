@@ -52,7 +52,7 @@ const ActionColumn = ({ index, row }) => {
   }
 
   const onEdit = () => {
-    navigate(`/super/admin/po-Edit/${row.po_id}`)
+    navigate(`/po-Edit/${row.po_id}`)
   }
 
   return (
@@ -86,7 +86,7 @@ const PoAColumn = ({ row }) => {
     >
       <Link
         className={`hover:${textTheme} font-semibold`}
-        to={`/super/admin/po-details/${row?.po_id}`}
+        to={`/po-details/${row?.po_id}`}
       >
         {row?.poa}
       </Link>
@@ -214,10 +214,12 @@ const PoTable = () => {
     poNumber,
     poaNumber,
     startDate,
-    endDate
+    endDate,
+    months
   } = useSelector((state) => state.po_list.data.tableData)
 
   const fetchData = useCallback(() => {
+    console.log(months)
     dispatch(
       getAllPoWithPagination({
         pageIndex,
@@ -228,7 +230,8 @@ const PoTable = () => {
         poNumber,
         poaNumber,
         startDate,
-        endDate
+        endDate,
+        months
       })
     )
   }, [
@@ -240,12 +243,25 @@ const PoTable = () => {
     dispatch,
     poNumber,
     poaNumber,
-    endDate
+    endDate,
+    months
   ])
 
   useEffect(() => {
     fetchData()
-  }, [fetchData, pageIndex, pageSize, sort, status])
+  }, [
+    fetchData,
+    pageIndex,
+    pageSize,
+    sort,
+    status,
+    query,
+    status,
+    poNumber,
+    poaNumber,
+    endDate,
+    months
+  ])
 
   useEffect(() => {
     dispatch(getAllPoNumber())
@@ -253,8 +269,32 @@ const PoTable = () => {
   }, [])
 
   const tableData = useMemo(
-    () => ({ pageIndex, pageSize, sort, query, total }),
-    [pageIndex, pageSize, sort, query, total]
+    () => ({
+      pageIndex,
+      pageSize,
+      sort,
+      query,
+      total,
+      query,
+      status,
+      poNumber,
+      poaNumber,
+      endDate,
+      months
+    }),
+    [
+      pageIndex,
+      pageSize,
+      sort,
+      query,
+      total,
+      query,
+      status,
+      poNumber,
+      poaNumber,
+      endDate,
+      months
+    ]
   )
 
   const onPaginationChange = (page) => {

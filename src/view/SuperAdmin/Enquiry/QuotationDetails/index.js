@@ -1,64 +1,68 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { json, useLocation, useNavigate } from "react-router-dom";
-import { injectReducer } from "../../../../store/index.js";
-import { useDispatch, useSelector } from "react-redux";
-import quotaionDetailReducer from "./store/index.js";
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { json, useLocation, useNavigate } from 'react-router-dom'
+import { injectReducer } from '../../../../store/index.js'
+import { useDispatch, useSelector } from 'react-redux'
+import quotaionDetailReducer from './store/index.js'
 import {
   UpdateQuotationStatus,
   getEnquiryDetailsByEnquiryId,
   getQutotaionDetailsByQuotationId,
-  updateQuotationById,
-} from "./store/dataSlice.js";
+  updateQuotationById
+} from './store/dataSlice.js'
 import {
   Container,
   DoubleSidedImage,
   Loading,
-  StickyFooter,
-} from "../../../../components/shared/index.js";
-import { isEmpty } from "lodash";
+  StickyFooter
+} from '../../../../components/shared/index.js'
+import { isEmpty } from 'lodash'
 import {
   Button,
   Card,
   Toast,
-  Notification,
-} from "../../../../components/ui/index";
+  Notification
+} from '../../../../components/ui/index'
 // import PoDetails from "./components/PoDetails.js";
-import QuotationTable from "./components/QuotationItemList.js";
-import { useReactToPrint } from "react-to-print";
-import { AiOutlineSave } from "react-icons/ai";
+import QuotationTable from './components/QuotationItemList.js'
+import { useReactToPrint } from 'react-to-print'
+import { AiOutlineSave } from 'react-icons/ai'
 // import SelectedProductTble from "./components/SelectedProductTble.js";
-import QuotationInvoice from "./components/QuotationInvoice.js";
-import { HiOutlinePrinter } from "react-icons/hi";
-import QuotationDetail from "./components/QuotationDetail.js";
+import QuotationInvoice from './components/QuotationInvoice.js'
+import { HiOutlinePrinter } from 'react-icons/hi'
+import QuotationDetail from './components/QuotationDetail.js'
 
-injectReducer("quotation_detail", quotaionDetailReducer);
+injectReducer('quotation_detail', quotaionDetailReducer)
 
 const QuotationDetails = () => {
-  const [printLoading, setPrintLoading] = useState(false);
-  const [statusLoading, setStatusLoading] = useState(false);
-  const componentRef = useRef();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [printLoading, setPrintLoading] = useState(false)
+  const [statusLoading, setStatusLoading] = useState(false)
+  const componentRef = useRef()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
   const initialData = useSelector(
     (state) => state.quotation_detail.data.quotationDetails
-  );
-  const loading = useSelector((state) => state.quotation_detail.data.loading);
+  )
+  const loading = useSelector((state) => state.quotation_detail.data.loading)
 
   const data = useSelector(
     (state) => state.quotation_detail.state.quotationList
-  );
+  )
 
   const popNotification = (keyword, type, message) => {
     Toast.push(
-      <Notification title={keyword} type={type} duration={2500}>
+      <Notification
+        title={keyword}
+        type={type}
+        duration={2500}
+      >
         {message}
       </Notification>,
       {
-        placement: "top-end",
+        placement: 'top-end'
       }
-    );
-  };
+    )
+  }
 
   const data1 = useMemo(() => {
     const result = {
@@ -66,91 +70,91 @@ const QuotationDetails = () => {
       ring: [],
       square: [],
       profile: [],
-      fabrication: [],
-    };
+      fabrication: []
+    }
 
     data?.forEach((m) => {
-      if (m.part_type === "CIRCLE") {
-        result.circle.push(m);
-      } else if (m.part_type === "RING") {
-        result.ring.push(m);
-      } else if (m.part_type === "SQUARE") {
-        result.square.push(m);
-      } else if (m.part_type === "PROFILE DRAWING") {
-        result.profile.push(m);
-      } else if (m.part_type === "FABRICATION DRAWING") {
-        result.fabrication.push(m);
+      if (m.part_type === 'CIRCLE') {
+        result.circle.push(m)
+      } else if (m.part_type === 'RING') {
+        result.ring.push(m)
+      } else if (m.part_type === 'SQUARE') {
+        result.square.push(m)
+      } else if (m.part_type === 'PROFILE DRAWING') {
+        result.profile.push(m)
+      } else if (m.part_type === 'FABRICATION DRAWING') {
+        result.fabrication.push(m)
       }
-    });
+    })
 
-    result.circle = JSON.stringify(result.circle);
-    result.ring = JSON.stringify(result.ring);
-    result.square = JSON.stringify(result.square);
-    result.profile = JSON.stringify(result.profile);
-    result.fabrication = JSON.stringify(result.fabrication);
+    result.circle = JSON.stringify(result.circle)
+    result.ring = JSON.stringify(result.ring)
+    result.square = JSON.stringify(result.square)
+    result.profile = JSON.stringify(result.profile)
+    result.fabrication = JSON.stringify(result.fabrication)
 
-    return result;
-  }, [data]);
+    return result
+  }, [data])
 
   const onNavigate = async () => {
-    if (initialData.status === "PENDING") {
+    if (initialData.status === 'PENDING') {
       dispatch(
         updateQuotationById({
           quotation_id: initialData.quotation_id,
-          ...data1[0],
+          ...data1[0]
         })
-      );
+      )
     }
-  };
+  }
 
   useEffect(() => {
-    fetchData();
+    fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const fetchData = async () => {
     const quotation_id = location.pathname.substring(
-      location.pathname.lastIndexOf("/") + 1
-    );
+      location.pathname.lastIndexOf('/') + 1
+    )
     if (quotation_id) {
-      await dispatch(getQutotaionDetailsByQuotationId({ quotation_id }));
+      await dispatch(getQutotaionDetailsByQuotationId({ quotation_id }))
     }
-  };
+  }
 
   const handleDiscard = () => {
-    navigate("/super/admin/quotation");
-  };
+    navigate('/quotation')
+  }
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     onAfterPrint: () => {
-      setPrintLoading(false);
+      setPrintLoading(false)
     },
     onBeforePrint: () => {
-      setPrintLoading(true);
-    },
-  });
+      setPrintLoading(true)
+    }
+  })
 
   const onQuotationStatus = async (val) => {
     const quotation_id = location.pathname.substring(
-      location.pathname.lastIndexOf("/") + 1
-    );
-    setStatusLoading(true);
+      location.pathname.lastIndexOf('/') + 1
+    )
+    setStatusLoading(true)
     const action = await dispatch(
       UpdateQuotationStatus({
         status: val,
         quotation_id: quotation_id,
-        enquiry_id: initialData.enquiry_id,
+        enquiry_id: initialData.enquiry_id
       })
-    );
+    )
     if (action.payload.status < 300) {
-      popNotification("Success", "success", "Quotation Accepted Successfully");
-      setStatusLoading(false);
-      await dispatch(getQutotaionDetailsByQuotationId({ quotation_id }));
+      popNotification('Success', 'success', 'Quotation Accepted Successfully')
+      setStatusLoading(false)
+      await dispatch(getQutotaionDetailsByQuotationId({ quotation_id }))
     } else {
-      popNotification("Error", "danger", "Something Went Wrong");
+      popNotification('Error', 'danger', 'Something Went Wrong')
     }
-  };
+  }
 
   // const PoLists = useMemo(() => {
   //   return initialData?.PoLists?.filter(
@@ -177,7 +181,7 @@ const QuotationDetails = () => {
                   <POInvoice data={initialData} PoLists={PoLists} />
                 </div>
               </div> */}
-              <div style={{ display: "none" }}>
+              <div style={{ display: 'none' }}>
                 <div ref={componentRef}>
                   <QuotationInvoice />
                 </div>
@@ -226,7 +230,7 @@ const QuotationDetails = () => {
             >
               Print
             </Button>
-            {initialData.status === "PENDING" && (
+            {initialData.status === 'PENDING' && (
               <>
                 <Button
                   size="sm"
@@ -235,7 +239,7 @@ const QuotationDetails = () => {
                   variant="solid"
                   color="emerald-500"
                   loading={statusLoading}
-                  onClick={() => onQuotationStatus("ACCEPTED")}
+                  onClick={() => onQuotationStatus('ACCEPTED')}
                 >
                   Accept
                 </Button>
@@ -245,14 +249,14 @@ const QuotationDetails = () => {
                   type="button"
                   variant="solid"
                   color="red-500"
-                  onClick={() => onQuotationStatus("REJECTED")}
+                  onClick={() => onQuotationStatus('REJECTED')}
                   loading={statusLoading}
                 >
                   Reject
                 </Button>
               </>
             )}
-            {initialData.status === "PENDING" && (
+            {initialData.status === 'PENDING' && (
               <Button
                 size="sm"
                 variant="solid"
@@ -277,7 +281,7 @@ const QuotationDetails = () => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default QuotationDetails;
+export default QuotationDetails

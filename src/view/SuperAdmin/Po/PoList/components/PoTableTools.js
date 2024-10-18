@@ -28,6 +28,7 @@ const PoTableTools = () => {
 
   const [poNumberValues, setPoNumberValues] = useState([])
   const [poaNumberValues, setPoaNumberValues] = useState([])
+  const [monthValues, setMonthValues] = useState([])
 
   const handleDateChange = (value) => {}
 
@@ -62,6 +63,10 @@ const PoTableTools = () => {
       console.log(e)
       newTableData.startDate = e[0]
       newTableData.endDate = e[1]
+    } else if (type === 'month') {
+      setMonthValues(e)
+      let months = e.map((m) => m.value)
+      newTableData.months = JSON.stringify(months)
     }
 
     newTableData.pageIndex = 1
@@ -82,6 +87,7 @@ const PoTableTools = () => {
     newTableData.poaNumber = ''
     newTableData.startDate = ''
     newTableData.endDate = ''
+    newTableData.months = ''
     inputRef.current.value = ''
     fetchData(newTableData)
   }
@@ -133,9 +139,19 @@ const PoTableTools = () => {
 
             <DatePickerRange
               value={[startDate, endDate]}
+              placeholder="Select Range"
               onChange={(e) => onEdit(e, 'months')}
               inputFormat={dateFormat}
               size="sm"
+            />
+
+            <Select
+              isMulti
+              placeholder="Select Months"
+              size="sm"
+              options={Months}
+              value={monthValues}
+              onChange={(e) => onEdit(e, 'month')}
             />
           </div>
         </Card>

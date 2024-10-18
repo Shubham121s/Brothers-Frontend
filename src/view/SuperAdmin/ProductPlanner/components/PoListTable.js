@@ -81,7 +81,7 @@ const PoAColumn = ({ row }) => {
     >
       <Link
         className={`hover:${textTheme} font-semibold`}
-        to={`/super/admin/product/drawing/${row?.product_id}`}
+        to={`/product/drawing/${row?.product_id}`}
       >
         {row?.item_code}
       </Link>

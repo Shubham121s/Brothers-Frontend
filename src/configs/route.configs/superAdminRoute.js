@@ -9,7 +9,7 @@ import {
 const superAdminRoute = [
   {
     key: 'dashboard',
-    path: `/super/admin/dashboard`,
+    path: `/dashboard`,
     component: React.lazy(() => import('../../view/SuperAdmin/Dashboard')),
     authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
@@ -19,7 +19,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'user.list',
-    path: `/super/admin/company/user`,
+    path: `/company/user`,
     component: React.lazy(() => import('../../view/SuperAdmin/User')),
     authority: [SUPER_ADMIN, ADMIN]
   },
@@ -29,7 +29,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'customer.new',
-    path: `/super/admin/customer/new`,
+    path: `/customer/new`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/NewCustomer')
     ),
@@ -37,7 +37,7 @@ const superAdminRoute = [
   },
   {
     key: 'customer.list',
-    path: `/super/admin/customer/list`,
+    path: `/customer/list`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/CustomerList')
     ),
@@ -45,7 +45,7 @@ const superAdminRoute = [
   },
   {
     key: 'customer.details',
-    path: `/super/admin/customer-details/:customerId`,
+    path: `/customer-details/:customerId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/CustomerDetails')
     ),
@@ -53,7 +53,7 @@ const superAdminRoute = [
   },
   {
     key: 'customer.edit',
-    path: `/super/admin/customer/edit/:customerId`,
+    path: `/customer/edit/:customerId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/EditCustomer')
     ),
@@ -65,31 +65,31 @@ const superAdminRoute = [
   // **************START*************
   {
     key: 'po.new',
-    path: `/super/admin/po/new`,
+    path: `/po/new`,
     component: React.lazy(() => import('../../view/SuperAdmin/Po/NewPo')),
     authority: [SUPER_ADMIN, ADMIN]
   },
   {
     key: 'po.new',
-    path: `/super/admin/po/list`,
+    path: `/po/list`,
     component: React.lazy(() => import('../../view/SuperAdmin/Po/PoList')),
     authority: [SUPER_ADMIN, ADMIN]
   },
   {
     key: 'po.new',
-    path: `/super/admin/po-details/:poId`,
+    path: `/po-details/:poId`,
     component: React.lazy(() => import('../../view/SuperAdmin/Po/PoDetails')),
     authority: [SUPER_ADMIN, ADMIN]
   },
   {
     key: 'po.edit',
-    path: `/super/admin/po-Edit/:poId`,
+    path: `/po-Edit/:poId`,
     component: React.lazy(() => import('../../view/SuperAdmin/Po/EditPo')),
     authority: [SUPER_ADMIN, ADMIN]
   },
   {
     key: 'po.setting',
-    path: `/super/admin/po/setting`,
+    path: `/po/setting`,
     component: React.lazy(() => import('../../view/SuperAdmin/Po/PoSetting')),
     authority: [SUPER_ADMIN, ADMIN]
   },
@@ -99,7 +99,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'product.settings',
-    path: `/super/admin/product/settings`,
+    path: `/product/settings`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/ProductSetting')
     ),
@@ -107,7 +107,7 @@ const superAdminRoute = [
   },
   {
     key: 'product.list',
-    path: `/super/admin/product/list`,
+    path: `/product/list`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/ProductList')
     ),
@@ -115,7 +115,7 @@ const superAdminRoute = [
   },
   {
     key: 'product.new',
-    path: `/super/admin/product/new`,
+    path: `/product/new`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/NewProduct')
     ),
@@ -123,7 +123,7 @@ const superAdminRoute = [
   },
   {
     key: 'product.edit',
-    path: `/super/admin/product/edit/:productId`,
+    path: `/product/edit/:productId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/EditProduct')
     ),
@@ -135,7 +135,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'product.drawing.list',
-    path: `/super/admin/product/drawing/:productId`,
+    path: `/product/drawing/:productId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/Drawing/DrawingList')
     ),
@@ -147,7 +147,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'invoice.dispatch.new',
-    path: `/super/admin/dispatch/foreign/new`,
+    path: `/dispatch/foreign/new`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/Foreign/NewDispatch')
     ),
@@ -155,7 +155,7 @@ const superAdminRoute = [
   },
   {
     key: 'invoice.dispatch.edit',
-    path: `/super/admin/dispatch/foreign/edit/:invoiceId`,
+    path: `/dispatch/foreign/edit/:invoiceId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/Foreign/EditDispatch')
     ),
@@ -167,7 +167,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'invoice.dispatch.setting',
-    path: `/super/admin/dispatch/invoice/setting`,
+    path: `/dispatch/invoice/setting`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/Setting/ForeignInvoiceSetting')
     ),
@@ -179,7 +179,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'invoice.dispatch.new',
-    path: `/super/admin/dispatch/domestic/new`,
+    path: `/dispatch/domestic/new`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/Domestic/NewDispatch')
     ),
@@ -187,7 +187,7 @@ const superAdminRoute = [
   },
   {
     key: 'invoice.dispatch.edit',
-    path: `/super/admin/dispatch/domestic/edit/:invoiceId`,
+    path: `/dispatch/domestic/edit/:invoiceId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/Domestic/EditDispatch')
     ),
@@ -199,7 +199,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'invoice.pattern.new',
-    path: `/super/admin/dispatch/pattern/new`,
+    path: `/dispatch/pattern/new`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/Pattern/NewPattern')
     ),
@@ -207,7 +207,7 @@ const superAdminRoute = [
   },
   // {
   //   key: "invoice.dispatch.edit",
-  //   path: `/super/admin/dispatch/domestic/edit/:invoiceId`,
+  //   path: `/dispatch/domestic/edit/:invoiceId`,
   //   component: React.lazy(() =>
   //     import("../../view/SuperAdmin/Dispatch/Domestic/EditDispatch")
   //   ),
@@ -219,7 +219,7 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'invoice.dispatch.list',
-    path: `/super/admin/dispatch-list`,
+    path: `/dispatch-list`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/InvoiceList')
     ),
@@ -227,7 +227,7 @@ const superAdminRoute = [
   },
   {
     key: 'invoice.domestic.view',
-    path: `/super/admin/domestic/invoice/view/:invoiceId`,
+    path: `/domestic/invoice/view/:invoiceId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Invoice/Dispatch/Domestic')
     ),
@@ -247,7 +247,7 @@ const superAdminRoute = [
 
   {
     key: 'master.planner',
-    path: `/super/admin/master/product/planner`,
+    path: `/master/product/planner`,
     component: React.lazy(() => import('../../view/SuperAdmin/ProductPlanner')),
     authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },
@@ -256,14 +256,14 @@ const superAdminRoute = [
   // **************START***************
   {
     key: 'workers',
-    path: `/super/admin/workers`,
+    path: `/workers`,
     component: React.lazy(() => import('../../view/SuperAdmin/worker')),
     authority: [SUPER_ADMIN, ADMIN]
   },
 
   {
     key: 'workers',
-    path: `/super/admin/worker/attendance`,
+    path: `/worker/attendance`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/worker/workerAttendence')
     ),
@@ -272,7 +272,7 @@ const superAdminRoute = [
 
   {
     key: 'workersLedger',
-    path: `super/admin/worker/details`,
+    path: `/worker/details`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/worker/workerLedger')
     ),
@@ -282,14 +282,14 @@ const superAdminRoute = [
   // **************END***************
   {
     key: 'stock',
-    path: `super/admin/master/stock`,
+    path: `/master/stock`,
     component: React.lazy(() => import('../../view/SuperAdmin/stock')),
     authority: [SUPER_ADMIN, ADMIN]
   },
 
   {
     key: 'purchaseOrder.new',
-    path: `/super/admin/purchaseOrder/new`,
+    path: `/purchaseOrder/new`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/PurchaseOrder/NewPo')
     ),
@@ -297,7 +297,7 @@ const superAdminRoute = [
   },
   {
     key: 'purchaseOrder.edit',
-    path: `/super/admin/purchaseOrder/edit/:purchaseOrderId`,
+    path: `/purchaseOrder/edit/:purchaseOrderId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/PurchaseOrder/EditPo')
     ),
@@ -305,7 +305,7 @@ const superAdminRoute = [
   },
   {
     key: 'purchaseOrder.list',
-    path: `/super/admin/purchaseOrder/list`,
+    path: `/purchaseOrder/list`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/PurchaseOrder/PoList')
     ),
@@ -313,7 +313,7 @@ const superAdminRoute = [
   },
   {
     key: 'purchaseOrder.list',
-    path: `/super/admin/purchase/order/details/:purchaseId`,
+    path: `/purchase/order/details/:purchaseId`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/PurchaseOrder/PoDetails')
     ),
@@ -329,7 +329,7 @@ const superAdminRoute = [
   },
   {
     key: 'purchaseOrder.inward.list',
-    path: `/super/admin/purchaseOrder/inward/list`,
+    path: `/purchaseOrder/inward/list`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/PurchaseOrder/InwardList')
     ),
@@ -337,7 +337,7 @@ const superAdminRoute = [
   },
   {
     key: 'purchaseOrder.inward.grn',
-    path: `/super/admin/inward/details/:grn`,
+    path: `/inward/details/:grn`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/PurchaseOrder/GRN')
     ),
@@ -347,7 +347,7 @@ const superAdminRoute = [
   //*********START********* */
   {
     key: 'enquiry.list',
-    path: `/super/admin/enquiry/List`,
+    path: `/enquiry/List`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Sales/Enquiry/EnquiryList')
     ),
@@ -360,7 +360,7 @@ const superAdminRoute = [
   //*********START********* */
   {
     key: 'quotation.list',
-    path: `/super/admin/quotation`,
+    path: `/quotation`,
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Sales/Quotation/QuotationList')
     ),
@@ -372,13 +372,13 @@ const superAdminRoute = [
   //*********START********* */
   {
     key: 'machine.list',
-    path: `/super/admin/machine/list`,
+    path: `/machine/list`,
     component: React.lazy(() => import('../../view/SuperAdmin/machine')),
     authority: [SUPER_ADMIN, ADMIN]
   },
   {
     key: 'machine.breakdown',
-    path: `/super/admin/machine/breakdown`,
+    path: `/machine/breakdown`,
     component: React.lazy(() => import('../../view/SuperAdmin/breakdown')),
     authority: [SUPER_ADMIN, ADMIN]
   }

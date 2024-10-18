@@ -77,7 +77,7 @@ const NewDispatch = () => {
   }
 
   const handleDiscard = () => {
-    navigate('/super/admin/dispatch-list')
+    navigate('/dispatch-list')
   }
 
   return (

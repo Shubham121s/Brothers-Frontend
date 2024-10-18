@@ -63,7 +63,8 @@ export const initialTableData = {
   poNumber: '',
   poaNumber: '',
   startDate: '',
-  endDate: ''
+  endDate: '',
+  months: ''
 }
 
 export const initialFilterData = {

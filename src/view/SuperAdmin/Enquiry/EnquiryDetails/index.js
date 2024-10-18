@@ -1,48 +1,48 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { json, useLocation, useNavigate } from "react-router-dom";
-import { injectReducer } from "../../../../store/index.js";
-import { useDispatch, useSelector } from "react-redux";
-import enquiryDetailReducer from "./store/index.js";
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { json, useLocation, useNavigate } from 'react-router-dom'
+import { injectReducer } from '../../../../store/index.js'
+import { useDispatch, useSelector } from 'react-redux'
+import enquiryDetailReducer from './store/index.js'
 import {
   PostQuotation,
-  getEnquiryDetailsByEnquiryId,
-} from "./store/dataSlice.js";
+  getEnquiryDetailsByEnquiryId
+} from './store/dataSlice.js'
 import {
   Container,
   DoubleSidedImage,
   Loading,
-  StickyFooter,
-} from "../../../../components/shared/index.js";
-import { isEmpty } from "lodash";
-import EnquiryListTable from "./components/EnquiryTable.js";
+  StickyFooter
+} from '../../../../components/shared/index.js'
+import { isEmpty } from 'lodash'
+import EnquiryListTable from './components/EnquiryTable.js'
 import {
   Button,
   Card,
   Toast,
-  Notification,
-} from "../../../../components/ui/index";
-import PoDetails from "./components/PoDetails.js";
-import { useReactToPrint } from "react-to-print";
-import { AiOutlineSave } from "react-icons/ai";
-import SelectedProductTble from "./components/SelectedProductTble.js";
-import { emptySelectedProduct } from "./store/stateSlice.js";
+  Notification
+} from '../../../../components/ui/index'
+import PoDetails from './components/PoDetails.js'
+import { useReactToPrint } from 'react-to-print'
+import { AiOutlineSave } from 'react-icons/ai'
+import SelectedProductTble from './components/SelectedProductTble.js'
+import { emptySelectedProduct } from './store/stateSlice.js'
 
-injectReducer("enquiry_detail", enquiryDetailReducer);
+injectReducer('enquiry_detail', enquiryDetailReducer)
 
 const EnquiryDstails = () => {
-  const [printLoading, setPrintLoading] = useState(false);
-  const componentRef = useRef();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [printLoading, setPrintLoading] = useState(false)
+  const componentRef = useRef()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
   const initialData = useSelector(
     (state) => state.enquiry_detail.data.EnquiryDetails
-  );
-  const loading = useSelector((state) => state.enquiry_detail.data.loading);
+  )
+  const loading = useSelector((state) => state.enquiry_detail.data.loading)
 
   const data = useSelector(
     (state) => state.enquiry_detail.state.selectedProduct
-  );
+  )
 
   const data1 = useMemo(() => {
     const result = {
@@ -50,84 +50,88 @@ const EnquiryDstails = () => {
       ring: [],
       square: [],
       profile: [],
-      fabrication: [],
-    };
+      fabrication: []
+    }
 
     data?.forEach((m) => {
-      if (m.part_type === "CIRCLE") {
-        result.circle.push(m);
-      } else if (m.part_type === "RING") {
-        result.ring.push(m);
-      } else if (m.part_type === "SQUARE") {
-        result.square.push(m);
-      } else if (m.part_type === "PROFILE DRAWING") {
-        result.profile.push(m);
-      } else if (m.part_type === "FABRICATION DRAWING") {
-        result.fabrication.push(m);
+      if (m.part_type === 'CIRCLE') {
+        result.circle.push(m)
+      } else if (m.part_type === 'RING') {
+        result.ring.push(m)
+      } else if (m.part_type === 'SQUARE') {
+        result.square.push(m)
+      } else if (m.part_type === 'PROFILE DRAWING') {
+        result.profile.push(m)
+      } else if (m.part_type === 'FABRICATION DRAWING') {
+        result.fabrication.push(m)
       }
-    });
+    })
 
-    result.circle = JSON.stringify(result.circle);
-    result.ring = JSON.stringify(result.ring);
-    result.square = JSON.stringify(result.square);
-    result.profile = JSON.stringify(result.profile);
-    result.fabrication = JSON.stringify(result.fabrication);
+    result.circle = JSON.stringify(result.circle)
+    result.ring = JSON.stringify(result.ring)
+    result.square = JSON.stringify(result.square)
+    result.profile = JSON.stringify(result.profile)
+    result.fabrication = JSON.stringify(result.fabrication)
 
-    return result;
-  }, [data]);
+    return result
+  }, [data])
 
   useEffect(() => {
-    fetchData();
+    fetchData()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const popNotification = (keyword, type, message) => {
     Toast.push(
-      <Notification title={keyword} type={type} duration={2500}>
+      <Notification
+        title={keyword}
+        type={type}
+        duration={2500}
+      >
         {message}
       </Notification>,
       {
-        placement: "top-end",
+        placement: 'top-end'
       }
-    );
-  };
+    )
+  }
 
   const onNavigate = async () => {
     const action = await dispatch(
       PostQuotation({ ...data1, enquiry_id: data[0].enquiry_id })
-    );
+    )
     if (action.payload.status < 300) {
-      dispatch(emptySelectedProduct([]));
-      popNotification("Success", "success", "Quotation Added Successfully");
-      navigate("/super/admin/quotation");
+      dispatch(emptySelectedProduct([]))
+      popNotification('Success', 'success', 'Quotation Added Successfully')
+      navigate('/quotation')
     } else {
-      popNotification("Error", "danger", "Quotation Not Added");
+      popNotification('Error', 'danger', 'Quotation Not Added')
     }
-  };
+  }
 
   const fetchData = async () => {
     const enquiry_id = location.pathname.substring(
-      location.pathname.lastIndexOf("/") + 1
-    );
+      location.pathname.lastIndexOf('/') + 1
+    )
     if (enquiry_id) {
-      await dispatch(getEnquiryDetailsByEnquiryId({ enquiry_id }));
+      await dispatch(getEnquiryDetailsByEnquiryId({ enquiry_id }))
     }
-  };
+  }
 
   const handleDiscard = () => {
-    navigate("/super/admin/enquiry/List");
-  };
+    navigate('/enquiry/List')
+  }
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `POA-${initialData?.poa}`,
     onAfterPrint: () => {
-      setPrintLoading(false);
+      setPrintLoading(false)
     },
     onBeforePrint: () => {
-      setPrintLoading(true);
-    },
-  });
+      setPrintLoading(true)
+    }
+  })
 
   // const PoLists = useMemo(() => {
   //   return initialData?.PoLists?.filter(
@@ -198,7 +202,7 @@ const EnquiryDstails = () => {
             >
               Discard
             </Button>
-            {initialData[0]?.Enquiry?.status === "PENDING" && (
+            {initialData[0]?.Enquiry?.status === 'PENDING' && (
               <Button
                 size="sm"
                 variant="solid"
@@ -223,7 +227,7 @@ const EnquiryDstails = () => {
         </div>
       )}
     </>
-  );
-};
+  )
+}
 
-export default EnquiryDstails;
+export default EnquiryDstails
