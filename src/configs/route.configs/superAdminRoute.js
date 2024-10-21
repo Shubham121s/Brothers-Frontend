@@ -11,7 +11,7 @@ const superAdminRoute = [
     key: 'dashboard',
     path: `/dashboard`,
     component: React.lazy(() => import('../../view/SuperAdmin/Dashboard')),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   // SUPER ADMIN
 
@@ -33,7 +33,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/NewCustomer')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   {
     key: 'customer.list',
@@ -41,7 +41,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/CustomerList')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   {
     key: 'customer.details',
@@ -49,7 +49,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/CustomerDetails')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   {
     key: 'customer.edit',
@@ -57,7 +57,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Customer/EditCustomer')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   // **************END***************
 
@@ -103,7 +103,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/ProductSetting')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   {
     key: 'product.list',
@@ -111,7 +111,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/ProductList')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   {
     key: 'product.new',
@@ -119,7 +119,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/NewProduct')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   {
     key: 'product.edit',
@@ -127,7 +127,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/EditProduct')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   // **************END***************
 
@@ -139,7 +139,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Product/Drawing/DrawingList')
     ),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
   // **************END***************
 
@@ -223,7 +223,7 @@ const superAdminRoute = [
     component: React.lazy(() =>
       import('../../view/SuperAdmin/Dispatch/InvoiceList')
     ),
-    authority: [SUPER_ADMIN, ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, EXECUTIVE]
   },
   {
     key: 'invoice.domestic.view',
@@ -249,7 +249,7 @@ const superAdminRoute = [
     key: 'master.planner',
     path: `/master/product/planner`,
     component: React.lazy(() => import('../../view/SuperAdmin/ProductPlanner')),
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
   },
 
   // TEST

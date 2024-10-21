@@ -9,7 +9,7 @@ import {
 const instrumentRoute = [
   {
     key: 'dashboard',
-    path: `//instrument/dashboard`,
+    path: `/instrument/dashboard`,
     component: React.lazy(() => import('../../view/Instruments/Dashboard')),
     authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN]
   },

@@ -3,7 +3,12 @@ import {
   NAV_ITEM_TYPE_ITEM,
   NAV_ITEM_TYPE_COLLAPSE
 } from '../../constants/navigation.constant'
-import { SUPER_ADMIN, ADMIN, SUB_ADMIN } from '../../constants/roles.constant'
+import {
+  SUPER_ADMIN,
+  ADMIN,
+  SUB_ADMIN,
+  EXECUTIVE
+} from '../../constants/roles.constant'
 
 const superAdminNavigationConfig = [
   {
@@ -12,8 +17,8 @@ const superAdminNavigationConfig = [
     title: 'PAGES',
     translateKey: 'nav.pages',
     icon: 'pages',
-    type: NAV_ITEM_TYPE_TITLE,
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
+    type: 'title',
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
     subMenu: [
       {
         key: 'dashboard',
@@ -21,8 +26,8 @@ const superAdminNavigationConfig = [
         title: 'Dashboard',
         translateKey: 'nav.dashboard',
         icon: 'dashboard',
-        type: NAV_ITEM_TYPE_ITEM,
-        authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
+        type: 'item',
+        authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
         subMenu: []
       },
       {
@@ -32,7 +37,7 @@ const superAdminNavigationConfig = [
         translateKey: 'nav.user',
         icon: 'user',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [SUPER_ADMIN, ADMIN],
+        authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
         subMenu: []
       },
       {
@@ -41,8 +46,8 @@ const superAdminNavigationConfig = [
         title: 'Customer',
         translateKey: 'nav.customer',
         icon: 'customer',
-        type: NAV_ITEM_TYPE_COLLAPSE,
-        authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
+        type: 'collapse',
+        authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, 'executive'],
         subMenu: [
           {
             key: 'customer.list',
@@ -150,26 +155,6 @@ const superAdminNavigationConfig = [
           }
         ]
       },
-      // {
-      //     key: 'order',
-      //     path: '',
-      //     title: 'Order',
-      //     translateKey: 'nav.order.order',
-      //     icon: 'order',
-      //     type: NAV_ITEM_TYPE_COLLAPSE,
-      //     authority: [SUPER_ADMIN,ADMIN],
-      //     subMenu: [
-      //         {
-      //             key: 'order.dispatch.list',
-      //             path: `/order/dispatch/list`,
-      //             title: 'Dispatch List',
-      //             translateKey: 'nav.order.list',
-      //             type: NAV_ITEM_TYPE_ITEM,
-      //             authority: [SUPER_ADMIN,ADMIN],
-      //             subMenu: [],
-      //         },
-      //     ],
-      // },
       {
         key: 'invoice',
         path: '',
@@ -177,7 +162,7 @@ const superAdminNavigationConfig = [
         translateKey: 'nav.invoice',
         icon: 'invoice',
         type: NAV_ITEM_TYPE_COLLAPSE,
-        authority: [SUPER_ADMIN, ADMIN],
+        authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
         subMenu: [
           {
             key: 'foreign.new',
@@ -185,7 +170,7 @@ const superAdminNavigationConfig = [
             title: 'Foreign Invoice',
             translateKey: 'nav.foreign.new',
             type: NAV_ITEM_TYPE_ITEM,
-            authority: [SUPER_ADMIN, ADMIN],
+            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
           {
@@ -194,7 +179,7 @@ const superAdminNavigationConfig = [
             title: 'Domestic Invoice',
             translateKey: 'nav.domestic.new',
             type: NAV_ITEM_TYPE_ITEM,
-            authority: [SUPER_ADMIN, ADMIN],
+            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
           {
@@ -203,7 +188,7 @@ const superAdminNavigationConfig = [
             title: 'Pattern Invoice',
             translateKey: 'nav.pattern.new',
             type: NAV_ITEM_TYPE_ITEM,
-            authority: [SUPER_ADMIN, ADMIN],
+            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
           {
@@ -212,7 +197,7 @@ const superAdminNavigationConfig = [
             title: 'Settings',
             translateKey: 'nav.foreign.setting',
             type: NAV_ITEM_TYPE_ITEM,
-            authority: [SUPER_ADMIN, ADMIN],
+            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
           {
@@ -221,7 +206,7 @@ const superAdminNavigationConfig = [
             title: 'Invoice List',
             translateKey: 'nav.invoice.list',
             type: NAV_ITEM_TYPE_ITEM,
-            authority: [SUPER_ADMIN, ADMIN],
+            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           }
         ]

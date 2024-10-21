@@ -82,6 +82,7 @@ const PoTableTools = () => {
     const newTableData = cloneDeep(tableData)
     setPoNumberValues([])
     setPoaNumberValues([])
+    setMonthValues([])
     newTableData.query = ''
     newTableData.poNumber = ''
     newTableData.poaNumber = ''

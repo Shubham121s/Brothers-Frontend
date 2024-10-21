@@ -3,7 +3,12 @@ import {
   NAV_ITEM_TYPE_ITEM,
   NAV_ITEM_TYPE_COLLAPSE
 } from '../../constants/navigation.constant'
-import { SUPER_ADMIN, ADMIN, SUB_ADMIN } from '../../constants/roles.constant'
+import {
+  SUPER_ADMIN,
+  ADMIN,
+  SUB_ADMIN,
+  EXECUTIVE
+} from '../../constants/roles.constant'
 
 const instrumentNavigationConfig = [
   {
@@ -13,7 +18,7 @@ const instrumentNavigationConfig = [
     translateKey: 'nav.instruments.instruments',
     icon: 'instrument',
     type: NAV_ITEM_TYPE_COLLAPSE,
-    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
+    authority: [],
     subMenu: [
       {
         key: 'dashboard',
@@ -22,7 +27,7 @@ const instrumentNavigationConfig = [
         translateKey: 'nav.dashboard',
         icon: '',
         type: NAV_ITEM_TYPE_ITEM,
-        authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
+        authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
         subMenu: []
       },
       {

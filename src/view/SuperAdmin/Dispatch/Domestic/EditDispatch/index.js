@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Button, Toast, Notification } from '../../../../../components/ui'
+import {
+  Card,
+  Button,
+  Toast,
+  Notification,
+  DatePicker
+} from '../../../../../components/ui'
 import ConsigneeAndBuyerDetails from './components/ConsigneeAndBuyer/ConsigneeAndBuyerDetails'
 import ShippingAddress from './components/ShippingAndShippingAddress/ShippingAddress'
 import TransportDetails from './components/ShippingAndShippingAddress/TransportDetails'
@@ -27,6 +33,8 @@ import NewItemDialog from './components/ItemList/NewItemDialog'
 import { toggleAddDispatchItemDialog } from './store/stateSlice'
 import { getAllPosByCustomerId } from './store/dataSlice'
 import FrightChargesInformationField from './components/GSTAndOther/FrightChargesInformationField'
+import { UpdateForeignInvoiceDate } from '../../Foreign/EditDispatch/store/dataSlice'
+import dayjs from 'dayjs'
 
 injectReducer('edit_domestic_dispatch', EditDispatchForeignReducer)
 
@@ -49,6 +57,7 @@ const EditDispatch = () => {
   const location = useLocation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [EditDate, setEditDate] = useState('')
   const [StateDispatchList, setList] = useState(null)
   const data = useSelector(
     (state) => state.edit_domestic_dispatch.data.invoiceDetails
@@ -68,6 +77,34 @@ const EditDispatch = () => {
       setList(data)
     }
   }, [data])
+
+  useEffect(() => {
+    const updateInvoiceDate = async () => {
+      if (EditDate && EditDate !== 'Invalid Date') {
+        const action = await dispatch(
+          UpdateForeignInvoiceDate({
+            invoice_date: dayjs(EditDate).format('YYYY-MM-DD'),
+            dispatch_invoice_id: data.dispatch_invoice_id
+          })
+        )
+
+        if (action.payload.status < 300) {
+          pushNotification(
+            'Invoice Date Successfully Updated',
+            'success',
+            'Successfully Updated'
+          )
+          fetchData()
+        } else {
+          pushNotification('Invoice Date Not Updated', 'danger', 'error')
+        }
+      }
+    }
+
+    updateInvoiceDate()
+  }, [EditDate])
+
+  const date = new Date(data.invoice_date)
 
   const fetchData = async () => {
     const dispatch_invoice_id = location.pathname.substring(
@@ -124,7 +161,7 @@ const EditDispatch = () => {
           <>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <Card className="bg-yellow-50">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span>
                     <h5 className="font-semibold text-gray-700">
                       Receiver & Recipient Information
@@ -133,6 +170,16 @@ const EditDispatch = () => {
                       Section to config receiver & recipient information
                     </p>
                   </span>
+                  <div>
+                    <DatePicker
+                      style={{ width: '160px' }}
+                      placeholder="Invoice Date"
+                      value={date}
+                      onChange={(date) => {
+                        setEditDate(date)
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <ConsigneeAndBuyerDetails
@@ -152,11 +199,12 @@ const EditDispatch = () => {
               </Card>
               <Card className="bg-blue-50 h-max">
                 <h5 className="font-semibold text-gray-700">
-                  Shipping & Transport Information
+                  Address & Shipping Information
                 </h5>
                 <p className="mb-2">
-                  Section to config shipping & transport information
+                  Section to config address & shipping information
                 </p>
+
                 <div className="grid grid-cols-2 gap-2">
                   <ShippingAddress
                     data={StateDispatchList?.DispatchShippingAddress}
