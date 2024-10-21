@@ -9,6 +9,7 @@ import {
 import { initialState, setUser } from '../../store/auth/userSlice'
 import { useNavigate } from 'react-router-dom'
 import useQuery from './useQuery'
+import { apiGetNavigation } from '../../services/AuthService'
 
 function useAuth() {
   const dispatch = useDispatch()
@@ -22,6 +23,8 @@ function useAuth() {
   const signIn = async (values) => {
     try {
       const resp = await apiSignInRequest(values)
+      // const action = await apiGetNavigation({ user_id: resp.data.data.user_id })
+      // && action.data
       if (resp.data) {
         const { token } = resp.data
         dispatch(onSignInSuccess(token))
@@ -30,6 +33,7 @@ function useAuth() {
             setUser({
               ...resp.data.data,
               authority: resp.data.authority
+              // navigationConfigs: action.data.data
             })
           )
         } else {

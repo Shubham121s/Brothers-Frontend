@@ -12,64 +12,84 @@ import { Loading } from '../components/shared'
 
 const { authenticatedEntryPath } = appConfig
 const AllRoutes = (props) => {
-    const userAuthority = useSelector((state) => state.auth.user.authority)
-    return (
-        <Routes>
-            <Route path="/" element={<ProtectedRoute />}>
-                <Route
-                    path="/"
-                    element={<Navigate replace to={`/${userAuthority?.[0]?.split('-').join('/')}${authenticatedEntryPath}`} />}
-                />
-                {protectedRoutes.map((route, index) => (
-                    <Route
-                        key={route.key + index}
-                        path={route.path}
-                        element={
-                            <AuthorityGuard
-                                userAuthority={userAuthority}
-                                authority={route.authority}
-                            >
-                                <PageContainer {...props} {...route.meta}>
-                                    <AppRoute
-                                        routeKey={route.key}
-                                        component={route.component}
-                                        {...route.meta}
-                                    />
-                                </PageContainer>
-                            </AuthorityGuard>
-                        }
-                    />
-                ))}
-                <Route path="*" element={<Navigate to="/" replace />} />
-            </Route>
-            <Route path="/" element={<PublicRoute />}>
-                {publicRoutes.map((route) => (
-                    <Route
-                        key={route.path}
-                        path={route.path}
-                        element={
-                            <AppRoute
-                                routeKey={route.key}
-                                component={route.component}
-                                {...route.meta}
-                            />
-                        }
-                    />
-                ))}
-            </Route>
-        </Routes>
-    )
+  const userAuthority = useSelector((state) => state.auth.user.authority)
+  // to={`/${authenticatedEntryPath}`}
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={<ProtectedRoute />}
+      >
+        <Route
+          path="/"
+          element={
+            <Navigate
+              replace
+              to={`${authenticatedEntryPath}`}
+            />
+          }
+        />
+        {protectedRoutes.map((route, index) => (
+          <Route
+            key={route.key + index}
+            path={route.path}
+            element={
+              <AuthorityGuard
+                userAuthority={userAuthority}
+                authority={route.authority}
+              >
+                <PageContainer
+                  {...props}
+                  {...route.meta}
+                >
+                  <AppRoute
+                    routeKey={route.key}
+                    component={route.component}
+                    {...route.meta}
+                  />
+                </PageContainer>
+              </AuthorityGuard>
+            }
+          />
+        ))}
+        <Route
+          path="*"
+          element={
+            <Navigate
+              to="/"
+              replace
+            />
+          }
+        />
+      </Route>
+      <Route
+        path="/"
+        element={<PublicRoute />}
+      >
+        {publicRoutes.map((route) => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={
+              <AppRoute
+                routeKey={route.key}
+                component={route.component}
+                {...route.meta}
+              />
+            }
+          />
+        ))}
+      </Route>
+    </Routes>
+  )
 }
 
-
-
-
 const View = (props) => {
-    return (
-        <Suspense fallback={<Loading loading={true} />}>
-            <AllRoutes {...props} />
-        </Suspense>
-    )
+  return (
+    <Suspense fallback={<Loading loading={true} />}>
+      <AllRoutes {...props} />
+    </Suspense>
+  )
 }
 
 export default View
