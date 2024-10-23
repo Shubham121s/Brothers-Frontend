@@ -16,10 +16,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (_, action) => action.payload,
+    setUserConfigs: (state, action) => {
+      state.navigationConfigs = action.payload.navigationConfigs || []
+      state.entryPath = action.payload.entryPath || ''
+    },
     userLoggedOut: () => initialState
   }
 })
 
-export const { setUser } = userSlice.actions
+export const { setUser, setUserConfigs } = userSlice.actions
 
 export default userSlice.reducer
