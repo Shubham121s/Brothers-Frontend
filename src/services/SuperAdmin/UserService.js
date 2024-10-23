@@ -30,3 +30,19 @@ export async function apiDeleteUser(data) {
     data
   })
 }
+
+export async function apiGetAllForms(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/module/detail',
+    method: 'post',
+    data
+  })
+}
+
+export async function apiUpdateFormDetail(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/module/detail/update',
+    method: 'put',
+    data
+  })
+}
