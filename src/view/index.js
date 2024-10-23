@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import appConfig from '../configs/app.config'
 import ProtectedRoute from '../components/route/ProtectedRoute'
@@ -7,13 +7,39 @@ import AppRoute from '../components/route/AppRoute'
 import PublicRoute from '../components/route/PublicRoute'
 import { protectedRoutes, publicRoutes } from '../configs/route.configs'
 import PageContainer from '../components/template/PageContainer'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Loading } from '../components/shared'
+import { apiGetNavigation } from '../services/AuthService'
+import { setUserConfigs } from '../store/auth/userSlice'
+import { useNavigate } from 'react-router-dom'
 
 const { authenticatedEntryPath } = appConfig
 const AllRoutes = (props) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const userAuthority = useSelector((state) => state.auth.user.authority)
-  const entryPath = useSelector((state) => state.auth.user.entryPath)
+  const { entryPath, user_id } = useSelector((state) => state.auth.user)
+
+  useEffect(() => {
+    if (user_id) {
+      fetchData()
+    }
+  }, [])
+
+  const fetchData = async () => {
+    const resp = await apiGetNavigation({ user_id: user_id })
+    if (resp.data.data) {
+      dispatch(
+        setUserConfigs({
+          navigationConfigs: resp.data.data.navigationRoute,
+          entryPath: resp.data.data.entryPath
+        })
+      )
+    } else {
+      navigate('/sign-in')
+    }
+  }
+
   // to={`/${authenticatedEntryPath}`}
   return (
     <Routes>

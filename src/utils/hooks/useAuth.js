@@ -24,18 +24,15 @@ function useAuth() {
   const signIn = async (values) => {
     try {
       const resp = await apiSignInRequest(values)
-      const action = await apiGetNavigation({ user_id: resp.data.data.user_id })
 
-      if (resp.data && action.data) {
+      if (resp.data) {
         const { token } = resp.data
         dispatch(onSignInSuccess(token))
         if (resp.data?.data) {
           dispatch(
             setUser({
               ...resp.data.data,
-              authority: resp.data.authority,
-              navigationConfigs: action.data.data.navigationRoute,
-              entryPath: action.data.data.entryPath
+              authority: resp.data.authority
             })
           )
         } else {
