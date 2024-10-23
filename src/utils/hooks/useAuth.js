@@ -51,7 +51,9 @@ function useAuth() {
         const redirectUrl = query.get(REDIRECT_URL_KEY)
         // console.log(redirectUrl)
         //redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath
-        navigate(entryPath)
+        // window.location.reload(entryPath)
+
+        // navigate(entryPath)
         return {
           status: 'success',
           message: ''

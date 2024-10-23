@@ -6,8 +6,8 @@ const state = store.getState()
 const { navigationConfigs } = state.auth.user
 
 const navigationConfig = [
-  // ...(navigationConfigs || [])
-  ...superAdminNavigationConfig
+  ...(navigationConfigs || [])
+  // ...superAdminNavigationConfig
   // ...instrumentNavigationConfig
 ]
 
