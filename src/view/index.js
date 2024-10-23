@@ -24,7 +24,7 @@ const AllRoutes = (props) => {
     if (user_id) {
       fetchData()
     }
-  }, [])
+  }, [user_id])
 
   const fetchData = async () => {
     const resp = await apiGetNavigation({ user_id: user_id })
