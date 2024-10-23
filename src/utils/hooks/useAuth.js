@@ -19,21 +19,23 @@ function useAuth() {
   const query = useQuery()
 
   const { token, signedIn } = useSelector((state) => state.auth.session)
+  const { entryPath } = useSelector((state) => state.auth.user)
 
   const signIn = async (values) => {
     try {
       const resp = await apiSignInRequest(values)
-      // const action = await apiGetNavigation({ user_id: resp.data.data.user_id })
-      // && action.data
-      if (resp.data) {
+      const action = await apiGetNavigation({ user_id: resp.data.data.user_id })
+
+      if (resp.data && action.data) {
         const { token } = resp.data
         dispatch(onSignInSuccess(token))
         if (resp.data?.data) {
           dispatch(
             setUser({
               ...resp.data.data,
-              authority: resp.data.authority
-              // navigationConfigs: action.data.data
+              authority: resp.data.authority,
+              navigationConfigs: action.data.data.navigationRoute,
+              entryPath: action.data.data.entryPath
             })
           )
         } else {
@@ -49,7 +51,9 @@ function useAuth() {
         const redirectUrl = query.get(REDIRECT_URL_KEY)
         // console.log(redirectUrl)
         //redirectUrl ? redirectUrl : appConfig.authenticatedEntryPath
-        navigate('/dashboard')
+        // window.location.reload(entryPath)
+
+        // navigate(entryPath)
         return {
           status: 'success',
           message: ''

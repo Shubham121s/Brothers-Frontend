@@ -7,7 +7,8 @@ export const initialState = {
   username: '',
   email: '',
   authority: [],
-  navigationConfigs: []
+  navigationConfigs: [],
+  entryPath: ''
 }
 
 export const userSlice = createSlice({

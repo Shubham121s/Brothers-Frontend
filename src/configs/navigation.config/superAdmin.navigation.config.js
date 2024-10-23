@@ -36,7 +36,7 @@ const superAdminNavigationConfig = [
         title: 'User',
         translateKey: 'nav.user',
         icon: 'user',
-        type: NAV_ITEM_TYPE_ITEM,
+        type: 'item',
         authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
         subMenu: []
       },
@@ -54,7 +54,7 @@ const superAdminNavigationConfig = [
             path: `/customer/list`,
             title: 'Customer List',
             translateKey: 'nav.customer.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
             subMenu: []
           },
@@ -63,7 +63,7 @@ const superAdminNavigationConfig = [
             path: `/customer/new`,
             title: 'New Customer',
             translateKey: 'nav.customer.new',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
             subMenu: []
           }
@@ -75,7 +75,7 @@ const superAdminNavigationConfig = [
         title: 'Product',
         translateKey: 'nav.dashboard',
         icon: 'product',
-        type: NAV_ITEM_TYPE_COLLAPSE,
+        type: 'collapse',
         authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
         subMenu: [
           {
@@ -83,7 +83,7 @@ const superAdminNavigationConfig = [
             path: `/product/list`,
             title: 'Product List',
             translateKey: 'nav.product.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
             subMenu: []
           },
@@ -92,7 +92,7 @@ const superAdminNavigationConfig = [
             path: `/product/new`,
             title: 'New Product',
             translateKey: 'nav.product.new',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
             subMenu: []
           },
@@ -101,7 +101,7 @@ const superAdminNavigationConfig = [
             path: `/product/settings`,
             title: 'Settings',
             translateKey: 'nav.product.setting',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
             subMenu: []
           }
@@ -113,7 +113,7 @@ const superAdminNavigationConfig = [
         title: 'Stock',
         translateKey: 'nav.stock',
         icon: 'stock',
-        type: NAV_ITEM_TYPE_ITEM,
+        type: 'item',
         authority: [SUPER_ADMIN, ADMIN],
         subMenu: []
       },
@@ -123,7 +123,7 @@ const superAdminNavigationConfig = [
         title: 'Order Management',
         translateKey: 'nav.purchase.order',
         icon: 'orders',
-        type: NAV_ITEM_TYPE_COLLAPSE,
+        type: 'collapse',
         authority: [SUPER_ADMIN, ADMIN],
         subMenu: [
           {
@@ -131,7 +131,7 @@ const superAdminNavigationConfig = [
             path: `/po/list`,
             title: 'Order List',
             translateKey: 'nav.purchase.order.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           },
@@ -140,7 +140,7 @@ const superAdminNavigationConfig = [
             path: `/po/new`,
             title: 'New Order',
             translateKey: 'nav.purchase.order.new',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           },
@@ -149,7 +149,7 @@ const superAdminNavigationConfig = [
             path: `/po/setting`,
             title: 'Settings',
             translateKey: 'nav.purchase.settings',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           }
@@ -161,7 +161,7 @@ const superAdminNavigationConfig = [
         title: 'Invoices',
         translateKey: 'nav.invoice',
         icon: 'invoice',
-        type: NAV_ITEM_TYPE_COLLAPSE,
+        type: 'collapse',
         authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
         subMenu: [
           {
@@ -169,7 +169,7 @@ const superAdminNavigationConfig = [
             path: `/dispatch/foreign/new`,
             title: 'Foreign Invoice',
             translateKey: 'nav.foreign.new',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
@@ -178,7 +178,7 @@ const superAdminNavigationConfig = [
             path: `/dispatch/domestic/new`,
             title: 'Domestic Invoice',
             translateKey: 'nav.domestic.new',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
@@ -187,7 +187,7 @@ const superAdminNavigationConfig = [
             path: `/dispatch/pattern/new`,
             title: 'Pattern Invoice',
             translateKey: 'nav.pattern.new',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
@@ -196,7 +196,7 @@ const superAdminNavigationConfig = [
             path: `/dispatch/invoice/setting`,
             title: 'Settings',
             translateKey: 'nav.foreign.setting',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           },
@@ -205,7 +205,7 @@ const superAdminNavigationConfig = [
             path: `/dispatch-list`,
             title: 'Invoice List',
             translateKey: 'nav.invoice.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
             subMenu: []
           }
@@ -217,7 +217,7 @@ const superAdminNavigationConfig = [
         title: 'Master PP',
         translateKey: 'nav.master.planner',
         icon: 'master',
-        type: NAV_ITEM_TYPE_ITEM,
+        type: 'item',
         authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
         subMenu: []
       },
@@ -227,7 +227,7 @@ const superAdminNavigationConfig = [
         title: 'HR',
         translateKey: 'nav.workers',
         icon: 'worker',
-        type: NAV_ITEM_TYPE_ITEM,
+        type: 'item',
         authority: [SUPER_ADMIN, ADMIN],
         subMenu: []
       },
@@ -237,7 +237,7 @@ const superAdminNavigationConfig = [
         title: 'Purchase Order',
         translateKey: 'nav.purchase.order',
         icon: 'purchase',
-        type: NAV_ITEM_TYPE_COLLAPSE,
+        type: 'collapse',
         authority: [SUPER_ADMIN, ADMIN],
         subMenu: [
           {
@@ -245,7 +245,7 @@ const superAdminNavigationConfig = [
             path: `/purchaseOrder/list`,
             title: 'PO List',
             translateKey: 'nav.purchase.order.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           },
@@ -254,7 +254,7 @@ const superAdminNavigationConfig = [
             path: `/purchaseOrder/new`,
             title: 'New PO',
             translateKey: 'nav.purchase.order.new',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           },
@@ -263,7 +263,7 @@ const superAdminNavigationConfig = [
             path: `/purchaseOrder/inward/list`,
             title: 'Inward List',
             translateKey: 'nav.purchase.order.inward',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           }
@@ -275,7 +275,7 @@ const superAdminNavigationConfig = [
         title: 'Sales',
         translateKey: 'nav.sales',
         icon: 'purchase',
-        type: NAV_ITEM_TYPE_COLLAPSE,
+        type: 'collapse',
         authority: [SUPER_ADMIN, ADMIN],
         subMenu: [
           {
@@ -283,25 +283,25 @@ const superAdminNavigationConfig = [
             path: `/enquiry/List`,
             title: 'Enquiry List',
             translateKey: 'nav.enquiry.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           },
-          {
-            key: 'enquiry.new',
-            path: `/enquiry/new`,
-            title: 'New Enquiry',
-            translateKey: 'nav.enquiry.new',
-            type: NAV_ITEM_TYPE_ITEM,
-            authority: [SUPER_ADMIN, ADMIN],
-            subMenu: []
-          },
+          // {
+          //   key: 'enquiry.new',
+          //   path: `/enquiry/new`,
+          //   title: 'New Enquiry',
+          //   translateKey: 'nav.enquiry.new',
+          //   type: 'item',
+          //   authority: [SUPER_ADMIN, ADMIN],
+          //   subMenu: []
+          // },
           {
             key: 'quotation.list',
             path: `/quotation`,
             title: 'Quotation',
             translateKey: 'nav.quotation.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           }
@@ -311,9 +311,9 @@ const superAdminNavigationConfig = [
         key: 'machines',
         path: '',
         title: 'Machines',
-        translateKey: 'nav.sales',
+        translateKey: 'nav.machine',
         icon: 'purchase',
-        type: NAV_ITEM_TYPE_COLLAPSE,
+        type: 'collapse',
         authority: [SUPER_ADMIN, ADMIN],
         subMenu: [
           {
@@ -321,7 +321,7 @@ const superAdminNavigationConfig = [
             path: `/machine/List`,
             title: 'Machines',
             translateKey: 'nav.machine.list',
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
             subMenu: []
           },
@@ -331,8 +331,49 @@ const superAdminNavigationConfig = [
             title: 'Machine Breakdown',
             translateKey: 'nav.machine.breakdown',
 
-            type: NAV_ITEM_TYPE_ITEM,
+            type: 'item',
             authority: [SUPER_ADMIN, ADMIN],
+            subMenu: []
+          }
+        ]
+      },
+      {
+        key: 'instruments',
+        path: '',
+        title: 'INSTRUMENTS',
+        translateKey: 'nav.instruments.instruments',
+        icon: 'instrument',
+        type: 'collapse',
+        authority: [],
+        subMenu: [
+          {
+            key: 'dashboard',
+            path: `/instrument/dashboard`,
+            title: 'Dashboard',
+            translateKey: 'nav.dashboard',
+            icon: '',
+            type: 'item',
+            authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
+            subMenu: []
+          },
+          {
+            key: 'instrument',
+            path: `/instrument/list`,
+            title: 'Instrument',
+            translateKey: 'nav.instrument',
+            icon: '',
+            type: 'item',
+            authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
+            subMenu: []
+          },
+          {
+            key: 'calibration',
+            path: `/instrument/calibration`,
+            title: 'Calibration',
+            translateKey: 'nav.calibration',
+            icon: '',
+            type: 'item',
+            authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
             subMenu: []
           }
         ]

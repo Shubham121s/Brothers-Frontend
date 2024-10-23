@@ -13,6 +13,7 @@ import { Loading } from '../components/shared'
 const { authenticatedEntryPath } = appConfig
 const AllRoutes = (props) => {
   const userAuthority = useSelector((state) => state.auth.user.authority)
+  const entryPath = useSelector((state) => state.auth.user.entryPath)
   // to={`/${authenticatedEntryPath}`}
   return (
     <Routes>
@@ -25,7 +26,7 @@ const AllRoutes = (props) => {
           element={
             <Navigate
               replace
-              to={`${authenticatedEntryPath}`}
+              to={`${entryPath}`}
             />
           }
         />

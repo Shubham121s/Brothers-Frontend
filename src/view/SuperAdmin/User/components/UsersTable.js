@@ -14,6 +14,9 @@ import {
 } from '../store/stateSlice'
 import UserEditFormDialog from './UserEditDialog'
 import UserDeleteConfirmation from './UserDeleteConfirmation'
+import { toggleFormAssignDialog } from '../store/stateSlice'
+import { FaAddressBook } from 'react-icons/fa'
+import RoleAssignDialog from './FormAssignDialog'
 
 const statusColor = {
   true: {
@@ -52,6 +55,7 @@ const typeColor = {
 }
 
 const ActionColumn = ({ row }) => {
+  const userAuthority = useSelector((state) => state.auth.user.authority)
   const { textTheme } = useThemeClass()
   const dispatch = useDispatch()
 
@@ -61,6 +65,11 @@ const ActionColumn = ({ row }) => {
   }
   const onDelete = () => {
     dispatch(toggleDeleteUserDialog(true))
+    dispatch(setSelectedUser(row))
+  }
+
+  const onFormAssign = () => {
+    dispatch(toggleFormAssignDialog(true))
     dispatch(setSelectedUser(row))
   }
 
@@ -78,6 +87,14 @@ const ActionColumn = ({ row }) => {
       >
         <HiOutlineTrash />
       </span>
+      {userAuthority.includes('super-admin') && (
+        <span
+          className="cursor-pointer hover:text-purple-500"
+          onClick={onFormAssign}
+        >
+          <FaAddressBook />
+        </span>
+      )}
     </div>
   )
 }
@@ -210,6 +227,7 @@ const UsersTable = () => {
       />
       <UserEditFormDialog />
       <UserDeleteConfirmation />
+      <RoleAssignDialog />
     </>
   )
 }
