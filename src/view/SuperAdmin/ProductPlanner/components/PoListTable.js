@@ -369,7 +369,9 @@ const PoListTable = ({ DeliveryStatus }) => {
     material_grade,
     po_Date,
     po_del_Date,
-    brother_Date
+    brother_Date,
+    raw_date,
+    machining_date
   } = useSelector((state) => state.masterPP.data.tableData)
 
   const fetchData = useCallback(() => {
@@ -398,8 +400,46 @@ const PoListTable = ({ DeliveryStatus }) => {
   }, [])
 
   const tableData = useMemo(
-    () => ({ pageIndex, pageSize, sort, query, total }),
-    [pageIndex, pageSize, sort, query, total]
+    () => ({
+      pageIndex,
+      pageSize,
+      sort,
+      query,
+      total,
+      customer,
+      project_no,
+      po_no,
+      po_serial_no,
+      product,
+      item_code,
+      revision_no,
+      material_grade,
+      po_Date,
+      po_del_Date,
+      brother_Date,
+      raw_date,
+      machining_date
+    }),
+    [
+      pageIndex,
+      pageSize,
+      sort,
+      query,
+      total,
+      customer,
+      project_no,
+      po_no,
+      po_serial_no,
+      product,
+      item_code,
+      revision_no,
+      material_grade,
+      po_Date,
+      po_del_Date,
+      brother_Date,
+      raw_date,
+      machining_date
+    ]
   )
 
   const onPaginationChange = (page) => {
