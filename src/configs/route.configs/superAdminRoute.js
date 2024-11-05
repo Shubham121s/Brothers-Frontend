@@ -28,6 +28,14 @@ const superAdminRoute = [
   // CUSTOMER
   // **************START***************
   {
+    key: 'customer.dashboard',
+    path: `/customer/dashboard`,
+    component: React.lazy(() =>
+      import('../../view/SuperAdmin/Customer/Dashboard')
+    ),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE]
+  },
+  {
     key: 'customer.new',
     path: `/customer/new`,
     component: React.lazy(() =>

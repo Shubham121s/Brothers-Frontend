@@ -50,6 +50,15 @@ const superAdminNavigationConfig = [
         authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, 'executive'],
         subMenu: [
           {
+            key: 'customer.dashboard',
+            path: `/customer/dashboard`,
+            title: 'Dashboard',
+            translateKey: 'nav.customer.dashboard',
+            type: 'item',
+            authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, 'executive'],
+            subMenu: []
+          },
+          {
             key: 'customer.list',
             path: `/customer/list`,
             title: 'Customer List',
