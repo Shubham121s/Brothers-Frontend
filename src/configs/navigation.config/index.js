@@ -6,9 +6,9 @@ const state = store.getState()
 const { navigationConfigs } = state.auth.user
 
 const navigationConfig = [
-  ...(navigationConfigs || [])
-  // ...superAdminNavigationConfig
-  // ...instrumentNavigationConfig
+  // ...(navigationConfigs || [])
+  ...superAdminNavigationConfig,
+  ...instrumentNavigationConfig
 ]
 
 export default navigationConfig
