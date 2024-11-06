@@ -26,13 +26,12 @@ const userType = [
 
 const validationEditSchema = Yup.object().shape({
   name: Yup.string().required('Required'),
-  email: Yup.string().email().required('Required'),
+
   status: Yup.boolean().required('Required'),
   type: Yup.string().required('Required'),
   mobile: Yup.number().required('Required')
 })
 const validationNewSchema = Yup.object().shape({
-  email: Yup.string().email().required('Required'),
   name: Yup.string().required('Required'),
   status: Yup.boolean().required('Required'),
   type: Yup.string().required('Required'),
@@ -139,8 +138,6 @@ const UserForm = forwardRef((props, ref) => {
                   <FormItem
                     className="mb-4"
                     label="Email"
-                    invalid={errors.email && touched.email}
-                    errorMessage={errors.email}
                   >
                     <Field
                       type="text"

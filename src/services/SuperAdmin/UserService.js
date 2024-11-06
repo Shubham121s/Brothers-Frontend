@@ -31,6 +31,14 @@ export async function apiDeleteUser(data) {
   })
 }
 
+export async function apiUpdateUserPassword(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/user/update/password',
+    method: 'put',
+    data
+  })
+}
+
 export async function apiGetAllForms(data) {
   return ApiService.fetchData({
     url: 'v1/web/company/module/detail',
