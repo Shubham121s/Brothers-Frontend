@@ -139,17 +139,42 @@ export async function apiGetPoNumber(data) {
   })
 }
 
-export async function apiGetAllPoNumberOption() {
+export async function apiGetAllPoYears() {
   return ApiService.fetchData({
-    url: 'v1/web/company/po/Number/po/option',
+    url: 'v1/web/company/po/years',
     method: 'get'
   })
 }
 
-export async function apiGetAllPOAOption() {
+export async function apiGetAllPoMonths(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/po/months',
+    method: 'post',
+    data
+  })
+}
+
+export async function apiGetAllPoDateFromMonthAndYear(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/po/month/dates',
+    method: 'post',
+    data
+  })
+}
+
+export async function apiGetAllPoNumberOption(data) {
+  return ApiService.fetchData({
+    url: 'v1/web/company/po/Number/po/option',
+    method: 'post',
+    data
+  })
+}
+
+export async function apiGetAllPOAOption(data) {
   return ApiService.fetchData({
     url: 'v1/web/company/po/poa/option',
-    method: 'get'
+    method: 'post',
+    data
   })
 }
 

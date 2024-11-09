@@ -3,8 +3,11 @@ import { Tag, Tooltip } from '../../../../../components/ui'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   getAllPOANumber,
+  getAllPoDates,
+  getAllPoMonths,
   getAllPoNumber,
   getAllPoWithPagination,
+  getAllPoYears,
   setTableData
 } from '../store/dataSlice'
 import useThemeClass from '../../../../../utils/hooks/useThemeClass'
@@ -215,11 +218,12 @@ const PoTable = () => {
     poaNumber,
     startDate,
     endDate,
-    months
+    months,
+    year,
+    date
   } = useSelector((state) => state.po_list.data.tableData)
 
   const fetchData = useCallback(() => {
-    console.log(months)
     dispatch(
       getAllPoWithPagination({
         pageIndex,
@@ -231,7 +235,9 @@ const PoTable = () => {
         poaNumber,
         startDate,
         endDate,
-        months
+        months,
+        year,
+        date
       })
     )
   }, [
@@ -244,7 +250,9 @@ const PoTable = () => {
     poNumber,
     poaNumber,
     endDate,
-    months
+    months,
+    year,
+    date
   ])
 
   useEffect(() => {
@@ -260,12 +268,17 @@ const PoTable = () => {
     poNumber,
     poaNumber,
     endDate,
-    months
+    months,
+    year,
+    date
   ])
 
   useEffect(() => {
     dispatch(getAllPoNumber())
     dispatch(getAllPOANumber())
+    dispatch(getAllPoYears())
+    dispatch(getAllPoMonths())
+    dispatch(getAllPoDates())
   }, [])
 
   const tableData = useMemo(
@@ -280,7 +293,9 @@ const PoTable = () => {
       poNumber,
       poaNumber,
       endDate,
-      months
+      months,
+      year,
+      date
     }),
     [
       pageIndex,
@@ -293,7 +308,9 @@ const PoTable = () => {
       poNumber,
       poaNumber,
       endDate,
-      months
+      months,
+      year,
+      date
     ]
   )
 

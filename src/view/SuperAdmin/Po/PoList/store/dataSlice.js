@@ -4,7 +4,10 @@ import {
   apiDeletePo,
   apiGetPoNumber,
   apiGetAllPoNumberOption,
-  apiGetAllPOAOption
+  apiGetAllPOAOption,
+  apiGetAllPoYears,
+  apiGetAllPoMonths,
+  apiGetAllPoDateFromMonthAndYear
 } from '../../../../../services/SuperAdmin/Po/PoService'
 
 export const getAllPoWithPagination = createAsyncThunk(
@@ -31,11 +34,47 @@ export const deletePo = createAsyncThunk(
   }
 )
 
-export const getAllPoNumber = createAsyncThunk(
-  'po/data/list/po/number',
+export const getAllPoYears = createAsyncThunk(
+  'po/data/list/po/years',
   async () => {
     try {
-      const response = await apiGetAllPoNumberOption()
+      const response = await apiGetAllPoYears()
+      return response
+    } catch (error) {
+      return error.response
+    }
+  }
+)
+
+export const getAllPoMonths = createAsyncThunk(
+  'po/data/list/po/months',
+  async (data) => {
+    try {
+      const response = await apiGetAllPoMonths(data)
+      return response
+    } catch (error) {
+      return error.response
+    }
+  }
+)
+
+export const getAllPoDates = createAsyncThunk(
+  'po/data/list/po/dates',
+  async (data) => {
+    try {
+      const response = await apiGetAllPoDateFromMonthAndYear(data)
+      return response
+    } catch (error) {
+      return error.response
+    }
+  }
+)
+
+export const getAllPoNumber = createAsyncThunk(
+  'po/data/list/po/number',
+  async (data) => {
+    try {
+      const response = await apiGetAllPoNumberOption(data)
       return response
     } catch (error) {
       return error.response
@@ -45,9 +84,9 @@ export const getAllPoNumber = createAsyncThunk(
 
 export const getAllPOANumber = createAsyncThunk(
   'po/data/list/poa/number',
-  async () => {
+  async (data) => {
     try {
-      const response = await apiGetAllPOAOption()
+      const response = await apiGetAllPOAOption(data)
       return response
     } catch (error) {
       return error.response
@@ -64,7 +103,9 @@ export const initialTableData = {
   poaNumber: '',
   startDate: '',
   endDate: '',
-  months: ''
+  months: '',
+  year: '',
+  date: ''
 }
 
 export const initialFilterData = {
@@ -76,6 +117,9 @@ const dataSlice = createSlice({
   initialState: {
     loading: false,
     poList: [],
+    years: [],
+    dates: [],
+    months: [],
     poNumbers: [],
     poaNumbers: [],
     tableData: initialTableData,
@@ -109,6 +153,15 @@ const dataSlice = createSlice({
     },
     [getAllPOANumber.fulfilled]: (state, action) => {
       state.poaNumbers = action.payload.data?.data || []
+    },
+    [getAllPoYears.fulfilled]: (state, action) => {
+      state.years = action.payload.data?.data || []
+    },
+    [getAllPoMonths.fulfilled]: (state, action) => {
+      state.months = action.payload.data?.data || []
+    },
+    [getAllPoDates.fulfilled]: (state, action) => {
+      state.dates = action.payload.data?.data || []
     },
     [deletePo.fulfilled]: (state, action) => {}
   }

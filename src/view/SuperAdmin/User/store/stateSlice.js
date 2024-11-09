@@ -7,6 +7,7 @@ const stateSlice = createSlice({
     deleteUserDialog: false,
     editUserDialog: false,
     formAssignDialog: false,
+    passwordDialog: false,
     selectedUser: {}
   },
   reducers: {
@@ -22,6 +23,9 @@ const stateSlice = createSlice({
     toggleFormAssignDialog: (state, action) => {
       state.formAssignDialog = action.payload
     },
+    togglePasswordDialog: (state, action) => {
+      state.passwordDialog = action.payload
+    },
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload
     }
@@ -33,7 +37,8 @@ export const {
   setSelectedUser,
   toggleEditUserDialog,
   toggleDeleteUserDialog,
-  toggleFormAssignDialog
+  toggleFormAssignDialog,
+  togglePasswordDialog
 } = stateSlice.actions
 
 export default stateSlice.reducer
