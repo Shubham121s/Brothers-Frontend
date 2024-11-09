@@ -18,7 +18,7 @@ const CustomerMonthWiseSalesChart = () => {
   )
   const data = [
     {
-      name: 'Net Profit ₹ ',
+      name: 'Net Sales ₹ ',
       data: monthlySales.revenue || []
     }
   ]

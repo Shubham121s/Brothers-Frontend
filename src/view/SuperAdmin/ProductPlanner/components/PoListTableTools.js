@@ -82,6 +82,12 @@ const PoListTableTools = ({ DeliveryStatus }) => {
     dispatch(getPODeliveryDates({ DeliveryStatus }))
     dispatch(getBrotherDeliveryDate({ DeliveryStatus }))
     dispatch(getAllProjectNumber({ DeliveryStatus }))
+    dispatch(
+      getAllProductOption({
+        DeliveryStatus
+      })
+    )
+    dispatch(getAllPoNumber({ DeliveryStatus }))
     const newTableData = cloneDeep(tableData)
     dispatch(setAllFilterData([]))
     newTableData.customer = ''
@@ -190,6 +196,13 @@ const PoListTableTools = ({ DeliveryStatus }) => {
     } else if (type === 'project_no') {
       dispatch(
         getAllSerialNumber({
+          project_no: e.value,
+          number: po_no,
+          DeliveryStatus
+        })
+      )
+      dispatch(
+        getAllProductOption({
           project_no: e.value,
           number: po_no,
           DeliveryStatus

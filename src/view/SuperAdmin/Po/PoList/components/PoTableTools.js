@@ -4,12 +4,18 @@ import {
   setTableData,
   getAllPoWithPagination,
   setEndDate,
-  setStartDate
+  setStartDate,
+  getAllPOANumber,
+  getAllPoMonths,
+  getAllPoNumber,
+  getAllPoDates,
+  getAllPoYears
 } from '../store/dataSlice'
 import { useDispatch, useSelector } from 'react-redux'
 import cloneDeep from 'lodash/cloneDeep'
 import PoTableSearch from './PoTableSearch'
 import { HiOutlineFilter } from 'react-icons/hi'
+import ReportButton from './ReportButton'
 import { Months } from './constants'
 
 const dateFormat = 'MMM DD, YYYY'
@@ -19,6 +25,9 @@ const { DatePickerRange } = DatePicker
 const PoTableTools = () => {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
+  const poYears = useSelector((state) => state.po_list.data.years)
+  const poMonths = useSelector((state) => state.po_list.data.months)
+  const poDates = useSelector((state) => state.po_list.data.dates)
   const poNumbers = useSelector((state) => state.po_list.data.poNumbers)
   const poaNumbers = useSelector((state) => state.po_list.data.poaNumbers)
   const startDate = useSelector(
@@ -26,9 +35,11 @@ const PoTableTools = () => {
   )
   const endDate = useSelector((state) => state.po_list.data.tableData.endDate)
 
+  const [poYearValues, setPoYearValues] = useState([])
   const [poNumberValues, setPoNumberValues] = useState([])
   const [poaNumberValues, setPoaNumberValues] = useState([])
   const [monthValues, setMonthValues] = useState([])
+  const [dateValues, setDateValues] = useState([])
 
   const handleDateChange = (value) => {}
 
@@ -51,7 +62,15 @@ const PoTableTools = () => {
 
   const onEdit = (e, type) => {
     const newTableData = cloneDeep(tableData)
-    if (type === 'poNumber') {
+    if (type === 'poYear') {
+      setPoYearValues(e)
+      let poYear = e.map((m) => m.value)
+      dispatch(getAllPOANumber({ year: JSON.stringify(poYear) }))
+      dispatch(getAllPoMonths({ year: JSON.stringify(poYear) }))
+      dispatch(getAllPoNumber({ year: JSON.stringify(poYear) }))
+      dispatch(getAllPoDates({ year: JSON.stringify(poYear) }))
+      newTableData.year = JSON.stringify(poYear)
+    } else if (type === 'poNumber') {
       setPoNumberValues(e)
       let poNumbers = e.map((m) => m.value)
       newTableData.poNumber = JSON.stringify(poNumbers)
@@ -66,7 +85,43 @@ const PoTableTools = () => {
     } else if (type === 'month') {
       setMonthValues(e)
       let months = e.map((m) => m.value)
+      dispatch(
+        getAllPOANumber({
+          months: JSON.stringify(months),
+          year: newTableData.year
+        })
+      )
+      dispatch(
+        getAllPoNumber({
+          months: JSON.stringify(months),
+          year: newTableData.year
+        })
+      )
+      dispatch(
+        getAllPoDates({
+          months: JSON.stringify(months),
+          year: newTableData.year
+        })
+      )
       newTableData.months = JSON.stringify(months)
+    } else if (type === 'date') {
+      setDateValues(e)
+      let dates = e.map((m) => m.value)
+      dispatch(
+        getAllPoNumber({
+          months: newTableData.months,
+          year: newTableData.year,
+          date: JSON.stringify(dates)
+        })
+      )
+      dispatch(
+        getAllPOANumber({
+          months: newTableData.months,
+          year: newTableData.year,
+          date: JSON.stringify(dates)
+        })
+      )
+      newTableData.date = JSON.stringify(dates)
     }
 
     newTableData.pageIndex = 1
@@ -80,15 +135,24 @@ const PoTableTools = () => {
 
   const onClearAll = () => {
     const newTableData = cloneDeep(tableData)
+    dispatch(getAllPOANumber())
+    dispatch(getAllPoDates())
+    dispatch(getAllPoMonths())
+    dispatch(getAllPoNumber())
+    dispatch(getAllPoYears())
     setPoNumberValues([])
     setPoaNumberValues([])
     setMonthValues([])
+    setDateValues([])
+    setPoYearValues([])
     newTableData.query = ''
     newTableData.poNumber = ''
     newTableData.poaNumber = ''
     newTableData.startDate = ''
     newTableData.endDate = ''
     newTableData.months = ''
+    newTableData.year = ''
+    newTableData.date = ''
     inputRef.current.value = ''
     fetchData(newTableData)
   }
@@ -115,11 +179,36 @@ const PoTableTools = () => {
           >
             Clear All
           </Button>
+          <ReportButton />
         </div>
       </div>
       {open && (
         <Card className="mb-4">
           <div className="grid grid-cols-5 gap-2">
+            <Select
+              isMulti
+              placeholder="Year"
+              size="sm"
+              options={poYears}
+              value={poYearValues}
+              onChange={(e) => onEdit(e, 'poYear')}
+            />
+            <Select
+              isMulti
+              placeholder="Select Months"
+              size="sm"
+              options={poMonths}
+              value={monthValues}
+              onChange={(e) => onEdit(e, 'month')}
+            />
+            <Select
+              isMulti
+              placeholder="Select Date"
+              size="sm"
+              options={poDates}
+              value={dateValues}
+              onChange={(e) => onEdit(e, 'date')}
+            />
             <Select
               isMulti
               placeholder="Select POA Numbers"
@@ -138,22 +227,13 @@ const PoTableTools = () => {
               onChange={(e) => onEdit(e, 'poNumber')}
             />
 
-            <DatePickerRange
+            {/* <DatePickerRange
               value={[startDate, endDate]}
               placeholder="Select Range"
               onChange={(e) => onEdit(e, 'months')}
               inputFormat={dateFormat}
               size="sm"
-            />
-
-            <Select
-              isMulti
-              placeholder="Select Months"
-              size="sm"
-              options={Months}
-              value={monthValues}
-              onChange={(e) => onEdit(e, 'month')}
-            />
+            /> */}
           </div>
         </Card>
       )}

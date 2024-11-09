@@ -10,13 +10,16 @@ import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
 import {
   setSelectedUser,
   toggleDeleteUserDialog,
-  toggleEditUserDialog
+  toggleEditUserDialog,
+  togglePasswordDialog
 } from '../store/stateSlice'
 import UserEditFormDialog from './UserEditDialog'
 import UserDeleteConfirmation from './UserDeleteConfirmation'
 import { toggleFormAssignDialog } from '../store/stateSlice'
 import { FaAddressBook } from 'react-icons/fa'
 import RoleAssignDialog from './FormAssignDialog'
+import UserPasswordUpdateDialog from './UserPasswordUpdateDialog'
+import { MdLockOpen } from 'react-icons/md'
 
 const statusColor = {
   true: {
@@ -73,6 +76,11 @@ const ActionColumn = ({ row }) => {
     dispatch(setSelectedUser(row))
   }
 
+  const onUpdatePassword = () => {
+    dispatch(togglePasswordDialog(true))
+    dispatch(setSelectedUser(row))
+  }
+
   return (
     <div className="flex justify-end text-lg gap-x-4">
       <span
@@ -86,6 +94,12 @@ const ActionColumn = ({ row }) => {
         onClick={onDelete}
       >
         <HiOutlineTrash />
+      </span>
+      <span
+        className={`cursor-pointer hover:text-pink-500`}
+        onClick={onUpdatePassword}
+      >
+        <MdLockOpen />
       </span>
       {userAuthority.includes('super-admin') && (
         <span
@@ -228,6 +242,7 @@ const UsersTable = () => {
       <UserEditFormDialog />
       <UserDeleteConfirmation />
       <RoleAssignDialog />
+      <UserPasswordUpdateDialog />
     </>
   )
 }
