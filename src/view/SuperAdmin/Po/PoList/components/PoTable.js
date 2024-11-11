@@ -191,6 +191,20 @@ const PoTable = () => {
       }
     },
     {
+      header: 'Amount',
+      accessorKey: 'Amount',
+      cell: (props) => {
+        const row = props.row.original
+        return (
+          <div>
+            {row?.currency_type === 'INR'
+              ? '₹ ' + row?.Amount
+              : '$ ' + row?.Amount}
+          </div>
+        )
+      }
+    },
+    {
       header: ``,
       accessorKey: 'action',
       cell: (props) => {
