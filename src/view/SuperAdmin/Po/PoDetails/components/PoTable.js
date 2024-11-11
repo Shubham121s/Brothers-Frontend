@@ -10,7 +10,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import useThemeClass from '../../../../../utils/hooks/useThemeClass'
 import { HiOutlineEye, HiOutlinePencil } from 'react-icons/hi'
 import EditItemDialog from './EditItemDialog'
-import { setSelectedPoItem, toggleEditPoItemDialog } from '../store/stateSlice'
+import {
+  setSelectedPoItem,
+  toggleEditPoItemDialog,
+  toggleViewPoItemDialog
+} from '../store/stateSlice'
 
 const { Tr, Th, Td, THead, TBody } = Table
 
@@ -23,24 +27,27 @@ const ActionColumn = ({ row }) => {
     dispatch(setSelectedPoItem(row))
   }
   const onView = () => {
-    dispatch(toggleEditPoItemDialog(true))
+    dispatch(toggleViewPoItemDialog(true))
     dispatch(setSelectedPoItem(row))
   }
 
-  return row?.list_status === 'accepted' || row?.list_status === 'rejected' ? (
-    <span
-      className={`cursor-pointer hover:${textTheme} text-lg`}
-      onClick={onView}
-    >
-      <HiOutlineEye />
-    </span>
-  ) : (
-    <span
-      className={`cursor-pointer text-lg hover:${textTheme}`}
-      onClick={onEdit}
-    >
-      <HiOutlinePencil />
-    </span>
+  return (
+    <div className="flex jsutify-end gap-4">
+      {row?.list_status === 'accepted' && (
+        <span
+          className={`cursor-pointer hover:${textTheme} text-lg`}
+          onClick={onView}
+        >
+          <HiOutlineEye />
+        </span>
+      )}
+      <span
+        className={`cursor-pointer text-lg hover:${textTheme}`}
+        onClick={onEdit}
+      >
+        <HiOutlinePencil />
+      </span>
+    </div>
   )
 }
 

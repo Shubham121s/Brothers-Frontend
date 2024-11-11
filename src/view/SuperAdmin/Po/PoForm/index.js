@@ -82,8 +82,22 @@ const PoForm = forwardRef((props, ref) => {
   }
 
   const handleOnAddItem = (item) => {
+    let found = data.find((f, Index) => f.serial_number === item.serial_number)
+    if (found && !itemtype) {
+      return Toast.push(
+        <Notification
+          title={'Error'}
+          type="danger"
+          duration={3000}
+        >
+          Serial Number Already Exists
+        </Notification>,
+        {
+          placement: 'top-center'
+        }
+      )
+    }
     if (itemtype) {
-      console.log(item)
       setData((data) =>
         data.map((f, Index) =>
           Index === index
@@ -92,6 +106,18 @@ const PoForm = forwardRef((props, ref) => {
         )
       )
       setIndex(-1)
+      return Toast.push(
+        <Notification
+          title={'Success'}
+          type="success"
+          duration={3000}
+        >
+          Product Updated Successfully
+        </Notification>,
+        {
+          placement: 'top-center'
+        }
+      )
     } else {
       setData((data) => [...data, item])
     }
@@ -123,9 +149,11 @@ const PoForm = forwardRef((props, ref) => {
 
   const handleCheck = async (e) => {
     try {
-      const response = await apiIsPONumberExists({ number: e.target.value })
-      if (response.status === 200) {
-        isPOExist = false
+      if (type !== 'edit') {
+        const response = await apiIsPONumberExists({ number: e.target.value })
+        if (response.status === 200) {
+          isPOExist = false
+        }
       }
     } catch (error) {
       isPOExist = true
