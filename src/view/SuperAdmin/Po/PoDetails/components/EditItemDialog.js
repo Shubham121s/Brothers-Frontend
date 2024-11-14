@@ -266,7 +266,7 @@ const EditItemDialog = forwardRef((props, ref) => {
                 >
                   Discard
                 </Button>
-                {values?.list_status === 'accepted' ||
+                {(editPoItemDialog && values?.list_status === 'accepted') ||
                 values?.list_status === 'rejected' ? (
                   <Button
                     loading={isSubmitting}
