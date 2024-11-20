@@ -35,7 +35,13 @@ const ActionColumn = ({ index, onRemoveItem, row, onEditItem }) => {
   );
 };
 
-const ItemTable = ({ data = [], currency = "", onRemoveItem, onEditItem }) => {
+const ItemTable = ({
+  data = [],
+  currency = "",
+  onRemoveItem,
+  onEditItem,
+  type,
+}) => {
   const columns = useMemo(
     () => [
       {
@@ -71,6 +77,19 @@ const ItemTable = ({ data = [], currency = "", onRemoveItem, onEditItem }) => {
         accessorKey: "po_quantity",
         cell: (props) => {
           const { quantity } = props.row.original;
+          return <div>{quantity}</div>;
+        },
+      },
+      {
+        header: "pending qty",
+        accessorKey: "pending_quantity",
+        cell: (props) => {
+          console.log("type", type);
+          const { quantity, pending_quantity } = props.row.original;
+          if (type === "edit") {
+            return <div>{pending_quantity}</div>;
+          }
+
           return <div>{quantity}</div>;
         },
       },

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "../../../../components/ui";
+import { Card } from "../../../../../components/ui";
 import { NumericFormat } from "react-number-format";
 
 const StatisticCard = ({ data = 0, label, valuePrefix, className }) => {
@@ -24,11 +24,11 @@ const StatisticCard = ({ data = 0, label, valuePrefix, className }) => {
 
 const Statistic = ({ data = {} }) => {
   return (
-    <div className="grid grid-cols-2 gap-4 h-max">
+    <div className="grid grid-cols-4 gap-4 h-max">
       <StatisticCard
         data={data.revenue}
-        valuePrefix="₹"
-        label="Revenue"
+        // valuePrefix="₹"
+        label="Total Products"
         className="bg-pink-50"
       />
       <StatisticCard
@@ -48,38 +48,6 @@ const Statistic = ({ data = {} }) => {
         valuePrefix="₹"
         label="Purchases"
         className="bg-orange-50"
-      />
-      <StatisticCard
-        data={data.foreignInvoice}
-        valuePrefix="₹"
-        label="Foreign Invoice"
-        className="bg-blue-50"
-      />
-      <StatisticCard
-        data={data.domesticInvoice}
-        valuePrefix="₹"
-        label="Domestic Invoice"
-        className="bg-green-50"
-      />
-      <StatisticCard
-        data={data.pendingPOs}
-        // valuePrefix="₹"
-        label="Pending PO's"
-        className="bg-rose-50"
-      />
-
-      <StatisticCard
-        data={data.customer}
-        // valuePrefix="₹"
-        label="Customer"
-        className="bg-orange-50"
-      />
-
-      <StatisticCard
-        data={data.supplier}
-        // valuePrefix="₹"
-        label="Supplier"
-        className="bg-emerald-50"
       />
     </div>
   );

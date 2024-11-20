@@ -1,40 +1,42 @@
-import React, { useEffect, useState } from 'react'
-import Chart from 'react-apexcharts'
-import { COLORS } from '../../../../../constants/chart.constant'
-import { useDispatch, useSelector } from 'react-redux'
-import { getYarlySales } from '../store/dataSlice'
-import { Select } from '../../../../../components/ui'
+import React, { useEffect, useState } from "react";
+import Chart from "react-apexcharts";
+import { COLORS } from "../../../../../constants/chart.constant";
+import { useDispatch, useSelector } from "react-redux";
+import { getYarlySales } from "../store/dataSlice";
+import { Select } from "../../../../../components/ui";
 
 const CustomerYearWiseSalesChart = () => {
-  const [customer, setCustomer] = useState(null)
-  const [customerName, setCustomerName] = useState(null)
-  const dispatch = useDispatch()
+  const [customer, setCustomer] = useState(null);
+  const [customerName, setCustomerName] = useState(null);
+  const dispatch = useDispatch();
 
+  console.log("customer", customer);
   const yearlySales = useSelector(
     (state) => state.customer_dashboard.data.yearlySales
-  )
+  );
+
   const CustomerOption = useSelector(
     (state) => state.customer_dashboard.data.customers
-  )
+  );
   const data = [
     {
-      name: 'Net Sales ₹ ',
-      data: yearlySales.revenue || []
-    }
-  ]
+      name: "Net Sales ₹ ",
+      data: yearlySales.revenue || [],
+    },
+  ];
 
   useEffect(() => {
-    fetchData()
-  }, [customer])
+    fetchData();
+  }, [customer]);
 
   const fetchData = async () => {
-    dispatch(getYarlySales({ customer_id: customer }))
-  }
+    dispatch(getYarlySales({ customer_id: customer }));
+  };
 
   const handleChange = (e) => {
-    setCustomer(e.value)
-    setCustomerName(e.label)
-  }
+    setCustomer(e.value);
+    setCustomerName(e.label);
+  };
 
   return (
     <>
@@ -53,8 +55,8 @@ const CustomerYearWiseSalesChart = () => {
           dataLabels: {
             offsetY: -25,
             style: {
-              fontSize: '12px'
-            }
+              fontSize: "12px",
+            },
           },
           chart: {
             stacked: true,
@@ -67,61 +69,61 @@ const CustomerYearWiseSalesChart = () => {
                 zoomin: true,
                 zoomout: true,
                 pan: true,
-                reset: true
-              }
+                reset: true,
+              },
             },
             zoom: {
-              enabled: true
-            }
+              enabled: true,
+            },
           },
-          colors: ['#DA70D6'],
+          colors: ["#DA70D6"],
           responsive: [
             {
               breakpoint: 480,
               options: {
                 legend: {
-                  position: 'bottom',
+                  position: "bottom",
                   offsetX: -10,
-                  offsetY: 0
-                }
-              }
-            }
+                  offsetY: 0,
+                },
+              },
+            },
           ],
           plotOptions: {
             bar: {
               horizontal: false,
-              endingShape: 'round',
-              borderRadius: 8
-            }
+              endingShape: "round",
+              borderRadius: 8,
+            },
           },
           xaxis: {
-            categories: yearlySales.years || []
+            categories: yearlySales.years || [],
           },
           legend: {
-            position: 'right',
-            offsetY: 40
+            position: "right",
+            offsetY: 40,
           },
           fill: {
-            opacity: 1
+            opacity: 1,
           },
           title: {
             text: `${
-              customer ? `${customerName}` : 'All Customers'
+              customer ? `${customerName}` : "All Customers"
             } Yearly Sales`,
-            align: 'center',
+            align: "center",
             style: {
-              fontSize: '20px',
-              fontWeight: 'normal',
-              color: '#263238'
-            }
-          }
+              fontSize: "20px",
+              fontWeight: "normal",
+              color: "#263238",
+            },
+          },
         }}
         series={data}
         type="bar"
         height={300}
       />
     </>
-  )
-}
+  );
+};
 
-export default CustomerYearWiseSalesChart
+export default CustomerYearWiseSalesChart;

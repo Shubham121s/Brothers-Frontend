@@ -63,6 +63,7 @@ const ItemForm = forwardRef((props, ref) => {
     setItem,
     setType,
   } = props;
+
   const dispatch = useDispatch();
   const newPoItemDialog = useSelector((state) =>
     mode === "edit"
@@ -104,135 +105,152 @@ const ItemForm = forwardRef((props, ref) => {
           }
         }}
       >
-        {({ values, touched, errors }) => (
-          <Form>
-            <FormContainer>
-              <div className="flex flex-col h-full justify-between">
-                <h4>
-                  {type === "edit"
-                    ? "Edit Item Information"
-                    : "New Item Information"}
-                </h4>
-                <p className="mb-4">Section to config new item information</p>
-                <div className="grid grid-cols-2 gap-2">
-                  <InputInformationFields
-                    errors={errors.serial_number}
-                    touched={touched.serial_number}
-                    name="serial_number"
-                    label="Po Serial Number"
-                    placeholder="Po Serial Number"
-                  />
-                  <InputInformationFields
-                    errors={errors.project_no}
-                    touched={touched.project_no}
-                    name="project_no"
-                    label="Project Number"
-                    placeholder="Project Number"
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  <ProductInformationFields
-                    errors={errors.Product}
-                    touched={touched.Product}
-                    values={values.Product}
-                    mode={mode}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  <InputInformationFields
-                    errors={errors.revision_number}
-                    touched={touched.revision_number}
-                    className={
-                      values.Product?.Drawings?.some(
-                        (drawingRevision) =>
-                          drawingRevision.revision_number ===
-                          values?.revision_number
-                      ) && "bg-emerald-100"
-                    }
-                    name="revision_number"
-                    label="Drawing Revision Number"
-                    placeholder="Drawing Revision Number"
-                  />
-                  <DatePickerInformationFields
-                    errors={errors.delivery_date}
-                    touched={touched.delivery_date}
-                    name="delivery_date"
-                    label="PO Delivery Date"
-                    placeholder="PO Delivery Date"
-                  />
-                </div>
-                <div className="grid grid-cols-3 gap-1">
-                  <CheckBoxField
-                    name="material_tc_verify_check"
-                    label="Material TC"
-                  />
-                  <CheckBoxField
-                    name="internal_inspection_check"
-                    label="Internal Insp."
-                  />
-                  <CheckBoxField name="ndt_requirement_check" label="NDT" />
-                  <CheckBoxField
-                    name="final_inspection_check"
-                    label="final Insp."
-                  />
-                  <CheckBoxField
-                    name="heat_treatment_check"
-                    label="Heat Treatment"
-                  />
-                  <CheckBoxField name="other_check" label="Other" />
-                </div>
-                <div className="grid grid-cols-1 gap-2">
-                  <InputInformationFields
-                    errors={errors.description}
-                    touched={touched.description}
-                    name="description"
-                    placeholder="Remarks"
-                    label="Remarks"
-                  />
-                </div>
-                <div className="grid md:grid-cols-3 gap-2 mb-2">
-                  <InputInformationFields
-                    errors={errors.quantity}
-                    touched={touched.quantity}
-                    name="quantity"
-                    type="number"
-                    placeholder="Quantity"
-                    label="Quantity"
-                    suffix={values.Product?.unit_measurement?.toUpperCase()}
-                  />
-                  <InputInformationFields
-                    type="number"
-                    errors={errors.unit_price}
-                    touched={touched.unit_price}
-                    name="unit_price"
-                    placeholder="Unit Price"
-                    label="Unit Price"
-                    prefix={currency_type}
-                  />
-                  <FormItem className="mb-4" label="Amount">
-                    <Field
-                      disabled={true}
-                      type="text"
-                      autoComplete="off"
-                      placeholder="Net Amount"
-                      prefix={currency_type}
-                      value={(values?.unit_price * values?.quantity).toFixed(2)}
-                      component={Input}
+        {({ values, touched, errors }) => {
+          return (
+            <Form>
+              <FormContainer>
+                <div className="flex flex-col h-full justify-between">
+                  <h4>
+                    {type === "edit"
+                      ? "Edit Item Information"
+                      : "New Item Information"}
+                  </h4>
+                  <p className="mb-4">Section to config new item information</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <InputInformationFields
+                      errors={errors.serial_number}
+                      touched={touched.serial_number}
+                      name="serial_number"
+                      label="Po Serial Number"
+                      placeholder="Po Serial Number"
                     />
-                  </FormItem>
+                    <InputInformationFields
+                      errors={errors.project_no}
+                      touched={touched.project_no}
+                      name="project_no"
+                      label="Project Number"
+                      placeholder="Project Number"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-2">
+                    <ProductInformationFields
+                      errors={errors.Product}
+                      touched={touched.Product}
+                      values={values.Product}
+                      mode={mode}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <InputInformationFields
+                      errors={errors.revision_number}
+                      touched={touched.revision_number}
+                      className={
+                        values.Product?.Drawings?.some(
+                          (drawingRevision) =>
+                            drawingRevision.revision_number ===
+                            values?.revision_number
+                        ) && "bg-emerald-100"
+                      }
+                      name="revision_number"
+                      label="Drawing Revision Number"
+                      placeholder="Drawing Revision Number"
+                    />
+                    <DatePickerInformationFields
+                      errors={errors.delivery_date}
+                      touched={touched.delivery_date}
+                      name="delivery_date"
+                      label="PO Delivery Date"
+                      placeholder="PO Delivery Date"
+                    />
+                  </div>
+                  <div className="grid grid-cols-3 gap-1">
+                    <CheckBoxField
+                      name="material_tc_verify_check"
+                      label="Material TC"
+                      value={values.material_tc_verify_check}
+                    />
+                    <CheckBoxField
+                      name="internal_inspection_check"
+                      label="Internal Insp."
+                      value={values.internal_inspection_check}
+                    />
+                    <CheckBoxField
+                      name="ndt_requirement_check"
+                      label="NDT"
+                      value={values.ndt_requirement_check}
+                    />
+                    <CheckBoxField
+                      name="final_inspection_check"
+                      label="final Insp."
+                      value={values.final_inspection_check}
+                    />
+                    <CheckBoxField
+                      name="heat_treatment_check"
+                      label="Heat Treatment"
+                      value={values.heat_treatment_check}
+                    />
+                    <CheckBoxField
+                      name="other_check"
+                      label="Other"
+                      value={values.other_check}
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-2">
+                    <InputInformationFields
+                      errors={errors.description}
+                      touched={touched.description}
+                      name="description"
+                      placeholder="Remarks"
+                      label="Remarks"
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-2 mb-2">
+                    <InputInformationFields
+                      errors={errors.quantity}
+                      touched={touched.quantity}
+                      name="quantity"
+                      type="number"
+                      placeholder="Quantity"
+                      label="Quantity"
+                      suffix={values.Product?.unit_measurement?.toUpperCase()}
+                    />
+
+                    <InputInformationFields
+                      type="number"
+                      errors={errors.unit_price}
+                      touched={touched.unit_price}
+                      name="unit_price"
+                      placeholder="Unit Price"
+                      label="Unit Price"
+                      prefix={currency_type}
+                    />
+                    <FormItem className="mb-4" label="Amount">
+                      <Field
+                        disabled={true}
+                        type="text"
+                        autoComplete="off"
+                        placeholder="Net Amount"
+                        prefix={currency_type}
+                        value={(values?.unit_price * values?.quantity).toFixed(
+                          2
+                        )}
+                        component={Input}
+                      />
+                    </FormItem>
+                  </div>
                 </div>
-              </div>
-              <div className="flex justify-end px-5 py-2 bg-gray-100 gap-2 rounded-bl-lg rounded-br-lg">
-                <Button size="sm" type="button" variant="">
-                  Discard
-                </Button>
-                <Button size="sm" variant="solid">
-                  {type === "edit" ? "Update Item" : "Add Item"}
-                </Button>
-              </div>
-            </FormContainer>
-          </Form>
-        )}
+                <div className="flex justify-end px-5 py-2 bg-gray-100 gap-2 rounded-bl-lg rounded-br-lg">
+                  <Button size="sm" type="button" variant="">
+                    Discard
+                  </Button>
+                  <Button size="sm" variant="solid">
+                    {type === "edit" ? "Update Item" : "Add Item"}
+                  </Button>
+                </div>
+              </FormContainer>
+            </Form>
+          );
+        }}
       </Formik>
     </Dialog>
   );
@@ -245,6 +263,7 @@ ItemForm.defaultProps = {
     revision_number: "",
     delivery_date: null,
     quantity: "",
+    pending_quantity: 0,
     unit_price: "",
     serial_number: "",
     Product: null,

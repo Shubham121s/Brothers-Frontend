@@ -3,6 +3,9 @@ import {
   apiGetAllDispatchInvoiceWithPagination,
   apiAddInvoiceDetails,
   apiDeleteInvoice,
+  apiGetAllInvoiceNumber,
+  apiGetAllCustomersOption,
+  apiGetAllInvoiceDates,
 } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
 export const getDispatchInvoiceWithPagination = createAsyncThunk(
@@ -41,11 +44,61 @@ export const deleteInvoice = createAsyncThunk(
   }
 );
 
+export const getAllInvoiceNumber = createAsyncThunk(
+  "dispatch/invoice/details/invoice/number",
+  async (data) => {
+    try {
+      const response = await apiGetAllInvoiceNumber(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const getAllCustomerName = createAsyncThunk(
+  "dispatch/invoice/details/invoice/number",
+  async (data) => {
+    try {
+      const response = await apiGetAllInvoiceNumber(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const getAllCustomerOption = createAsyncThunk(
+  "dispatch/invoice/details/customer/option",
+  async (data) => {
+    try {
+      const response = await apiGetAllCustomersOption(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const getAllInvoiceDate = createAsyncThunk(
+  "dispatch/invoice/details/invoice/dates",
+  async (data) => {
+    try {
+      const response = await apiGetAllInvoiceDates(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
   pageSize: 10,
   query: "",
+  customer: "",
+  invoiceNumber: "",
 };
 
 export const initialFilterData = {
@@ -57,6 +110,9 @@ const dataSlice = createSlice({
   initialState: {
     loading: false,
     dispatchInvoiceList: [],
+    invoiceNumberList: [],
+    invoiceDateList: [],
+    customerOption: [],
     tableData: initialTableData,
     filterData: initialFilterData,
   },
@@ -80,6 +136,33 @@ const dataSlice = createSlice({
     [getDispatchInvoiceWithPagination.pending]: (state) => {
       state.loading = true;
     },
+
+    [getAllInvoiceNumber.fulfilled]: (state, action) => {
+      state.invoiceNumberList = action.payload.data?.data;
+      state.tableData.total = action.payload?.data?.total;
+      state.loading = false;
+    },
+    [getAllInvoiceNumber.pending]: (state) => {
+      state.loading = true;
+    },
+    [getAllCustomerOption.fulfilled]: (state, action) => {
+      state.customerOption = action.payload.data?.data;
+      state.tableData.total = action.payload?.data?.total;
+      state.loading = false;
+    },
+    [getAllCustomerOption.pending]: (state) => {
+      state.loading = true;
+    },
+
+    [getAllInvoiceDate.fulfilled]: (state, action) => {
+      state.invoiceDateList = action.payload.data?.data;
+      state.tableData.total = action.payload?.data?.total;
+      state.loading = false;
+    },
+    [getAllInvoiceDate.pending]: (state) => {
+      state.loading = true;
+    },
+
     [addDetails.fulfilled]: (state) => {},
     [deleteInvoice.fulfilled]: (state) => {},
   },
