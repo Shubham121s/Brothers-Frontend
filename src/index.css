@@ -722,10 +722,11 @@
 
 @media (min-width: 640px) {
   .dialog-content {
-    margin-bottom: 4rem;
-    margin-top: 4rem;
+    margin-bottom:0rem;
+    margin-top: 0rem;
   }
 }
+
 
 .dialog-overlay {
   --tw-bg-opacity: 0.6;
