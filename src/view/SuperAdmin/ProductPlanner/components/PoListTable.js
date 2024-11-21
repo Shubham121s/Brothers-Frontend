@@ -441,8 +441,6 @@ const PoListTable = ({ DeliveryStatus }) => {
     ]
   );
 
-  console.log("table data from polist", tableData);
-
   const onPaginationChange = (page) => {
     const newTableData = cloneDeep(tableData);
     newTableData.pageIndex = page;

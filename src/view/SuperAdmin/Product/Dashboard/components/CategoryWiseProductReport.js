@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Button, Select } from "../../../../../components/ui";
 
 import { Chart } from "../../../../../components/shared";
+import { useDispatch, useSelector } from "react-redux";
+import { getProductsByCategory } from "../store/dataSlice";
 
 const CategoryWiseProductReport = ({ className }) => {
-  const categoryData = {
-    categories: ["FIXED ASSET", "RAW MATERIAL", "FINISH GOODS", "CONSUMABLE"],
-    series: [
-      {
-        name: "Products",
-        data: [300, 450, 600, 250], // Corresponding numbers for each category
-      },
-    ],
+  const dispatch = useDispatch();
+  const categoryData = useSelector(
+    (state) => state.product_dashboard.data.productByCategoryList
+  );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    dispatch(getProductsByCategory());
   };
+
+  const data = [
+    {
+      name: "Quantity",
+      data: categoryData.QUANTITY || [],
+    },
+  ];
 
   return (
     <Card className={className}>
@@ -21,40 +33,65 @@ const CategoryWiseProductReport = ({ className }) => {
         {/* <Button size="sm">Export Report</Button> */}
       </div>
       <Chart
-        type="bar"
-        series={categoryData.series}
-        xAxis={categoryData.categories}
-        height="250px"
-        customOptions={{
-          //   chart: {
-          //     toolbar: {
-          //       show: true,
-          //     },
-          //   },
-          plotOptions: {
-            bar: {
-              horizontal: false,
-              borderRadius: 5,
+        options={{
+          dataLabels: {
+            offsetY: -25,
+            style: {
+              fontSize: "12px",
+            },
+          },
+          chart: {
+            stacked: true,
+            toolbar: {
+              show: true,
+              tools: {
+                download: false,
+                selection: true,
+                zoom: true,
+                zoomin: true,
+                zoomout: true,
+                pan: true,
+                reset: true,
+              },
+            },
+            zoom: {
+              enabled: true,
             },
           },
           colors: ["#1E90FF"],
-          xaxis: {
-            categories: categoryData.categories,
+          responsive: [
+            {
+              breakpoint: 480,
+              options: {
+                legend: {
+                  position: "bottom",
+                  offsetX: -10,
+                  offsetY: 0,
+                },
+              },
+            },
+          ],
+          plotOptions: {
+            bar: {
+              horizontal: false,
+              endingShape: "round",
+              borderRadius: 8,
+            },
           },
-          //   title: {
-          //     text: "Products Distribution Across Categories",
-          //     align: "center",
-          //     style: {
-          //       fontSize: "18px",
-          //       fontWeight: "bold",
-          //       color: "#263238",
-          //     },
-          //   },
+          xaxis: {
+            categories: categoryData.CATEGORY || [],
+          },
           legend: {
-            show: true,
-            position: "bottom",
+            position: "right",
+            offsetY: 40,
+          },
+          fill: {
+            opacity: 1,
           },
         }}
+        series={data}
+        type="bar"
+        height={300}
       />
     </Card>
   );

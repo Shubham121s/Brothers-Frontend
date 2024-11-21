@@ -83,7 +83,10 @@ const PoForm = forwardRef((props, ref) => {
 
   const handleOnAddItem = (item) => {
     let found = data.find((f, Index) => f.serial_number === item.serial_number);
-    if (found && !itemtype) {
+    if (found) {
+      setItem({});
+      setType(false);
+
       return Toast.push(
         <Notification title={"Error"} type="danger" duration={3000}>
           Serial Number Already Exists

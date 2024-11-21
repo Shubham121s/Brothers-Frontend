@@ -33,7 +33,7 @@ const SalesReportPerYear = ({ className }) => {
 
   const data = [
     {
-      name: "Net Sales ₹ ",
+      name: "Quantity",
       data: yearlySales.quantity || [],
     },
   ];

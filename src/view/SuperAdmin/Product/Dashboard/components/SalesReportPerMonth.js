@@ -19,7 +19,7 @@ const SalesReportPerMonth = ({ className }) => {
 
   const data = [
     {
-      name: "Net Sales ₹ ",
+      name: "Quantity",
       data: monthlySales.quantity || [],
     },
   ];
