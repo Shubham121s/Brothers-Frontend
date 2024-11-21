@@ -5,6 +5,8 @@ import {
   apiGetAllProductsOption,
   apiGetYears,
   apiGetAllProductByYearMonth,
+  apiGetProductsByCategory,
+  apiGetTopSellingProduct,
 } from "../../../../../services/SuperAdmin/Product/DashboardService";
 
 export const getProductYearlySalesQuantity = createAsyncThunk(
@@ -67,6 +69,30 @@ export const getAllProductByYearMonth = createAsyncThunk(
   }
 );
 
+export const getProductsByCategory = createAsyncThunk(
+  "super-admin/product/dashboard/data/getProductsByCategory",
+  async (data) => {
+    try {
+      const response = await apiGetProductsByCategory(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const getTopSellingProduct = createAsyncThunk(
+  "super-admin/product/dashboard/data/getTopSellingProduct",
+  async (data) => {
+    try {
+      const response = await apiGetTopSellingProduct(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -86,6 +112,8 @@ const dataSlice = createSlice({
     productList: [],
     yearsList: [],
     productByYearMonthList: [],
+    productByCategoryList: [],
+    topSellingProductList: [],
     tableData: initialTableData,
   },
 
@@ -132,6 +160,20 @@ const dataSlice = createSlice({
       state.loading = false;
     },
     [getAllProductByYearMonth.pending]: (state) => {
+      state.loading = true;
+    },
+    [getProductsByCategory.fulfilled]: (state, action) => {
+      state.productByCategoryList = action.payload?.data?.data || {};
+      state.loading = false;
+    },
+    [getProductsByCategory.pending]: (state) => {
+      state.loading = true;
+    },
+    [getTopSellingProduct.fulfilled]: (state, action) => {
+      state.topSellingProductList = action.payload?.data?.data || {};
+      state.loading = false;
+    },
+    [getTopSellingProduct.pending]: (state) => {
       state.loading = true;
     },
   },

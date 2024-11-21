@@ -38,3 +38,17 @@ export async function apiGetAllProductByYearMonth(data) {
     data,
   });
 }
+
+export async function apiGetProductsByCategory() {
+  return ApiService.fetchData({
+    url: "v1/web/company/product/dashboard/by/category",
+    method: "get",
+  });
+}
+
+export async function apiGetTopSellingProduct() {
+  return ApiService.fetchData({
+    url: "v1/web/company/product/dashboard/top/selling/product",
+    method: "get",
+  });
+}
