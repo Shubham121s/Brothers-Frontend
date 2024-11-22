@@ -83,7 +83,7 @@ const PoForm = forwardRef((props, ref) => {
 
   const handleOnAddItem = (item) => {
     let found = data.find((f, Index) => f.serial_number === item.serial_number);
-    if (found) {
+    if (found && !itemtype) {
       setItem({});
       setType(false);
 
