@@ -252,6 +252,23 @@ const superAdminRoute = [
   },
   // **************END***************
 
+  // TASK
+  // **************START***************
+  {
+    key: "task.list",
+    path: `/task/list`,
+    component: React.lazy(() => import("../../view/SuperAdmin/Task/TaskTable")),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
+  },
+
+  {
+    key: "task.chat",
+    path: `/task/chat`,
+    component: React.lazy(() => import("../../view/SuperAdmin/Task/Message")),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
+  },
+  // **************END***************
+
   // TEST
   // **************START***************
   {
