@@ -25,7 +25,7 @@ const TopSellingProduct = () => {
   };
 
   const NameColumn = ({ value }) => {
-    return <div className="items-center uppercase w-32">{value}</div>;
+    return <div className="items-center uppercase w-42">{value}</div>;
   };
 
   // Table columns
@@ -129,10 +129,6 @@ const TopSellingProduct = () => {
     {
       header: "Quantity",
       accessorKey: "Quantity",
-      cell: (props) => {
-        const value = props.row.original.Quantity;
-        return <NameColumn value={value} />;
-      },
     },
   ];
 
