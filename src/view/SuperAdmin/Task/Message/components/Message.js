@@ -30,7 +30,10 @@ const ChatPage = () => {
     let newSocket;
 
     const initializeSocket = () => {
-      newSocket = io("https://710f-103-158-91-217.ngrok-free.app", {
+      newSocket = io("https://api-erp.brothers.net.in", {
+        path: "/api/socket.io/",
+        rejectUnauthorized: false,
+        transports: ["websocket", "polling"],
         auth: {
           token: `Bearer ${accessToken}`,
         },
@@ -45,7 +48,8 @@ const ChatPage = () => {
       });
 
       newSocket.on("connect_error", (err) => {
-        console.error("Connection error:", err.message);
+        // console.error("Connection error:", err.message);
+        console.error("Connection error:", err);
       });
     };
 
