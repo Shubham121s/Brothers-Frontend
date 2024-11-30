@@ -18,6 +18,7 @@ const stateSlice = createSlice({
       state.deleteTaskDialog = action.payload;
     },
     toggleEditTaskDialog: (state, action) => {
+      console.log("action.payload", action.payload);
       state.editTaskDialog = action.payload;
     },
     setSelectedTask: (state, action) => {

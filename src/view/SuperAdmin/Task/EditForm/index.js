@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllTask, getUser } from "../TaskForm/store/dataSlice";
 import TaskFormDialog from "../TaskForm/components/TaskForm";
 import { putTask } from "../TaskForm/store/dataSlice";
-import { toggleEditTaskDialog } from "../TaskForm/store/stateSlice";
+import { toggleEditTaskDialog } from "../TaskTable/store/stateSlice";
 
 const popNotification = (keyword, type, message) => {
   Toast.push(
@@ -20,12 +20,12 @@ const popNotification = (keyword, type, message) => {
 const EditTask = () => {
   const dispatch = useDispatch();
   const editTaskDialog = useSelector(
-    (state) => state.taskForm.state?.editTaskDialog
+    (state) => state.task.state?.editTaskDialog
   );
+
   const initialData = useSelector((state) => state.taskForm.data.taskList);
   useEffect(() => {
     dispatch(getUser());
-    dispatch(getAllTask());
   }, []);
 
   const handleFormSubmit = async (values, setSubmitting) => {
@@ -41,6 +41,7 @@ const EditTask = () => {
   };
 
   const onDialogClose = () => {
+    console.log("onDialogClose");
     dispatch(toggleEditTaskDialog(false));
   };
 
