@@ -3,6 +3,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   apiPostTaskList,
   apiGetUserList,
+  apiGetAllTaskList,
+  apiPutTaskList,
 } from "../../../../../services/SuperAdmin/Task/TaskService";
 
 export const postTask = createAsyncThunk("task/data/post", async (data) => {
@@ -13,6 +15,27 @@ export const postTask = createAsyncThunk("task/data/post", async (data) => {
     return error?.response;
   }
 });
+
+export const putTask = createAsyncThunk("task/data/put", async (data) => {
+  try {
+    const response = await apiPutTaskList(data);
+    return response;
+  } catch (error) {
+    return error?.response;
+  }
+});
+
+export const getAllTask = createAsyncThunk(
+  "task/data/all/task",
+  async (data) => {
+    try {
+      const response = await apiGetAllTaskList(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
 
 export const getUser = createAsyncThunk("task/data/get/user", async (data) => {
   try {
@@ -35,6 +58,7 @@ const dataSlice = createSlice({
   initialState: {
     loading: false,
     userList: [],
+    taskList: [],
     tableData: initialTableData,
   },
   reducers: {
@@ -51,7 +75,17 @@ const dataSlice = createSlice({
     [getUser.pending]: (state, action) => {
       state.loading = true;
     },
+
+    [getAllTask.fulfilled]: (state, action) => {
+      state.taskList = action.payload.data?.data || [];
+      state.tableData.total = action.payload.data.total || 0;
+      state.loading = false;
+    },
+    [getAllTask.pending]: (state, action) => {
+      state.loading = true;
+    },
     [postTask.fulfilled]: (state, action) => {},
+    [putTask.fulfilled]: (state, action) => {},
   },
 });
 

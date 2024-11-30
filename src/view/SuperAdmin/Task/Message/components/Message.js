@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { IoMdSend } from "react-icons/io";
 import Wallpaper from "../images/wallpaper.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getChatByTaskId } from "../store/dataSlice";
+import { getChatByTaskId, postChat } from "../store/dataSlice";
 import { io } from "socket.io-client";
 import { useLocation } from "react-router-dom";
 import { PERSIST_STORE_NAME } from "../../../../../constants/app.constant";
 import deepParseJson from "../../../../../utils/deepParseJson";
+import { FaUser } from "react-icons/fa";
+import profile from "./image/profile.jpg";
 
 const ChatPage = () => {
   const dispatch = useDispatch();
@@ -25,7 +27,17 @@ const ChatPage = () => {
 
   const record = location.state?.record;
 
+  console.log("record", record);
   const [socket, setSocket] = useState(null);
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollTop = messagesEndRef.current.scrollHeight;
+    }
+  };
+
   useEffect(() => {
     let newSocket;
 
@@ -51,6 +63,8 @@ const ChatPage = () => {
         // console.error("Connection error:", err.message);
         console.error("Connection error:", err);
       });
+
+      setSocket(newSocket);
     };
 
     initializeSocket();
@@ -67,11 +81,27 @@ const ChatPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (socket) {
-      socket.on("receive_message", (message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
-    }
+    if (!socket) return;
+
+    const handleReply = (message) => {
+      console.log("Received message:", message);
+
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          task_id: message.data?.task_id || null,
+          receiver_id: message.data?.receiver_id || null,
+          sender_id: message.data?.sender_id || null,
+          message: message.data?.message || "",
+        },
+      ]);
+    };
+
+    socket.on("Reply", handleReply);
+
+    return () => {
+      socket.off("Reply", handleReply);
+    };
   }, [socket]);
 
   useEffect(() => {
@@ -80,29 +110,45 @@ const ChatPage = () => {
     }
   }, [chatMessage]);
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const handleSendMessage = () => {
     if (newMessage.trim() === "") return;
     const userMessage = {
-      id: messages.length + 1,
-      text: newMessage,
-      sender: userID,
-      chat_id: record?.task_id,
+      task_id: record.task_id,
+      receiver_id:
+        record.assigned_to === userID ? record.assigned_by : record.assigned_to,
+      sender_id: userID,
+      message: newMessage,
     };
 
+    dispatch(postChat({ ...userMessage }));
     setMessages((prevMessages) => [...prevMessages, userMessage]);
-    socket.emit("send_message", userMessage);
-    setNewMessage("");
 
     setNewMessage("");
   };
 
   return (
     <div className="flex flex-col h-80 max-w-lg mx-auto bg-white rounded-lg overflow-hidden">
-      <header className="p-4 bg-green-600 text-white text-lg font-semibold text-center shadow-md">
-        Chat Support
+      <header className="p-4 bg-green-600 text-white text-lg font-semibold flex items-center shadow-md">
+        <div className="flex items-center">
+          <img
+            src={profile}
+            alt="Profile"
+            className="w-12 h-12 rounded-full mr-2"
+          />
+          <span>
+            {record.assigned_to === userID
+              ? `${record["AssignedBy.name"]}`
+              : `${record["AssignedTo.name"]}`}
+          </span>
+        </div>
       </header>
 
       <main
+        ref={messagesEndRef}
         className="flex-1 overflow-y-auto p-4 h-full bg-cover bg-center"
         style={{
           backgroundImage: `url(${Wallpaper})`,
@@ -112,19 +158,27 @@ const ChatPage = () => {
           <div
             key={message.id}
             className={`flex mb-4 ${
-              message.sender === userID ? "justify-end" : "justify-start"
+              message.sender_id === userID ? "justify-end" : "justify-start"
             }`}
           >
             <div
               className={`max-w-xs p-3 rounded-lg text-white ${
-                message.sender === userID
+                message.sender_id === userID
                   ? "bg-green-500 text-right"
                   : "bg-green-500 text-black"
               } transition duration-200 ease-in-out shadow-md ${
-                message.sender === "user" ? "round-l" : "round-r"
+                message.sender_id === userID
+                  ? "round-l text-left"
+                  : "round-r text-left"
               }`}
+              style={{
+                wordWrap: "break-word",
+                wordBreak: "break-word",
+                overflowWrap: "break-word",
+                whiteSpace: "pre-wrap",
+              }}
             >
-              {message.text}
+              {message.message}
             </div>
           </div>
         ))}
@@ -138,6 +192,11 @@ const ChatPage = () => {
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type your message..."
             className="w-full h-full p-4 focus-outline-none"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSendMessage();
+              }
+            }}
           />
         </div>
         <div className="flex justify-center text-xl rounded-full bg-green-600 text-white w-12 h-12 hover:bg-green-700 transition duration-200">

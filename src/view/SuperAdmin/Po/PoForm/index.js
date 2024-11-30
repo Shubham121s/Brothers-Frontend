@@ -81,12 +81,29 @@ const PoForm = forwardRef((props, ref) => {
     }
   };
 
+  console.log("dataoutside", data);
+
   const handleOnAddItem = (item) => {
-    let found = data.find((f, Index) => f.serial_number === item.serial_number);
+    let found = data.find((f) => f.serial_number == item.serial_number);
+
+    console.log("found", found);
+    console.log("item", item);
+    console.log("data", data);
+
     if (found && !itemtype) {
       setItem({});
       setType(false);
 
+      return Toast.push(
+        <Notification title={"Error"} type="danger" duration={3000}>
+          Serial Number Already Exists
+        </Notification>,
+        {
+          placement: "top-center",
+        }
+      );
+    }
+    if (itemtype) {
       return Toast.push(
         <Notification title={"Error"} type="danger" duration={3000}>
           Serial Number Already Exists

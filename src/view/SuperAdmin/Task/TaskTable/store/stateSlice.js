@@ -8,6 +8,7 @@ const stateSlice = createSlice({
     editTaskDialog: false,
     selectedTask: {},
     selectedChat: {},
+    newEyeDialog: false,
   },
   reducers: {
     toggleNewTaskDialog: (state, action) => {
@@ -26,6 +27,10 @@ const stateSlice = createSlice({
       console.log("action.payload", action.payload);
       state.selectedChat = action.payload;
     },
+
+    toggleEyeDialog: (state, action) => {
+      state.newEyeDialog = action.payload;
+    },
   },
 });
 
@@ -35,5 +40,6 @@ export const {
   setSelectedChat,
   toggleEditTaskDialog,
   toggleDeleteTaskDialog,
+  toggleEyeDialog,
 } = stateSlice.actions;
 export default stateSlice.reducer;

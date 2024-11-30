@@ -1,19 +1,28 @@
 import React from "react";
 import TaskTable from "./components/TaskTable";
-import { Button, Card } from "../../../../components/ui";
+import { Button, Card, Dialog } from "../../../../components/ui";
 import { injectReducer } from "../../../../store";
 import taskReducer from "./store";
 import { toggleNewTaskDialog } from "../TaskForm/store/stateSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TaskForm from "../TaskForm";
+import { toggleEyeDialog } from "./store/stateSlice";
+import DescriptionModal from "./components/DescriptionModal";
+import EditTask from "../EditForm";
 
 injectReducer("task", taskReducer);
 
 const Task = () => {
   const dispatch = useDispatch();
+
   const onDialogOpen = () => {
-    console.log("called");
     dispatch(toggleNewTaskDialog(true));
+  };
+
+  const newEyeDialog = useSelector((state) => state.task.state.newEyeDialog);
+
+  const onDialogClose = () => {
+    dispatch(toggleEyeDialog(false));
   };
   return (
     <div>
@@ -27,9 +36,21 @@ const Task = () => {
         </Button>
       </div>
       <TaskForm />
+
       <Card>
         <TaskTable />
       </Card>
+
+      <Dialog
+        isOpen={newEyeDialog}
+        onClose={onDialogClose}
+        onRequestClose={onDialogClose}
+        className="mt-12"
+      >
+        <DescriptionModal onDialogClose={onDialogClose} />
+      </Dialog>
+
+      <EditTask />
     </div>
   );
 };
