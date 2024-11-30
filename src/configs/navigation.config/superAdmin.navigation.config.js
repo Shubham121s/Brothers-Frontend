@@ -40,6 +40,27 @@ const superAdminNavigationConfig = [
         authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
         subMenu: [],
       },
+
+      {
+        key: "task",
+        path: "",
+        title: "Task",
+        translateKey: "nav.task",
+        icon: "task",
+        type: "collapse",
+        authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
+        subMenu: [
+          {
+            key: "task.list",
+            path: `/task/list`,
+            title: "Task List",
+            translateKey: "nav.task.list",
+            type: "item",
+            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
+            subMenu: [],
+          },
+        ],
+      },
       {
         key: "customer",
         path: "",
@@ -229,35 +250,7 @@ const superAdminNavigationConfig = [
           },
         ],
       },
-      {
-        key: "task",
-        path: "",
-        title: "Task",
-        translateKey: "nav.task",
-        icon: "task",
-        type: "collapse",
-        authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
-        subMenu: [
-          {
-            key: "task.list",
-            path: `/task/list`,
-            title: "Task List",
-            translateKey: "nav.task.list",
-            type: "item",
-            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
-            subMenu: [],
-          },
-          {
-            key: "task.chat",
-            path: `/task/chat`,
-            title: "Task Chat",
-            translateKey: "nav.task.chat",
-            type: "item",
-            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
-            subMenu: [],
-          },
-        ],
-      },
+
       {
         key: "master.planner",
         path: `/master/product/planner`,

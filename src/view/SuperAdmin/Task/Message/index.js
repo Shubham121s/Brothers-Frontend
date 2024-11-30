@@ -8,9 +8,7 @@ injectReducer("chat", chatReducer);
 const TaskChat = () => {
   return (
     <div>
-      <Card>
-        <ChatPage />
-      </Card>
+      <ChatPage />
     </div>
   );
 };

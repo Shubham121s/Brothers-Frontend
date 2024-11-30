@@ -5,12 +5,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllTask } from "../store/dataSlice";
 import { useNavigate } from "react-router-dom";
 import useThemeClass from "../../../../../utils/hooks/useThemeClass";
-import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
+import { HiEye, HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 import {
   setSelectedChat,
   setSelectedTask,
   toggleDeleteTaskDialog,
+  toggleEyeDialog,
+  toggleNewTaskDialog,
 } from "../store/stateSlice";
+import { Badge, Tag } from "../../../../../components/ui";
+import DeleteConfirm from "./DeleteConfirm";
 
 const ActionColumn = ({ row }) => {
   const { textTheme } = useThemeClass();
@@ -18,12 +22,19 @@ const ActionColumn = ({ row }) => {
   const dispatch = useDispatch();
 
   const onEdit = () => {
-    navigate(`/product/edit/${row.product_id}`);
+    console.log("click");
+    dispatch(toggleNewTaskDialog(true));
   };
 
   const onDelete = () => {
+    console.log("click");
     dispatch(setSelectedTask(row));
     dispatch(toggleDeleteTaskDialog(true));
+  };
+
+  const onEye = () => {
+    dispatch(setSelectedTask(row));
+    dispatch(toggleEyeDialog(true));
   };
 
   return (
@@ -33,6 +44,9 @@ const ActionColumn = ({ row }) => {
       </span>
       <span className={`cursor-pointer hover:${textTheme}`} onClick={onDelete}>
         <HiOutlineTrash />
+      </span>
+      <span className={`cursor-pointer hover:${textTheme}`} onClick={onEye}>
+        <HiEye />
       </span>
     </div>
   );
@@ -60,6 +74,37 @@ const TaskTable = () => {
     navigate("/task/chat", { state: { record: row } });
   };
 
+  const priorityColor = {
+    high: {
+      label: "High",
+      bgClass: "bg-red-100",
+      textClass: "text-red-600",
+    },
+    low: {
+      label: "Low",
+      bgClass: "bg-orange-100",
+      textClass: "text-orange-600",
+    },
+    medium: {
+      label: "Medium",
+      bgClass: "bg-emerald-100",
+      textClass: "text-emerald-600",
+    },
+  };
+
+  const statusColor = {
+    active: {
+      label: "Active",
+      dotClass: "bg-emerald-500",
+      textClass: "text-emerald-500",
+    },
+    inactive: {
+      label: "In-Active",
+      dotClass: "bg-red-500",
+      textClass: "text-red-500",
+    },
+  };
+
   const columns = [
     {
       header: "Assigned By",
@@ -69,6 +114,7 @@ const TaskTable = () => {
         return <div>{row["AssignedBy.name"]}</div>;
       },
     },
+
     {
       header: "Description",
       accessorKey: "description",
@@ -77,7 +123,14 @@ const TaskTable = () => {
         return <div>{row?.description}</div>;
       },
     },
-
+    {
+      header: "Task",
+      accessorKey: "task",
+      cell: (props) => {
+        const row = props.row.original;
+        return <div>{row.task}</div>;
+      },
+    },
     {
       header: "Assigned To",
       accessorKey: "AssignedTo.name",
@@ -90,39 +143,36 @@ const TaskTable = () => {
       header: "Priority",
       accessorKey: "priority",
       cell: (props) => {
-        const row = props.row.original;
+        const row = props.row?.original;
         const priority = row?.priority;
 
-        const priorityStyles = {
-          high: { color: "red", fontWeight: "bold" },
-          medium: { color: "orange", fontWeight: "bold" },
-          low: { color: "green", fontWeight: "bold" },
-        };
-
         return (
-          <span style={priorityStyles[priority] || { color: "gray" }}>
-            {priority}
-          </span>
+          <div>
+            <Tag
+              className={`${priorityColor[priority]?.bgClass} ${priorityColor[priority]?.textClass} border-0`}
+            >
+              {priorityColor[priority]?.label || priority}
+            </Tag>
+          </div>
         );
       },
     },
-
     {
       header: "Status",
       accessorKey: "status",
       cell: (props) => {
         const row = props.row.original;
-        const status = row?.status;
-
-        const statusStyles = {
-          active: { color: "green", fontWeight: "bold" },
-          inactive: { color: "red", fontWeight: "bold" },
-        };
-
         return (
-          <span style={statusStyles[status] || { color: "black" }}>
-            {status}
-          </span>
+          <div className="flex items-center">
+            <Badge className={statusColor[row?.status]?.dotClass} />
+            <span
+              className={`ml-2 font-semibold capitalize ${
+                statusColor[row?.status]?.textClass
+              }`}
+            >
+              {statusColor[row?.status]?.label}
+            </span>
+          </div>
         );
       },
     },
@@ -165,6 +215,7 @@ const TaskTable = () => {
         // onPaginationChange={onPaginationChange}
         // onSelectChange={onSelectChange}
       />
+      <DeleteConfirm fetchData={fetchData} />
     </div>
   );
 };
