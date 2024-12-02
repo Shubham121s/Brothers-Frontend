@@ -80,7 +80,7 @@ const MobileNav = () => {
                 <VerticalMenuContent
                   navMode={navMode}
                   collapsed={sideNavCollapse}
-                  navigationTree={navigationConfig}
+                  navigationTree={navigationConfigs}
                   routeKey={currentRouteKey}
                   userAuthority={userAuthority}
                   onMenuItemClick={onDrawerClose}
