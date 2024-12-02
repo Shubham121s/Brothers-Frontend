@@ -81,19 +81,14 @@ const PoForm = forwardRef((props, ref) => {
     }
   };
 
-  console.log("dataoutside", data);
-
   const handleOnAddItem = (item) => {
-    let found = data.find((f) => f.serial_number == item.serial_number);
-
-    console.log("found", found);
-    console.log("item", item);
-    console.log("data", data);
-
+    let found = data.find(
+      (f, Index) => f.serial_number == item.serial_number && Index !== index
+    );
+    // On Adding New Item
     if (found && !itemtype) {
       setItem({});
       setType(false);
-
       return Toast.push(
         <Notification title={"Error"} type="danger" duration={3000}>
           Serial Number Already Exists
@@ -103,7 +98,12 @@ const PoForm = forwardRef((props, ref) => {
         }
       );
     }
-    if (itemtype) {
+    //On Edit Item
+    if (found && itemtype) {
+      setItem({});
+      setType(false);
+      setIndex(-1);
+
       return Toast.push(
         <Notification title={"Error"} type="danger" duration={3000}>
           Serial Number Already Exists
@@ -115,12 +115,25 @@ const PoForm = forwardRef((props, ref) => {
     }
     if (itemtype) {
       setData((data) =>
-        data.map((f, Index) =>
-          Index === index
-            ? { ...f, ...item, delivery_date: new Date(item?.delivery_date) }
-            : f
-        )
+        data
+          .map((f, Index) =>
+            Index === index
+              ? {
+                  ...f,
+                  ...item,
+                  delivery_date: new Date(item?.delivery_date),
+                  serial_number: Number(item?.serial_number),
+                }
+              : f
+          )
+          .sort((a, b) => {
+            if (a.serial_number < b.serial_number) return -1;
+            if (a.serial_number > b.serial_number) return 1;
+            return 0;
+          })
       );
+      setItem({});
+      setType(false);
       setIndex(-1);
       return Toast.push(
         <Notification title={"Success"} type="success" duration={3000}>
@@ -131,13 +144,20 @@ const PoForm = forwardRef((props, ref) => {
         }
       );
     } else {
-      setData((data) => [
-        ...data,
-        {
-          ...item,
-          pending_quantity: item.quantity,
-        },
-      ]);
+      setData((data) =>
+        [
+          ...data,
+          {
+            ...item,
+            serial_number: Number(item.serial_number),
+            pending_quantity: item.quantity,
+          },
+        ].sort((a, b) => {
+          if (a.serial_number < b.serial_number) return -1;
+          if (a.serial_number > b.serial_number) return 1;
+          return 0;
+        })
+      );
     }
     setItem({});
     setType(false);
