@@ -69,7 +69,7 @@ const SideNav = () => {
     <VerticalMenuContent
       navMode={navMode}
       collapsed={sideNavCollapse}
-      navigationTree={navigationConfigs}
+      navigationTree={navigationConfig}
       routeKey={currentRouteKey}
       userAuthority={userAuthority}
       direction={direction}

@@ -10,6 +10,7 @@ import {
   setSelectedChat,
   setSelectedTask,
   toggleDeleteTaskDialog,
+  toggleEditTaskDialog,
   toggleEyeDialog,
   toggleNewTaskDialog,
 } from "../store/stateSlice";
@@ -22,8 +23,8 @@ const ActionColumn = ({ row }) => {
   const dispatch = useDispatch();
 
   const onEdit = () => {
-    console.log("click");
-    dispatch(toggleNewTaskDialog(true));
+    dispatch(setSelectedTask(row));
+    dispatch(toggleEditTaskDialog(true));
   };
 
   const onDelete = () => {

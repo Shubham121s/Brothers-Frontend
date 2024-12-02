@@ -30,6 +30,7 @@ const priorityOptions = [
 
 const TaskFormDialog = forwardRef((props, ref) => {
   const { type, initialData, onFormSubmit, onDiscard } = props;
+  console.log("initialData", initialData);
   const dispatch = useDispatch();
   const userList = useSelector((state) => state.taskForm.data.userList);
 
