@@ -53,3 +53,11 @@ export async function apiPostChat(data) {
     data,
   });
 }
+
+export async function apiGetUserStatus(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/task//user/status",
+    method: "post",
+    data,
+  });
+}
