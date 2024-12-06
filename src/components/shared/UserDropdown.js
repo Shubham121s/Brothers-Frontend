@@ -1,106 +1,89 @@
-import React, { useState } from 'react'
-import { Avatar, Dropdown, Notification, Toast } from '../../components/ui'
-import ConfirmDialog from './ConfirmDialog'
-import withHeaderItem from '../../utils/hoc/withHeaderItem'
-import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
-import classNames from 'classnames'
-import { HiOutlineUser, HiOutlineLogout } from 'react-icons/hi'
-import { MdLockOpen } from 'react-icons/md'
-import useAuth from '../../utils/hooks/useAuth'
-import defaultProfile from './defaultProfile.jpg'
-import { togglePasswordDialog } from '../../store/auth/sessionSlice'
-import { apiUpdateUserPassword } from '../../services/SuperAdmin/UserService'
-import PasswordInput from './PasswordInput'
+import React, { useState } from "react";
+import { Avatar, Dropdown, Notification, Toast } from "../../components/ui";
+import ConfirmDialog from "./ConfirmDialog";
+import withHeaderItem from "../../utils/hoc/withHeaderItem";
+import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
+import classNames from "classnames";
+import { HiOutlineUser, HiOutlineLogout } from "react-icons/hi";
+import { MdLockOpen } from "react-icons/md";
+import useAuth from "../../utils/hooks/useAuth";
+import defaultProfile from "./defaultProfile.jpg";
+import { togglePasswordDialog } from "../../store/auth/sessionSlice";
+import { apiUpdateUserPassword } from "../../services/SuperAdmin/UserService";
+import PasswordInput from "./PasswordInput";
 
 const dropdownItemList = [
   {
-    label: 'Change Password',
-    path: '/profile/settings',
+    label: "Change Password",
+    path: "/profile/settings",
     icon: <HiOutlineUser />,
-    disabled: true
-  }
-]
+    disabled: true,
+  },
+];
 
 export const UserDropdown = ({ className }) => {
-  const { name, email, authority } = useSelector((state) => state.auth.user)
-  const { passwordDialog } = useSelector((state) => state.auth.session)
+  const { name, email, authority } = useSelector((state) => state.auth.user);
+  const { passwordDialog } = useSelector((state) => state.auth.session);
 
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState("");
 
-  const { signOut } = useAuth()
-  const dispatch = useDispatch()
+  const { signOut } = useAuth();
+  const dispatch = useDispatch();
 
   const UserAvatar = (
-    <div className={classNames(className, 'flex items-center gap-2')}>
-      <Avatar
-        size={32}
-        shape="circle"
-        src={defaultProfile}
-      />
+    <div className={classNames(className, "flex items-center gap-2")}>
+      <Avatar size={32} shape="circle" src={defaultProfile} />
       <div className="hidden md:block">
-        <div className="text-xs capitalize">{authority[0] || 'guest'}</div>
+        <div className="text-xs capitalize">{authority[0] || "guest"}</div>
         <div className="font-bold">{name}</div>
       </div>
     </div>
-  )
+  );
 
   const passwordChange = () => {
-    dispatch(togglePasswordDialog(true))
-  }
+    dispatch(togglePasswordDialog(true));
+  };
 
   const onDialogClose = () => {
-    dispatch(togglePasswordDialog(false))
-  }
+    dispatch(togglePasswordDialog(false));
+  };
 
   const onSavePassword = async () => {
     try {
-      console.log(password)
-      const resp = await apiUpdateUserPassword({ password: password })
+      const resp = await apiUpdateUserPassword({ password: password });
       if (resp.status < 300) {
         Toast.push(
-          <Notification
-            title={'Success'}
-            type={'success'}
-            duration={2500}
-          >
-            {'Password Updated Successfully'}
+          <Notification title={"Success"} type={"success"} duration={2500}>
+            {"Password Updated Successfully"}
           </Notification>,
           {
-            placement: 'top-center'
+            placement: "top-center",
           }
-        )
-        onDialogClose()
-        signOut()
+        );
+        onDialogClose();
+        signOut();
       } else {
         Toast.push(
-          <Notification
-            title={'Error'}
-            type={'danger'}
-            duration={2500}
-          >
-            {'Some Error Occured'}
+          <Notification title={"Error"} type={"danger"} duration={2500}>
+            {"Some Error Occured"}
           </Notification>,
           {
-            placement: 'top-center'
+            placement: "top-center",
           }
-        )
+        );
       }
     } catch (error) {
       Toast.push(
-        <Notification
-          title={'Error'}
-          type={'danger'}
-          duration={2500}
-        >
-          {'Some Error Occured'}
+        <Notification title={"Error"} type={"danger"} duration={2500}>
+          {"Some Error Occured"}
         </Notification>,
         {
-          placement: 'top-center'
+          placement: "top-center",
         }
-      )
+      );
     }
-  }
+  };
 
   return (
     <div>
@@ -112,11 +95,7 @@ export const UserDropdown = ({ className }) => {
         <Dropdown.Item variant="header">
           <div className="py-2 px-3 flex items-center gap-2">
             {/* <Avatar size={32} shape="circle" src={appConfig.apiPrefix + image} /> */}
-            <Avatar
-              size={32}
-              shape="circle"
-              src={defaultProfile}
-            />{' '}
+            <Avatar size={32} shape="circle" src={defaultProfile} />{" "}
             <div>
               <div className="font-bold text-gray-900 dark:text-gray-100">
                 {name}
@@ -153,11 +132,7 @@ export const UserDropdown = ({ className }) => {
           <span>Change Password</span>
         </Dropdown.Item>
         <Dropdown.Item variant="divider" />
-        <Dropdown.Item
-          onClick={signOut}
-          eventKey="Sign Out"
-          className="gap-2"
-        >
+        <Dropdown.Item onClick={signOut} eventKey="Sign Out" className="gap-2">
           <span className="text-xl opacity-50">
             <HiOutlineLogout />
           </span>
@@ -172,21 +147,22 @@ export const UserDropdown = ({ className }) => {
         title="Change Password"
         onCancel={onDialogClose}
         onConfirm={onSavePassword}
-        confirmText={'Save'}
+        confirmText={"Save"}
         confirmButtonColor="purple-600"
         width={450}
       >
         <PasswordInput
           className="mt-4"
           placeholder="New Password"
-          style={{ width: '300px' }}
+          style={{ width: "300px" }}
+          autoComplete="off"
           onChange={(e) => {
-            setPassword(e.target.value)
+            setPassword(e.target.value);
           }}
         />
       </ConfirmDialog>
     </div>
-  )
-}
+  );
+};
 
-export default withHeaderItem(UserDropdown)
+export default withHeaderItem(UserDropdown);
