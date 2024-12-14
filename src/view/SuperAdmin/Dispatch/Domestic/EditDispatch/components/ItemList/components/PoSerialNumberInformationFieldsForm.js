@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 
 const PoSerialNumberInformationFieldsForm = (props) => {
   const { errors, values, Po, touched } = props;
-  console.log(Po?.PoLists);
   const poSerialNumberListData = useMemo(() => {
     if (!Po) return [];
     return Po?.PoLists?.map((list) => {

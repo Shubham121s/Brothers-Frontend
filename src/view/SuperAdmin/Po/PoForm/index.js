@@ -81,8 +81,6 @@ const PoForm = forwardRef((props, ref) => {
     }
   };
 
-  console.log("dataoutside", data);
-
   const handleOnAddItem = (item) => {
     let found = data.find((f) => f.serial_number == item.serial_number);
 

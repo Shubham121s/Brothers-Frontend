@@ -39,6 +39,7 @@ const DispatchInvoiceTableTools = () => {
   const [invoiceDatesValues, setInvoiceDatesValues] = useState([]);
 
   const handleInputChange = (val) => {
+    console.log("val", val);
     const newTableData = cloneDeep(tableData);
     newTableData.query = val;
     newTableData.pageIndex = 1;
