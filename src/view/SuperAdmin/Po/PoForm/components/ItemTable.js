@@ -42,6 +42,7 @@ const ItemTable = ({
   onEditItem,
   type,
 }) => {
+  console.log(data);
   const columns = useMemo(
     () => [
       {

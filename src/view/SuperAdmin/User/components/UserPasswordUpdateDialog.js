@@ -1,65 +1,59 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Dialog, Notification, Toast } from '../../../../components/ui'
-import { togglePasswordDialog } from '../store/stateSlice'
-import { getAllUsers, newUserRegister } from '../store/dataSlice'
-import { ConfirmDialog, PasswordInput } from '../../../../components/shared'
-import { apiUpdateUserPassword } from '../../../../services/SuperAdmin/UserService'
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dialog, Notification, Toast } from "../../../../components/ui";
+import { togglePasswordDialog } from "../store/stateSlice";
+import { getAllUsers, newUserRegister } from "../store/dataSlice";
+import { ConfirmDialog, PasswordInput } from "../../../../components/shared";
+import { apiUpdateUserPassword } from "../../../../services/SuperAdmin/UserService";
 
 const pushNotification = (message, type, title) => {
   return Toast.push(
-    <Notification
-      title={title}
-      type={type}
-      duration={2500}
-    >
+    <Notification title={title} type={type} duration={2500}>
       {message}
     </Notification>,
     {
-      placement: 'top-center'
+      placement: "top-center",
     }
-  )
-}
+  );
+};
 
 const UserPasswordUpdateDialog = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState("");
 
   const UserPasswordDialog = useSelector(
     (state) => state.user.state.passwordDialog
-  )
+  );
 
-  const selectedUser = useSelector((state) => state.user.state.selectedUser)
+  const selectedUser = useSelector((state) => state.user.state.selectedUser);
 
-  const tableData = useSelector((state) => state.user.data.tableData)
+  const tableData = useSelector((state) => state.user.data.tableData);
 
   const onDialogClose = () => {
-    dispatch(togglePasswordDialog(false))
-  }
+    dispatch(togglePasswordDialog(false));
+  };
 
-  const handleFormSubmit = async (values, setSubmitting) => {
-    setSubmitting(true)
+  const handleFormSubmit = async () => {
     const action = await apiUpdateUserPassword({
       password: password,
-      user_id: selectedUser.user_id
-    })
-    setSubmitting(false)
+      user_id: selectedUser.user_id,
+    });
     if (action?.data?.success) {
-      dispatch(getAllUsers(tableData))
+      dispatch(getAllUsers(tableData));
       pushNotification(
         action?.payload?.data?.message,
-        'success',
-        'Successfully added'
-      )
-      return onDialogClose()
+        "success",
+        "Successfully added"
+      );
+      return onDialogClose();
     }
     return pushNotification(
       action?.payload?.data?.message,
-      'danger',
-      'Unsuccessfully'
-    )
-  }
+      "danger",
+      "Unsuccessfully"
+    );
+  };
 
   return (
     <ConfirmDialog
@@ -70,20 +64,20 @@ const UserPasswordUpdateDialog = () => {
       title="Change Password"
       onCancel={onDialogClose}
       onConfirm={handleFormSubmit}
-      confirmText={'Save'}
+      confirmText={"Save"}
       confirmButtonColor="purple-600"
       width={450}
     >
       <PasswordInput
         className="mt-4"
         placeholder="New Password"
-        style={{ width: '300px' }}
+        style={{ width: "300px" }}
         onChange={(e) => {
-          setPassword(e.target.value)
+          setPassword(e.target.value);
         }}
       />
     </ConfirmDialog>
-  )
-}
+  );
+};
 
-export default UserPasswordUpdateDialog
+export default UserPasswordUpdateDialog;

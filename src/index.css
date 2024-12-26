@@ -4,6 +4,31 @@
   page-break-after: always;
 }
 
+.vibrate {
+  animation: vibrate 0.5s infinite;
+}
+
+@keyframes vibrate {
+  0% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(2px, -2px);
+  }
+  60% {
+    transform: translate(-2px, -2px);
+  }
+  80% {
+    transform: translate(2px, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
 .avatar {
   --tw-bg-opacity: 1;
   --tw-text-opacity: 1;
@@ -726,11 +751,10 @@
 
 @media (min-width: 640px) {
   .dialog-content {
-    margin-bottom:0rem;
+    margin-bottom: 0rem;
     margin-top: 0rem;
   }
 }
-
 
 .dialog-overlay {
   --tw-bg-opacity: 0.6;
@@ -5633,11 +5657,9 @@ hr {
   height: 100vh;
 }
 
-
 .h-80 {
- height: 80vh;
+  height: 80vh;
 }
-
 
 .h-min {
   height: min-content;
@@ -6446,12 +6468,11 @@ hr {
   border-radius: 0.5rem;
 }
 
-.round-r{
+.round-r {
   border-radius: 0 10px 10px 10px;
 }
 
-
-.round-l{
+.round-l {
   border-radius: 10px 0 10px 10px;
 }
 
@@ -27726,7 +27747,7 @@ hr {
   }
 
   .print\:text-ts {
-    font-size: 0.50rem;
+    font-size: 0.5rem;
     line-height: 0.9rem;
   }
 
@@ -27736,7 +27757,7 @@ hr {
   }
 
   .print\:text-xxxs {
-    font-size: 0.2rem; 
+    font-size: 0.2rem;
     line-height: 0.5rem;
   }
 }
@@ -27792,8 +27813,7 @@ hr {
   align-content: space-between;
 }
 
-
-.space-y-8{
+.space-y-8 {
   margin-top: 2rem;
 }
 

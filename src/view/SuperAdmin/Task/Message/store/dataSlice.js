@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   apiGetChatByTaskId,
   apiPostChat,
+  apiGetUserStatus,
 } from "../../../../../services/SuperAdmin/Task/TaskService";
 
 export const getChatByTaskId = createAsyncThunk(
@@ -10,6 +11,18 @@ export const getChatByTaskId = createAsyncThunk(
   async (data) => {
     try {
       const response = await apiGetChatByTaskId(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const getUserStatus = createAsyncThunk(
+  "task/data/get/user/status",
+  async (data) => {
+    try {
+      const response = await apiGetUserStatus(data);
       return response;
     } catch (error) {
       return error?.response;
@@ -41,6 +54,7 @@ const dataSlice = createSlice({
   initialState: {
     loading: false,
     chatByIdList: [],
+    userStatus: "Offline",
     tableData: initialTableData,
   },
   reducers: {
@@ -58,6 +72,9 @@ const dataSlice = createSlice({
       state.loading = true;
     },
     [postChat.fulfilled]: (state, action) => {},
+    [getUserStatus.fulfilled]: (state, action) => {
+      state.userStatus = action.payload.data.data || "Offline";
+    },
   },
 });
 

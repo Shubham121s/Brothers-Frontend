@@ -2,12 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { IoMdSend } from "react-icons/io";
 import Wallpaper from "../images/wallpaper.png";
 import { useDispatch, useSelector } from "react-redux";
-import { getChatByTaskId, postChat } from "../store/dataSlice";
-import { io } from "socket.io-client";
+import { getChatByTaskId, getUserStatus, postChat } from "../store/dataSlice";
 import { useLocation } from "react-router-dom";
-import { PERSIST_STORE_NAME } from "../../../../../constants/app.constant";
-import deepParseJson from "../../../../../utils/deepParseJson";
-import { FaUser } from "react-icons/fa";
 import profile from "./image/profile.jpg";
 
 const ChatPage = () => {
@@ -18,17 +14,13 @@ const ChatPage = () => {
   const [newMessage, setNewMessage] = useState("");
   // const selectedChat = useSelector((state) => state.task.state.selectedChat);
   const userID = useSelector((state) => state.auth.user.user_id);
-  const rawPersistData = localStorage.getItem(PERSIST_STORE_NAME);
-  const persistData = deepParseJson(rawPersistData);
-
-  let accessToken = persistData.auth.session.token;
 
   const chatMessage = useSelector((state) => state.chat.data.chatByIdList);
+  const userStatus = useSelector((state) => state.chat.data.userSatus);
+
+  const socket = useSelector((state) => state.socket.instance);
 
   const record = location.state?.record;
-
-  console.log("record", record);
-  const [socket, setSocket] = useState(null);
 
   const messagesEndRef = useRef(null);
 
@@ -39,45 +31,8 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    let newSocket;
-
-    const initializeSocket = () => {
-      newSocket = io("https://api-erp.brothers.net.in", {
-        path: "/api/socket.io/",
-        rejectUnauthorized: false,
-        transports: ["websocket", "polling"],
-        auth: {
-          token: `Bearer ${accessToken}`,
-        },
-      });
-
-      newSocket.on("connect", () => {
-        console.log("Connected");
-      });
-
-      newSocket.on("disconnect", () => {
-        console.log("Disconnected");
-      });
-
-      newSocket.on("connect_error", (err) => {
-        // console.error("Connection error:", err.message);
-        console.error("Connection error:", err);
-      });
-
-      setSocket(newSocket);
-    };
-
-    initializeSocket();
-
-    return () => {
-      if (newSocket) {
-        newSocket.disconnect();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     dispatch(getChatByTaskId({ task_id: record.task_id }));
+    dispatch(getUserStatus({ user_id: record.assigned_to }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -139,11 +94,15 @@ const ChatPage = () => {
             alt="Profile"
             className="w-12 h-12 rounded-full mr-2"
           />
-          <span>
-            {record.assigned_to === userID
-              ? `${record["AssignedBy.name"]}`
-              : `${record["AssignedTo.name"]}`}
-          </span>
+          <div>
+            <span>
+              {record.assigned_to === userID
+                ? `${record["AssignedBy.name"]}`
+                : `${record["AssignedTo.name"]}`}
+            </span>
+            <br />
+            <span className="text-sm">{userStatus}</span>
+          </div>
         </div>
       </header>
 

@@ -34,67 +34,71 @@ const { Tr, Th, Td, THead, TBody } = Table;
 
 const DownloadColumn = ({ row }) => {
   const onDownload = async (URL) => {
-    
-      // const response = await apiPostDownloadDrawingAttachment({
-      //   pdf_attachment_id,
-      // });
-      console.log(URL)
-      const splitString = URL?.split("/uploads/");
-      const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`;
-      window.open(transformedString, "_blank");
-     
+    // const response = await apiPostDownloadDrawingAttachment({
+    //   pdf_attachment_id,
+    // });
+    console.log(URL);
+    const splitString = URL?.split("/uploads/");
+    const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`;
+    window.open(transformedString, "_blank");
   };
   return (
     <div className="flex gap-x-4 justify-center">
-      {row.process_attachment_path && <Tooltip
-        title={
-          <div>
-            Download <strong className="text-yellow-400">Process</strong> pdf
-          </div>
-        }
-      >
-        <span
-          className={`cursor-pointer text-lg`}
-          onClick={() => {
-            onDownload(row.process_attachment_path);
-          }}
+      {row.process_attachment_path && (
+        <Tooltip
+          title={
+            <div>
+              Download <strong className="text-yellow-400">Process</strong> pdf
+            </div>
+          }
         >
-          <HiOutlineDocumentDownload />
-        </span>
-      </Tooltip>}
+          <span
+            className={`cursor-pointer text-lg`}
+            onClick={() => {
+              onDownload(row.process_attachment_path);
+            }}
+          >
+            <HiOutlineDocumentDownload />
+          </span>
+        </Tooltip>
+      )}
 
-      {row.raw_attachment_path && <Tooltip
-        title={
-          <div>
-            Download <strong className="text-yellow-400">Raw</strong> pdf
-          </div>
-        }
-      >
-        <span
-          className={`cursor-pointer text-lg`}
-          onClick={() => {
-            onDownload(row.raw_attachment_path);
-          }}
+      {row.raw_attachment_path && (
+        <Tooltip
+          title={
+            <div>
+              Download <strong className="text-yellow-400">Raw</strong> pdf
+            </div>
+          }
         >
-          <HiOutlineDocumentDownload />
-        </span>
-      </Tooltip>}
-      {row.finish_attachment_path &&<Tooltip
-        title={
-          <div>
-            Download <strong className="text-yellow-400">Finish</strong> pdf
-          </div>
-        }
-      >
-        <span
-          className={`cursor-pointer text-lg`}
-          onClick={() => {
-            onDownload(row.finish_attachment_path);
-          }}
+          <span
+            className={`cursor-pointer text-lg`}
+            onClick={() => {
+              onDownload(row.raw_attachment_path);
+            }}
+          >
+            <HiOutlineDocumentDownload />
+          </span>
+        </Tooltip>
+      )}
+      {row.finish_attachment_path && (
+        <Tooltip
+          title={
+            <div>
+              Download <strong className="text-yellow-400">Finish</strong> pdf
+            </div>
+          }
         >
-          <HiOutlineDocumentDownload />
-        </span>
-      </Tooltip>}
+          <span
+            className={`cursor-pointer text-lg`}
+            onClick={() => {
+              onDownload(row.finish_attachment_path);
+            }}
+          >
+            <HiOutlineDocumentDownload />
+          </span>
+        </Tooltip>
+      )}
     </div>
   );
 };
@@ -115,11 +119,11 @@ const ActionColumn = ({ row }) => {
 
   return (
     <div className="flex justify-center text-lg gap-x-4">
-      {/* <span className={`cursor-pointer hover:text-red-500`} onClick={onDelete}>
-        <HiOutlineTrash />
-      </span> */}
       <span className={`cursor-pointer hover:${textTheme}`} onClick={onEdit}>
         <HiOutlinePencil />
+      </span>
+      <span className={`cursor-pointer hover:text-red-500`} onClick={onDelete}>
+        <HiOutlineTrash />
       </span>
     </div>
   );
@@ -268,7 +272,7 @@ const DrawingTable = ({ data }) => {
         </TBody>
       </Table>
       <EditDrawingDialog />
-      <NewDrawingDialog/>
+      <NewDrawingDialog />
       <DrawingDeleteConfirmationDialog />
     </>
   );

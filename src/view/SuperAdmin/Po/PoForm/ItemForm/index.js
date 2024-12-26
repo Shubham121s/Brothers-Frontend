@@ -243,7 +243,7 @@ const ItemForm = forwardRef((props, ref) => {
                   <Button size="sm" type="button" variant="">
                     Discard
                   </Button>
-                  <Button size="sm" variant="solid">
+                  <Button size="sm" variant="solid" type="submit">
                     {type === "edit" ? "Update Item" : "Add Item"}
                   </Button>
                 </div>
