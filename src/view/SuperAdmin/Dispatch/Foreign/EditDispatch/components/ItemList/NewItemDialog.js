@@ -43,22 +43,22 @@ const NewDispatchItemDialog = (props) => {
   const handleNewItem = async (values, setSubmitting) => {
     setSubmitting(true);
 
-    const find = dispatchList[locationIndex]?.DispatchLists.find((f) => {
-      if (
-        f?.Po?.number === values?.Po?.number &&
-        f?.PoList?.po_list_id === values?.PoList?.po_list_id
-      )
-        return f;
-    });
+    // const find = dispatchList[locationIndex]?.DispatchLists.find((f) => {
+    //   if (
+    //     f?.Po?.number === values?.Po?.number &&
+    //     f?.PoList?.po_list_id === values?.PoList?.po_list_id
+    //   )
+    //     return f;
+    // });
 
-    if (find) {
-      setSubmitting(false);
-      return pushNotification(
-        `PO ${values?.Po?.number} and ${values?.PoList?.Product?.name} Already Added You Can Edit it.`,
-        "danger",
-        "Error"
-      );
-    }
+    // if (find) {
+    //   setSubmitting(false);
+    //   return pushNotification(
+    //     `PO ${values?.Po?.number} and ${values?.PoList?.Product?.name} Already Added You Can Edit it.`,
+    //     "danger",
+    //     "Error"
+    //   );
+    // }
 
     const box = boxes.find((f) => f.box_no === values.box_no);
 

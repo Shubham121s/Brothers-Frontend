@@ -258,6 +258,7 @@ const DispatchInvoiceTable = () => {
   const data = useSelector(
     (state) => state.dispatch_invoice.data.dispatchInvoiceList
   );
+
   const loading = useSelector((state) => state.dispatch_invoice.data.loading);
   const { type } = useSelector(
     (state) => state.dispatch_invoice.data.filterData

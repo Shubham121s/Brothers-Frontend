@@ -1,18 +1,19 @@
-import React, { useEffect } from 'react'
-import { Loading } from '../../../../components/shared'
-import { useDispatch, useSelector } from 'react-redux'
-import { injectReducer } from '../../../../store'
-import customerDashboardReducer from './store'
-import CustomerDashboardTable from './components/customerdashboardTable'
-import CustomerdashboardTableTools from './components/CustomerdashboardTableTools'
-import CustomerMonthWiseSalesChart from './components/CustomerMonthWiseSalesChart'
-import CustomerYearWiseSalesChart from './components/CustomerYearWiseSalesChart'
-import { Card } from '../../../../components/ui'
+import React, { useEffect } from "react";
+import { Loading } from "../../../../components/shared";
+import { useDispatch, useSelector } from "react-redux";
+import { injectReducer } from "../../../../store";
+import customerDashboardReducer from "./store";
+import CustomerDashboardTable from "./components/customerdashboardTable";
+import CustomerdashboardTableTools from "./components/CustomerdashboardTableTools";
+import CustomerMonthWiseSalesChart from "./components/CustomerMonthWiseSalesChart";
+import CustomerYearWiseSalesChart from "./components/CustomerYearWiseSalesChart";
+import { Card } from "../../../../components/ui";
+import CustomerWiseWeeklySalesChart from "./components/CustomerWeeklyWiseSalesChart";
 
-injectReducer('customer_dashboard', customerDashboardReducer)
+injectReducer("customer_dashboard", customerDashboardReducer);
 
 const Dashboard = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   return (
     <Loading loading={false}>
@@ -33,12 +34,17 @@ const Dashboard = () => {
           <CustomerMonthWiseSalesChart />
         </Card>
       </div>
+
+      <Card>
+        <CustomerWiseWeeklySalesChart />
+      </Card>
+
       <Card>
         <CustomerdashboardTableTools />
         <CustomerDashboardTable />
       </Card>
     </Loading>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

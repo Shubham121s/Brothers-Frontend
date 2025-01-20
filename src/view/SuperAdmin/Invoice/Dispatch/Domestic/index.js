@@ -1,46 +1,43 @@
-import React, { useEffect, useState } from 'react'
-import { apiGetDispatchDomesticInvoiceByInvoiceId } from '../../../../../services/SuperAdmin/Invoice/DispatchServices'
+import React, { useEffect, useState } from "react";
+import { apiGetDispatchDomesticInvoiceByInvoiceId } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 import {
   Container,
   DoubleSidedImage,
-  Loading
-} from '../../../../../components/shared'
-import isEmpty from 'lodash/isEmpty'
-import DispatchInvoice from './DispatchInvoice'
-import { Input } from '../../../../../components/ui'
+  Loading,
+} from "../../../../../components/shared";
+import isEmpty from "lodash/isEmpty";
+import DispatchInvoice from "./DispatchInvoice";
+import { Input } from "../../../../../components/ui";
 
 const DomesticInvoice = ({ dispatch_invoice_id, TABLE_ROW_COUNT }) => {
-  const [loading, setLoading] = useState(false)
-  const [data, setData] = useState()
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState();
 
   useEffect(() => {
-    fetchData()
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch_invoice_id])
+  }, [dispatch_invoice_id]);
 
   const fetchData = async () => {
     if (dispatch_invoice_id) {
-      setLoading(true)
+      setLoading(true);
       const response = await apiGetDispatchDomesticInvoiceByInvoiceId({
-        dispatch_invoice_id
-      })
+        dispatch_invoice_id,
+      });
       if (response?.data?.success) {
-        setData(response.data?.data)
+        setData(response.data?.data);
       }
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Container className="h-full">
       <Loading loading={loading}>
         {!isEmpty(data) && (
           <>
-            <div className="w-full flex gap-4 justify-center">
-              <DispatchInvoice
-                data={data}
-                TABLE_ROW_COUNT={TABLE_ROW_COUNT}
-              />
+            <div className="w-full ">
+              <DispatchInvoice data={data} TABLE_ROW_COUNT={TABLE_ROW_COUNT} />
             </div>
           </>
         )}
@@ -56,7 +53,7 @@ const DomesticInvoice = ({ dispatch_invoice_id, TABLE_ROW_COUNT }) => {
         </div>
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default DomesticInvoice
+export default DomesticInvoice;

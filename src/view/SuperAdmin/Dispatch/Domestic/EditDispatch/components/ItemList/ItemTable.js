@@ -78,7 +78,6 @@ const ActionColumn = ({ row, initialData }) => {
 };
 
 const ItemTable = ({ initialData = [], dispatchList, setFieldValue }) => {
-  console.log(initialData);
   const columns = useMemo(() => {
     return [
       {
@@ -189,6 +188,7 @@ const ItemTable = ({ initialData = [], dispatchList, setFieldValue }) => {
             accessorKey: "net_amount",
             cell: (props) => {
               const row = props.row.original;
+              console.log("row", row);
               return (
                 <div className="uppercase text-center">
                   {Number(row?.PoList?.unit_price * row?.item_quantity).toFixed(

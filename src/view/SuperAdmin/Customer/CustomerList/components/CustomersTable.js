@@ -1,63 +1,63 @@
-import React, { useEffect, useCallback, useMemo } from 'react'
-import { Badge, Tag } from '../../../../../components/ui'
-import { useDispatch, useSelector } from 'react-redux'
-import { getCustomersWithPagination, setTableData } from '../store/dataSlice'
-import useThemeClass from '../../../../../utils/hooks/useThemeClass'
-import { Link } from 'react-router-dom'
-import dayjs from 'dayjs'
-import cloneDeep from 'lodash/cloneDeep'
-import DataTable from '../../../../../components/shared/DataTable'
-import { HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi'
+import React, { useEffect, useCallback, useMemo } from "react";
+import { Badge, Tag } from "../../../../../components/ui";
+import { useDispatch, useSelector } from "react-redux";
+import { getCustomersWithPagination, setTableData } from "../store/dataSlice";
+import useThemeClass from "../../../../../utils/hooks/useThemeClass";
+import { Link } from "react-router-dom";
+import dayjs from "dayjs";
+import cloneDeep from "lodash/cloneDeep";
+import DataTable from "../../../../../components/shared/DataTable";
+import { HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
 import {
   setSelectedCustomer,
-  togglDeleteConfirmationDialog
-} from '../store/stateSlice'
-import DeleteCustomerConfirmationDialog from './DeleteConfirmationDialog'
+  togglDeleteConfirmationDialog,
+} from "../store/stateSlice";
+import DeleteCustomerConfirmationDialog from "./DeleteConfirmationDialog";
 
 const statusColor = {
   true: {
-    label: 'Active',
-    dotClass: 'bg-emerald-500',
-    textClass: 'text-emerald-500'
+    label: "Active",
+    dotClass: "bg-emerald-500",
+    textClass: "text-emerald-500",
   },
   false: {
-    label: 'In-Active',
-    dotClass: 'bg-red-500',
-    textClass: 'text-red-500'
-  }
-}
+    label: "In-Active",
+    dotClass: "bg-red-500",
+    textClass: "text-red-500",
+  },
+};
 
 const typeColor = {
   supplier: {
-    label: 'Supplier',
-    bgClass: 'bg-emerald-100',
-    textClass: 'text-emerald-600'
+    label: "Supplier",
+    bgClass: "bg-emerald-100",
+    textClass: "text-emerald-600",
   },
   customer: {
-    label: 'Customer',
-    bgClass: 'bg-red-100',
-    textClass: 'text-red-600'
+    label: "Customer",
+    bgClass: "bg-red-100",
+    textClass: "text-red-600",
   },
   both: {
-    label: 'Both',
-    bgClass: 'bg-yellow-100',
-    textClass: 'text-yellow-600'
-  }
-}
+    label: "Both",
+    bgClass: "bg-yellow-100",
+    textClass: "text-yellow-600",
+  },
+};
 
 const ActionColumn = ({ row }) => {
-  const { textTheme } = useThemeClass()
-  const dispatch = useDispatch()
+  const { textTheme } = useThemeClass();
+  const dispatch = useDispatch();
 
   const onDelete = () => {
-    dispatch(setSelectedCustomer(row))
-    dispatch(togglDeleteConfirmationDialog(true))
-  }
+    dispatch(setSelectedCustomer(row));
+    dispatch(togglDeleteConfirmationDialog(true));
+  };
 
   return (
     <div className="flex justify-between text-lg">
       <span className="mr-2">
-        {' '}
+        {" "}
         <Link
           className={`cursor-pointer hover:${textTheme}`}
           to={`/customer-details/${row?.customer_id}`}
@@ -65,63 +65,60 @@ const ActionColumn = ({ row }) => {
           <HiOutlinePencil />
         </Link>
       </span>
-      <span
-        className="cursor-pointer"
-        onClick={onDelete}
-      >
+      <span className="cursor-pointer" onClick={onDelete}>
         <HiOutlineTrash />
       </span>
     </div>
-  )
-}
+  );
+};
 
 const NameColumn = ({ row }) => {
-  const { textTheme } = useThemeClass()
+  const { textTheme } = useThemeClass();
 
-  return <div className="items-center uppercase">{row.name}</div>
-}
+  return <div className="items-center uppercase">{row.name}</div>;
+};
 
 const columns = [
   {
-    header: 'Name',
-    accessorKey: 'name',
+    header: "Name",
+    accessorKey: "name",
     cell: (props) => {
-      const row = props.row.original
-      return <NameColumn row={row} />
-    }
+      const row = props.row.original;
+      return <NameColumn row={row} />;
+    },
   },
   {
-    header: 'c. code',
-    accessorKey: 'customer_code'
+    header: "c. code",
+    accessorKey: "customer_code",
   },
   {
-    header: 'v. code',
+    header: "v. code",
     cell: (props) => {
-      const row = props.row.original
-      return <span className="uppercase">{row?.vender_code || '-'}</span>
-    }
+      const row = props.row.original;
+      return <span className="uppercase">{row?.vender_code || "-"}</span>;
+    },
   },
   {
-    header: 'mobile',
-    accessorKey: 'mobile',
+    header: "mobile",
+    accessorKey: "mobile",
     cell: (props) => {
-      const row = props.row.original
-      return <span>{row.mobile || '-'}</span>
-    }
+      const row = props.row.original;
+      return <span>{row.mobile || "-"}</span>;
+    },
   },
   {
-    header: 'email',
-    accessorKey: 'email',
+    header: "email",
+    accessorKey: "email",
     cell: (props) => {
-      const row = props.row.original
-      return <span className="lowercase">{row.email || '-'}</span>
-    }
+      const row = props.row.original;
+      return <span className="lowercase">{row.email || "-"}</span>;
+    },
   },
   {
-    header: 'Status',
-    accessorKey: 'status',
+    header: "Status",
+    accessorKey: "status",
     cell: (props) => {
-      const row = props.row.original
+      const row = props.row.original;
       return (
         <div className="flex items-center">
           <Badge className={statusColor[row.status]?.dotClass} />
@@ -133,14 +130,14 @@ const columns = [
             {statusColor[row.status]?.label}
           </span>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    header: 'Type',
-    accessorKey: 'type',
+    header: "Type",
+    accessorKey: "type",
     cell: (props) => {
-      const row = props.row.original
+      const row = props.row.original;
       return (
         <div className="mr-2">
           <Tag
@@ -151,68 +148,68 @@ const columns = [
             {typeColor[row?.type]?.label}
           </Tag>
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    header: 'Reg. Date',
-    accessorKey: 'createdAt',
+    header: "Reg. Date",
+    accessorKey: "createdAt",
     cell: (props) => {
-      const row = props.row.original
+      const row = props.row.original;
       return (
         <div className="flex items-center">
-          {dayjs(row?.createdAt).format('DD/MM/YYYY')}
+          {dayjs(row?.createdAt).format("DD/MM/YYYY")}
         </div>
-      )
-    }
+      );
+    },
   },
   {
-    header: '',
-    accessorKey: 'id',
+    header: "",
+    accessorKey: "id",
     cell: (props) => {
-      const row = props.row.original
-      return <ActionColumn row={row} />
-    }
-  }
-]
+      const row = props.row.original;
+      return <ActionColumn row={row} />;
+    },
+  },
+];
 
 const CustomerTable = () => {
-  const dispatch = useDispatch()
-  const data = useSelector((state) => state.customer.data.customerList)
-  const loading = useSelector((state) => state.customer.data.loading)
-  const { type } = useSelector((state) => state.customer.data.filterData)
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.customer.data.customerList);
+  const loading = useSelector((state) => state.customer.data.loading);
+  const { type } = useSelector((state) => state.customer.data.filterData);
 
   const { pageIndex, pageSize, sort, query, total } = useSelector(
     (state) => state.customer.data.tableData
-  )
+  );
 
   const fetchData = useCallback(() => {
     dispatch(
       getCustomersWithPagination({ pageIndex, pageSize, sort, query, type })
-    )
-  }, [pageIndex, pageSize, sort, query, type, dispatch])
+    );
+  }, [pageIndex, pageSize, sort, query, type, dispatch]);
 
   useEffect(() => {
-    fetchData()
-  }, [fetchData, pageIndex, pageSize, sort, type])
+    fetchData();
+  }, [fetchData, pageIndex, pageSize, sort, type]);
 
   const tableData = useMemo(
     () => ({ pageIndex, pageSize, sort, query, total }),
     [pageIndex, pageSize, sort, query, total]
-  )
+  );
 
   const onPaginationChange = (page) => {
-    const newTableData = cloneDeep(tableData)
-    newTableData.pageIndex = page
-    dispatch(setTableData(newTableData))
-  }
+    const newTableData = cloneDeep(tableData);
+    newTableData.pageIndex = page;
+    dispatch(setTableData(newTableData));
+  };
 
   const onSelectChange = (value) => {
-    const newTableData = cloneDeep(tableData)
-    newTableData.pageSize = Number(value)
-    newTableData.pageIndex = 1
-    dispatch(setTableData(newTableData))
-  }
+    const newTableData = cloneDeep(tableData);
+    newTableData.pageSize = Number(value);
+    newTableData.pageIndex = 1;
+    dispatch(setTableData(newTableData));
+  };
 
   return (
     <>
@@ -226,7 +223,7 @@ const CustomerTable = () => {
       />
       <DeleteCustomerConfirmationDialog />
     </>
-  )
-}
+  );
+};
 
-export default CustomerTable
+export default CustomerTable;

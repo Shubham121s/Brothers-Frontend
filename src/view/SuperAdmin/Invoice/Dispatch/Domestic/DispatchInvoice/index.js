@@ -1,17 +1,39 @@
-import React, { useRef } from 'react'
-import { Button } from '../../../../../../components/ui'
-import { useReactToPrint } from 'react-to-print'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
-import DispatchTable from './components/DispatchTable'
+import React, { useRef, useState } from "react";
+import { Button } from "../../../../../../components/ui";
+import { useReactToPrint } from "react-to-print";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import DispatchTable from "./components/DispatchTable";
+import { Viewer } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+
+// Import styles for PDF Viewer
+import "@react-pdf-viewer/core/lib/styles/index.css";
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
-  const componentRef = useRef()
+  const componentRef = useRef();
+  const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
+
+  // Create a new instance of the default layout plugin
+  const defaultLayoutPluginInstance = defaultLayoutPlugin();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    documentTitle: `invoice-${data?.invoice_no}`
-  })
+    documentTitle: `invoice-${data?.invoice_no}`,
+  });
+
+  const handleGeneratePreview = () => {
+    const node = componentRef.current;
+
+    if (node) {
+      const html = node.outerHTML;
+      const blob = new Blob([html], { type: "text/html" });
+      const blobUrl = URL.createObjectURL(blob);
+      console.log("Blob URL:", blobUrl);
+      setPdfBlobUrl(blobUrl);
+    }
+  };
 
   const TableData = (props) => {
     return (
@@ -25,25 +47,25 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
           </div>
         </div>
       </div>
-    )
-  }
+    );
+  };
 
   const RenderPages = ({ data }) => {
-    const pages = []
-    let pageCount = 0
+    const pages = [];
+    let pageCount = 0;
     if (data) {
-      const dispatchLocationsLength = data?.DispatchLocations?.length || 1
+      const dispatchLocationsLength = data?.DispatchLocations?.length || 1;
 
       for (let i = 0; i < dispatchLocationsLength; i++) {
-        const { DispatchLists = [] } = data?.DispatchLocations?.[i]
-        pageCount += Math.ceil(DispatchLists?.length / TABLE_ROW_COUNT)
+        const { DispatchLists = [] } = data?.DispatchLocations?.[i];
+        pageCount += Math.ceil(DispatchLists?.length / TABLE_ROW_COUNT);
       }
 
-      let pageNo = 1
+      let pageNo = 1;
       for (let i = 0; i < dispatchLocationsLength; i++) {
-        const { location_code = '', DispatchLists = [] } =
-          data?.DispatchLocations?.[i]
-        const dispatchListLength = DispatchLists?.length
+        const { location_code = "", DispatchLists = [] } =
+          data?.DispatchLocations?.[i];
+        const dispatchListLength = DispatchLists?.length;
         for (
           let i = 0;
           i < Math.ceil(dispatchListLength / TABLE_ROW_COUNT);
@@ -54,16 +76,16 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
               key={`page-${pageNo}`}
               className="page"
               style={{
-                height: 'calc(1130px - 50px)',
-                paddingLeft: '6%',
-                paddingRight: '2%'
+                height: "calc(1130px - 50px)",
+                paddingLeft: "6%",
+                paddingRight: "2%",
               }}
             >
               <div
                 className="invoice w-full  relative"
                 style={{
-                  border: '1px solid black',
-                  marginTop: '9px'
+                  border: "1px solid black",
+                  marginTop: "9px",
                 }}
               >
                 {/* <div
@@ -95,13 +117,13 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
                 <Footer data={data} />
               </div>
             </div>
-          )
-          pageNo += 1
+          );
+          pageNo += 1;
         }
       }
     }
-    return pages
-  }
+    return pages;
+  };
 
   return (
     data && (
@@ -109,18 +131,42 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
         <Button
           variant="solid"
           color="orange-500"
-          onClick={handlePrint}
+          onClick={() => {
+            handlePrint();
+            handleGeneratePreview();
+          }}
         >
-          Invoice
+          Print & Preview
         </Button>
-        <div style={{ display: 'none' }}>
+
+        {pdfBlobUrl && (
+          <div className="mt-4">
+            <h3>PDF Preview:</h3>
+            <div
+              style={{
+                width: "100%",
+                margin: "0 auto",
+                height: "calc(1130px - 620px)",
+                border: "1px solid black",
+                overflow: "auto",
+              }}
+            >
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: `<div>${componentRef.current?.outerHTML}</div>`,
+                }}
+              />
+            </div>
+          </div>
+        )}
+        <div style={{ display: "none" }}>
           <div ref={componentRef}>
             <RenderPages data={data} />
           </div>
         </div>
       </>
     )
-  )
-}
+  );
+};
 
-export default DispatchInvoice
+export default DispatchInvoice;

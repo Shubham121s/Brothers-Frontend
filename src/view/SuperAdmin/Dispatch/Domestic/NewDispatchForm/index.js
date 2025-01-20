@@ -1,112 +1,113 @@
-import React, { Suspense, forwardRef } from 'react'
-import { Form, Formik } from 'formik'
-import { Button, Card, FormContainer } from '../../../../../components/ui'
-import { useDispatch } from 'react-redux'
-import * as Yup from 'yup'
-import { Loading, StickyFooter } from '../../../../../components/shared'
-import cloneDeep from 'lodash/cloneDeep'
-import ConsigneeInformationFields from './components/ConsigneeInformationFields'
-import BuyerInformationFields from './components/BuyerInformationFields'
-import InvoiceDatePickerFields from './components/InvoiceDatePickerFields'
-import ShippingAddressInformationFields from './components/ShippingAndTransport/ShippingAddressInformationFields'
-import BankInformationFields from './components/BankAndCompany/BankInformationFields'
-import TransportModeInformationField from './components/ShippingAndTransport/TransportModeInformationFields'
-import { toggleAddDispatchItemDialog } from '../NewDispatch/store/stateSlice'
-import NewDispatchItemDialog from './components/ItemList/NewItemDialog'
-import ItemTable from './components/ItemList/ItemTable'
-import LocationCodeFields from './components/ItemList/LocationCodeFields'
-import { BANK_LIST, GST_IN, PAN, STATE, STATE_CODE } from './constant'
-import CompanyDetails from './components/BankAndCompany/CompanyDetails'
-import PaymentTermInformationFields from './components/ShippingAndTransport/PaymentTermInformationFields'
-import VehicleInformationFields from './components/ShippingAndTransport/VehicleInformationFields'
-import RemarkInformationField from './components/GSTandOther/RemarkInformationField'
-import EWayBillNoInformationField from './components/GSTandOther/EWayBillNoInformationField'
-import BillTypeInformationField from './components/GSTandOther/BillTypeInformationField'
-import CGSTInformationField from './components/GSTandOther/CGSTInformationField'
-import IGSTInformationField from './components/GSTandOther/IGSTInformationField'
-import SGSTInformationField from './components/GSTandOther/SGSTInformationField'
-import InvoiceNumberField from './components/invoiceNumberField'
-import PackingChargesInformationField from './components/GSTandOther/PackingChargers'
-import FreightChargesField from './components/GSTandOther/FreightChargesField'
-import { debounce } from 'lodash'
-import { apiCheckInvoiceNumber } from '../../../../../services/SuperAdmin/Invoice/DispatchServices'
+import React, { Suspense, forwardRef } from "react";
+import { Form, Formik } from "formik";
+import { Button, Card, FormContainer } from "../../../../../components/ui";
+import { useDispatch } from "react-redux";
+import * as Yup from "yup";
+import { Loading, StickyFooter } from "../../../../../components/shared";
+import cloneDeep from "lodash/cloneDeep";
+import ConsigneeInformationFields from "./components/ConsigneeInformationFields";
+import BuyerInformationFields from "./components/BuyerInformationFields";
+import InvoiceDatePickerFields from "./components/InvoiceDatePickerFields";
+import ShippingAddressInformationFields from "./components/ShippingAndTransport/ShippingAddressInformationFields";
+import BankInformationFields from "./components/BankAndCompany/BankInformationFields";
+import TransportModeInformationField from "./components/ShippingAndTransport/TransportModeInformationFields";
+import { toggleAddDispatchItemDialog } from "../NewDispatch/store/stateSlice";
+import NewDispatchItemDialog from "./components/ItemList/NewItemDialog";
+import ItemTable from "./components/ItemList/ItemTable";
+import LocationCodeFields from "./components/ItemList/LocationCodeFields";
+import { BANK_LIST, GST_IN, PAN, STATE, STATE_CODE } from "./constant";
+import CompanyDetails from "./components/BankAndCompany/CompanyDetails";
+import PaymentTermInformationFields from "./components/ShippingAndTransport/PaymentTermInformationFields";
+import VehicleInformationFields from "./components/ShippingAndTransport/VehicleInformationFields";
+import RemarkInformationField from "./components/GSTandOther/RemarkInformationField";
+import EWayBillNoInformationField from "./components/GSTandOther/EWayBillNoInformationField";
+import BillTypeInformationField from "./components/GSTandOther/BillTypeInformationField";
+import CGSTInformationField from "./components/GSTandOther/CGSTInformationField";
+import IGSTInformationField from "./components/GSTandOther/IGSTInformationField";
+import SGSTInformationField from "./components/GSTandOther/SGSTInformationField";
+import InvoiceNumberField from "./components/invoiceNumberField";
+import PackingChargesInformationField from "./components/GSTandOther/PackingChargers";
+import OtherChargesInformationField from "./components/GSTandOther/OthersCharges";
+import FreightChargesField from "./components/GSTandOther/FreightChargesField";
+import { debounce } from "lodash";
+import { apiCheckInvoiceNumber } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
-var isInvoiceNumberExist = false
+var isInvoiceNumberExist = false;
 
 const validationSchema = Yup.object().shape({
-  DispatchConsignee: Yup.object().required('Required'),
+  DispatchConsignee: Yup.object().required("Required"),
   invoice_no: Yup.string()
-    .required('Required')
+    .required("Required")
     .test(
-      'isInvoiceNumberExist',
-      'Invoice Number Already Exists',
+      "isInvoiceNumberExist",
+      "Invoice Number Already Exists",
       function (value) {
         return (
           !isInvoiceNumberExist ||
-          this.createError({ message: 'Invoice Number Already Exists' })
-        )
+          this.createError({ message: "Invoice Number Already Exists" })
+        );
       }
     ),
-  DispatchBuyer: Yup.object().required('Required'),
-  DispatchShippingAddress: Yup.object().required('Required'),
+  DispatchBuyer: Yup.object().required("Required"),
+  DispatchShippingAddress: Yup.object().required("Required"),
   DispatchList: Yup.array(
     Yup.object({
       location_code: Yup.string().test((data, ctx) => {
-        if (ctx.options.context.DispatchList.length === 1) return true
-        else if (data === undefined || data === null || data === '')
-          return ctx.createError({ message: 'Required' })
-        else return true
-      })
+        if (ctx.options.context.DispatchList.length === 1) return true;
+        else if (data === undefined || data === null || data === "")
+          return ctx.createError({ message: "Required" });
+        else return true;
+      }),
     })
   ),
   DispatchCompanyDetails: Yup.object().shape({
-    gstin: Yup.string().required('Required')
+    gstin: Yup.string().required("Required"),
   }),
-  invoice_date: Yup.date().required('Required'),
-  DispatchBankDetails: Yup.object().required('Required'),
+  invoice_date: Yup.date().required("Required"),
+  DispatchBankDetails: Yup.object().required("Required"),
   DispatchShippingAndOtherDetails: Yup.object().shape({
-    payment_term: Yup.string().required('Required'),
-    shipping_line: Yup.string().required('Required'),
-    bill_type: Yup.string().required('Required'),
+    payment_term: Yup.string().required("Required"),
+    shipping_line: Yup.string().required("Required"),
+    bill_type: Yup.string().required("Required"),
     c_gst: Yup.number().test((data, ctx) => {
-      if (ctx.parent?.bill_type === 'GST') {
+      if (ctx.parent?.bill_type === "GST") {
         if (!data) {
-          return ctx.createError({ message: 'Required' })
+          return ctx.createError({ message: "Required" });
         }
-        return true
+        return true;
       }
-      return true
+      return true;
     }),
     s_gst: Yup.number().test((data, ctx) => {
-      if (ctx.parent?.bill_type === 'GST') {
+      if (ctx.parent?.bill_type === "GST") {
         if (!data) {
-          return ctx.createError({ message: 'Required' })
+          return ctx.createError({ message: "Required" });
         }
-        return true
+        return true;
       }
-      return true
+      return true;
     }),
     i_gst: Yup.number().test((data, ctx) => {
-      if (ctx.parent?.bill_type === 'IGST') {
+      if (ctx.parent?.bill_type === "IGST") {
         if (!data) {
-          return ctx.createError({ message: 'Required' })
+          return ctx.createError({ message: "Required" });
         }
-        return true
+        return true;
       }
-      return true
-    })
-  })
-})
+      return true;
+    }),
+  }),
+});
 
 const NewDomesticForm = forwardRef((props, ref) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const {
     initialData,
     onFormSubmit,
     customers = [],
     pushNotification,
-    type = 'new'
-  } = props
+    type = "new",
+  } = props;
   const handleRemoveLocationCodeAndPoList = (
     dispatchList = [],
     indexToRemove,
@@ -114,30 +115,30 @@ const NewDomesticForm = forwardRef((props, ref) => {
   ) => {
     const updatedTableData = dispatchList.filter(
       (_, index) => index !== indexToRemove
-    )
-    setFieldValue?.('DispatchList', updatedTableData)
-  }
+    );
+    setFieldValue?.("DispatchList", updatedTableData);
+  };
 
   const addNewItemInPoList = (dispatchList, newItem, index, setFieldValue) => {
     const updatedDispatchList = [
       ...dispatchList.slice(0, index),
       {
         ...dispatchList[index],
-        poList: [...dispatchList[index].poList, newItem]
+        poList: [...dispatchList[index].poList, newItem],
       },
-      ...dispatchList.slice(index + 1)
-    ]
-    setFieldValue('DispatchList', updatedDispatchList)
-  }
+      ...dispatchList.slice(index + 1),
+    ];
+    setFieldValue("DispatchList", updatedDispatchList);
+  };
 
   const handleNewLocationCodeAndPoList = (dispatchList = [], setFieldValue) => {
     const newDispatchList = {
-      location_code: '',
-      poList: []
-    }
-    const updatedDispatchList = [...dispatchList, newDispatchList]
-    setFieldValue?.('DispatchList', updatedDispatchList)
-  }
+      location_code: "",
+      poList: [],
+    };
+    const updatedDispatchList = [...dispatchList, newDispatchList];
+    setFieldValue?.("DispatchList", updatedDispatchList);
+  };
 
   const handleDeleteItemInPoList = (
     dispatchList,
@@ -145,33 +146,33 @@ const NewDomesticForm = forwardRef((props, ref) => {
     setFieldValue,
     poIndex
   ) => {
-    const updatedDispatchList = [...dispatchList]
+    const updatedDispatchList = [...dispatchList];
     const filterDispatchList = updatedDispatchList.map((list, index) => {
       if (index === locationIndex) {
         return {
           ...list,
-          poList: list.poList.filter((_, index) => index !== poIndex)
-        }
+          poList: list.poList.filter((_, index) => index !== poIndex),
+        };
       }
-      return list
-    })
-    setFieldValue?.('DispatchList', filterDispatchList)
-  }
+      return list;
+    });
+    setFieldValue?.("DispatchList", filterDispatchList);
+  };
 
   const handleCheck = async (e) => {
     try {
       const response = await apiCheckInvoiceNumber({
-        invoice_no: e.target.value
-      })
+        invoice_no: e.target.value,
+      });
       if (response.status === 200) {
-        isInvoiceNumberExist = false
+        isInvoiceNumberExist = false;
       }
     } catch (error) {
-      isInvoiceNumberExist = true
+      isInvoiceNumberExist = true;
     }
-  }
+  };
 
-  const debouncedHandleCheck = debounce(handleCheck, 500)
+  const debouncedHandleCheck = debounce(handleCheck, 500);
 
   return (
     <>
@@ -181,23 +182,23 @@ const NewDomesticForm = forwardRef((props, ref) => {
           innerRef={ref}
           initialValues={{
             ...initialData,
-            DispatchShippingAddress: initialData?.DispatchShippingAddress
+            DispatchShippingAddress: initialData?.DispatchShippingAddress,
           }}
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             const isDispatchListEmpty = values.DispatchList.filter(
               (item) => item.poList.length === 0
-            )
+            );
             if (isDispatchListEmpty.length > 0) {
-              setSubmitting(false)
+              setSubmitting(false);
               return pushNotification?.(
-                'Add items in list',
-                'danger',
-                'Required'
-              )
+                "Add items in list",
+                "danger",
+                "Required"
+              );
             }
-            const formData = cloneDeep({ ...values })
-            onFormSubmit?.(formData, setSubmitting)
+            const formData = cloneDeep({ ...values });
+            onFormSubmit?.(formData, setSubmitting);
           }}
         >
           {({
@@ -206,17 +207,14 @@ const NewDomesticForm = forwardRef((props, ref) => {
             errors,
             setFieldValue,
             isSubmitting,
-            handleChange
+            handleChange,
           }) => {
-            console.log(values)
+            console.log(values);
             return (
               <Form key="invoiceForm">
                 <FormContainer key="invoiceFormContainer">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <Card
-                      className="bg-yellow-50 h-max"
-                      bodyClass="pb-0"
-                    >
+                    <Card className="bg-yellow-50 h-max" bodyClass="pb-0">
                       <div className="flex justify-between">
                         <span>
                           <h5 className="font-semibold text-gray-700">
@@ -247,10 +245,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                         />
                       </div>
                     </Card>
-                    <Card
-                      className="bg-blue-50 h-max"
-                      bodyClass="pb-0"
-                    >
+                    <Card className="bg-blue-50 h-max" bodyClass="pb-0">
                       <div className="flex justify-between">
                         <span>
                           <h5 className="font-semibold text-gray-700">
@@ -349,12 +344,12 @@ const NewDomesticForm = forwardRef((props, ref) => {
                         <div
                           className={`${
                             values?.DispatchShippingAndOtherDetails
-                              ?.bill_type === 'IGST'
-                              ? 'col-span-2 grid gap-2 grid-cols-2'
+                              ?.bill_type === "IGST"
+                              ? "col-span-2 grid gap-2 grid-cols-2"
                               : values?.DispatchShippingAndOtherDetails
-                                  ?.bill_type === 'GST'
-                              ? 'md:col-span-3 grid md:grid-cols-3 gap-2'
-                              : 'col-span-2'
+                                  ?.bill_type === "GST"
+                              ? "md:col-span-3 grid md:grid-cols-3 gap-2"
+                              : "col-span-2"
                           }`}
                         >
                           <BillTypeInformationField
@@ -370,7 +365,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                             }
                           />
                           {values?.DispatchShippingAndOtherDetails
-                            ?.bill_type === 'IGST' ? (
+                            ?.bill_type === "IGST" ? (
                             <IGSTInformationField
                               errors={
                                 errors?.DispatchShippingAndOtherDetails?.i_gst
@@ -383,7 +378,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                               }
                             />
                           ) : values?.DispatchShippingAndOtherDetails
-                              ?.bill_type === 'GST' ? (
+                              ?.bill_type === "GST" ? (
                             <>
                               <SGSTInformationField
                                 errors={
@@ -415,12 +410,12 @@ const NewDomesticForm = forwardRef((props, ref) => {
                         <div
                           className={`${
                             values?.DispatchShippingAndOtherDetails
-                              ?.bill_type === 'IGST'
-                              ? 'md:col-span-3'
+                              ?.bill_type === "IGST"
+                              ? "md:col-span-3"
                               : values?.DispatchShippingAndOtherDetails
-                                  ?.bill_type === 'GST'
-                              ? 'col-span-2'
-                              : 'md:col-span-3'
+                                  ?.bill_type === "GST"
+                              ? "col-span-2"
+                              : "md:col-span-3"
                           }`}
                         >
                           <EWayBillNoInformationField
@@ -438,6 +433,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                       <div className="grid grid-cols-2 gap-4">
                         <PackingChargesInformationField />
                         <FreightChargesField />
+                        <OtherChargesInformationField />
                       </div>
                       <RemarkInformationField
                         errors={errors?.DispatchShippingAndOtherDetails?.remark}
@@ -453,8 +449,8 @@ const NewDomesticForm = forwardRef((props, ref) => {
                         <div
                           className={
                             values?.DispatchList?.length - 1 === index
-                              ? ''
-                              : 'mb-5'
+                              ? ""
+                              : "mb-5"
                           }
                         >
                           <div className="flex justify-between">
@@ -495,7 +491,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                                       values?.DispatchList,
                                       index,
                                       setFieldValue
-                                    )
+                                    );
                                   }}
                                 >
                                   Remove
@@ -510,9 +506,9 @@ const NewDomesticForm = forwardRef((props, ref) => {
                                   dispatch(
                                     toggleAddDispatchItemDialog({
                                       option: true,
-                                      locationIndex: index
+                                      locationIndex: index,
                                     })
-                                  )
+                                  );
                                 }}
                               >
                                 Add Item
@@ -526,7 +522,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                                     handleNewLocationCodeAndPoList?.(
                                       values?.DispatchList,
                                       setFieldValue
-                                    )
+                                    );
                                   }}
                                 >
                                   New Location
@@ -550,7 +546,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                             dispatchList={values?.DispatchList}
                           />
                         </div>
-                      )
+                      );
                     })}
                   </Card>
                   <StickyFooter
@@ -570,60 +566,61 @@ const NewDomesticForm = forwardRef((props, ref) => {
                   </StickyFooter>
                 </FormContainer>
               </Form>
-            )
+            );
           }}
         </Formik>
       </Suspense>
     </>
-  )
-})
+  );
+});
 
 NewDomesticForm.defaultProps = {
-  type: 'new',
+  type: "new",
   initialData: {
-    invoice_no: '',
-    invoice_type: 'domestic',
+    invoice_no: "",
+    invoice_type: "domestic",
     invoice_date: new Date(),
     DispatchConsignee: null,
     DispatchBuyer: null,
     DispatchShippingAddress: null,
     DispatchList: [
       {
-        location_code: '',
-        poList: []
-      }
+        location_code: "",
+        poList: [],
+      },
     ],
     DispatchCompanyDetails: {
-      iec_code: '',
+      iec_code: "",
       gstin: GST_IN,
-      itc_code: '',
-      duty_drawback_serial_no: '',
+      itc_code: "",
+      duty_drawback_serial_no: "",
       state: STATE,
       pan: PAN,
-      state_code: STATE_CODE
+      state_code: STATE_CODE,
     },
     DispatchBankDetails: BANK_LIST[0],
     DispatchShippingAndOtherDetails: {
-      end_use_code: '',
-      packing_details: '',
-      excise_document: '',
-      freight: '',
-      shipping_term: '',
-      payment_term: '',
-      shipping_line: '',
-      shipping_insurance: '',
-      vehicle_no: '',
-      bill_type: 'NON GST',
-      c_gst: '',
-      s_gst: '',
-      i_gst: '',
-      e_way_bill_no: '',
-      remark: '',
-      convert_rate: '',
-      packing_charges: '',
-      fright_charges: ''
-    }
-  }
-}
+      end_use_code: "",
+      packing_details: "",
+      excise_document: "",
+      freight: "",
+      shipping_term: "",
+      payment_term: "",
+      shipping_line: "",
+      shipping_insurance: "",
+      vehicle_no: "",
+      bill_type: "NON GST",
+      c_gst: "",
+      s_gst: "",
+      i_gst: "",
+      e_way_bill_no: "",
+      remark: "",
+      convert_rate: "",
+      packing_charges: "",
+      fright_charges: "",
+      other_charges: "",
+    },
+  },
+};
 
-export default NewDomesticForm
+export default NewDomesticForm;
