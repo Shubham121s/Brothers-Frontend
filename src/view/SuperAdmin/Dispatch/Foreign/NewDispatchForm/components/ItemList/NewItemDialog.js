@@ -1,9 +1,12 @@
 import React, { memo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Dialog,Notification,Toast } from "../../../../../../../components/ui";
+import {
+  Dialog,
+  Notification,
+  Toast,
+} from "../../../../../../../components/ui";
 import ItemForm from "./ItemForm";
 import { toggleAddDispatchItemDialog } from "../../../NewDispatch/store/stateSlice";
-
 
 const pushNotification = (message, type, title) => {
   return Toast.push(
@@ -37,24 +40,23 @@ const NewDispatchItemDialog = (props) => {
   };
 
   const handleNewItem = async (values) => {
+    // const find = dispatchList[locationIndex]?.poList.find((f) => {
+    //   if (
+    //     f?.Po?.number === values?.Po?.number &&
+    //     f?.PoList?.po_list_id === values?.PoList?.po_list_id
+    //   )
+    //     return f;
+    // });
 
-    const find = dispatchList[locationIndex]?.poList.find((f) => {
-      if (
-        f?.Po?.number === values?.Po?.number &&
-        f?.PoList?.po_list_id === values?.PoList?.po_list_id
-      )
-        return f;
-    });
+    // if (find) {
+    //   return pushNotification(
+    //     `PO ${values?.Po?.number} and ${values?.PoList?.Product?.name} Already Added You Can Edit it.`,
+    //     "danger",
+    //     "Error"
+    //   );
+    // }
 
-    if (find) {
-      return pushNotification(
-        `PO ${values?.Po?.number} and ${values?.PoList?.Product?.name} Already Added You Can Edit it.`,
-        "danger",
-        "Error"
-      );
-    }
-
-     addNewItemInPoList?.(dispatchList, values, locationIndex, setFieldValue);
+    addNewItemInPoList?.(dispatchList, values, locationIndex, setFieldValue);
     onDialogClose();
   };
 

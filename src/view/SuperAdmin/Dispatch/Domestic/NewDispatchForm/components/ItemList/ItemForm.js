@@ -1,18 +1,22 @@
-import React, { forwardRef, useState } from 'react'
-import { Button, FormContainer } from '../../../../../../../components/ui'
-import * as Yup from 'yup'
-import { Form, Formik } from 'formik'
-import PoInformationFields from './PoInformationFields'
-import PoSerialNumberInformationFields from './PoSerialNumberInformationFields'
-import ItemQuantityInformationFields from './ItemQuantityInformationFields'
-import TotalAmountInformationFields from './TotalAmountInformationFields'
-import TextEditor from '../../../../../Po/PoSetting/utils/TextEditor'
+import React, { forwardRef, useState } from "react";
+import { Button, FormContainer } from "../../../../../../../components/ui";
+import * as Yup from "yup";
+import { Form, Formik } from "formik";
+import PoInformationFields from "./PoInformationFields";
+import PoSerialNumberInformationFields from "./PoSerialNumberInformationFields";
+import ItemQuantityInformationFields from "./ItemQuantityInformationFields";
+import TotalAmountInformationFields from "./TotalAmountInformationFields";
+import TextEditor from "../../../../../Po/PoSetting/utils/TextEditor";
+import RowChargesInformationFields from "./RowChargesInformationFields";
+import MachineChargesInformationFields from "./MachineChargesInformationFields";
 
 const validationSchema = Yup.object().shape({
-  PoList: Yup.object().required('Required'),
-  Po: Yup.object().required('Required'),
-  quantity: Yup.number().required('Required')
-})
+  PoList: Yup.object().required("Required"),
+  Po: Yup.object().required("Required"),
+  quantity: Yup.number().required("Required"),
+  rowCharges: Yup.number().required("Required"),
+  machineCharges: Yup.number().required("Required"),
+});
 
 const ItemForm = forwardRef((props, ref) => {
   const {
@@ -21,28 +25,28 @@ const ItemForm = forwardRef((props, ref) => {
     boxes = [],
     handleFormSubmit,
     type,
-    dispatchList
-  } = props
-  const [content, setContent] = useState('')
+    dispatchList,
+  } = props;
+  const [content, setContent] = useState("");
   return (
     <Formik
       innerRef={ref}
       initialValues={{
-        ...initialData
+        ...initialData,
       }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         handleFormSubmit?.({
           ...values,
-          remarks: content.replace(/<p><br><\/p>/g, '')
-        })
-        setContent('')
+          remarks: content.replace(/<p><br><\/p>/g, ""),
+        });
+        setContent("");
       }}
     >
       {({ values, touched, errors, setFieldValue }) => (
         <Form>
           <FormContainer>
-            <h4>{type === 'new' ? 'Add' : 'Update'} Item Information</h4>
+            <h4>{type === "new" ? "Add" : "Update"} Item Information</h4>
             <p className="mb-3">Section to config add item information</p>
             <div className="grid grid-cols-2 gap-2">
               <PoInformationFields
@@ -64,10 +68,20 @@ const ItemForm = forwardRef((props, ref) => {
                 setFieldValue={setFieldValue}
                 poList={values.PoList}
               />
+              <RowChargesInformationFields
+                label="Row Charges"
+                name="rowCharges"
+              />
+              <MachineChargesInformationFields
+                label="Machine Charges"
+                name="machineCharges"
+              />
               <TotalAmountInformationFields
                 currency={values.Po?.po_currency_type}
                 unitPrice={values.PoList?.unit_price}
                 quantity={values.quantity}
+                rowCharges={values.rowCharges}
+                machineCharges={values.machineCharges}
               />
             </div>
             <div className="mt-3 mb-3">
@@ -86,29 +100,27 @@ const ItemForm = forwardRef((props, ref) => {
               >
                 Discard
               </Button>
-              <Button
-                size="sm"
-                variant="solid"
-                type="submit"
-              >
-                {type === 'new' ? 'Add' : 'Update'} Item
+              <Button size="sm" variant="solid" type="submit">
+                {type === "new" ? "Add" : "Update"} Item
               </Button>
             </div>
           </FormContainer>
         </Form>
       )}
     </Formik>
-  )
-})
+  );
+});
 
 ItemForm.defaultProps = {
   initialData: {
     Po: null,
     quantity: 0,
     PoList: null,
-    weight: '',
-    box_no: ''
-  }
-}
+    weight: "",
+    box_no: "",
+    rowCharges: 0,
+    machineCharges: 0,
+  },
+};
 
-export default ItemForm
+export default ItemForm;

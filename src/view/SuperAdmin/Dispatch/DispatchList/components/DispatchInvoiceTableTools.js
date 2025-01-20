@@ -74,7 +74,6 @@ const DispatchInvoiceTableTools = () => {
         .filter((item) => filter.includes(item.DispatchConsignee.customer_id))
         .map((item) => ({ label: item.invoice_no, value: item.invoice_no }));
 
-      console.log("filteredInvoices", filteredInvoices);
       const filteredDates = data
         .filter((item) => filter.includes(item.DispatchConsignee.customer_id))
         .map((item) => ({
@@ -86,22 +85,25 @@ const DispatchInvoiceTableTools = () => {
         invoices: filteredInvoices,
         dates: filteredDates,
       });
+
+      setTimeout(() => {
+        setShouldFilter(false);
+      }, 4000);
     }
   }, [data, customerValues]);
 
-  useEffect(() => {
-    if (
-      shouldFilter &&
-      filteredData.invoices.length > 0 &&
-      filteredData.dates.length > 0
-    ) {
-      const timeout = setTimeout(() => {
-        setShouldFilter(false);
-      }, 300);
-
-      return () => clearTimeout(timeout);
-    }
-  }, [filteredData, shouldFilter]);
+  // useEffect(() => {
+  //   if (
+  //     shouldFilter &&
+  //     filteredData.invoices.length > 0 &&
+  //     filteredData.dates.length > 0
+  //   ) {
+  //     const timeout = setTimeout(() => {
+  //       setShouldFilter(false);
+  //     }, 300);
+  //     return () => clearTimeout(timeout);
+  //   }
+  // }, [filteredData, shouldFilter]);
 
   const onEdit = (e, type) => {
     const newTableData = cloneDeep(tableData);
@@ -171,18 +173,7 @@ const DispatchInvoiceTableTools = () => {
               value={customerValues}
               onChange={(e) => onEdit(e, "customer")}
             />
-            <Select
-              isMulti
-              placeholder="Invoice Number"
-              size="sm"
-              options={
-                filteredData.invoices.length > 0
-                  ? filteredData.invoices
-                  : invoiceNumber
-              }
-              value={invoiceNumberValues}
-              onChange={(e) => onEdit(e, "invoiceNumber")}
-            />
+
             <Select
               isMulti
               placeholder="Select Date"
@@ -194,6 +185,19 @@ const DispatchInvoiceTableTools = () => {
               }
               value={invoiceDatesValues}
               onChange={(e) => onEdit(e, "invoiceDates")}
+            />
+
+            <Select
+              isMulti
+              placeholder="Invoice Number"
+              size="sm"
+              options={
+                filteredData.invoices.length > 0
+                  ? filteredData.invoices
+                  : invoiceNumber
+              }
+              value={invoiceNumberValues}
+              onChange={(e) => onEdit(e, "invoiceNumber")}
             />
           </div>
         </Card>

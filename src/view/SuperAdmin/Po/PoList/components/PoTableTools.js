@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { Button, Card, Select, DatePicker } from "../../../../../components/ui";
 import {
   setTableData,
@@ -33,6 +33,7 @@ const PoTableTools = () => {
   const startDate = useSelector(
     (state) => state.po_list.data.tableData.startDate
   );
+  const data = useSelector((state) => state.po_list.data.poList);
   const endDate = useSelector((state) => state.po_list.data.tableData.endDate);
 
   const [poYearValues, setPoYearValues] = useState([]);
@@ -40,12 +41,24 @@ const PoTableTools = () => {
   const [poaNumberValues, setPoaNumberValues] = useState([]);
   const [monthValues, setMonthValues] = useState([]);
   const [dateValues, setDateValues] = useState([]);
+  const [customerValues, setCustomerValues] = useState([]);
 
   const handleDateChange = (value) => {};
 
   const inputRef = useRef();
 
   const tableData = useSelector((state) => state.po_list.data.tableData);
+
+  const customerOptions = useMemo(() => {
+    const customers = data.map((item) => ({
+      value: item.Customer.customer_id,
+      label: item.Customer.name,
+    }));
+
+    return Array.from(
+      new Map(customers.map((item) => [item.value, item])).values()
+    );
+  }, [data]);
 
   const handleInputChange = (val) => {
     const newTableData = cloneDeep(tableData);
@@ -62,7 +75,11 @@ const PoTableTools = () => {
 
   const onEdit = (e, type) => {
     const newTableData = cloneDeep(tableData);
-    if (type === "poYear") {
+    if (type === "customer") {
+      setCustomerValues(e);
+      let customers = e.map((m) => m.value);
+      newTableData.customers = JSON.stringify(customers);
+    } else if (type === "poYear") {
       setPoYearValues(e);
       let poYear = e.map((m) => m.value);
       dispatch(getAllPOANumber({ year: JSON.stringify(poYear) }));
@@ -78,10 +95,6 @@ const PoTableTools = () => {
       setPoaNumberValues(e);
       let poaNumbers = e.map((m) => m.value);
       newTableData.poaNumber = JSON.stringify(poaNumbers);
-    } else if (type === "months") {
-      console.log(e);
-      newTableData.startDate = e[0];
-      newTableData.endDate = e[1];
     } else if (type === "month") {
       setMonthValues(e);
       let months = e.map((m) => m.value);
@@ -145,6 +158,7 @@ const PoTableTools = () => {
     setMonthValues([]);
     setDateValues([]);
     setPoYearValues([]);
+    setCustomerValues([]);
     newTableData.query = "";
     newTableData.poNumber = "";
     newTableData.poaNumber = "";
@@ -153,6 +167,7 @@ const PoTableTools = () => {
     newTableData.months = "";
     newTableData.year = "";
     newTableData.date = "";
+    newTableData.customers = "";
     inputRef.current.value = "";
     fetchData(newTableData);
   };
@@ -219,6 +234,14 @@ const PoTableTools = () => {
               options={poNumbers}
               value={poNumberValues}
               onChange={(e) => onEdit(e, "poNumber")}
+            />
+            <Select
+              isMulti
+              placeholder="Select Customer"
+              size="sm"
+              options={customerOptions}
+              value={customerValues}
+              onChange={(e) => onEdit(e, "customer")}
             />
 
             {/* <DatePickerRange

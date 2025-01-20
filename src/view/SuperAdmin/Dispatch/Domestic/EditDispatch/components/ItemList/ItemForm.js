@@ -1,30 +1,30 @@
-import React, { forwardRef, useState } from 'react'
-import { Button, FormContainer } from '../../../../../../../components/ui'
-import * as Yup from 'yup'
-import { Form, Formik } from 'formik'
-import PoInformationFields from './PoInformationFields'
-import PoSerialNumberInformationFields from './PoSerialNumberInformationFields'
-import ItemQuantityInformationFields from './ItemQuantityInformationFields'
-import TotalAmountInformationFields from './TotalAmountInformationFields'
-import TextEditor from '../../../../../Po/PoSetting/utils/TextEditor'
+import React, { forwardRef, useState } from "react";
+import { Button, FormContainer } from "../../../../../../../components/ui";
+import * as Yup from "yup";
+import { Form, Formik } from "formik";
+import PoInformationFields from "./PoInformationFields";
+import PoSerialNumberInformationFields from "./PoSerialNumberInformationFields";
+import ItemQuantityInformationFields from "./ItemQuantityInformationFields";
+import TotalAmountInformationFields from "./TotalAmountInformationFields";
+import TextEditor from "../../../../../Po/PoSetting/utils/TextEditor";
 
 const validationSchema = Yup.object().shape({
-  item_quantity: Yup.number().required('Required')
+  item_quantity: Yup.number().required("Required"),
   // item_weight: Yup.number().required('Required')
-})
+});
 
 const ItemForm = forwardRef((props, ref) => {
-  const { initialData, onDiscard, handleFormSubmit, dispatchList } = props
-  const [content, setContent] = useState(initialData.remarks)
+  const { initialData, onDiscard, handleFormSubmit, dispatchList } = props;
+  const [content, setContent] = useState(initialData.remarks);
   return (
     <Formik
       innerRef={ref}
       initialValues={{
-        ...initialData
+        ...initialData,
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        handleFormSubmit?.(values, setSubmitting)
+        handleFormSubmit?.(values, setSubmitting);
       }}
     >
       {({ values, setFieldValue, isSubmitting }) => (
@@ -70,16 +70,16 @@ const ItemForm = forwardRef((props, ref) => {
         </Form>
       )}
     </Formik>
-  )
-})
+  );
+});
 
 ItemForm.defaultProps = {
   initialData: {
     item_quantity: 0,
     PoList: null,
     Po: null,
-    item_weight: ''
-  }
-}
+    item_weight: "",
+  },
+};
 
-export default ItemForm
+export default ItemForm;
