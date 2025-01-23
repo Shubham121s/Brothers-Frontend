@@ -1,5 +1,5 @@
-import React, { memo } from 'react'
-import { FormItem, Input } from '../../../../../../../components/ui'
+import React, { memo } from "react";
+import { FormItem, Input } from "../../../../../../../components/ui";
 
 const FrightChargesInformationField = ({ setFright, fright }) => {
   return (
@@ -14,7 +14,7 @@ const FrightChargesInformationField = ({ setFright, fright }) => {
         onChange={(e) => setFright(e.target.value)}
       />
     </div>
-  )
-}
+  );
+};
 
-export default memo(FrightChargesInformationField)
+export default memo(FrightChargesInformationField);
