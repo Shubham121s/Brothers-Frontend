@@ -1,18 +1,22 @@
-import React, { forwardRef, useState } from 'react'
-import { Button, FormContainer } from '../../../../../../../components/ui'
-import * as Yup from 'yup'
-import PoInformationFieldsForm from './components/PoInformationFieldsForm'
-import PoSerialNumberInformationFieldsForm from './components/PoSerialNumberInformationFieldsForm'
-import ItemQuantityInformationFieldsForm from './components/ItemQuantityInformationFieldsForm'
-import TotalAmountInformationFieldsForm from './components/TotalAmountInformationFieldsForm'
-import { Formik, Form } from 'formik'
-import TextEditor from '../../../../../Po/PoSetting/utils/TextEditor'
+import React, { forwardRef, useState } from "react";
+import { Button, FormContainer } from "../../../../../../../components/ui";
+import * as Yup from "yup";
+import PoInformationFieldsForm from "./components/PoInformationFieldsForm";
+import PoSerialNumberInformationFieldsForm from "./components/PoSerialNumberInformationFieldsForm";
+import ItemQuantityInformationFieldsForm from "./components/ItemQuantityInformationFieldsForm";
+import TotalAmountInformationFieldsForm from "./components/TotalAmountInformationFieldsForm";
+import MachineChargesInformationFields from "./components/MachineChargesInformationFields";
+import RowChargesInformationFields from "./components/RowChargesInformationFields";
+import { Formik, Form } from "formik";
+import TextEditor from "../../../../../Po/PoSetting/utils/TextEditor";
 
 const validationSchema = Yup.object().shape({
-  PoList: Yup.object().required('Required'),
-  Po: Yup.object().required('Required'),
-  quantity: Yup.number().required('Required')
-})
+  PoList: Yup.object().required("Required"),
+  Po: Yup.object().required("Required"),
+  quantity: Yup.number().required("Required"),
+  row_charges: Yup.number().required("Required"),
+  machining_charges: Yup.number().required("Required"),
+});
 
 const NewItemForm = forwardRef((props, ref) => {
   const {
@@ -21,25 +25,25 @@ const NewItemForm = forwardRef((props, ref) => {
     boxes = [],
     handleFormSubmit,
     type,
-    dispatchList
-  } = props
-  const [content, setContent] = useState('')
+    dispatchList,
+  } = props;
+  const [content, setContent] = useState("");
   return (
     <Formik
       innerRef={ref}
       initialValues={{
-        ...initialData
+        ...initialData,
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        handleFormSubmit?.({ ...values, remarks: content }, setSubmitting)
-        setContent('')
+        handleFormSubmit?.({ ...values, remarks: content }, setSubmitting);
+        setContent("");
       }}
     >
       {({ values, touched, errors, setFieldValue, isSubmitting }) => (
         <Form>
           <FormContainer>
-            <h4>{type === 'new' ? 'Add' : 'Update'} Item Information</h4>
+            <h4>{type === "new" ? "Add" : "Update"} Item Information</h4>
             <p className="mb-3">Section to config add item information</p>
             <div className="grid grid-cols-2 gap-2">
               <PoInformationFieldsForm
@@ -61,10 +65,20 @@ const NewItemForm = forwardRef((props, ref) => {
                 setFieldValue={setFieldValue}
                 poList={values.PoList}
               />
+              <RowChargesInformationFields
+                label="Row Charges"
+                name="row_charges"
+              />
+              <MachineChargesInformationFields
+                label="Machine Charges"
+                name="machining_charges"
+              />
               <TotalAmountInformationFieldsForm
                 currency={values.Po?.po_currency_type}
                 unitPrice={values.PoList?.unit_price}
                 quantity={values.quantity}
+                row_charges={values.row_charges}
+                machining_charges={values.machining_charges}
               />
             </div>
             <div className="mt-3 mb-3">
@@ -89,17 +103,19 @@ const NewItemForm = forwardRef((props, ref) => {
         </Form>
       )}
     </Formik>
-  )
-})
+  );
+});
 
 NewItemForm.defaultProps = {
   initialData: {
     Po: {},
     quantity: 0,
     PoList: [],
-    weight: '',
-    box_no: ''
-  }
-}
+    weight: "",
+    box_no: "",
+    row_charges: 0,
+    machining_charges: 0,
+  },
+};
 
-export default NewItemForm
+export default NewItemForm;

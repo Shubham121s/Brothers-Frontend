@@ -189,11 +189,23 @@ const ItemTable = ({ initialData = [], dispatchList, setFieldValue }) => {
             cell: (props) => {
               const row = props.row.original;
               console.log("row", row);
+              const row_charges = row?.row_charges || 0;
+              const machining_charges = row?.machining_charges || 0;
+              const unitPrices = row?.PoList?.unit_price || 0;
+              const quantity = row?.item_quantity || 0;
+              console.log("row_charges", row_charges);
+              console.log("machining_charges", machining_charges);
+              console.log("unitPrices", unitPrices);
+              console.log("quantity", quantity);
+              const total =
+                unitPrices * quantity + row_charges + machining_charges;
+              console.log("total", total);
               return (
                 <div className="uppercase text-center">
-                  {Number(row?.PoList?.unit_price * row?.item_quantity).toFixed(
+                  {/* {Number(row?.PoList?.unit_price * row?.item_quantity).toFixed(
                     2
-                  )}
+                  )} */}
+                  {total.toFixed(2)}
                 </div>
               );
             },

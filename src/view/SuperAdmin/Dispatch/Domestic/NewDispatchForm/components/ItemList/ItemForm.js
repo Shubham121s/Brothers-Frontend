@@ -14,8 +14,8 @@ const validationSchema = Yup.object().shape({
   PoList: Yup.object().required("Required"),
   Po: Yup.object().required("Required"),
   quantity: Yup.number().required("Required"),
-  rowCharges: Yup.number().required("Required"),
-  machineCharges: Yup.number().required("Required"),
+  row_charges: Yup.number().required("Required"),
+  machining_charges: Yup.number().required("Required"),
 });
 
 const ItemForm = forwardRef((props, ref) => {
@@ -70,18 +70,18 @@ const ItemForm = forwardRef((props, ref) => {
               />
               <RowChargesInformationFields
                 label="Row Charges"
-                name="rowCharges"
+                name="row_charges"
               />
               <MachineChargesInformationFields
                 label="Machine Charges"
-                name="machineCharges"
+                name="machining_charges"
               />
               <TotalAmountInformationFields
                 currency={values.Po?.po_currency_type}
                 unitPrice={values.PoList?.unit_price}
                 quantity={values.quantity}
-                rowCharges={values.rowCharges}
-                machineCharges={values.machineCharges}
+                row_charges={values.row_charges}
+                machining_charges={values.machining_charges}
               />
             </div>
             <div className="mt-3 mb-3">
@@ -118,8 +118,8 @@ ItemForm.defaultProps = {
     PoList: null,
     weight: "",
     box_no: "",
-    rowCharges: 0,
-    machineCharges: 0,
+    row_charges: 0,
+    machining_charges: 0,
   },
 };
 

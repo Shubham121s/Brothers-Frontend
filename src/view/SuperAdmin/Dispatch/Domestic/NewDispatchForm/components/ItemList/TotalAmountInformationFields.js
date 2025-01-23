@@ -5,8 +5,8 @@ import { Field } from "formik";
 const TotalAmountInformationFields = (props) => {
   const {
     quantity = 0,
-    rowCharges = 0,
-    machineCharges = 0,
+    row_charges = 0,
+    machining_charges = 0,
     currency,
     unitPrice = 0,
   } = props;
@@ -18,8 +18,8 @@ const TotalAmountInformationFields = (props) => {
         prefix={currency}
         value={(
           Number(unitPrice) * Number(quantity) +
-          Number(rowCharges) +
-          Number(machineCharges)
+          Number(row_charges) +
+          Number(machining_charges)
         ).toFixed(2)}
         component={Input}
       />

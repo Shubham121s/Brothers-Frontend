@@ -191,12 +191,12 @@ const ItemTable = ({
             accessorKey: "net_amount",
             cell: (props) => {
               const row = props.row.original;
-              const rowCharges = row?.rowCharges || 0;
-              const machineCharges = row?.machineCharges || 0;
+              const row_charges = row?.row_charges || 0;
+              const machining_charges = row?.machining_charges || 0;
               const total =
                 row?.PoList?.unit_price * row?.quantity +
-                rowCharges +
-                machineCharges;
+                row_charges +
+                machining_charges;
               return (
                 <div className="uppercase text-center">
                   {Number(total).toFixed(2)}
