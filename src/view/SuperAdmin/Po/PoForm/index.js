@@ -270,7 +270,7 @@ const PoForm = forwardRef((props, ref) => {
                     <Card className="h-max bg-pink-50">
                       <div className="flex justify-between items-center mb-5">
                         <div>
-                          <h5>Sale Order List</h5>
+                          <h5>Sale Order Lists</h5>
                           <p>Section to config list information</p>
                         </div>
                         <Button

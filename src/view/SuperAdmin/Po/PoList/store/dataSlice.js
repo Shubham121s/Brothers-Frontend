@@ -8,6 +8,7 @@ import {
   apiGetAllPoYears,
   apiGetAllPoMonths,
   apiGetAllPoDateFromMonthAndYear,
+  apiGetAllCustomersOption,
 } from "../../../../../services/SuperAdmin/Po/PoService";
 
 export const getAllPoWithPagination = createAsyncThunk(
@@ -94,6 +95,17 @@ export const getAllPOANumber = createAsyncThunk(
   }
 );
 
+export const getAllCustomerName = createAsyncThunk(
+  "po/data/list/poa/customer",
+  async (data) => {
+    try {
+      const response = await apiGetAllCustomersOption(data);
+      return response;
+    } catch (error) {
+      return error.response;
+    }
+  }
+);
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -122,6 +134,7 @@ const dataSlice = createSlice({
     months: [],
     poNumbers: [],
     poaNumbers: [],
+    customer: [],
     tableData: initialTableData,
     filterData: initialFilterData,
   },
@@ -162,6 +175,11 @@ const dataSlice = createSlice({
     },
     [getAllPoDates.fulfilled]: (state, action) => {
       state.dates = action.payload.data?.data || [];
+    },
+    [getAllCustomerName.fulfilled]: (state, action) => {
+      state.customer = action.payload.data?.data;
+      state.tableData.total = action.payload?.data?.total;
+      state.loading = false;
     },
     [deletePo.fulfilled]: (state, action) => {},
   },

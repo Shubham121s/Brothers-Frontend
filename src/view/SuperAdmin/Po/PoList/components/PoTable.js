@@ -3,6 +3,7 @@ import { Tag, Tooltip } from "../../../../../components/ui";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllPOANumber,
+  getAllCustomerName,
   getAllPoDates,
   getAllPoMonths,
   getAllPoNumber,
@@ -233,6 +234,7 @@ const PoTable = () => {
     query,
     total,
     poNumber,
+    customer_id,
     poaNumber,
     startDate,
     endDate,
@@ -256,6 +258,7 @@ const PoTable = () => {
         months,
         year,
         date,
+        customer_id,
       })
     );
   }, [
@@ -271,6 +274,7 @@ const PoTable = () => {
     months,
     year,
     date,
+    customer_id,
   ]);
 
   useEffect(() => {
@@ -289,11 +293,13 @@ const PoTable = () => {
     months,
     year,
     date,
+    customer_id,
   ]);
 
   useEffect(() => {
     dispatch(getAllPoNumber());
     dispatch(getAllPOANumber());
+    dispatch(getAllCustomerName());
     dispatch(getAllPoYears());
     dispatch(getAllPoMonths());
     dispatch(getAllPoDates());
@@ -314,6 +320,7 @@ const PoTable = () => {
       months,
       year,
       date,
+      customer_id,
     }),
     [
       pageIndex,
@@ -329,6 +336,7 @@ const PoTable = () => {
       months,
       year,
       date,
+      customer_id,
     ]
   );
 

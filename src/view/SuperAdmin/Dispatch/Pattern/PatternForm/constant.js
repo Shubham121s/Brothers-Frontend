@@ -25,6 +25,7 @@ export const BANK_LIST = [
     ifsc_code: "MAHBOOOOO3O",
     swift_code: "MAHBINBBKOL",
     bank_ad_code: "0230067-6000009",
+    branch_address: "MUMBAI",
   },
 ];
 

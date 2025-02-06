@@ -3,6 +3,7 @@ import {
   apiGetAllDispatchInvoiceWithPagination,
   apiAddInvoiceDetails,
   apiAllPatternInvoicePagination,
+  apiGetAllCustomersOption,
 } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
 export const getDispatchInvoiceWithPagination = createAsyncThunk(
@@ -29,6 +30,18 @@ export const addDetails = createAsyncThunk(
   }
 );
 
+export const getAllCustomerOption = createAsyncThunk(
+  "pattern/invoice/details/customer",
+  async (data) => {
+    try {
+      const response = await apiGetAllCustomersOption(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -45,6 +58,7 @@ const dataSlice = createSlice({
   initialState: {
     loading: false,
     dispatchInvoiceList: [],
+    customerList: [],
     tableData: initialTableData,
     filterData: initialFilterData,
   },
@@ -69,6 +83,12 @@ const dataSlice = createSlice({
       state.loading = true;
     },
     [addDetails.fulfilled]: (state) => {},
+
+    [getAllCustomerOption.fulfilled]: (state, action) => {
+      state.customerList = action.payload.data?.data;
+      state.tableData.total = action.payload?.data?.total;
+      state.loading = false;
+    },
   },
 });
 

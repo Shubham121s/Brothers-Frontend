@@ -112,6 +112,8 @@ const DispatchInvoiceTableTools = () => {
       setCustomerValues(e);
       setShouldFilter(true);
       let customer = e.map((m) => m.value);
+      console.log("customer", customer);
+
       newTableData.customer_id = JSON.stringify(customer);
     } else if (type === "invoiceNumber") {
       setInvoiceNumberValues(e);

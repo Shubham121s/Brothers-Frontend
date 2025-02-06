@@ -17,6 +17,7 @@ const statusColor = {
   }
 }
 
+
 const CustomerDetails = (props) => {
   const { data } = props
   const { textTheme } = useThemeClass()
