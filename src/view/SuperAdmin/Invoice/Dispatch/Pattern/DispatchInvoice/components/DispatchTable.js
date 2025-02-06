@@ -31,6 +31,9 @@ const TableFooterRows = ({
   );
   // const totalAmount = InvoiceTotal(dispatchList(data?.DispatchLocations));
 
+  const [{ remark = "" }] = data;
+  const cleanRemark = remark.replace(/<\/?p>/g, "");
+
   return (
     <>
       <Tr
@@ -65,7 +68,33 @@ const TableFooterRows = ({
           <NumberFormat value={pageAmount.toFixed(2)} />
         </Td>
       </Tr>
-
+      <Tr
+        style={{
+          border: ".2px dashed lightGray",
+          padding: "3px",
+          textAlign: "center",
+        }}
+        className={className}
+      >
+        <Td
+          style={{ border: ".2px dashed lightGray", padding: "3px" }}
+          colSpan="2"
+          className="uppercase"
+        >
+          Remark
+        </Td>
+        <Td
+          className="font-semibold uppercase"
+          style={{
+            border: ".2px dashed lightGray",
+            padding: "6px 3px",
+            paddingLeft: "10px",
+          }}
+          colSpan="8"
+        >
+          {cleanRemark}
+        </Td>
+      </Tr>
       <Tr
         style={{
           border: ".2px dashed lightGray",

@@ -18,12 +18,12 @@ const CompanyDetails = () => {
         <p className="text-gray-700 print:text-sm uppercase">Phone:</p>
         (+91)<p> 7588777800, 9764705724</p>
       </div>
-      <div className="flex gap-1 items-center print:text-sm uppercase">
-        <p className="text-gray-700 print:text-sm uppercase">Email: </p>
+      <div className="flex gap-1 items-center print:text-sm">
+        <p className="text-gray-700 print:text-sm">Email: </p>
         <p>brothersindustries07@gmail.com</p>
       </div>
-      <div className="flex gap-1 items-center print:text-sm uppercase">
-        <p className="text-gray-700 print:text-sm uppercase">Website: </p>
+      <div className="flex gap-1 items-center print:text-sm">
+        <p className="text-gray-700 print:text-sm">Website: </p>
         <p>www.brothers.net.in </p>
       </div>
     </div>

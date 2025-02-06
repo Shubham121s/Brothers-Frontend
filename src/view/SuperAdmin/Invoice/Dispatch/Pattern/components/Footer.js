@@ -25,7 +25,7 @@ const Footer = ({ data }) => {
             <ShippingDetails data={data?.DispatchShippingAndOtherDetail} />
           </div>
         </div> */}
-        <div className="col-span-2 h-full p-2">
+        <div className="col-span-4 h-full p-2">
           <div className="h-full">
             <BankDetails data={data?.DispatchBankDetail} />
           </div>

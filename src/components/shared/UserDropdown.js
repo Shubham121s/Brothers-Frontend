@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Dropdown, Notification, Toast } from "../../components/ui";
 import ConfirmDialog from "./ConfirmDialog";
 import withHeaderItem from "../../utils/hoc/withHeaderItem";
@@ -10,8 +10,14 @@ import { MdLockOpen } from "react-icons/md";
 import useAuth from "../../utils/hooks/useAuth";
 import defaultProfile from "./defaultProfile.jpg";
 import { togglePasswordDialog } from "../../store/auth/sessionSlice";
-import { apiUpdateUserPassword } from "../../services/SuperAdmin/UserService";
+import {
+  apiUpdateUserPassword,
+  apiGetAllUserWithPagination,
+  apiGetPasswordOfUser,
+} from "../../services/SuperAdmin/UserService";
 import PasswordInput from "./PasswordInput";
+import CryptoJS from "crypto-js";
+import { SECRET_KEY } from "../../constants/app.constant";
 
 const dropdownItemList = [
   {
@@ -23,13 +29,52 @@ const dropdownItemList = [
 ];
 
 export const UserDropdown = ({ className }) => {
-  const { name, email, authority } = useSelector((state) => state.auth.user);
+  const { name, email, authority, user_id } = useSelector(
+    (state) => state.auth.user
+  );
   const { passwordDialog } = useSelector((state) => state.auth.session);
 
   const [password, setPassword] = useState("");
+  const [decryptedPassword, setDecryptedPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { signOut } = useAuth();
   const dispatch = useDispatch();
+
+  const decryptPassword = (encryptedPassword) => {
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedPassword, SECRET_KEY);
+      return bytes.toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+      return "Unable to decrypt password";
+    }
+  };
+
+  useEffect(() => {
+    if (passwordDialog) {
+      fetchUserPassword();
+    }
+  }, [passwordDialog]);
+
+  const fetchUserPassword = async () => {
+    try {
+      const response = await apiGetPasswordOfUser({
+        userId: user_id,
+      });
+
+      if (response?.status < 300 && response?.data?.data) {
+        const user = response.data.data;
+
+        if (user?.password) {
+          const decryptedPass = decryptPassword(user.password);
+
+          setDecryptedPassword(decryptedPass);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching user password:", error);
+    }
+  };
 
   const UserAvatar = (
     <div className={classNames(className, "flex items-center gap-2")}>
@@ -149,12 +194,25 @@ export const UserDropdown = ({ className }) => {
         onConfirm={onSavePassword}
         confirmText={"Save"}
         confirmButtonColor="purple-600"
-        width={450}
+        width={500}
       >
+        {decryptedPassword && (
+          <div className="text-sm text-gray-600 mb-2 mt-4">
+            <strong>Current Password:</strong>{" "}
+            <span
+              className="cursor-pointer"
+              onMouseEnter={() => setShowPassword(true)}
+              onMouseLeave={() => setShowPassword(false)}
+            >
+              {showPassword ? decryptedPassword : "******"}
+            </span>
+          </div>
+        )}
+
         <PasswordInput
           className="mt-4"
           placeholder="New Password"
-          style={{ width: "300px" }}
+          style={{ width: "350px" }}
           autoComplete="off"
           onChange={(e) => {
             setPassword(e.target.value);

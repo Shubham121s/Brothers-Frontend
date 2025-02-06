@@ -10,6 +10,7 @@ import {
   getAllPoNumber,
   getAllPoDates,
   getAllPoYears,
+  getAllCustomerName,
 } from "../store/dataSlice";
 import { useDispatch, useSelector } from "react-redux";
 import cloneDeep from "lodash/cloneDeep";
@@ -33,6 +34,8 @@ const PoTableTools = () => {
   const startDate = useSelector(
     (state) => state.po_list.data.tableData.startDate
   );
+  const customer = useSelector((state) => state.po_list.data.customer);
+
   const data = useSelector((state) => state.po_list.data.poList);
   const endDate = useSelector((state) => state.po_list.data.tableData.endDate);
 
@@ -49,16 +52,16 @@ const PoTableTools = () => {
 
   const tableData = useSelector((state) => state.po_list.data.tableData);
 
-  const customerOptions = useMemo(() => {
-    const customers = data.map((item) => ({
-      value: item.Customer.customer_id,
-      label: item.Customer.name,
-    }));
+  // const customerOptions = useMemo(() => {
+  //   const customers = data.map((item) => ({
+  //     value: item.Customer.customer_id,
+  //     label: item.Customer.name,
+  //   }));
 
-    return Array.from(
-      new Map(customers.map((item) => [item.value, item])).values()
-    );
-  }, [data]);
+  //   return Array.from(
+  //     new Map(customers.map((item) => [item.value, item])).values()
+  //   );
+  // }, [data]);
 
   const handleInputChange = (val) => {
     const newTableData = cloneDeep(tableData);
@@ -76,11 +79,16 @@ const PoTableTools = () => {
   const onEdit = (e, type) => {
     const newTableData = cloneDeep(tableData);
     if (type === "customer") {
+      console.log("customer");
+      console.log("e", e);
       setCustomerValues(e);
       let customers = e.map((m) => m.value);
-      newTableData.customers = JSON.stringify(customers);
+      console.log("customers", customers);
+      newTableData.customer_id = JSON.stringify(customers);
     } else if (type === "poYear") {
       setPoYearValues(e);
+      console.log("poYear");
+      console.log("e", e);
       let poYear = e.map((m) => m.value);
       dispatch(getAllPOANumber({ year: JSON.stringify(poYear) }));
       dispatch(getAllPoMonths({ year: JSON.stringify(poYear) }));
@@ -152,6 +160,7 @@ const PoTableTools = () => {
     dispatch(getAllPoDates());
     dispatch(getAllPoMonths());
     dispatch(getAllPoNumber());
+    dispatch(getAllCustomerName());
     dispatch(getAllPoYears());
     setPoNumberValues([]);
     setPoaNumberValues([]);
@@ -167,7 +176,7 @@ const PoTableTools = () => {
     newTableData.months = "";
     newTableData.year = "";
     newTableData.date = "";
-    newTableData.customers = "";
+    newTableData.customer_id = "";
     inputRef.current.value = "";
     fetchData(newTableData);
   };
@@ -196,20 +205,21 @@ const PoTableTools = () => {
           <div className="grid grid-cols-5 gap-2">
             <Select
               isMulti
+              placeholder="Customer Name"
+              size="sm"
+              options={customer}
+              value={customerValues}
+              onChange={(e) => onEdit(e, "customer")}
+            />
+            <Select
+              isMulti
               placeholder="Year"
               size="sm"
               options={poYears}
               value={poYearValues}
               onChange={(e) => onEdit(e, "poYear")}
             />
-            <Select
-              isMulti
-              placeholder="Select Months"
-              size="sm"
-              options={poMonths}
-              value={monthValues}
-              onChange={(e) => onEdit(e, "month")}
-            />
+
             <Select
               isMulti
               placeholder="Select Date"
@@ -235,13 +245,14 @@ const PoTableTools = () => {
               value={poNumberValues}
               onChange={(e) => onEdit(e, "poNumber")}
             />
+
             <Select
               isMulti
-              placeholder="Select Customer"
+              placeholder="Select Months"
               size="sm"
-              options={customerOptions}
-              value={customerValues}
-              onChange={(e) => onEdit(e, "customer")}
+              options={poMonths}
+              value={monthValues}
+              onChange={(e) => onEdit(e, "month")}
             />
 
             {/* <DatePickerRange

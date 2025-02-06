@@ -96,7 +96,11 @@ const ItemForm = forwardRef((props, ref) => {
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          handleOnAddItem?.(values);
+          const normalizedValues = {
+            ...values,
+            delivery_date: new Date(values.delivery_date).toISOString(), // Convert to ISO format
+          };
+          handleOnAddItem?.(normalizedValues);
           resetForm();
           if (mode === "edit") {
             dispatch(toggleEditPoItemDialog(false));
@@ -106,6 +110,7 @@ const ItemForm = forwardRef((props, ref) => {
         }}
       >
         {({ values, touched, errors }) => {
+          console.log("values", values);
           return (
             <Form>
               <FormContainer>

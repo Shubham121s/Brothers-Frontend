@@ -15,7 +15,7 @@ const validationSchema = Yup.object().shape({
 
 const ItemForm = forwardRef((props, ref) => {
   const { initialData, onDiscard, handleFormSubmit, dispatchList } = props;
-  const [content, setContent] = useState(initialData.remarks);
+  const [content, setContent] = useState(initialData.remark);
   return (
     <Formik
       innerRef={ref}
@@ -45,7 +45,7 @@ const ItemForm = forwardRef((props, ref) => {
               <TextEditor
                 content={content}
                 setContent={setContent}
-                placeholder="Add Product Remarks"
+                placeholder="Add Product Remark"
               />
             </div>
             <div className="flex gap-2 justify-end mt-4">

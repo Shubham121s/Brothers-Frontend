@@ -75,6 +75,8 @@ const EditPO = () => {
     setSubmitting(true);
     const action = await updatePo(values);
     setSubmitting(false);
+
+    console.log("action", action.payload.data.message);
     if (action.payload.status === 200) {
       Toast.push(
         <Notification title="Successfully added" type="success" duration={2500}>
@@ -88,7 +90,8 @@ const EditPO = () => {
     } else {
       Toast.push(
         <Notification title={"Error"} type="danger" duration={2500}>
-          Some Error Occured
+          {/* Some Error Occured */}
+          {action.payload.data.message}
         </Notification>,
         {
           placement: "top-center",

@@ -1,56 +1,64 @@
-import ApiService from '../ApiService'
+import ApiService from "../ApiService";
 
 export async function apiGetAllUserWithPagination(data) {
   return ApiService.fetchData({
-    url: 'v1/web/company/user',
-    method: 'post',
-    data
-  })
+    url: "v1/web/company/user",
+    method: "post",
+    data,
+  });
+}
+
+export async function apiGetPasswordOfUser(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/user/get/password",
+    method: "post",
+    data,
+  });
 }
 
 export async function apiPostNewUserRegister(data) {
   return ApiService.fetchData({
-    url: 'v1/web/company/user/register',
-    method: 'post',
-    data
-  })
+    url: "v1/web/company/user/register",
+    method: "post",
+    data,
+  });
 }
 
 export async function apiUpdateUserDetails(data) {
   return ApiService.fetchData({
-    url: 'v1/web/company/user/update/id',
-    method: 'put',
-    data
-  })
+    url: "v1/web/company/user/update/id",
+    method: "put",
+    data,
+  });
 }
 export async function apiDeleteUser(data) {
   return ApiService.fetchData({
-    url: 'v1/web/company/user/delete/id',
-    method: 'delete',
-    data
-  })
+    url: "v1/web/company/user/delete/id",
+    method: "delete",
+    data,
+  });
 }
 
 export async function apiUpdateUserPassword(data) {
   return ApiService.fetchData({
-    url: 'v1/web/company/user/update/password',
-    method: 'put',
-    data
-  })
+    url: "v1/web/company/user/update/password",
+    method: "put",
+    data,
+  });
 }
 
 export async function apiGetAllForms(data) {
   return ApiService.fetchData({
-    url: 'v1/web/company/module/detail',
-    method: 'post',
-    data
-  })
+    url: "v1/web/company/module/detail",
+    method: "post",
+    data,
+  });
 }
 
 export async function apiUpdateFormDetail(data) {
   return ApiService.fetchData({
-    url: 'v1/web/company/module/detail/update',
-    method: 'put',
-    data
-  })
+    url: "v1/web/company/module/detail/update",
+    method: "put",
+    data,
+  });
 }
