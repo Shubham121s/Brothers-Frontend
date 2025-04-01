@@ -32,7 +32,7 @@ const TableFooterRows = ({
   // const totalAmount = InvoiceTotal(dispatchList(data?.DispatchLocations));
 
   const [{ remark = "" }] = data;
-  const cleanRemark = remark.replace(/<\/?p>/g, "");
+  const cleanRemark = remark?.replace(/<\/?p>/g, "");
 
   return (
     <>

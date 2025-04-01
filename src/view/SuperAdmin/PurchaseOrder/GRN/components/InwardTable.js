@@ -36,7 +36,7 @@ const ActionColumn = ({ row }) => {
       return pushNotification("Error", "danger", `File Not Uploaded`);
     }
     const splitString = url.split("/uploads/");
-    const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`;
+    const transformedString = `https://api-casting.brothers.net.in/api/static/${splitString[1]}`;
     window.open(transformedString, "_blank");
   };
 

@@ -106,10 +106,11 @@ export const getAllCustomerName = createAsyncThunk(
     }
   }
 );
-export const initialTableData = {
+export const initialTableData = { 
   total: 0,
   pageIndex: 1,
   pageSize: 10,
+  customer_id: "",
   query: "",
   poNumber: "",
   poaNumber: "",

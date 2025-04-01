@@ -16,6 +16,8 @@ import {
 // import CategoryEditFormDialog from "./CategoryEditDialog";
 import NoteNewDialog from "./NoteNewDialog";
 import NoteEditDialog from "./NoteEditDialog";
+import DeleteConditionDialog from "../components/DeleteConfirmationDialog";
+import DeleteNoteDialog from "../components/DeleteConfirmationDialog";
 
 const statusColor = {
   true: {
@@ -163,6 +165,7 @@ const NoteTable = () => {
       <CategoryEditFormDialog /> */}
       <NoteNewDialog />
       <NoteEditDialog />
+      <DeleteNoteDialog />
     </>
   );
 };

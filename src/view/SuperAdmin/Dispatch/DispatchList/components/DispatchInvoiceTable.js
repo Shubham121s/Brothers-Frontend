@@ -5,6 +5,8 @@ import {
   getAllCustomerOption,
   getAllInvoiceDate,
   getAllInvoiceNumber,
+  getAllMonths,
+  getAllYears,
   getDispatchInvoiceWithPagination,
   setTableData,
 } from "../store/dataSlice";
@@ -273,6 +275,8 @@ const DispatchInvoiceTable = () => {
     invoice_no,
     invoice_date,
     customer_id,
+    year,
+    months,
   } = useSelector((state) => state.dispatch_invoice.data.tableData);
 
   const fetchData = useCallback(() => {
@@ -286,6 +290,8 @@ const DispatchInvoiceTable = () => {
         customer_id,
         invoice_no,
         invoice_date,
+        year,
+        months,
       })
     );
   }, [
@@ -298,6 +304,8 @@ const DispatchInvoiceTable = () => {
     customer_id,
     invoice_no,
     invoice_date,
+    year,
+    months,
   ]);
 
   useEffect(() => {
@@ -311,12 +319,16 @@ const DispatchInvoiceTable = () => {
     customer_id,
     invoice_no,
     invoice_date,
+    year,
+    months,
   ]);
 
   useEffect(() => {
     dispatch(getAllCustomerOption());
     dispatch(getAllInvoiceNumber());
     dispatch(getAllInvoiceDate());
+    dispatch(getAllYears());
+    dispatch(getAllMonths());
 
     // dispatch(getAllPoDates());
   }, []);
@@ -331,6 +343,8 @@ const DispatchInvoiceTable = () => {
       customer_id,
       invoice_no,
       invoice_date,
+      year,
+      months,
     }),
     [
       pageIndex,
@@ -341,6 +355,8 @@ const DispatchInvoiceTable = () => {
       customer_id,
       invoice_no,
       invoice_date,
+      year,
+      months,
     ]
   );
 

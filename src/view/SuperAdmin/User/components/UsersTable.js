@@ -89,12 +89,14 @@ const ActionColumn = ({ row }) => {
       <span className="cursor-pointer hover:text-red-500" onClick={onDelete}>
         <HiOutlineTrash />
       </span>
-      <span
-        className={`cursor-pointer hover:text-pink-500`}
-        onClick={onUpdatePassword}
-      >
-        <MdLockOpen />
-      </span>
+      {userAuthority.includes("super-admin") && (
+        <span
+          className={`cursor-pointer hover:text-pink-500`}
+          onClick={onUpdatePassword}
+        >
+          <MdLockOpen />
+        </span>
+      )}
       {userAuthority.includes("super-admin") && (
         <span
           className="cursor-pointer hover:text-purple-500"

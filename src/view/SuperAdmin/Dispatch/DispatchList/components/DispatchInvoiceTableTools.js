@@ -5,6 +5,10 @@ import {
   setFilterData,
   getDispatchInvoiceWithPagination,
   getAllCustomerOption,
+  getAllInvoiceNumber,
+  getAllInvoiceDate,
+  getAllYears,
+  getAllMonths,
 } from "../store/dataSlice";
 import DispatchInvoiceTableSearch from "./DispatchInvoiceTableSearch";
 import DispatchInvoiceTableFilter from "./DispatchInvoiceTableFilter";
@@ -23,7 +27,7 @@ const DispatchInvoiceTableTools = () => {
   );
 
   const data = useSelector(
-    (state) => state.dispatch_invoice.data.dispatchInvoiceList
+    (state) => state.dispatch_invoice.data.customerInvoiceDatesList
   );
 
   const customer = useSelector(
@@ -38,20 +42,24 @@ const DispatchInvoiceTableTools = () => {
     (state) => state.dispatch_invoice.data.invoiceDateList
   );
 
+  const years = useSelector((state) => state.dispatch_invoice.data.years);
+  const months = useSelector((state) => state.dispatch_invoice.data.months);
+
+  const invoiceNumberOptions = data?.length
+    ? data.map((item) => ({ value: item.invoice_no, label: item.invoice_no }))
+    : invoiceNumber;
+
+  const invoiceDateOptions = data?.length
+    ? data.map((item) => ({
+        value: item.invoice_date,
+        label: item.invoice_date,
+      }))
+    : invoiceDates;
   const [customerValues, setCustomerValues] = useState([]);
   const [invoiceNumberValues, setInvoiceNumberValues] = useState([]);
-
+  const [yearsValue, setYearsValue] = useState([]);
+  const [monthValues, setMonthValues] = useState([]);
   const [invoiceDatesValues, setInvoiceDatesValues] = useState([]);
-
-  const [filteredInvoiceNumbers, setFilteredInvoiceNumbers] = useState([]);
-  const [filteredInvoiceDates, setFilteredInvoiceDates] = useState([]);
-
-  const [filteredData, setFilteredData] = useState({
-    invoices: [],
-    dates: [],
-  });
-
-  const [shouldFilter, setShouldFilter] = useState(false);
 
   const handleInputChange = (val) => {
     const newTableData = cloneDeep(tableData);
@@ -66,54 +74,12 @@ const DispatchInvoiceTableTools = () => {
     }
   };
 
-  useEffect(() => {
-    if (shouldFilter) {
-      const filter = customerValues.map((item) => item.value);
-
-      const filteredInvoices = data
-        .filter((item) => filter.includes(item.DispatchConsignee.customer_id))
-        .map((item) => ({ label: item.invoice_no, value: item.invoice_no }));
-
-      const filteredDates = data
-        .filter((item) => filter.includes(item.DispatchConsignee.customer_id))
-        .map((item) => ({
-          label: item.invoice_date,
-          value: item.invoice_date,
-        }));
-
-      setFilteredData({
-        invoices: filteredInvoices,
-        dates: filteredDates,
-      });
-
-      setTimeout(() => {
-        setShouldFilter(false);
-      }, 4000);
-    }
-  }, [data, customerValues]);
-
-  // useEffect(() => {
-  //   if (
-  //     shouldFilter &&
-  //     filteredData.invoices.length > 0 &&
-  //     filteredData.dates.length > 0
-  //   ) {
-  //     const timeout = setTimeout(() => {
-  //       setShouldFilter(false);
-  //     }, 300);
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [filteredData, shouldFilter]);
-
   const onEdit = (e, type) => {
     const newTableData = cloneDeep(tableData);
 
     if (type === "customer") {
       setCustomerValues(e);
-      setShouldFilter(true);
       let customer = e.map((m) => m.value);
-      console.log("customer", customer);
-
       newTableData.customer_id = JSON.stringify(customer);
     } else if (type === "invoiceNumber") {
       setInvoiceNumberValues(e);
@@ -123,6 +89,22 @@ const DispatchInvoiceTableTools = () => {
       setInvoiceDatesValues(e);
       let invoiceDates = e.map((m) => m.value);
       newTableData.invoice_date = JSON.stringify(invoiceDates);
+    } else if (type === "year") {
+      setYearsValue(e);
+
+      let Year = e.map((m) => m.value);
+
+      dispatch(
+        getAllInvoiceDate({
+          customer_id: newTableData.customer_id,
+          year: JSON.stringify(Year),
+        })
+      );
+      newTableData.year = JSON.stringify(Year);
+    } else if (type === "month") {
+      setMonthValues(e);
+      let months = e.map((m) => m.value);
+      newTableData.months = JSON.stringify(months);
     }
 
     dispatch(setTableData(newTableData));
@@ -138,6 +120,21 @@ const DispatchInvoiceTableTools = () => {
     newTableData.query = "";
     inputRef.current.value = "";
     dispatch(setFilterData({ type: "" }));
+    dispatch(getAllCustomerOption());
+    dispatch(getAllInvoiceNumber());
+    dispatch(getAllInvoiceDate());
+    dispatch(getAllYears());
+    dispatch(getAllMonths());
+    setCustomerValues([]);
+    setInvoiceNumberValues([]);
+    setInvoiceDatesValues([]);
+    setYearsValue([]);
+    setMonthValues([]);
+    newTableData.months = "";
+    newTableData.year = "";
+    newTableData.invoice_date = "";
+    newTableData.invoice_no = "";
+    newTableData.customer_id = "";
     fetchData(newTableData);
   };
 
@@ -178,13 +175,27 @@ const DispatchInvoiceTableTools = () => {
 
             <Select
               isMulti
+              placeholder="Year"
+              size="sm"
+              options={years}
+              value={yearsValue}
+              onChange={(e) => onEdit(e, "year")}
+            />
+
+            <Select
+              isMulti
+              placeholder="Select Months"
+              size="sm"
+              options={months}
+              value={monthValues}
+              onChange={(e) => onEdit(e, "month")}
+            />
+
+            <Select
+              isMulti
               placeholder="Select Date"
               size="sm"
-              options={
-                filteredData.dates.length > 0
-                  ? filteredData.dates
-                  : invoiceDates
-              }
+              options={invoiceDateOptions}
               value={invoiceDatesValues}
               onChange={(e) => onEdit(e, "invoiceDates")}
             />
@@ -193,11 +204,7 @@ const DispatchInvoiceTableTools = () => {
               isMulti
               placeholder="Invoice Number"
               size="sm"
-              options={
-                filteredData.invoices.length > 0
-                  ? filteredData.invoices
-                  : invoiceNumber
-              }
+              options={invoiceNumberOptions}
               value={invoiceNumberValues}
               onChange={(e) => onEdit(e, "invoiceNumber")}
             />

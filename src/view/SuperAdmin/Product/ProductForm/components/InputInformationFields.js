@@ -1,6 +1,6 @@
-import React, { memo } from 'react'
-import { FormItem, Input } from '../../../../../components/ui'
-import { Field } from 'formik'
+import React, { memo } from "react";
+import { FormItem, Input } from "../../../../../components/ui";
+import { Field } from "formik";
 
 const InputInformationFields = (props) => {
   const {
@@ -8,10 +8,10 @@ const InputInformationFields = (props) => {
     touched,
     label,
     name,
-    placeholder = '',
-    type = 'text',
-    values = ''
-  } = props
+    placeholder = "",
+    type = "text",
+    values = "",
+  } = props;
 
   return (
     <FormItem
@@ -28,7 +28,7 @@ const InputInformationFields = (props) => {
         component={Input}
       />
     </FormItem>
-  )
-}
+  );
+};
 
-export default memo(InputInformationFields)
+export default memo(InputInformationFields);

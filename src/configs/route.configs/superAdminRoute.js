@@ -230,6 +230,15 @@ const superAdminRoute = [
   //   ),
   //   authority: [SUPER_ADMIN,ADMIN],
   // },
+
+  {
+    key: "invoice.dispatch.edit",
+    path: `/dispatch/pattern/edit/:invoiceId`,
+    component: React.lazy(() =>
+      import("../../view/SuperAdmin/Dispatch/Pattern/EditPattern")
+    ),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
+  },
   // **************END***************
 
   // DISPATCH

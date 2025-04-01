@@ -4,6 +4,7 @@ import { Field } from "formik";
 
 const WeightInformationFieldsForm = (props) => {
   const { errors, touched, values } = props;
+
   useEffect(() => {
     if (values.PoList) {
       values.weight = values?.PoList?.Product?.Drawings[0].finish_weight;
@@ -16,7 +17,7 @@ const WeightInformationFieldsForm = (props) => {
         name="weight"
         autoComplete="off"
         placeholder="Individual Weight"
-        value={values.weight}
+        value={values.weight * values.quantity}
         disabled={true}
         component={Input}
       />

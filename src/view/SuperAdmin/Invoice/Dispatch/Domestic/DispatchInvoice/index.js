@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import DispatchTable from "./components/DispatchTable";
 import { Viewer } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
+import html2pdf from "html2pdf.js";
 
 // Import styles for PDF Viewer
 import "@react-pdf-viewer/core/lib/styles/index.css";
@@ -15,13 +16,18 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
   const componentRef = useRef();
   const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
 
-  // Create a new instance of the default layout plugin
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
-
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `invoice-${data?.invoice_no}`,
   });
+
+  const handleDownloadPDF = () => {
+    if (!componentRef.current || !data) return;
+
+    const fileName = `Invoice-${data?.invoice_no || "document"}.pdf`;
+
+    html2pdf().from(componentRef.current).set({ filename: fileName }).save(); // Directly downloads the PDF
+  };
 
   const handleGeneratePreview = () => {
     const node = componentRef.current;
@@ -132,7 +138,7 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
           variant="solid"
           color="orange-500"
           onClick={() => {
-            handlePrint();
+            handleDownloadPDF();
             handleGeneratePreview();
           }}
         >

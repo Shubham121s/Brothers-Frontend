@@ -61,16 +61,11 @@ const ActionColumn = ({ row }) => {
     dispatch(setSelectedInvoice(row));
   };
 
-  // const onEdit = useCallback(() => {
-  //   if (row?.invoice_type === "domestic")
-  //     navigate(
-  //       `/dispatch/domestic/edit/${row?.dispatch_invoice_id}`
-  //     );
-  //   else
-  //     navigate(
-  //       `/dispatch/foreign/edit/${row?.dispatch_invoice_id}`
-  //     );
-  // }, [row]);
+  console.log("row", row);
+
+  const onEdit = useCallback(() => {
+    navigate(`/dispatch/pattern/edit/${row?.pattern_invoice_id}`);
+  }, [row]);
 
   return (
     <div className="flex justify-center text-lg gap-x-4">
@@ -81,13 +76,13 @@ const ActionColumn = ({ row }) => {
       >
         <HiOutlineEye />
       </span>
-      {/* <span
+      <span
         onClick={onEdit}
         className={`cursor-pointer hover:${textTheme}`}
         // to={`/dispatch/foreign/dispatch-invoice/${row?.dispatch_invoice_id}`}
       >
         <HiOutlinePencil />
-      </span> */}
+      </span>
     </div>
   );
 };

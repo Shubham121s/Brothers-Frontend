@@ -6,6 +6,8 @@ import {
   apiGetAllInvoiceNumber,
   apiGetAllCustomersOption,
   apiGetAllInvoiceDates,
+  apiGetYears,
+  apiGetMonths,
 } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
 export const getDispatchInvoiceWithPagination = createAsyncThunk(
@@ -92,6 +94,30 @@ export const getAllInvoiceDate = createAsyncThunk(
   }
 );
 
+export const getAllYears = createAsyncThunk(
+  "dispatch/invoice/details/invoice/years",
+  async (data) => {
+    try {
+      const response = await apiGetYears(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const getAllMonths = createAsyncThunk(
+  "dispatch/invoice/details/invoice/months",
+  async (data) => {
+    try {
+      const response = await apiGetMonths(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -110,9 +136,12 @@ const dataSlice = createSlice({
   initialState: {
     loading: false,
     dispatchInvoiceList: [],
+    customerInvoiceDatesList: [],
     invoiceNumberList: [],
     invoiceDateList: [],
     customerOption: [],
+    years: [],
+    months: [],
     tableData: initialTableData,
     filterData: initialFilterData,
   },
@@ -130,6 +159,9 @@ const dataSlice = createSlice({
   extraReducers: {
     [getDispatchInvoiceWithPagination.fulfilled]: (state, action) => {
       state.dispatchInvoiceList = action.payload.data?.data;
+      state.customerInvoiceDatesList =
+        action.payload.data?.customerInvoiceDates;
+
       state.tableData.total = action.payload?.data?.total;
       state.loading = false;
     },
@@ -161,6 +193,18 @@ const dataSlice = createSlice({
     },
     [getAllInvoiceDate.pending]: (state) => {
       state.loading = true;
+    },
+
+    [getAllYears.fulfilled]: (state, action) => {
+      state.years = action.payload.data?.data;
+      state.tableData.total = action.payload?.data?.total;
+      state.loading = false;
+    },
+
+    [getAllMonths.fulfilled]: (state, action) => {
+      state.months = action.payload.data?.data;
+      state.tableData.total = action.payload?.data?.total;
+      state.loading = false;
     },
 
     [addDetails.fulfilled]: (state) => {},
