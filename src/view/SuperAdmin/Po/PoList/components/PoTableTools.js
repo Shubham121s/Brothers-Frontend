@@ -11,6 +11,7 @@ import {
   getAllPoDates,
   getAllPoYears,
   getAllCustomerName,
+  setFilterData,
 } from "../store/dataSlice";
 import { useDispatch, useSelector } from "react-redux";
 import cloneDeep from "lodash/cloneDeep";
@@ -18,6 +19,7 @@ import PoTableSearch from "./PoTableSearch";
 import { HiOutlineFilter } from "react-icons/hi";
 import ReportButton from "./ReportButton";
 import { Months } from "./constants";
+import PoTableFilter from "./PoTableFilter";
 
 const dateFormat = "MMM DD, YYYY";
 
@@ -79,21 +81,41 @@ const PoTableTools = () => {
   const onEdit = (e, type) => {
     const newTableData = cloneDeep(tableData);
     if (type === "customer") {
-      console.log("customer");
-      console.log("e", e);
       setCustomerValues(e);
       let customers = e.map((m) => m.value);
-      console.log("customers", customers);
+      dispatch(getAllPOANumber({ customer_id: JSON.stringify(customers) }));
+      dispatch(getAllPoMonths({ customer_id: JSON.stringify(customers) }));
+      dispatch(getAllPoNumber({ customer_id: JSON.stringify(customers) }));
+      dispatch(getAllPoDates({ customer_id: JSON.stringify(customers) }));
       newTableData.customer_id = JSON.stringify(customers);
     } else if (type === "poYear") {
       setPoYearValues(e);
-      console.log("poYear");
-      console.log("e", e);
       let poYear = e.map((m) => m.value);
-      dispatch(getAllPOANumber({ year: JSON.stringify(poYear) }));
-      dispatch(getAllPoMonths({ year: JSON.stringify(poYear) }));
-      dispatch(getAllPoNumber({ year: JSON.stringify(poYear) }));
-      dispatch(getAllPoDates({ year: JSON.stringify(poYear) }));
+      dispatch(
+        getAllPOANumber({
+          customer_id: newTableData.customer_id,
+          year: JSON.stringify(poYear),
+        })
+      );
+      dispatch(
+        getAllPoMonths({
+          customer_id: newTableData.customer_id,
+          year: JSON.stringify(poYear),
+        })
+      );
+      dispatch(
+        getAllPoNumber({
+          customer_id: newTableData.customer_id,
+          year: JSON.stringify(poYear),
+        })
+      );
+      dispatch(
+        getAllPoDates({
+          customer_id: newTableData.customer_id,
+          year: JSON.stringify(poYear),
+        })
+      );
+
       newTableData.year = JSON.stringify(poYear);
     } else if (type === "poNumber") {
       setPoNumberValues(e);
@@ -108,18 +130,21 @@ const PoTableTools = () => {
       let months = e.map((m) => m.value);
       dispatch(
         getAllPOANumber({
+          customer_id: newTableData.customer_id,
           months: JSON.stringify(months),
           year: newTableData.year,
         })
       );
       dispatch(
         getAllPoNumber({
+          customer_id: newTableData.customer_id,
           months: JSON.stringify(months),
           year: newTableData.year,
         })
       );
       dispatch(
         getAllPoDates({
+          customer_id: newTableData.customer_id,
           months: JSON.stringify(months),
           year: newTableData.year,
         })
@@ -130,6 +155,7 @@ const PoTableTools = () => {
       let dates = e.map((m) => m.value);
       dispatch(
         getAllPoNumber({
+          customer_id: newTableData.customer_id,
           months: newTableData.months,
           year: newTableData.year,
           date: JSON.stringify(dates),
@@ -137,6 +163,7 @@ const PoTableTools = () => {
       );
       dispatch(
         getAllPOANumber({
+          customer_id: newTableData.customer_id,
           months: newTableData.months,
           year: newTableData.year,
           date: JSON.stringify(dates),
@@ -178,6 +205,7 @@ const PoTableTools = () => {
     newTableData.date = "";
     newTableData.customer_id = "";
     inputRef.current.value = "";
+    dispatch(setFilterData({ status: "" }));
     fetchData(newTableData);
   };
 
@@ -194,6 +222,7 @@ const PoTableTools = () => {
           >
             Filter
           </Button>
+          <PoTableFilter />
           <Button size="sm" onClick={onClearAll}>
             Clear All
           </Button>
@@ -222,6 +251,15 @@ const PoTableTools = () => {
 
             <Select
               isMulti
+              placeholder="Select Months"
+              size="sm"
+              options={poMonths}
+              value={monthValues}
+              onChange={(e) => onEdit(e, "month")}
+            />
+
+            <Select
+              isMulti
               placeholder="Select Date"
               size="sm"
               options={poDates}
@@ -244,15 +282,6 @@ const PoTableTools = () => {
               options={poNumbers}
               value={poNumberValues}
               onChange={(e) => onEdit(e, "poNumber")}
-            />
-
-            <Select
-              isMulti
-              placeholder="Select Months"
-              size="sm"
-              options={poMonths}
-              value={monthValues}
-              onChange={(e) => onEdit(e, "month")}
             />
 
             {/* <DatePickerRange

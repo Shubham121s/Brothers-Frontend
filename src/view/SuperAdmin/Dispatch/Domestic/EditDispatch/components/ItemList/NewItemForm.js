@@ -65,14 +65,14 @@ const NewItemForm = forwardRef((props, ref) => {
                 setFieldValue={setFieldValue}
                 poList={values.PoList}
               />
-              <RowChargesInformationFields
-                label="Row Charges"
+              {/* <RowChargesInformationFields
+                label="Raw Charges"
                 name="row_charges"
-              />
-              <MachineChargesInformationFields
+              /> */}
+              {/* <MachineChargesInformationFields
                 label="Machine Charges"
                 name="machining_charges"
-              />
+              /> */}
               <TotalAmountInformationFieldsForm
                 currency={values.Po?.po_currency_type}
                 unitPrice={values.PoList?.unit_price}

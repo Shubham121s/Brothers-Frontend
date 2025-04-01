@@ -779,7 +779,7 @@ const generateInvoiceExcel = (invoiceData) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'BANK OF MAHARASTRA\n',
+      text: 'BANK OF MAHARASHTRA\n',
       font: { size: 15 }
     },
     {

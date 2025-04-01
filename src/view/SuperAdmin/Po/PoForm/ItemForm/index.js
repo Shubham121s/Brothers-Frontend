@@ -54,6 +54,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const ItemForm = forwardRef((props, ref) => {
+  console.log("props", props);
   const {
     handleOnAddItem,
     initialData,

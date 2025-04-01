@@ -22,7 +22,7 @@ const ImageDialog = () => {
 
   const onViewImage = () => {
     const splitString = selectedAnnual?.certificate?.split('/uploads/')
-    const transformedString = `https://api-erp.brothers.net.in/api/static/${splitString[1]}`
+    const transformedString = `https://api-casting.brothers.net.in/api/static/${splitString[1]}`;
     window.open(transformedString, '_blank')
   }
 

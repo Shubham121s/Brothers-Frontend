@@ -37,6 +37,9 @@ const ShippingAddressDeleteDialog = () => {
         shipping_address_id: selectedShippingAddress?.shipping_address_id,
       })
     );
+
+
+    
     setLoading(false);
     if (action.payload.status === 200) {
       PushNotification(

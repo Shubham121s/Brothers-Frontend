@@ -30,7 +30,6 @@ import { json } from "react-router-dom";
 const dateFormat = "MMM DD, YYYY";
 
 const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
-  console.log("selectab", selectedTab);
   const [open, setOpen] = useState(false);
   const [poDateVAlues, setPoDateValues] = useState([]);
   const [poDeliveryVAlues, setPoDeliveryVAlues] = useState([]);
@@ -110,7 +109,6 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
 
     fetchData(newTableData);
   };
-  console.log("delivery status", DeliveryStatus);
   useEffect(() => {
     if (selectedTab) {
       dispatch(getPODates({ DeliveryStatus }));
@@ -167,7 +165,6 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
     } else if (type === "material_grade") {
       newTableData.material_grade = val;
     } else if (type === "po_number") {
-      console.log(val);
       newTableData.po_no = val;
     } else if (type === "po_date") {
       setPoDateValues(val);
@@ -291,7 +288,6 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
     }
     fetchData(newTableData);
   };
-  console.log(po_no);
   return (
     <>
       <div className="flex items-center justify-between gap-2 mb-4">

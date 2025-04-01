@@ -216,3 +216,11 @@ export async function apiGetAllCustomersOption() {
     method: "get",
   });
 }
+
+export async function apiPostActualDates(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/po-list/date/update",
+    method: "post",
+    data,
+  });
+}

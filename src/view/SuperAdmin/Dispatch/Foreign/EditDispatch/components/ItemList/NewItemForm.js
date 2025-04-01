@@ -39,7 +39,6 @@ const NewItemForm = forwardRef((props, ref) => {
       }}
     >
       {({ values, touched, errors, setFieldValue, isSubmitting }) => {
-        console.log(values);
         return (
           <Form>
             <FormContainer>

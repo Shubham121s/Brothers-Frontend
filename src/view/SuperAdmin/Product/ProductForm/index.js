@@ -1,143 +1,155 @@
-import React, { forwardRef, useMemo, useState } from 'react'
+import React, { forwardRef, useMemo, useState } from "react";
 import {
   FormContainer,
   Button,
   Card,
   Badge,
   FormItem,
-  Upload
-} from '../../../../components/ui'
-import { StickyFooter, ConfirmDialog } from '../../../../components/shared'
-import { Form, Formik, Field } from 'formik'
-import cloneDeep from 'lodash/cloneDeep'
-import { HiCheck, HiOutlineTrash } from 'react-icons/hi'
-import { AiOutlineSave } from 'react-icons/ai'
-import * as Yup from 'yup'
-import InputInformationFields from './components/InputInformationFields'
-import SelectInformationFields from './components/SelectInformationFields'
-import { components } from 'react-select'
-import DrawingFields from '../Drawing/DrawingForm/DrawingFields'
-import { apiIsProductExist } from '../../../../services/SuperAdmin/Product/IndexService'
-import { debounce } from 'lodash'
-import ItemCodeInformationField from './components/ItemCodeInformationField'
-const { Control } = components
+  Upload,
+} from "../../../../components/ui";
+import { StickyFooter, ConfirmDialog } from "../../../../components/shared";
+import { Form, Formik, Field } from "formik";
+import cloneDeep from "lodash/cloneDeep";
+import { HiCheck, HiOutlineTrash } from "react-icons/hi";
+import { AiOutlineSave } from "react-icons/ai";
+import * as Yup from "yup";
+import InputInformationFields from "./components/InputInformationFields";
+import SelectInformationFields from "./components/SelectInformationFields";
+import { components } from "react-select";
+import DrawingFields from "../Drawing/DrawingForm/DrawingFields";
+import { apiIsProductExist } from "../../../../services/SuperAdmin/Product/IndexService";
+import { debounce } from "lodash";
+import ItemCodeInformationField from "./components/ItemCodeInformationField";
+const { Control } = components;
 
-var isCodeExixts = false
+var isCodeExixts = false;
 
 const validationSchema1 = Yup.object().shape({
-  name: Yup.string().required('Required'),
-  description: Yup.string().required('Required'),
-  material_grade_id: Yup.string().required('Required'),
-  unit_measurement: Yup.string().required('Required'),
-  standard_lead_time: Yup.string().required('Required'),
-  standard_lead_time_type: Yup.string().required('Required'),
-  pattern_id: Yup.string().required('Required'),
+  name: Yup.string().required("Required"),
+  description: Yup.string().required("Required"),
+  material_grade_id: Yup.string().required("Required"),
+  unit_measurement: Yup.string().required("Required"),
+  standard_lead_time: Yup.string().required("Required"),
+  standard_lead_time_type: Yup.string().required("Required"),
+  raw_lead_time: Yup.string().required("Required"),
+  raw_lead_time_type: Yup.string().required("Required"),
+  machine_lead_time: Yup.string().required("Required"),
+  machine_lead_time_type: Yup.string().required("Required"),
+  quality_lead_time: Yup.string().required("Required"),
+  quality_lead_time_type: Yup.string().required("Required"),
+  pattern_id: Yup.string().required("Required"),
   item_code: Yup.string()
-    .required('Required')
-    .test('isCodeExixts', 'Item Code Already Exists', function (value) {
+    .required("Required")
+    .test("isCodeExixts", "Item Code Already Exists", function (value) {
       return (
         !isCodeExixts ||
-        this.createError({ message: 'Item Code Already Exists' })
-      )
+        this.createError({ message: "Item Code Already Exists" })
+      );
     }),
-  category_id: Yup.string().required('Required'),
-  drawing_number: Yup.string().required('Required'),
-  raw_weight: Yup.number().required('Required'),
-  revision_number: Yup.string().required('Required'),
+  category_id: Yup.string().required("Required"),
+  drawing_number: Yup.string().required("Required"),
+  raw_weight: Yup.number().required("Required"),
+  revision_number: Yup.string().required("Required"),
   scrap_weight: Yup.number(),
   finish_weight: Yup.number()
     .test((weight, ctx) => {
       if (weight === 0) {
-        return false
+        return false;
       }
       if (weight > ctx.parent.raw_weight) {
-        ctx.parent.scrap_weight = 0
+        ctx.parent.scrap_weight = 0;
         return ctx.createError({
           message: `Greater than Raw Weight ${ctx.parent.raw_weight} ${
-            ctx.parent.product_um ? ctx.parent.product_um : ''
-          }`
-        })
+            ctx.parent.product_um ? ctx.parent.product_um : ""
+          }`,
+        });
       }
-      return true
+      return true;
     })
-    .required('Required')
-})
+    .required("Required"),
+});
 
 const validationSchema2 = Yup.object().shape({
-  name: Yup.string().required('Required'),
-  description: Yup.string().required('Required'),
-  material_grade_id: Yup.string().required('Required'),
-  unit_measurement: Yup.string().required('Required'),
-  standard_lead_time: Yup.string().required('Required'),
-  standard_lead_time_type: Yup.string().required('Required'),
-  pattern_id: Yup.string().required('Required'),
-  item_code: Yup.string().required('Required'),
-  category_id: Yup.string().required('Required'),
-  drawing_number: Yup.string().required('Required')
-})
+  name: Yup.string().required("Required"),
+  description: Yup.string().required("Required"),
+  material_grade_id: Yup.string().required("Required"),
+  unit_measurement: Yup.string().required("Required"),
+  standard_lead_time: Yup.string().required("Required"),
+  standard_lead_time_type: Yup.string().required("Required"),
+  raw_lead_time: Yup.string().required("Required"),
+  raw_lead_time_type: Yup.string().required("Required"),
+  machine_lead_time: Yup.string().required("Required"),
+  machine_lead_time_type: Yup.string().required("Required"),
+  quality_lead_time: Yup.string().required("Required"),
+  quality_lead_time_type: Yup.string().required("Required"),
+  pattern_id: Yup.string().required("Required"),
+  item_code: Yup.string().required("Required"),
+  category_id: Yup.string().required("Required"),
+  drawing_number: Yup.string().required("Required"),
+});
 
 export const standardLeadTimeType = [
   // { label: 'Days', value: 'days' },
-  { label: 'Weeks', value: 'weeks' }
+  { label: "Weeks", value: "weeks" },
   // { label: 'Months', value: 'months' },
   // { label: 'Years', value: 'years' },
-]
+];
 export const productUnitMeasurement = [
-  { label: 'No', value: 'no' }
-  // { label: 'Kg', value: 'kg' },
-  // { label: 'MM', value: 'mm' },
-]
+  { label: "No", value: "no" },
+  { label: "Kg", value: "kg" },
+  { label: "MM", value: "mm" },
+];
 
 const CustomSelectOption = ({ innerProps, label, data, isSelected }) => {
   return (
     <div
       className={`flex items-center justify-between p-2 cursor-pointer ${
-        isSelected ? 'bg-gray-100' : 'hover:bg-gray-50'
+        isSelected ? "bg-gray-100" : "hover:bg-gray-50"
       }`}
       {...innerProps}
     >
       <div className="flex items-center gap-2">
         <Badge
-          innerClass={data.availability ? 'bg-emerald-500' : 'br-red-500'}
+          innerClass={data.availability ? "bg-emerald-500" : "br-red-500"}
         />
         <span>{label}</span>
       </div>
       {isSelected && <HiCheck className="text-emerald-500 text-xl" />}
     </div>
-  )
-}
+  );
+};
 
 const CustomControl = ({ children, ...props }) => {
-  const selected = props.getValue()[0]
+  const selected = props.getValue()[0];
   return (
     <Control {...props}>
       {selected && (
         <Badge
           className="ltr:ml-4 rtl:mr-4"
-          innerClass={selected.availability ? 'bg-emerald-500' : 'br-red-500'}
+          innerClass={selected.availability ? "bg-emerald-500" : "br-red-500"}
         />
       )}
       {children}
     </Control>
-  )
-}
+  );
+};
 
 const DeleteProductButton = ({ onDelete, product_id }) => {
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onConfirmDialogOpen = () => {
-    setDialogOpen(true)
-  }
+    setDialogOpen(true);
+  };
 
   const onConfirmDialogClose = () => {
-    setDialogOpen(false)
-  }
+    setDialogOpen(false);
+  };
 
   const handleConfirm = () => {
-    setLoading(true)
-    onDelete?.({ setDialogOpen, setLoading, product_id })
-  }
+    setLoading(true);
+    onDelete?.({ setDialogOpen, setLoading, product_id });
+  };
 
   return (
     <>
@@ -168,8 +180,8 @@ const DeleteProductButton = ({ onDelete, product_id }) => {
         </p>
       </ConfirmDialog>
     </>
-  )
-}
+  );
+};
 
 const ProductForm = forwardRef((props, ref) => {
   const {
@@ -180,46 +192,46 @@ const ProductForm = forwardRef((props, ref) => {
     onDelete,
     categories = [],
     materialGrades = [],
-    patterns = []
-  } = props
+    patterns = [],
+  } = props;
 
   const categoryData = useMemo(() => {
     return categories.map((category) => {
-      return { label: category.name, value: category.category_id }
-    })
-  }, [categories])
+      return { label: category.name, value: category.category_id };
+    });
+  }, [categories]);
 
   const materialGradesData = useMemo(() => {
     return materialGrades.map((material) => {
-      return { label: material.number, value: material.material_grade_id }
-    })
-  }, [materialGrades])
+      return { label: material.number, value: material.material_grade_id };
+    });
+  }, [materialGrades]);
 
   const patternData = useMemo(() => {
     return patterns.map((pattern) => {
       return {
         label: pattern.number,
         value: pattern.pattern_id,
-        availability: pattern.availability
-      }
-    })
-  }, [patterns])
+        availability: pattern.availability,
+      };
+    });
+  }, [patterns]);
 
   const onSetFormFile = (form, field, file) => {
-    form.setFieldValue(field.name, file[0])
-  }
+    form.setFieldValue(field.name, file[0]);
+  };
 
   const handleCheck = async (e) => {
     try {
-      const response = await apiIsProductExist({ item_code: e.target.value })
+      const response = await apiIsProductExist({ item_code: e.target.value });
       if (response.status == 201) {
-        isCodeExixts = false
+        isCodeExixts = false;
       }
     } catch (error) {
-      isCodeExixts = true
+      isCodeExixts = true;
     }
-  }
-  const debouncedHandleCheck = debounce(handleCheck, 500)
+  };
+  const debouncedHandleCheck = debounce(handleCheck, 500);
 
   return (
     <>
@@ -227,14 +239,14 @@ const ProductForm = forwardRef((props, ref) => {
         enableReinitialize={true}
         innerRef={ref}
         initialValues={{
-          ...initialData
+          ...initialData,
         }}
         validationSchema={
-          type === 'edit' ? validationSchema2 : validationSchema1
+          type === "edit" ? validationSchema2 : validationSchema1
         }
         onSubmit={(values, { setSubmitting }) => {
-          const formData = cloneDeep(values)
-          onFormSubmit?.(formData, setSubmitting)
+          const formData = cloneDeep(values);
+          onFormSubmit?.(formData, setSubmitting);
         }}
       >
         {({ values, touched, errors, isSubmitting, handleChange }) => (
@@ -253,6 +265,7 @@ const ProductForm = forwardRef((props, ref) => {
                       placeholder="Product Name"
                       label="Product Name"
                       name="name"
+                     
                     />
                     <InputInformationFields
                       errors={errors?.drawing_number}
@@ -331,13 +344,62 @@ const ProductForm = forwardRef((props, ref) => {
                       values={values.standard_lead_time_type}
                       label="SLT Type"
                     />
+                    <InputInformationFields
+                      errors={errors?.raw_lead_time}
+                      touched={touched?.raw_lead_time}
+                      name="raw_lead_time"
+                      type="number"
+                      placeholder="Raw Lead Time"
+                      label="RLT"
+                    />
+                    <SelectInformationFields
+                      errors={errors?.raw_lead_time_type}
+                      touched={touched?.raw_lead_time_type}
+                      name="raw_lead_time_type"
+                      data={standardLeadTimeType}
+                      values={values.raw_lead_time_type}
+                      label="RLT Type"
+                    />
+
+                    <InputInformationFields
+                      errors={errors?.machine_lead_time}
+                      touched={touched?.machine_lead_time}
+                      name="machine_lead_time"
+                      type="number"
+                      placeholder="Machine Lead Time"
+                      label="MLT"
+                    />
+                    <SelectInformationFields
+                      errors={errors?.machine_lead_time_type}
+                      touched={touched?.machine_lead_time_type}
+                      name="machine_lead_time_type"
+                      data={standardLeadTimeType}
+                      values={values.machine_lead_time_type}
+                      label="MLT Type"
+                    />
+                    <InputInformationFields
+                      errors={errors?.quality_lead_time}
+                      touched={touched?.quality_lead_time}
+                      name="quality_lead_time"
+                      type="number"
+                      placeholder="Quality Lead Time"
+                      label="QLT"
+                    />
+                    <SelectInformationFields
+                      errors={errors?.quality_lead_time_type}
+                      touched={touched?.quality_lead_time_type}
+                      name="quality_lead_time_type"
+                      data={standardLeadTimeType}
+                      values={values.quality_lead_time_type}
+                      label="QLT Type"
+                    />
                     <SelectInformationFields
                       errors={errors?.unit_measurement}
                       touched={touched?.unit_measurement}
                       name="unit_measurement"
                       data={productUnitMeasurement}
                       values={values.unit_measurement}
-                      label="Unit Measurement"
+                      label="Unit Measurements"
                     />
                     <SelectInformationFields
                       errors={errors?.category_id}
@@ -364,12 +426,12 @@ const ProductForm = forwardRef((props, ref) => {
                       label="Pattern"
                       components={{
                         Option: CustomSelectOption,
-                        Control: CustomControl
+                        Control: CustomControl,
                       }}
                     />
                   </div>
                 </Card>
-                {type === 'new' && (
+                {type === "new" && (
                   <Card className="bg-red-50 h-max">
                     <div className="grid grid-cols-1 gap-2 p-2">
                       <DrawingFields
@@ -377,10 +439,7 @@ const ProductForm = forwardRef((props, ref) => {
                         errors={errors}
                         values={values}
                       />
-                      <FormItem
-                        className="mb-4"
-                        label="Process Sheet"
-                      >
+                      <FormItem className="mb-4" label="Process Sheet">
                         <Field name="process_attachment">
                           {({ field, form }) => (
                             <Upload
@@ -398,7 +457,7 @@ const ProductForm = forwardRef((props, ref) => {
                               <div className="text-center">
                                 <p className="font-semibold">
                                   <span className="text-gray-800 dark:text-white">
-                                    Drop your pdf here, or{' '}
+                                    Drop your pdf here, or{" "}
                                   </span>
                                   <span className="text-blue-500">browse</span>
                                 </p>
@@ -411,10 +470,7 @@ const ProductForm = forwardRef((props, ref) => {
                         </Field>
                       </FormItem>
 
-                      <FormItem
-                        className="mb-4"
-                        label="Raw Attachment"
-                      >
+                      <FormItem className="mb-4" label="Raw Attachment">
                         <Field name="raw_attachment">
                           {({ field, form }) => (
                             <Upload
@@ -432,7 +488,7 @@ const ProductForm = forwardRef((props, ref) => {
                               <div className="text-center">
                                 <p className="font-semibold">
                                   <span className="text-gray-800 dark:text-white">
-                                    Drop your pdf here, or{' '}
+                                    Drop your pdf here, or{" "}
                                   </span>
                                   <span className="text-blue-500">browse</span>
                                 </p>
@@ -462,7 +518,7 @@ const ProductForm = forwardRef((props, ref) => {
                               <div className="text-center">
                                 <p className="font-semibold">
                                   <span className="text-gray-800 dark:text-white">
-                                    Drop your pdf here, or{' '}
+                                    Drop your pdf here, or{" "}
                                   </span>
                                   <span className="text-blue-500">browse</span>
                                 </p>
@@ -498,7 +554,7 @@ const ProductForm = forwardRef((props, ref) => {
                     icon={<AiOutlineSave className="mr-1" />}
                     type="submit"
                   >
-                    {type === 'new' ? 'Save' : 'Update'}
+                    {type === "new" ? "Save" : "Update"}
                   </Button>
                 </div>
               </StickyFooter>
@@ -507,37 +563,43 @@ const ProductForm = forwardRef((props, ref) => {
         )}
       </Formik>
     </>
-  )
-})
+  );
+});
 
 ProductForm.defaultProps = {
-  type: 'new',
+  type: "new",
   initialData: {
-    product_id: '',
-    pattern_id: '',
-    category_id: '',
-    material_grade_id: '',
-    name: '',
-    item_code: '',
-    row_code: '',
-    pump_model: '',
-    unit_measurement: 'no',
-    hsn_code: '',
-    description: '',
-    standard_lead_time: '',
-    standard_lead_time_type: 'weeks',
-    drawing_number: '',
+    product_id: "",
+    pattern_id: "",
+    category_id: "",
+    material_grade_id: "",
+    name: "",
+    item_code: "",
+    row_code: "",
+    pump_model: "",
+    unit_measurement: "no",
+    hsn_code: "",
+    description: "",
+    standard_lead_time: "",
+    standard_lead_time_type: "weeks",
+    raw_lead_time: "",
+    raw_lead_time_type: "weeks",
+    machine_lead_time: "",
+    machine_lead_time_type: "weeks",
+    quality_lead_time: "",
+    quality_lead_time_type: "weeks",
+    drawing_number: "",
     Product: {
-      drawing_number: ''
+      drawing_number: "",
     },
-    raw_weight: '',
-    drawing_number: '',
-    finish_weight: '',
-    drawing_revision_number: '',
-    raw_attachment: '',
-    finish_attachment: '',
-    process_attachment: ''
-  }
-}
+    raw_weight: "",
+    drawing_number: "",
+    finish_weight: "",
+    drawing_revision_number: "",
+    raw_attachment: "",
+    finish_attachment: "",
+    process_attachment: "",
+  },
+};
 
-export default ProductForm
+export default ProductForm;

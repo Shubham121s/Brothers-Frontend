@@ -167,6 +167,30 @@ export async function apiGetDispatchPatterInvoiceByInvoiceId(data) {
   });
 }
 
+export async function updatePatterInvoiceById(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch/patternList/id",
+    method: "put",
+    data,
+  });
+}
+
+export async function apiAddPatternProductToInvoice(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/product/pattern/update/product",
+    method: "put",
+    data,
+  });
+}
+
+export async function apiDeletePatternProductToInvoice(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/product/pattern/delete",
+    method: "delete",
+    data,
+  });
+}
+
 export async function apiGetAllInvoiceNumber(data) {
   return ApiService.fetchData({
     url: "v1/web/company/invoice/dispatch/invoice/number",
@@ -185,6 +209,20 @@ export async function apiGetAllCustomersOption() {
 export async function apiGetAllInvoiceDates() {
   return ApiService.fetchData({
     url: "v1/web/company/invoice/dispatch/invoice/date",
+    method: "get",
+  });
+}
+
+export async function apiGetYears() {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch/invoice/years",
+    method: "get",
+  });
+}
+
+export async function apiGetMonths() {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch/invoice/months",
     method: "get",
   });
 }

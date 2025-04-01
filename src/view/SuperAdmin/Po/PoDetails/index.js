@@ -100,7 +100,8 @@ const PoAccept = () => {
                 <h4 className="mb-4">Sale Order List</h4>
                 <PoTable
                   type="edit"
-                  data={initialData.PoLists}
+                  data={initialData}
+                  datas={initialData}
                   currency={initialData.currency_type}
                   po_id={initialData.po_id}
                   onDiscard={handleDiscard}

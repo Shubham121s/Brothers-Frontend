@@ -33,7 +33,7 @@ const DispatchInvoice = ({ data }) => {
     const pages = [];
     if (data) {
       pages.push(
-        <div key={Math.random()} style={{ height: "1130px" }}>
+        <div key={Math.random()} style={{ breakAfter: "avoid-page" }}>
           <div className="invoice w-full p-4 relative">
             {/* <div className='w-full h-full absolute top-0' style={{ opacity: .15 }}>
                   <img src='http://www.brothers.net.in/img/logoBrother.png' className='w-full h-full' style={{ objectFit: 'contain', objectPosition: 'center' }}></img>

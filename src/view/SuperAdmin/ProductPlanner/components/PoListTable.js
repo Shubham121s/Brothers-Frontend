@@ -1,32 +1,26 @@
 import React, { useEffect, useCallback, useMemo } from "react";
-import { Tag, Tooltip, DatePicker } from "../../../../components/ui";
+import { Tag, Tooltip, DatePicker, Input } from "../../../../components/ui";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCustomerOption,
-  getAllDrawingOption,
-  getAllMaterialGradeOption,
   getAllPoLists,
   getAllPoNumber,
-  getAllProductItemCode,
   getAllProductOption,
   getAllProjectNumber,
   getBrotherDeliveryDate,
-  getMachinigDate,
   getPODates,
   getPODeliveryDates,
-  getRawDate,
+  postActualDates,
   setSelectedPoList,
   setTableData,
   toggleAttachmentDialog,
-  toggleViewDialog,
-  UpdateRawMachiningDate,
 } from "../store/dataSlice";
 import useThemeClass from "../../../../utils/hooks/useThemeClass";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../components/shared/DataTable";
-import { MdAttachEmail } from "react-icons/md";
+import { MdOutlineUploadFile } from "react-icons/md";
 import AttachmentDialog from "./AttachmentsDialog";
 
 const statusColor = {
@@ -57,10 +51,120 @@ const ActionColumn = ({ index, row }) => {
   };
 
   return (
-    <div className="flex justify-center text-lg gap-x-4">
+    <div className="flex justify-center flex-col items-center text-xl gap-x-4">
       <span className={`cursor-pointer hover:${textTheme}`} onClick={onEdit}>
-        <MdAttachEmail />
+        <MdOutlineUploadFile />
       </span>
+
+      <div className="dots flex gap-x-1">
+        {row?.final_inspection_check ? (
+          <Tooltip
+            title={
+              <div>
+                <strong className="text-yellow-400">Final Inspection</strong>
+              </div>
+            }
+          >
+            <span
+              className={`cursor-pointer ${
+                row?.final_inspection ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              •
+            </span>
+          </Tooltip>
+        ) : null}
+
+        {row?.heat_treatment_check ? (
+          <Tooltip
+            title={
+              <div>
+                <strong className="text-yellow-400">Heat Treatment</strong>
+              </div>
+            }
+          >
+            <span
+              className={`cursor-pointer ${
+                row?.heat_treatment ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              •
+            </span>
+          </Tooltip>
+        ) : null}
+
+        {row?.internal_inspection_check ? (
+          <Tooltip
+            title={
+              <div>
+                <strong className="text-yellow-400">Internal Inspection</strong>
+              </div>
+            }
+          >
+            <span
+              className={`cursor-pointer ${
+                row?.internal_inspection ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              •
+            </span>
+          </Tooltip>
+        ) : null}
+
+        {row?.material_tc_verify_check ? (
+          <Tooltip
+            title={
+              <div>
+                <strong className="text-yellow-400">Material TC Verify</strong>
+              </div>
+            }
+          >
+            <span
+              className={`cursor-pointer ${
+                row?.material_tc_verify ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              •
+            </span>
+          </Tooltip>
+        ) : null}
+
+        {row?.ndt_requirement_check ? (
+          <Tooltip
+            title={
+              <div>
+                <strong className="text-yellow-400">NDT Requirement</strong>
+              </div>
+            }
+          >
+            <span
+              className={`cursor-pointer ${
+                row?.ndt_requirement ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              •
+            </span>
+          </Tooltip>
+        ) : null}
+
+        {row?.other_check ? (
+          <Tooltip
+            title={
+              <div>
+                <strong className="text-yellow-400">Other</strong>
+              </div>
+            }
+          >
+            <span
+              className={`cursor-pointer ${
+                row?.other ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              •
+            </span>
+          </Tooltip>
+        ) : null}
+      </div>
     </div>
   );
 };
@@ -83,6 +187,48 @@ const PoAColumn = ({ row }) => {
         {row?.item_code}
       </Link>
     </Tooltip>
+  );
+};
+
+const ActualPlannedDateCell = ({
+  dateField, // The key of the date field (e.g., "actual_raw_date", "actual_machine_date")
+  dateValue, // The actual date value
+  po_list_id,
+  pageIndex,
+  pageSize,
+  sort,
+  query,
+  status,
+}) => {
+  const dispatch = useDispatch();
+
+  const [updatedDate, setUpdatedDate] = React.useState(
+    dateValue ? dayjs(dateValue).format("YYYY-MM-DD") : ""
+  );
+
+  const handleDateChange = async (e) => {
+    const newDate = e.target.value;
+    setUpdatedDate(newDate);
+
+    console.log(`${dateField} updated to:`, newDate);
+
+    await dispatch(
+      postActualDates({
+        [dateField]: newDate, // Dynamically update the correct date field
+        po_list_id,
+      })
+    );
+
+    dispatch(getAllPoLists({ pageIndex, pageSize, sort, query, status }));
+  };
+
+  return (
+    <Input
+      size="sm"
+      type="date"
+      value={updatedDate}
+      onChange={handleDateChange}
+    />
   );
 };
 
@@ -152,6 +298,8 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "sr no.",
       accessorKey: "",
+      size: 100,
+
       cell: (props) => {
         const { index } = props.row;
         const serialNumber = index + 1;
@@ -190,6 +338,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "po sr no",
       accessorKey: "serial_number",
+      size: 100,
     },
     {
       header: `PO date`,
@@ -231,6 +380,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "rev no.",
       accessorKey: "Drawing.revision_number",
+      size: 100,
       cell: (props) => {
         const { revision_number } = props.row.original;
         return (
@@ -243,6 +393,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "material grade",
       accessorKey: "",
+      size: 200,
       cell: (props) => {
         const { material_grade } = props.row.original;
         return <div className="uppercase">{material_grade}</div>;
@@ -251,6 +402,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "po qty",
       accessorKey: "",
+      size: 100,
       cell: (props) => {
         const { quantity } = props.row.original;
         return <div>{quantity}</div>;
@@ -281,6 +433,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "del qty",
       accessorKey: "",
+      size: 100,
       cell: (props) => {
         const { item_quantity } = props.row.original;
         return <div>{item_quantity ? item_quantity : 0}</div>;
@@ -289,14 +442,197 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "pending qty",
       accessorKey: "",
+      size: 120,
       cell: (props) => {
         const row = props.row.original;
         return <div>{Math.abs(row?.quantity - row?.item_quantity)}</div>;
       },
     },
+
+    {
+      header: "S LT",
+      accessorKey: "",
+      size: 100,
+      cell: (props) => {
+        const row = props.row.original;
+
+        return (
+          <div>
+            {row?.standard_lead_time} {row?.standard_lead_time_type}
+          </div>
+        );
+      },
+    },
+    {
+      header: "Actual Raw Planned Date",
+      accessorKey: "actual_planned_date",
+      size: 220,
+      cell: (props) => {
+        const { actual_raw_date, po_list_id } = props.row.original;
+        return (
+          <ActualPlannedDateCell
+            dateField="actual_raw_date"
+            dateValue={actual_raw_date}
+            po_list_id={po_list_id}
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            sort={sort}
+            query={query}
+            status={status}
+          />
+        );
+      },
+    },
+
+    {
+      header: "Raw Planned Date",
+      size: 180,
+      accessorKey: "",
+      cell: (props) => {
+        const row = props.row.original;
+        const poDate = props.row.original?.DATE;
+        let rlt = Number(row?.raw_lead_time) || 0;
+        const rltType = row?.raw_lead_time_type;
+
+        if (rltType === "weeks") {
+          rlt *= 7;
+        } else if (rltType === "months") {
+          rlt *= 30;
+        } else if (rltType === "years") {
+          rlt *= 365;
+        }
+
+        let plannedDate = "Invalid Date";
+        if (poDate) {
+          const newDate = new Date(poDate);
+          newDate.setDate(newDate.getDate() + rlt);
+          plannedDate = newDate.toISOString().split("T")[0];
+        }
+
+        return <div>{plannedDate}</div>;
+      },
+    },
+    {
+      header: "Actual M/C Planned Date",
+      accessorKey: "",
+      size: 220,
+      cell: (props) => {
+        const { actual_machine_date, po_list_id } = props.row.original;
+        return (
+          <ActualPlannedDateCell
+            dateField="actual_machine_date"
+            dateValue={actual_machine_date}
+            po_list_id={po_list_id}
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            sort={sort}
+            query={query}
+            status={status}
+          />
+        );
+      },
+    },
+    {
+      header: "M/C Planned Date",
+      accessorKey: "",
+      size: 180,
+      cell: (props) => {
+        const row = props.row.original;
+        const poDate = row?.DATE;
+
+        let rlt = Number(row?.raw_lead_time) || 0;
+        let mlt = Number(row?.machine_lead_time) || 0;
+
+        const rltType = row?.raw_lead_time_type;
+        const mltType = row?.machine_lead_time_type;
+
+        if (rltType === "weeks") rlt *= 7;
+        else if (rltType === "months") rlt *= 30;
+        else if (rltType === "years") rlt *= 365;
+
+        if (mltType === "weeks") mlt *= 7;
+        else if (mltType === "months") mlt *= 30;
+        else if (mltType === "years") mlt *= 365;
+
+        const totalLeadTime = rlt + mlt;
+
+        let plannedDate = "Invalid Date";
+        if (poDate) {
+          const newDate = new Date(poDate);
+          newDate.setDate(newDate.getDate() + totalLeadTime);
+          plannedDate = newDate.toISOString().split("T")[0];
+        }
+
+        return <div>{plannedDate}</div>;
+      },
+    },
+
+    {
+      header: "Actual QC Planned Date",
+      accessorKey: "",
+      size: 220,
+      cell: (props) => {
+        const { actual_quality_date, po_list_id } = props.row.original;
+        return (
+          <ActualPlannedDateCell
+            dateField="actual_quality_date"
+            dateValue={actual_quality_date}
+            po_list_id={po_list_id}
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            sort={sort}
+            query={query}
+            status={status}
+          />
+        );
+      },
+    },
+
+    {
+      header: "QC Planned Date",
+      accessorKey: "",
+      size: 180,
+      cell: (props) => {
+        const row = props.row.original;
+        const poDate = row?.DATE;
+
+        let rlt = Number(row?.raw_lead_time) || 0;
+        let mlt = Number(row?.machine_lead_time) || 0;
+        let qlt = Number(row?.quality_lead_time) || 0;
+
+        const rltType = row?.raw_lead_time_type;
+        const mltType = row?.machine_lead_time_type;
+        const qltType = row?.quality_lead_time_type;
+
+        if (rltType === "weeks") rlt *= 7;
+        else if (rltType === "months") rlt *= 30;
+        else if (rltType === "years") rlt *= 365;
+
+        if (mltType === "weeks") mlt *= 7;
+        else if (mltType === "months") mlt *= 30;
+        else if (mltType === "years") mlt *= 365;
+
+        if (qltType === "weeks") qlt *= 7;
+        else if (qltType === "months") qlt *= 30;
+        else if (qltType === "years") qlt *= 365;
+
+        const totalLeadTime = rlt + mlt + qlt;
+
+        let plannedDate = "Invalid Date";
+        if (poDate) {
+          const newDate = new Date(poDate);
+          newDate.setDate(newDate.getDate() + totalLeadTime);
+          plannedDate = newDate.toISOString().split("T")[0];
+        }
+
+        return <div>{plannedDate}</div>;
+      },
+    },
+
     {
       header: "status",
       accessorKey: "list_status",
+      size: 120,
       cell: (props) => {
         const { list_status } = props.row.original;
         const status = statusColor[list_status] || {};
@@ -317,6 +653,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "Action",
       accessorKey: "action",
+      size: 100,
       cell: (props) => {
         const row = props.row.original;
         return <ActionColumn row={row} />;
@@ -456,14 +793,16 @@ const PoListTable = ({ DeliveryStatus }) => {
 
   return (
     <>
-      <DataTable
-        columns={columns}
-        data={data}
-        loading={loading}
-        pagingData={{ pageIndex, pageSize, sort, query, total }}
-        onPaginationChange={onPaginationChange}
-        onSelectChange={onSelectChange}
-      />
+      <div style={{ width: "100%", maxWidth: "100%", overflowX: "auto" }}>
+        <DataTable
+          columns={columns}
+          data={data}
+          loading={loading}
+          pagingData={{ pageIndex, pageSize, sort, query, total }}
+          onPaginationChange={onPaginationChange}
+          tableWidth="100%"
+        />
+      </div>
       <AttachmentDialog />
     </>
   );

@@ -8,6 +8,7 @@ import {
   apiNewNoteRegister,
   apiGetAllNotes,
   apiUpdateNotes,
+  apiDeleteNote,
 } from "../../../../../../services/SuperAdmin/Po/Note.Service";
 
 export const getAllCategories = createAsyncThunk(
@@ -37,6 +38,18 @@ export const updateNotes = createAsyncThunk(
   async (data) => {
     try {
       const response = await apiUpdateNotes(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const deleteNotes = createAsyncThunk(
+  "invoice/note/setting/data/delete",
+  async (data) => {
+    try {
+      const response = await apiDeleteNote(data);
       return response;
     } catch (error) {
       return error?.response;

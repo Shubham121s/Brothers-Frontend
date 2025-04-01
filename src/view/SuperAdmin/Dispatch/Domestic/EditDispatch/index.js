@@ -5,6 +5,7 @@ import {
   Toast,
   Notification,
   DatePicker,
+  Input,
 } from "../../../../../components/ui";
 import ConsigneeAndBuyerDetails from "./components/ConsigneeAndBuyer/ConsigneeAndBuyerDetails";
 import ShippingAddress from "./components/ShippingAndShippingAddress/ShippingAddress";
@@ -59,6 +60,8 @@ const EditDispatch = () => {
   const data = useSelector(
     (state) => state.edit_domestic_dispatch.data.invoiceDetails
   );
+
+  console.log("data from somestic invoice", data);
 
   const [loading, setLoading] = useState(false);
 
@@ -202,12 +205,26 @@ const EditDispatch = () => {
                 </div>
               </Card>
               <Card className="bg-blue-50 h-max">
-                <h5 className="font-semibold text-gray-700">
-                  Address & Shipping Information
-                </h5>
-                <p className="mb-2">
-                  Section to config address & shipping information
-                </p>
+                <div className="flex  justify-between">
+                  <div>
+                    <h5 className="font-semibold text-gray-700">
+                      Address & Shipping Information
+                    </h5>
+                    <p className="mb-2">
+                      Section to config address & shipping information
+                    </p>
+                  </div>
+
+                  <div className="float-right">
+                    <Input
+                      type="text"
+                      placeholer="Freight Charges"
+                      value={data.invoice_no}
+                      style={{ width: "160px" }}
+                      disabled
+                    />
+                  </div>
+                </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <ShippingAddress

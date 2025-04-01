@@ -6,9 +6,8 @@ import dayjs from "dayjs";
 
 const PoSerialNumberInformationFieldsForm = (props) => {
   const { errors, values, Po, touched } = props;
-  console.log(Po?.PoLists);
   const poSerialNumberListData = useMemo(() => {
-    if (!Po) return [];
+    if (!Po || !Po?.PoLists) return [];
     return Po?.PoLists?.map((list) => {
       return {
         label: `${list?.serial_number} : ${list?.Product?.name}`,

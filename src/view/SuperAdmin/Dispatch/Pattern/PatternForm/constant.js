@@ -18,14 +18,15 @@ export const SHIPPING_INSURANCE = ["BROTHER INDUSTRIES"];
 export const BANK_LIST = [
   {
     id: 1,
-    bank_name: "BANK OF MAHARASTRA",
+    bank_name: "BANK OF MAHARASHTRA",
     account_no: 60262968113,
+    account_type: "Current",
     beneficiary_name: "BROTHER INDUSTRIES",
     ifsc_code: "MAHBOOOOO3O",
     ifsc_code: "MAHBOOOOO3O",
     swift_code: "MAHBINBBKOL",
     bank_ad_code: "0230067-6000009",
-    branch_address: "MUMBAI",
+    branch_address: "kirloskarwadi, tal - palus, dist - sangli, 416308, india",
   },
 ];
 

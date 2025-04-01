@@ -79,7 +79,7 @@ const Statistic = ({ data = {} }) => {
       />
       <StatisticCard
         data={data.Purchases}
-        valuePrefix="₹"
+        // valuePrefix="₹"
         label="Purchases"
         className="bg-orange-50"
         Icon={GiTakeMyMoney}
