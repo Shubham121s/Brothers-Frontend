@@ -1,4 +1,4 @@
-name: Brother Industries WEB APP Deploy
+name: Brothers Industries WEB APP Deploy
 
 on:
   push:

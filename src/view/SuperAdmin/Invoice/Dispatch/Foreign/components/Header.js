@@ -19,18 +19,19 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
       >
         <div className="col-span-2 h-full">
           <div className="h-full justify-start items-center flex">
-            <img src={LOGO_SRC_PATH} width={80} />
+            <img src={LOGO_SRC_PATH} width={150} />
           </div>
         </div>
         <div className="col-span-2 h-full">
-          <div className="h-full text-center">
+          <div className="h-full flex justify-center items-center text-center">
             <h5 className="text-center text-gray-700">{invoice_type}</h5>
           </div>
         </div>
         <div className="col-span-2 h-full">
           <div className="h-full flex gap-2 justify-end items-center">
             <h6 className="text-gray-700 font-medium print:text-xs">
-            {pageNo < 10 ? `0${pageNo}` : pageNo}/{pageCount < 10 ? `0${pageCount}` : pageCount}
+              {pageNo < 10 ? `0${pageNo}` : pageNo}/
+              {pageCount < 10 ? `0${pageCount}` : pageCount}
               {/* {pageCount < 10 ? `0${pageCount}` : pageCount} */}
             </h6>
           </div>
@@ -69,6 +70,7 @@ const Header = ({ data, pageNo, location_code, invoice_type, pageCount }) => {
             <ConsigneeAndBuyerDetails
               data={data?.DispatchConsignee}
               address={data?.DispatchConsignee?.DispatchConsigneeAddress}
+              shipping={data?.DispatchShippingAddress}
               title="Consignee"
             />
           </div>

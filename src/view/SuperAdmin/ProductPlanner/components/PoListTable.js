@@ -450,7 +450,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     },
 
     {
-      header: "S LT",
+      header: "SLT",
       accessorKey: "",
       size: 100,
       cell: (props) => {
@@ -463,27 +463,6 @@ const PoListTable = ({ DeliveryStatus }) => {
         );
       },
     },
-    {
-      header: "Actual Raw Planned Date",
-      accessorKey: "actual_planned_date",
-      size: 220,
-      cell: (props) => {
-        const { actual_raw_date, po_list_id } = props.row.original;
-        return (
-          <ActualPlannedDateCell
-            dateField="actual_raw_date"
-            dateValue={actual_raw_date}
-            po_list_id={po_list_id}
-            pageIndex={pageIndex}
-            pageSize={pageSize}
-            sort={sort}
-            query={query}
-            status={status}
-          />
-        );
-      },
-    },
-
     {
       header: "Raw Planned Date",
       size: 180,
@@ -513,15 +492,15 @@ const PoListTable = ({ DeliveryStatus }) => {
       },
     },
     {
-      header: "Actual M/C Planned Date",
-      accessorKey: "",
+      header: "Actual Raw Date",
+      accessorKey: "actual_planned_date",
       size: 220,
       cell: (props) => {
-        const { actual_machine_date, po_list_id } = props.row.original;
+        const { actual_raw_date, po_list_id } = props.row.original;
         return (
           <ActualPlannedDateCell
-            dateField="actual_machine_date"
-            dateValue={actual_machine_date}
+            dateField="actual_raw_date"
+            dateValue={actual_raw_date}
             po_list_id={po_list_id}
             pageIndex={pageIndex}
             pageSize={pageSize}
@@ -532,6 +511,7 @@ const PoListTable = ({ DeliveryStatus }) => {
         );
       },
     },
+
     {
       header: "M/C Planned Date",
       accessorKey: "",
@@ -568,15 +548,15 @@ const PoListTable = ({ DeliveryStatus }) => {
     },
 
     {
-      header: "Actual QC Planned Date",
+      header: "M/C Achived Date",
       accessorKey: "",
       size: 220,
       cell: (props) => {
-        const { actual_quality_date, po_list_id } = props.row.original;
+        const { actual_machine_date, po_list_id } = props.row.original;
         return (
           <ActualPlannedDateCell
-            dateField="actual_quality_date"
-            dateValue={actual_quality_date}
+            dateField="actual_machine_date"
+            dateValue={actual_machine_date}
             po_list_id={po_list_id}
             pageIndex={pageIndex}
             pageSize={pageSize}
@@ -626,6 +606,27 @@ const PoListTable = ({ DeliveryStatus }) => {
         }
 
         return <div>{plannedDate}</div>;
+      },
+    },
+
+    {
+      header: "QC Achived Date",
+      accessorKey: "",
+      size: 220,
+      cell: (props) => {
+        const { actual_quality_date, po_list_id } = props.row.original;
+        return (
+          <ActualPlannedDateCell
+            dateField="actual_quality_date"
+            dateValue={actual_quality_date}
+            po_list_id={po_list_id}
+            pageIndex={pageIndex}
+            pageSize={pageSize}
+            sort={sort}
+            query={query}
+            status={status}
+          />
+        );
       },
     },
 

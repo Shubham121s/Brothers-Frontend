@@ -110,6 +110,30 @@ const EditItemDialog = forwardRef((props, ref) => {
     handleUpdatePoList(newData, setRejectLoading);
   };
 
+  const CalculateDate = (SLT, SLTT, date) => {
+    let formattedTime;
+    const originalDate = new Date(date);
+
+    if (SLTT === "days") {
+      originalDate.setDate(originalDate.getDate() + SLT);
+      formattedTime = dayjs(originalDate);
+    }
+    if (SLTT === "weeks") {
+      originalDate.setDate(originalDate.getDate() + 7 * SLT);
+      formattedTime = dayjs(originalDate);
+    }
+    if (SLTT === "months") {
+      originalDate.setMonth(originalDate.getMonth() + SLT);
+      formattedTime = dayjs(originalDate);
+    }
+    if (SLTT === "years") {
+      originalDate.setFullYear(originalDate.getFullYear() + SLT);
+      formattedTime = dayjs(originalDate);
+    }
+
+    return new Date(formattedTime);
+  };
+
   return (
     <Dialog
       isOpen={editPoItemDialog || viewPoItemDialog}
@@ -145,166 +169,207 @@ const EditItemDialog = forwardRef((props, ref) => {
           isSubmitting,
           setFieldError,
           setFieldTouched,
-        }) => (
-          <Form>
-            <FormContainer>
-              <h4>Item Details Information</h4>
-              <p className="mb-2">Section to config item details information</p>
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                {!isEmpty(values) ? (
-                  <Card className="mt-2 bg-slate-50">
-                    <div className="flex justify-between">
-                      <strong>PO Serial No :</strong>{" "}
-                      <span>{values?.serial_number || "-"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Project No :</strong>{" "}
-                      <span>{values?.project_no || "-"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Product Name :</strong>{" "}
-                      <span>{values?.Product?.name || "-"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Item Code :</strong>{" "}
-                      <span>{values?.Product?.item_code || "-"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Drawing Revision No :</strong>{" "}
-                      <span>
-                        {`${values?.Product?.drawing_number}-${values?.Drawing?.revision_number}` ||
-                          "-"}
-                      </span>
-                    </div>
-                  </Card>
-                ) : null}
-                {!isEmpty(values) ? (
-                  <Card className="mt-2 bg-blue-50">
-                    <div className="flex justify-between">
-                      <strong>
-                        Quantity ({values?.Product?.unit_measurement}):
-                      </strong>{" "}
-                      <span>{values?.quantity || "-"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Price ({currency}):</strong>{" "}
-                      <span>{values?.unit_price || "-"}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Amount ({currency}):</strong>{" "}
-                      <span>
-                        {(values?.unit_price * values?.quantity).toFixed(2) ||
-                          "-"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Delivery Date :</strong>{" "}
-                      <span>
-                        {dayjs(values?.delivery_date).format("DD-MMM-YYYY") ||
-                          "-"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <strong>Remark :</strong>{" "}
-                      <span>{values?.description || "-"}</span>
-                    </div>
-                  </Card>
-                ) : null}
-              </div>
-              {(viewPoItemDialog && values?.list_status === "accepted") ||
-              values?.list_status === "rejected" ? (
-                <div className="grid md:grid-cols-3 mb-3">
-                  <div className="col-span-2">
-                    <Card
-                      className={`${statusColor[values?.list_status]?.bgClass}`}
-                    >
+        }) => {
+          return (
+            <Form>
+              <FormContainer>
+                <h4>Item Details Information</h4>
+                <p className="mb-2">
+                  Section to config item details information
+                </p>
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  {!isEmpty(values) ? (
+                    <Card className="mt-2 bg-slate-50">
                       <div className="flex justify-between">
-                        <strong>Status :</strong>{" "}
-                        {(
-                          <span
-                            className={`ml-2 font-semibold capitalize ${
-                              statusColor[values?.list_status]?.textClass
-                            }`}
-                          >
-                            {statusColor[values?.list_status]?.label}
-                          </span>
-                        ) || "-"}
+                        <strong>PO Serial No :</strong>{" "}
+                        <span>{values?.serial_number || "-"}</span>
                       </div>
                       <div className="flex justify-between">
-                        <strong>Brother Delivery Date :</strong>{" "}
+                        <strong>Project No :</strong>{" "}
+                        <span>{values?.project_no || "-"}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <strong>Product Name :</strong>{" "}
+                        <span>{values?.Product?.name || "-"}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <strong>Item Code :</strong>{" "}
+                        <span>{values?.Product?.item_code || "-"}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <strong>Drawing Revision No :</strong>{" "}
                         <span>
-                          {dayjs(values?.accept_delivery_date).format(
-                            "DD-MMM-YYYY"
-                          ) || "-"}
+                          {`${values?.Product?.drawing_number}-${values?.Drawing?.revision_number}` ||
+                            "-"}
+                        </span>
+                      </div>
+                    </Card>
+                  ) : null}
+                  {!isEmpty(values) ? (
+                    <Card className="mt-2 bg-blue-50">
+                      <div className="flex justify-between">
+                        <strong>
+                          Quantity ({values?.Product?.unit_measurement}):
+                        </strong>{" "}
+                        <span>{values?.quantity || "-"}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <strong>Price ({currency}):</strong>{" "}
+                        <span>{values?.unit_price || "-"}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <strong>Amount ({currency}):</strong>{" "}
+                        <span>
+                          {(values?.unit_price * values?.quantity).toFixed(2) ||
+                            "-"}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <strong>Brother Remark :</strong>{" "}
-                        <span>{values?.accept_description || "-"}</span>
+                        <strong>Delivery Date :</strong>{" "}
+                        <span>
+                          {dayjs(values?.delivery_date).format("DD-MMM-YYYY") ||
+                            "-"}
+                        </span>
+                      </div>
+
+                      <div className="flex justify-between">
+                        <strong>SB DD :</strong>
+                        <span
+                          style={
+                            dayjs(values?.delivery_date).format(
+                              "YYYY-MM-DD"
+                            ) !==
+                              dayjs(
+                                CalculateDate(
+                                  values?.Product?.standard_lead_time,
+                                  values?.Product?.standard_lead_time_type,
+                                  data?.date
+                                )
+                              ).format("YYYY-MM-DD") &&
+                            !values?.is_delivery_date_change && {
+                              color: "red",
+                            }
+                          }
+                        >
+                          {CalculateDate(
+                            values?.Product?.standard_lead_time,
+                            values?.Product?.standard_lead_time_type,
+                            data?.date
+                          )
+                            ? dayjs(
+                                CalculateDate(
+                                  values?.Product?.standard_lead_time,
+                                  values?.Product?.standard_lead_time_type,
+                                  data?.date
+                                )
+                              ).format("DD-MMM-YYYY")
+                            : "-"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <strong>Remark :</strong>{" "}
+                        <span>{values?.description || "-"}</span>
                       </div>
                     </Card>
-                  </div>
+                  ) : null}
                 </div>
-              ) : (
-                <ItemInformationFields
-                  onDiscard={onDialogClose}
-                  values={values}
-                  data={data}
-                  errors={errors}
-                  touched={touched}
-                  currency={currency}
-                />
-              )}
-              <div className="flex justify-end px-5 py-2 bg-gray-100 gap-2 rounded-bl-lg rounded-br-lg">
-                <Button
-                  size="sm"
-                  type="button"
-                  variant=""
-                  onClick={onDialogClose}
-                >
-                  Discard
-                </Button>
-                {(editPoItemDialog && values?.list_status === "accepted") ||
+                {(viewPoItemDialog && values?.list_status === "accepted") ||
                 values?.list_status === "rejected" ? (
-                  <Button
-                    loading={isSubmitting}
-                    size="sm"
-                    variant="solid"
-                    color="purple-500"
-                  >
-                    Update
-                  </Button>
+                  <div className="grid md:grid-cols-3 mb-3">
+                    <div className="col-span-2">
+                      <Card
+                        className={`${
+                          statusColor[values?.list_status]?.bgClass
+                        }`}
+                      >
+                        <div className="flex justify-between">
+                          <strong>Status :</strong>{" "}
+                          {(
+                            <span
+                              className={`ml-2 font-semibold capitalize ${
+                                statusColor[values?.list_status]?.textClass
+                              }`}
+                            >
+                              {statusColor[values?.list_status]?.label}
+                            </span>
+                          ) || "-"}
+                        </div>
+                        <div className="flex justify-between">
+                          <strong>Brother Delivery Date :</strong>{" "}
+                          <span>
+                            {dayjs(values?.accept_delivery_date).format(
+                              "DD-MMM-YYYY"
+                            ) || "-"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <strong>Brother Remark :</strong>{" "}
+                          <span>{values?.accept_description || "-"}</span>
+                        </div>
+                      </Card>
+                    </div>
+                  </div>
                 ) : (
-                  <>
-                    <Button
-                      disabled={isSubmitting}
-                      loading={rejectLoading}
-                      size="sm"
-                      type="button"
-                      variant="solid"
-                      color="red-500"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        handleReject(values, setFieldError, setFieldTouched);
-                      }}
-                    >
-                      Reject
-                    </Button>
+                  <ItemInformationFields
+                    onDiscard={onDialogClose}
+                    values={values}
+                    data={data}
+                    errors={errors}
+                    touched={touched}
+                    currency={currency}
+                  />
+                )}
+                <div className="flex justify-end px-5 py-2 bg-gray-100 gap-2 rounded-bl-lg rounded-br-lg">
+                  <Button
+                    size="sm"
+                    type="button"
+                    variant=""
+                    onClick={onDialogClose}
+                  >
+                    Discard
+                  </Button>
+                  {(editPoItemDialog && values?.list_status === "accepted") ||
+                  values?.list_status === "rejected" ? (
                     <Button
                       loading={isSubmitting}
                       size="sm"
-                      disabled={rejectLoading}
                       variant="solid"
-                      color="emerald-500"
+                      color="purple-500"
                     >
-                      Accept
+                      Update
                     </Button>
-                  </>
-                )}
-              </div>
-            </FormContainer>
-          </Form>
-        )}
+                  ) : (
+                    <>
+                      <Button
+                        disabled={isSubmitting}
+                        loading={rejectLoading}
+                        size="sm"
+                        type="button"
+                        variant="solid"
+                        color="red-500"
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleReject(values, setFieldError, setFieldTouched);
+                        }}
+                      >
+                        Reject
+                      </Button>
+                      <Button
+                        loading={isSubmitting}
+                        size="sm"
+                        disabled={rejectLoading}
+                        variant="solid"
+                        color="emerald-500"
+                      >
+                        Accept
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </FormContainer>
+            </Form>
+          );
+        }}
       </Formik>
     </Dialog>
   );

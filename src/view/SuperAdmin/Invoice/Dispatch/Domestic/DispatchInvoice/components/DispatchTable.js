@@ -121,7 +121,14 @@ const TableFooterRows = ({
           style={{ border: ".5px solid black", padding: "3px" }}
           colSpan="1"
         ></Td>
-        <Td style={{ border: ".5px solid black", padding: "3px" }}>
+        <Td
+          style={{
+            border: ".5px solid black",
+            padding: "3px",
+            textAlign: "center",
+            verticalAlign: "middle",
+          }}
+        >
           <NumberFormat value={totalAmount} />
         </Td>
       </Tr>
@@ -292,7 +299,7 @@ const TableFooterRows = ({
           colSpan="1"
           className={className}
         >
-          Round Off
+          ROUND OFF
         </Td>
         <Td
           style={{ border: ".5px solid black", padding: "3px" }}
@@ -420,6 +427,7 @@ const DispatchTable = (props) => {
       {
         header: <span className={className}>HSN Code</span>,
         accessorKey: "hsn_code",
+        size: 100,
         cell: (props) => {
           const row = props.row.original;
           return (
@@ -430,8 +438,9 @@ const DispatchTable = (props) => {
         },
       },
       {
-        header: <span className={className}>delivery date</span>,
+        header: <span className={className}>delivery</span>,
         accessorKey: "po_delivery_date",
+        size: 80,
         cell: (props) => {
           const row = props.row.original;
           return (
@@ -444,6 +453,7 @@ const DispatchTable = (props) => {
       {
         header: <span className={className}>product name</span>,
         accessorKey: "product_name",
+        size: 220,
         cell: (props) => {
           const row = props.row.original;
           return (
@@ -461,6 +471,7 @@ const DispatchTable = (props) => {
       {
         header: <span className={className}>item code</span>,
         accessorKey: "item_code",
+        size: 110,
         cell: (props) => {
           const row = props.row.original;
           return <p className="uppercase text-center">{row?.item_code}</p>;
@@ -469,14 +480,16 @@ const DispatchTable = (props) => {
       {
         header: <span className={className}>Qty (no)</span>,
         accessorKey: "quantity",
+        size: 100,
         cell: (props) => {
           const row = props.row.original;
           return <p className="text-center">{row?.item_quantity}</p>;
         },
       },
       {
-        header: <span className={className}>rate (inr)</span>,
+        header: <span className={className}>rate</span>,
         accessorKey: "rate",
+        size: 80,
         cell: (props) => {
           const row = props.row.original;
           return (
@@ -487,8 +500,9 @@ const DispatchTable = (props) => {
         },
       },
       {
-        header: <span className={className}>total (inr)</span>,
+        header: <span className={className}>total</span>,
         accessorKey: "net_amount",
+        size: 80,
         cell: (props) => {
           const row = props.row.original;
           return (
@@ -515,13 +529,16 @@ const DispatchTable = (props) => {
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
+                const columnSize = header.column.columnDef.size || "auto";
                 return (
                   <Th
                     className={className}
                     style={{
                       border: ".5px solid black",
                       textAlign: "center",
-                      padding: "3px",
+                      alignItems: "middle",
+                      verticalAlign: "middle",
+                      width: columnSize,
                     }}
                     key={header.id}
                     colSpan={header.colSpan}
@@ -547,7 +564,9 @@ const DispatchTable = (props) => {
                       key={cell.id}
                       style={{
                         border: ".5px solid black",
-                        padding: "3px",
+                        textAlign: "center",
+                        alignItems: "middle",
+                        // padding: "6px 4px",
                       }}
                     >
                       {flexRender(

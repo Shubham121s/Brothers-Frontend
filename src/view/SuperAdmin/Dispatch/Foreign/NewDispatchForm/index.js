@@ -1,36 +1,36 @@
-import React, { Suspense, forwardRef, useState, useEffect } from 'react'
-import { Form, Formik } from 'formik'
+import React, { Suspense, forwardRef, useState, useEffect } from "react";
+import { Form, Formik } from "formik";
 import {
   Button,
   Card,
   FormContainer,
   Toast,
-  Notification
-} from '../../../../../components/ui'
-import { useDispatch } from 'react-redux'
-import * as Yup from 'yup'
-import { Loading, StickyFooter } from '../../../../../components/shared'
-import cloneDeep from 'lodash/cloneDeep'
-import ConsigneeInformationFields from './components/ConsigneeInformationFields'
-import BuyerInformationFields from './components/BuyerInformationFields'
-import InvoiceDatePickerFields from './components/InvoiceDatePickerFields'
-import ShippingAddressInformationFields from './components/ShippingAddressInformationFields'
-import ShippingDetailsInformationFields from './components/ShippingDetailsInformationFields'
-import BankInformationFields from './components/BankAndShipping/BankInformationFields'
-import ShippingInsuranceInformationFields from './components/BankAndShipping/ShippingInsuranceInformationFields'
-import ShippingLineInformationFields from './components/BankAndShipping/ShippingLineInformationFields'
-import ShippingTermsInformationFields from './components/BankAndShipping/ShippingTermsInformationFields'
-import BoxTable from './components/Box/BoxTable'
+  Notification,
+} from "../../../../../components/ui";
+import { useDispatch } from "react-redux";
+import * as Yup from "yup";
+import { Loading, StickyFooter } from "../../../../../components/shared";
+import cloneDeep from "lodash/cloneDeep";
+import ConsigneeInformationFields from "./components/ConsigneeInformationFields";
+import BuyerInformationFields from "./components/BuyerInformationFields";
+import InvoiceDatePickerFields from "./components/InvoiceDatePickerFields";
+import ShippingAddressInformationFields from "./components/ShippingAddressInformationFields";
+import ShippingDetailsInformationFields from "./components/ShippingDetailsInformationFields";
+import BankInformationFields from "./components/BankAndShipping/BankInformationFields";
+import ShippingInsuranceInformationFields from "./components/BankAndShipping/ShippingInsuranceInformationFields";
+import ShippingLineInformationFields from "./components/BankAndShipping/ShippingLineInformationFields";
+import ShippingTermsInformationFields from "./components/BankAndShipping/ShippingTermsInformationFields";
+import BoxTable from "./components/Box/BoxTable";
 import {
   toggleAddDispatchItemDialog,
   toggleNewBoxDialog,
   toggleEditDispatchItemDialog,
-  setSelectedDispatchItem
-} from '../NewDispatch/store/stateSlice'
-import NewDispatchItemDialog from './components/ItemList/NewItemDialog'
-import ItemTable from './components/ItemList/ItemTable'
-import LocationCodeFields from './components/ItemList/LocationCodeFields'
-import NoteInformationFields from './components/NoteInformationFields'
+  setSelectedDispatchItem,
+} from "../NewDispatch/store/stateSlice";
+import NewDispatchItemDialog from "./components/ItemList/NewItemDialog";
+import ItemTable from "./components/ItemList/ItemTable";
+import LocationCodeFields from "./components/ItemList/LocationCodeFields";
+import NoteInformationFields from "./components/NoteInformationFields";
 import {
   BANK_LIST,
   DUTY_DRAWBACK_SERIAL_NO,
@@ -41,86 +41,86 @@ import {
   STATE_CODE,
   NOTE_LIST,
   SHIPPING_INSURANCE,
-  PAN
-} from './constant'
-import CurrencyAndOtherInformationFields from './components/CurrencyAndOtherDetails'
-import CompanyDetails from './components/CompanyDetails'
-import EditItemDialog from './components/ItemList/EditItemDialog'
-import InvoiceNumberField from './components/InvoiceNumberField'
-import { debounce } from 'lodash'
-import { apiCheckInvoiceNumber } from '../../../../../services/SuperAdmin/Invoice/DispatchServices'
+  PAN,
+} from "./constant";
+import CurrencyAndOtherInformationFields from "./components/CurrencyAndOtherDetails";
+import CompanyDetails from "./components/CompanyDetails";
+import EditItemDialog from "./components/ItemList/EditItemDialog";
+import InvoiceNumberField from "./components/InvoiceNumberField";
+import { debounce } from "lodash";
+import { apiCheckInvoiceNumber } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
-var isInvoiceNumberExist = false
+var isInvoiceNumberExist = false;
 
 const validationSchema = Yup.object().shape({
-  DispatchConsignee: Yup.object().required('Required'),
-  DispatchBuyer: Yup.object().required('Required'),
-  DispatchShippingAddress: Yup.object().required('Required'),
-  DispatchShippingDetails: Yup.object().required('Required'),
+  DispatchConsignee: Yup.object().required("Required"),
+  DispatchBuyer: Yup.object().required("Required"),
+  DispatchShippingAddress: Yup.object().required("Required"),
+  DispatchShippingDetails: Yup.object().required("Required"),
   DispatchList: Yup.array(
     Yup.object({
       location_code: Yup.string().test((data, ctx) => {
-        if (ctx.options.context.DispatchList.length === 1) return true
-        else if (data === undefined || data === null || data === '')
-          return ctx.createError({ message: 'Required' })
-        else return true
-      })
+        if (ctx.options.context.DispatchList.length === 1) return true;
+        else if (data === undefined || data === null || data === "")
+          return ctx.createError({ message: "Required" });
+        else return true;
+      }),
     })
   ),
   DispatchCompanyDetails: Yup.object().shape({
-    iec_code: Yup.string().required('Required'),
-    gstin: Yup.string().required('Required'),
-    itc_code: Yup.string().required('Required'),
-    duty_drawback_serial_no: Yup.string().required('Required')
+    iec_code: Yup.string().required("Required"),
+    gstin: Yup.string().required("Required"),
+    itc_code: Yup.string().required("Required"),
+    duty_drawback_serial_no: Yup.string().required("Required"),
   }),
-  invoice_date: Yup.date().required('Required'),
+  invoice_date: Yup.date().required("Required"),
   DispatchBoxList: Yup.array(
     Yup.object({
-      box_length: Yup.number().required('Required'),
-      box_breadth: Yup.number().required('Required'),
-      box_height: Yup.number().required('Required'),
-      tare_weight: Yup.number().required('Required'),
-      box_size_type: Yup.string().required('Required')
+      box_length: Yup.number().required("Required"),
+      box_breadth: Yup.number().required("Required"),
+      box_height: Yup.number().required("Required"),
+      tare_weight: Yup.number().required("Required"),
+      box_size_type: Yup.string().required("Required"),
     })
   ),
-  DispatchBankDetails: Yup.object().required('Required'),
+  DispatchBankDetails: Yup.object().required("Required"),
   DispatchShippingAndOtherDetails: Yup.object().shape({
     //  packing_details: Yup.string().required('Required'),
-    payment_term: Yup.string().required('Required'),
-    end_use_code: Yup.string().required('Required'),
-    convert_rate: Yup.number().required('Required'),
-    freight: Yup.string().required('Required'),
-    shipping_term: Yup.string().required('Required'),
-    shipping_line: Yup.string().required('Required'),
-    shipping_insurance: Yup.string().required('Required')
+    payment_term: Yup.string().required("Required"),
+    end_use_code: Yup.string().required("Required"),
+    convert_rate: Yup.number().required("Required"),
+    freight: Yup.string().required("Required"),
+    shipping_term: Yup.string().required("Required"),
+    shipping_line: Yup.string().required("Required"),
+    shipping_insurance: Yup.string().required("Required"),
   }),
-  DispatchNote: Yup.object().required('Required'),
+  DispatchNote: Yup.object().required("Required"),
   invoice_no: Yup.string()
-    .required('Required')
+    .required("Required")
     .test(
-      'isInvoiceNumberExist',
-      'Invoice Number Already Exists',
+      "isInvoiceNumberExist",
+      "Invoice Number Already Exists",
       function (value) {
         return (
           !isInvoiceNumberExist ||
-          this.createError({ message: 'Invoice Number Already Exists' })
-        )
+          this.createError({ message: "Invoice Number Already Exists" })
+        );
       }
-    )
-})
+    ),
+});
 
 const ForeignDispatchForm = forwardRef((props, ref) => {
-  const dispatch = useDispatch()
-  const [tableRender, setTableRender] = useState(0)
+  const dispatch = useDispatch();
+  const [tableRender, setTableRender] = useState(0);
   const {
     initialData,
     onFormSubmit,
     customers = [],
     pushNotification,
-    conditions = []
-  } = props
+    conditions = [],
+  } = props;
 
-  useEffect(() => {}, [tableRender])
+  useEffect(() => {}, [tableRender]);
 
   const handleRemoveLocationCodeAndPoList = (
     dispatchList = [],
@@ -129,21 +129,21 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
   ) => {
     const updatedTableData = dispatchList.filter(
       (_, index) => index !== indexToRemove
-    )
-    setFieldValue?.('DispatchList', updatedTableData)
-  }
+    );
+    setFieldValue?.("DispatchList", updatedTableData);
+  };
 
   const addNewItemInPoList = (dispatchList, newItem, index, setFieldValue) => {
     const updatedDispatchList = [
       ...dispatchList.slice(0, index),
       {
         ...dispatchList[index],
-        poList: [...dispatchList[index].poList, newItem]
+        poList: [...dispatchList[index].poList, newItem],
       },
-      ...dispatchList.slice(index + 1)
-    ]
-    setFieldValue('DispatchList', updatedDispatchList)
-  }
+      ...dispatchList.slice(index + 1),
+    ];
+    setFieldValue("DispatchList", updatedDispatchList);
+  };
 
   const editItemInPoList = (
     dispatchList,
@@ -151,41 +151,41 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
     locationIndex,
     setFieldValue
   ) => {
-    const updatedDispatchList = [...dispatchList]
+    const updatedDispatchList = [...dispatchList];
 
-    const poList = updatedDispatchList[locationIndex].poList
+    const poList = updatedDispatchList[locationIndex].poList;
     const itemIndex = poList.findIndex(
       (item) => item.Po.po_id === editItem.Po.po_id
-    )
+    );
 
     if (itemIndex !== -1) {
-      updatedDispatchList[locationIndex].poList[itemIndex] = editItem
+      updatedDispatchList[locationIndex].poList[itemIndex] = editItem;
     }
 
-    setFieldValue('DispatchList', updatedDispatchList)
-    setTableRender(tableRender + 1)
-  }
+    setFieldValue("DispatchList", updatedDispatchList);
+    setTableRender(tableRender + 1);
+  };
 
   const handleNewBoxAdd = (boxes = [], newBox = {}, setFieldValue) => {
-    const updatedBox = [...boxes, newBox]
-    setFieldValue?.('DispatchBoxList', updatedBox)
-  }
+    const updatedBox = [...boxes, newBox];
+    setFieldValue?.("DispatchBoxList", updatedBox);
+  };
 
   const handleEditBox = (boxes = [], newBox = {}, setFieldValue) => {
-    const updatedBox = [...boxes]
-    console.log(newBox, updatedBox)
-    let index = updatedBox.findIndex((f) => f.index === newBox.index)
+    const updatedBox = [...boxes];
+    console.log(newBox, updatedBox);
+    let index = updatedBox.findIndex((f) => f.index === newBox.index);
     if (index > -1) {
-      updatedBox[index] = newBox
+      updatedBox[index] = newBox;
     } else {
       return pushNotification(
-        'Cannot Edit Box Some Error Occured, Please Delete It And Create New One',
-        'danger',
-        'Error'
-      )
+        "Cannot Edit Box Some Error Occured, Please Delete It And Create New One",
+        "danger",
+        "Error"
+      );
     }
-    setFieldValue?.('DispatchBoxList', updatedBox)
-  }
+    setFieldValue?.("DispatchBoxList", updatedBox);
+  };
 
   const handleDeleteBox = (
     boxes = [],
@@ -194,29 +194,29 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
     dispatchList = []
   ) => {
     let find = dispatchList.find((dispatchItem) => {
-      return dispatchItem.poList.find((poItem) => poItem.box_no === index + 1)
-    })
+      return dispatchItem.poList.find((poItem) => poItem.box_no === index + 1);
+    });
 
     if (find) {
       return pushNotification(
-        'Cannot Delete Box Already Added In Product Delete Product First',
-        'danger',
-        'Error'
-      )
+        "Cannot Delete Box Already Added In Product Delete Product First",
+        "danger",
+        "Error"
+      );
     }
-    const updatedBox = [...boxes]
-    updatedBox.splice(index, 1)
-    setFieldValue?.('DispatchBoxList', updatedBox)
-  }
+    const updatedBox = [...boxes];
+    updatedBox.splice(index, 1);
+    setFieldValue?.("DispatchBoxList", updatedBox);
+  };
 
   const handleNewLocationCodeAndPoList = (dispatchList = [], setFieldValue) => {
     const newDispatchList = {
-      location_code: '',
-      poList: []
-    }
-    const updatedDispatchList = [...dispatchList, newDispatchList]
-    setFieldValue?.('DispatchList', updatedDispatchList)
-  }
+      location_code: "",
+      poList: [],
+    };
+    const updatedDispatchList = [...dispatchList, newDispatchList];
+    setFieldValue?.("DispatchList", updatedDispatchList);
+  };
 
   const handleDeleteItemInPoList = (
     dispatchList,
@@ -224,18 +224,18 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
     setFieldValue,
     poIndex
   ) => {
-    const updatedDispatchList = [...dispatchList]
+    const updatedDispatchList = [...dispatchList];
     const filterDispatchList = updatedDispatchList.map((list, index) => {
       if (index === locationIndex) {
         return {
           ...list,
-          poList: list.poList.filter((_, index) => index !== poIndex)
-        }
+          poList: list.poList.filter((_, index) => index !== poIndex),
+        };
       }
-      return list
-    })
-    setFieldValue?.('DispatchList', filterDispatchList)
-  }
+      return list;
+    });
+    setFieldValue?.("DispatchList", filterDispatchList);
+  };
 
   const handleEditItemInPoList = (
     dispatchList,
@@ -244,31 +244,31 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
     poIndex,
     Item
   ) => {
-    const updatedDispatchList = [...dispatchList]
-    dispatch(setSelectedDispatchItem(Item))
+    const updatedDispatchList = [...dispatchList];
+    dispatch(setSelectedDispatchItem(Item));
     dispatch(
       toggleEditDispatchItemDialog({
         option: true,
-        locationIndex: locationIndex
+        locationIndex: locationIndex,
       })
-    )
-    setFieldValue?.('DispatchList', updatedDispatchList)
-  }
+    );
+    setFieldValue?.("DispatchList", updatedDispatchList);
+  };
 
   const handleCheck = async (e) => {
     try {
       const response = await apiCheckInvoiceNumber({
-        invoice_no: e.target.value
-      })
+        invoice_no: e.target.value,
+      });
       if (response.status === 200) {
-        isInvoiceNumberExist = false
+        isInvoiceNumberExist = false;
       }
     } catch (error) {
-      isInvoiceNumberExist = true
+      isInvoiceNumberExist = true;
     }
-  }
+  };
 
-  const debouncedHandleCheck = debounce(handleCheck, 500)
+  const debouncedHandleCheck = debounce(handleCheck, 500);
 
   return (
     <>
@@ -276,23 +276,23 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
         <Formik
           innerRef={ref}
           initialValues={{
-            ...initialData
+            ...initialData,
           }}
           validationSchema={validationSchema}
           onSubmit={(values, { setSubmitting }) => {
             const isDispatchListEmpty = values.DispatchList.filter(
               (item) => item.poList.length === 0
-            )
+            );
             if (isDispatchListEmpty.length > 0) {
-              setSubmitting(false)
+              setSubmitting(false);
               return pushNotification?.(
-                'Add items in list',
-                'danger',
-                'Required'
-              )
+                "Add items in list",
+                "danger",
+                "Required"
+              );
             }
-            const formData = cloneDeep({ ...values })
-            onFormSubmit?.(formData, setSubmitting)
+            const formData = cloneDeep({ ...values });
+            onFormSubmit?.(formData, setSubmitting);
           }}
         >
           {({
@@ -301,17 +301,14 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
             errors,
             setFieldValue,
             isSubmitting,
-            handleChange
+            handleChange,
           }) => {
-            console.log(values)
+            console.log(values);
             return (
               <Form key="invoiceForm">
                 <FormContainer key="invoiceFormContainer">
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    <Card
-                      className="bg-yellow-50"
-                      bodyClass="pb-0"
-                    >
+                    <Card className="bg-yellow-50" bodyClass="pb-0">
                       <div className="flex justify-between">
                         <span>
                           <h5 className="font-semibold text-gray-700">
@@ -342,10 +339,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                         />
                       </div>
                     </Card>
-                    <Card
-                      className="bg-blue-50 h-max"
-                      bodyClass="pb-0"
-                    >
+                    <Card className="bg-blue-50 h-max" bodyClass="pb-0">
                       <div className="flex justify-between">
                         <span>
                           <h5 className="font-semibold text-gray-700">
@@ -394,10 +388,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                         />
                       </div>
                     </Card>
-                    <Card
-                      className="bg-yellow-50 h-max"
-                      bodyClass="pb-0"
-                    >
+                    <Card className="bg-yellow-50 h-max" bodyClass="pb-0">
                       <div className="flex justify-between items-center">
                         <span>
                           <h5 className="font-semibold text-gray-700">
@@ -412,7 +403,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                           size="sm"
                           variant="solid"
                           onClick={() => {
-                            dispatch(toggleNewBoxDialog(true))
+                            dispatch(toggleNewBoxDialog(true));
                           }}
                         >
                           Add Box
@@ -436,8 +427,8 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                         <div
                           className={
                             values.DispatchList.length - 1 === index
-                              ? ''
-                              : 'mb-5'
+                              ? ""
+                              : "mb-5"
                           }
                         >
                           <div className="flex justify-between items-center">
@@ -478,7 +469,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                                       values.DispatchList,
                                       index,
                                       setFieldValue
-                                    )
+                                    );
                                   }}
                                 >
                                   Remove
@@ -493,9 +484,9 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                                   dispatch(
                                     toggleAddDispatchItemDialog({
                                       option: true,
-                                      locationIndex: index
+                                      locationIndex: index,
                                     })
-                                  )
+                                  );
                                 }}
                               >
                                 Add Item
@@ -509,7 +500,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                                     handleNewLocationCodeAndPoList?.(
                                       values?.DispatchList,
                                       setFieldValue
-                                    )
+                                    );
                                   }}
                                 >
                                   New Location
@@ -541,7 +532,7 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                             dispatchList={values.DispatchList}
                           />
                         </div>
-                      )
+                      );
                     })}
                   </Card>
                   <div className="grid grid-cols-2 gap-4">
@@ -633,28 +624,28 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
                   </StickyFooter>
                 </FormContainer>
               </Form>
-            )
+            );
           }}
         </Formik>
       </Suspense>
     </>
-  )
-})
+  );
+});
 
 ForeignDispatchForm.defaultProps = {
   initialData: {
-    invoice_type: 'foreign',
+    invoice_type: "foreign",
     invoice_date: new Date(),
-    invoice_no: '',
+    invoice_no: "",
     DispatchConsignee: null,
     DispatchBuyer: null,
     DispatchShippingAddress: null,
     DispatchShippingDetails: null,
     DispatchList: [
       {
-        location_code: '',
-        poList: []
-      }
+        location_code: "",
+        poList: [],
+      },
     ],
     DispatchBoxList: [],
     DispatchCompanyDetails: {
@@ -664,29 +655,29 @@ ForeignDispatchForm.defaultProps = {
       duty_drawback_serial_no: DUTY_DRAWBACK_SERIAL_NO,
       state: STATE,
       pan: PAN,
-      state_code: STATE_CODE
+      state_code: STATE_CODE,
     },
     DispatchBankDetails: BANK_LIST[0],
     DispatchShippingAndOtherDetails: {
-      end_use_code: '',
-      packing_details: '',
-      excise_document: '',
-      freight: '',
-      shipping_term: '',
-      payment_term: '',
-      shipping_line: '',
+      end_use_code: "",
+      packing_details: "",
+      excise_document: "",
+      freight: "",
+      shipping_term: "",
+      payment_term: "",
+      shipping_line: "",
       shipping_insurance: SHIPPING_INSURANCE[0],
-      vehicle_no: '',
-      bill_type: 'GST',
-      c_gst: '',
-      s_gst: '',
+      vehicle_no: "",
+      bill_type: "GST",
+      c_gst: "",
+      s_gst: "",
       i_gst: 18,
-      e_way_bill_no: '',
-      remark: '',
-      convert_rate: ''
+      e_way_bill_no: "",
+      remark: "",
+      convert_rate: "",
     },
-    DispatchNote: ''
-  }
-}
+    DispatchNote: "",
+  },
+};
 
-export default ForeignDispatchForm
+export default ForeignDispatchForm;

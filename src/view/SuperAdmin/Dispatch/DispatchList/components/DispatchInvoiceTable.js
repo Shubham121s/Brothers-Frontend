@@ -28,8 +28,8 @@ import DetailDialog from "./DetailsDialog";
 import DeleteInvoiceConfirmationDialog from "./DeleteConfirmationDialog";
 
 const statusColor = {
-  confirm: {
-    label: "Dispatched",
+  confirmed: {
+    label: "Completed",
     dotClass: "bg-emerald-500",
     textClass: "text-emerald-500",
   },

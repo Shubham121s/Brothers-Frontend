@@ -61,8 +61,6 @@ const ActionColumn = ({ row }) => {
     dispatch(setSelectedInvoice(row));
   };
 
-  console.log("row", row);
-
   const onEdit = useCallback(() => {
     navigate(`/dispatch/pattern/edit/${row?.pattern_invoice_id}`);
   }, [row]);

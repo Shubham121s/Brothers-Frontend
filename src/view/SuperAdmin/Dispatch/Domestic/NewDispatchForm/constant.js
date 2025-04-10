@@ -3,7 +3,7 @@ export const BANK_LIST = [
     id: 1,
     bank_name: 'BANK OF MAHARASHTRA',
     account_no: 60262968113,
-    beneficiary_name: 'BROTHER INDUSTRIES',
+    beneficiary_name: 'BROTHERS INDUSTRIES',
     ifsc_code: 'MAHBOOOOO3O',
     ifsc_code: 'MAHBOOOOO3O',
     bank_ad_code: '0230067-6000009',

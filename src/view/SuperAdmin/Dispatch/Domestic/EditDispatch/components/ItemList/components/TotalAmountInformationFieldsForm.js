@@ -10,7 +10,7 @@ const TotalAmountInformationFieldsForm = (props) => {
     row_charges = 0,
     machining_charges = 0,
   } = props;
-  console.log(quantity);
+  // console.log(quantity);
   return (
     <FormItem label="Total Amount" className="mb-4">
       <Field

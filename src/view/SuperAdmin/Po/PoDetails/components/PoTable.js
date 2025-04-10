@@ -53,6 +53,7 @@ const ActionColumn = ({ row }) => {
 
 const PoTable = ({ data = [], currency = "INR", po_id }) => {
   const PoLists = Array.isArray(data?.PoLists) ? data.PoLists : [];
+  console.log("data", data);
   const columns = useMemo(
     () => [
       {

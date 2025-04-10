@@ -6,29 +6,97 @@ import Footer from "../components/Footer";
 import DispatchTable from "./components/DispatchTable";
 import { Viewer } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
-import html2pdf from "html2pdf.js";
+
+// eslint-disable-next-line
 
 // Import styles for PDF Viewer
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import {
+  getDispatchInvoiceWithPagination,
+  updateStatus,
+} from "../../../../Dispatch/DispatchList/store/dataSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleInvoiceDialog } from "../../../../Dispatch/DispatchList/store/stateSlice";
 
 const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
+  const dispatch = useDispatch();
   const componentRef = useRef();
   const [pdfBlobUrl, setPdfBlobUrl] = useState(null);
+  const { pageIndex, pageSize } = useSelector(
+    (state) => state.dispatch_invoice.data.tableData
+  );
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `invoice-${data?.invoice_no}`,
+    pageStyle: `
+      // @page {
+      //   size: A4;
+      // }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+        }
+        .page {
+          page-break-after: always;
+          page-break-inside: avoid;
+        }
+        .invoice {
+          page-break-inside: avoid;
+        }
+        .pageMargin{
+          padding-top: 50px;
+          padding-left: 10px;
+          padding-right: 10px;
+        }
+      }
+    `,
   });
 
-  const handleDownloadPDF = () => {
-    if (!componentRef.current || !data) return;
+  // const handleDownloadPDF = async () => {
+  //   console.log("click");
+  //   if (!componentRef.current || !data) return;
 
-    const fileName = `Invoice-${data?.invoice_no || "document"}.pdf`;
+  //   const fileName = `Invoice-${data?.invoice_no || "document"}.pdf`;
+  //   console.log("fileName", fileName);
 
-    html2pdf().from(componentRef.current).set({ filename: fileName }).save(); // Directly downloads the PDF
-  };
+  //   try {
+  //     console.log("here");
+  //     await new Promise((resolve, reject) => {
+  //       html2pdf()
+  //         .from(componentRef.current)
+  //         .set({
+  //           filename: fileName,
+  //           html2canvas: {
+  //             scale: 1.2,
+  //             useCORS: true,
+  //             allowTaint: false,
+  //           },
+  //           jsPDF: { unit: "pt", format: "a4", orientation: "portrait" },
+  //           // margin: [10, 10, 10, 10], // Set margins
+  //         })
+  //         .save()
+  //         .then(resolve)
+  //         .catch(reject);
+  //     });
 
+  //     console.log("here2");
+
+  //     await dispatch(
+  //       updateStatus({
+  //         status: "confirmed",
+  //         dispatch_invoice_id: data?.dispatch_invoice_id,
+  //       })
+  //     );
+
+  //     console.log("here4");
+
+  //     dispatch(getDispatchInvoiceWithPagination({ pageIndex, pageSize }));
+  //   } catch (error) {
+  //     console.error("Error in downloading or updating:", error);
+  //   }
+  // };
   const handleGeneratePreview = () => {
     const node = componentRef.current;
 
@@ -41,14 +109,36 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
     }
   };
 
+  const handleCompleted = async () => {
+    try {
+      await dispatch(
+        updateStatus({
+          status: "confirmed",
+          dispatch_invoice_id: data?.dispatch_invoice_id,
+        })
+      );
+
+      dispatch(getDispatchInvoiceWithPagination({ pageIndex, pageSize }));
+      dispatch(toggleInvoiceDialog(false));
+    } catch (error) {
+      console.error("Error in downloading or updating:", error);
+    }
+  };
+
   const TableData = (props) => {
     return (
       <div className="grid grid-cols-6 mt-2">
         <div className="col-span-6 h-full">
-          <div className="h-full overflow-hidden">
+          <div
+            className="h-full overflow-hidden text-center"
+            style={{
+              textAlign: "center",
+              verticalAlign: "middle",
+            }}
+          >
             <DispatchTable
               {...props}
-              className="print:text-sm p-0 text-gray-700"
+              className="print:text-sm p-0 text-center text-gray-700"
             />
           </div>
         </div>
@@ -82,28 +172,20 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
               key={`page-${pageNo}`}
               className="page"
               style={{
-                height: "calc(1130px - 50px)",
                 paddingLeft: "6%",
                 paddingRight: "2%",
+                fontSize: "10px",
+                pageBreakAfter: "always",
               }}
             >
               <div
-                className="invoice w-full  relative"
+                className="invoice w-full relative"
                 style={{
                   border: "1px solid black",
                   marginTop: "9px",
+                  fontSize: "10px", // Adjusted font size
                 }}
               >
-                {/* <div
-                  className="w-full h-full absolute top-0"
-                  style={{ opacity: 0.3 }}
-                >
-                  <img
-                    src="http://www.brothers.net.in/img/logoBrother.png"
-                    className="w-full h-full"
-                    style={{ objectFit: "contain", objectPosition: "center" }}
-                  ></img>
-                </div> */}
                 <Header
                   data={data}
                   pageNo={pageNo}
@@ -138,11 +220,20 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
           variant="solid"
           color="orange-500"
           onClick={() => {
-            handleDownloadPDF();
+            handlePrint();
             handleGeneratePreview();
           }}
         >
           Print & Preview
+        </Button>
+        <Button
+          // variant="solid"
+          className="ml-4 border border-orange-500 !bg-white text-orange-500"
+          onClick={() => {
+            handleCompleted();
+          }}
+        >
+          Completed
         </Button>
 
         {pdfBlobUrl && (
@@ -166,7 +257,7 @@ const DispatchInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
           </div>
         )}
         <div style={{ display: "none" }}>
-          <div ref={componentRef}>
+          <div ref={componentRef} className="pageMargin">
             <RenderPages data={data} />
           </div>
         </div>
