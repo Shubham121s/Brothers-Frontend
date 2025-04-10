@@ -64,7 +64,7 @@ const PatternForm = forwardRef((props, ref) => {
           <Form>
             <FormContainer>
               <div>
-                <h4>{type === "edit" && "Update"} Pattern Information</h4>
+                <h4>{type === "edit" && "Update"} Pattern Informations</h4>
                 <p className="mb-6">
                   Section to config basic pattern information
                 </p>

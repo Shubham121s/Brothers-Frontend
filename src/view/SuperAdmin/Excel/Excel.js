@@ -745,7 +745,7 @@ const generateInvoiceExcel = (invoiceData) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'BROTHER INDUSTRIES\n',
+      text: 'BROTHERS INDUSTRIES\n',
       font: { size: 15 }
     }
   ]
@@ -771,7 +771,7 @@ const generateInvoiceExcel = (invoiceData) => {
       font: { bold: true, size: 15 }
     },
     {
-      text: 'BROTHER INDUSTRIES\n',
+      text: 'BROTHERS INDUSTRIES\n',
       font: { size: 15 }
     },
     {

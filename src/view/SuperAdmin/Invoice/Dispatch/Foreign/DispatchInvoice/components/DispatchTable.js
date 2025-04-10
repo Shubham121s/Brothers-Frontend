@@ -192,7 +192,9 @@ const DispatchTable = (props) => {
         accessorKey: "item_code",
         cell: (props) => {
           const row = props.row.original;
-          return <div className="uppercase">{row?.item_code || "-"}</div>;
+          return (
+            <div className="uppercase text-center">{row?.item_code || "-"}</div>
+          );
         },
       },
       // {

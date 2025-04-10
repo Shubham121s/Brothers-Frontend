@@ -38,7 +38,7 @@ const ActionColumn = ({ url }) => {
   const { textTheme } = useThemeClass();
 
   const onView = () => {
-    console.log(url);
+    // console.log(url);
     const splitString = url?.split("/uploads/");
     const transformedString = `https://api-casting.brothers.net.in/api/static/${splitString[1]}`;
     window.open(transformedString, "_blank");

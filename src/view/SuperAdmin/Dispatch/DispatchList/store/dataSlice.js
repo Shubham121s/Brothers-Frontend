@@ -8,6 +8,7 @@ import {
   apiGetAllInvoiceDates,
   apiGetYears,
   apiGetMonths,
+  apiUpdateStatus,
 } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
 export const getDispatchInvoiceWithPagination = createAsyncThunk(
@@ -118,6 +119,18 @@ export const getAllMonths = createAsyncThunk(
   }
 );
 
+export const updateStatus = createAsyncThunk(
+  "dispatch/invoice/details/update/status",
+  async (data) => {
+    try {
+      const response = await apiUpdateStatus(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -209,6 +222,7 @@ const dataSlice = createSlice({
 
     [addDetails.fulfilled]: (state) => {},
     [deleteInvoice.fulfilled]: (state) => {},
+    [updateStatus.fulfilled]: (state) => {},
   },
 });
 

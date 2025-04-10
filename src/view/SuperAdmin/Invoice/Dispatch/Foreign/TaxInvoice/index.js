@@ -27,6 +27,9 @@ const TaxInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
         .invoice {
           page-break-inside: avoid;
         }
+        .pageMargin{
+          padding-top: 50px;
+        }
       }
     `,
   });
@@ -69,9 +72,10 @@ const TaxInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
               key={`page-${pageNo}`}
               className="page"
               style={{
-                height: "calc(1130px - 50px)",
                 paddingLeft: "6%",
                 paddingRight: "2%",
+                fontSize: "10px",
+                pageBreakAfter: "always",
               }}
             >
               <div
@@ -119,7 +123,7 @@ const TaxInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
           Tax Invoice
         </Button>
         <div style={{ display: "none" }}>
-          <div ref={componentRef}>
+          <div ref={componentRef} className="pageMargin">
             <RenderPages data={data} />
           </div>
         </div>

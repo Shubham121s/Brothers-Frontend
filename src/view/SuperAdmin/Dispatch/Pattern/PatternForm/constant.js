@@ -13,7 +13,7 @@ export const NOTE_LIST = [
 
 export const SHIPPING_LINE = ["BY ROAD", "BY SEA", "BY AIR"];
 export const SHIPPING_TERM = ["CIF", "EX-WORK"];
-export const SHIPPING_INSURANCE = ["BROTHER INDUSTRIES"];
+export const SHIPPING_INSURANCE = ["BROTHERS INDUSTRIES"];
 
 export const BANK_LIST = [
   {
@@ -21,7 +21,7 @@ export const BANK_LIST = [
     bank_name: "BANK OF MAHARASHTRA",
     account_no: 60262968113,
     account_type: "Current",
-    beneficiary_name: "BROTHER INDUSTRIES",
+    beneficiary_name: "BROTHERS INDUSTRIES",
     ifsc_code: "MAHBOOOOO3O",
     ifsc_code: "MAHBOOOOO3O",
     swift_code: "MAHBINBBKOL",

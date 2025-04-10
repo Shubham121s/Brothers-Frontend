@@ -25,7 +25,7 @@ const ConsigneeInformationFields = (props) => {
       dispatch(
         getAllPosByCustomerId({
           customer_id: values?.customer_id,
-          currency_type: "USD",
+          currency_type: "",
         })
       );
       dispatch(

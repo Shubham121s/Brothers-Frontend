@@ -33,7 +33,7 @@ const GRNInvoice = () => {
           <div className="bg-slate-100 w-3/5 p-3" style={{ height: "150px" }}>
             <div className="flex justfy-between gap-5">
               <div>Received by</div>
-              <div className="font-bold">Brother Industries</div>
+              <div className="font-bold">Brothers Industries</div>
             </div>
             <div className="flex justfy-between gap-5">
               <div>Address</div>

@@ -265,7 +265,6 @@ const ProductForm = forwardRef((props, ref) => {
                       placeholder="Product Name"
                       label="Product Name"
                       name="name"
-                     
                     />
                     <InputInformationFields
                       errors={errors?.drawing_number}

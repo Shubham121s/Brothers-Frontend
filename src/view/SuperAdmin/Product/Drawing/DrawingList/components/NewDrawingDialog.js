@@ -46,7 +46,7 @@ const NewDrawingDialog = () => {
     formData.append('finish_weight', values.finish_weight)
     formData.append('product_id', product_id)
     setSubmitting(true)
-    console.log(values)
+    // console.log(values)/
     const response = await apiPostNewDrawingRegister(formData)
     setSubmitting(false)
     if (response.data?.success) {

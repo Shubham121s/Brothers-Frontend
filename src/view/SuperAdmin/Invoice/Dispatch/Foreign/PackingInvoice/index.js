@@ -12,10 +12,10 @@ const PackingInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
     content: () => componentRef.current,
     documentTitle: `packing-invoice-${data?.invoice_no}`,
     pageStyle: `
-      @page {
-        size: A4;
-        margin: 10mm;
-      }
+      // @page {
+      //   size: A4;
+      //   margin: 10mm;
+      // }
       @media print {
         body {
           -webkit-print-color-adjust: exact;
@@ -26,6 +26,11 @@ const PackingInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
         }
         .invoice {
           page-break-inside: avoid;
+        }
+        .pageMargin{
+          padding-top: 50px;
+          padding-left: 10px;
+          padding-right: 10px;
         }
       }
     `,
@@ -72,9 +77,10 @@ const PackingInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
               key={`page-${pageNo}`}
               className="page"
               style={{
-                height: "calc(1130px - 50px)",
                 paddingLeft: "6%",
                 paddingRight: "2%",
+                fontSize: "10px",
+                pageBreakAfter: "always",
               }}
             >
               <div
@@ -92,7 +98,7 @@ const PackingInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
                   pageNo={pageNo}
                   pageCount={pageCount}
                   location_code={location_code}
-                  invoice_type="PACKING INVOICE"
+                  invoice_type="PACKING LIST"
                 />
                 <TableData
                   pageNo={pageNo}
@@ -122,7 +128,7 @@ const PackingInvoice = ({ data, TABLE_ROW_COUNT = 8 }) => {
           Packing Invoice
         </Button>
         <div style={{ display: "none" }}>
-          <div ref={componentRef}>
+          <div ref={componentRef} className="pageMargin">
             <RenderPages data={data} />
           </div>
         </div>

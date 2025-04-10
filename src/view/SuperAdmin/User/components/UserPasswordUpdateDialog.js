@@ -10,6 +10,7 @@ import {
   apiUpdateUserPassword,
 } from "../../../../services/SuperAdmin/UserService";
 import { SECRET_KEY } from "../../../../constants/app.constant";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const pushNotification = (message, type, title) => {
   return Toast.push(
@@ -28,6 +29,8 @@ const UserPasswordUpdateDialog = () => {
   const [password, setPassword] = useState("");
   const [decryptedPassword, setDecryptedPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  console.log("showPassword", showPassword);
 
   const UserPasswordDialog = useSelector(
     (state) => state.user.state.passwordDialog
@@ -111,15 +114,27 @@ const UserPasswordUpdateDialog = () => {
       width={450}
     >
       {decryptedPassword && (
-        <div className="text-sm text-gray-600 mb-2 mt-4">
-          <strong>Current Password:</strong>{" "}
-          <span
-            className="cursor-pointer"
-            onMouseEnter={() => setShowPassword(true)}
-            onMouseLeave={() => setShowPassword(false)}
+        <div className="text-sm text-gray-600 mb-2 mt-4 relative">
+          <label
+            htmlFor="current-password"
+            className="block mb-1 font-medium text-gray-700"
+          ></label>
+          <input
+            id="current-password"
+            type={showPassword ? "text" : "password"}
+            value={decryptedPassword}
+            readOnly
+            className="w-full border border-gray-300 rounded px-3 py-3 text-sm focus:outline-none focus:ring focus:ring-purple-200"
+            onFocus={(e) => e.target.select()}
+            style={{ width: "300px" }}
+          />
+          <button
+            type="button"
+            className="text-xs text-gray-600 absolute right-2 top-1/2 transform -translate-y-1/2"
+            onClick={() => setShowPassword(!showPassword)}
           >
-            {showPassword ? decryptedPassword : "******"}
-          </span>
+            {showPassword ? <FiEye size={18} /> : <FiEyeOff size={18} />}
+          </button>
         </div>
       )}
       <PasswordInput

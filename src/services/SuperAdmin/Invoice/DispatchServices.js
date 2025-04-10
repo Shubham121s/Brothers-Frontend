@@ -226,3 +226,11 @@ export async function apiGetMonths() {
     method: "get",
   });
 }
+
+export async function apiUpdateStatus(data) {
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch/update/status",
+    method: "put",
+    data,
+  });
+}

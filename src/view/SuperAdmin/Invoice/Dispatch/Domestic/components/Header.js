@@ -13,15 +13,11 @@ const Header = (props) => {
     <>
       <div className="grid grid-cols-6 p-2 h-full items-center">
         <div className="col-span-1 h-full">
-          <div className="h-full justify-start items-center flex">
-            <img
-              src={LOGO_SRC_PATH}
-              className="absolute object-cover opacity-150"
-              style={{ height: "50px" }}
-            />
+          <div className="h-full w-full justify-start items-center flex relative">
+            <img src={LOGO_SRC_PATH} className="w-72" />
           </div>
         </div>
-        <div className="col-span-4 h-full">
+        <div className="col-span-4 !flex !justify-center !items-center">
           <div className="h-full text-center">
             <h6 className="text-center text-gray-700">
               COMMERCIAL | TAX INVOICE
@@ -35,7 +31,8 @@ const Header = (props) => {
         <div className="col-span-1 h-full">
           <div className="h-full flex justify-end items-center">
             <h6 className="text-gray-700 font-medium">
-            {pageNo < 10 ? `0${pageNo}` : pageNo}/{pageCount < 10 ? `0${pageCount}` : pageCount}
+              {pageNo < 10 ? `0${pageNo}` : pageNo}/
+              {pageCount < 10 ? `0${pageCount}` : pageCount}
               {/* {pageCount < 10 ? `0${pageCount}` : pageCount} */}
               {/* {pageNo < 10 ? `0${pageNo}` : pageNo} */}
             </h6>

@@ -17,7 +17,8 @@ const { Tr, Th, Td, THead, TBody } = Table;
 
 const CalculateDate = (SLT, SLTT, date) => {
   let formattedTime;
-  const originalDate = new Date();
+  const originalDate = new Date(date);
+
   if (SLTT === "days") {
     originalDate.setDate(originalDate.getDate() + SLT);
     formattedTime = dayjs(originalDate);
@@ -35,7 +36,9 @@ const CalculateDate = (SLT, SLTT, date) => {
     formattedTime = dayjs(originalDate);
   }
 
-  return new Date(formattedTime);
+  formattedTime = dayjs(originalDate).format("YYYY-MM-DD");
+
+  return formattedTime;
 };
 
 const ItemInformationFields = (props) => {
@@ -51,12 +54,10 @@ const ItemInformationFields = (props) => {
         cell: ({ row }) => {
           const poDate = row.original.date;
           let rlt = row.original?.PoLists?.[0]?.Product?.raw_lead_time || 0;
-          console.log("rlt", rlt);
 
           const rltType =
             row.original?.PoLists?.[0]?.Product?.raw_lead_time_type;
 
-          console.log("rltType", rltType);
           if (rltType === "weeks") {
             rlt *= 7;
           } else if (rltType === "months") {
@@ -166,6 +167,7 @@ const ItemInformationFields = (props) => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
     <>
       <div className="grid md:grid-cols-3 gap-2 ">
@@ -178,38 +180,46 @@ const ItemInformationFields = (props) => {
             errorMessage={errors?.accept_delivery_date}
           >
             <Field name="accept_delivery_date">
-              {({ field, form }) => (
-                <>
+              {({ field, form }) => {
+                const calculatedDate = CalculateDate(
+                  values?.Product?.standard_lead_time,
+                  values?.Product?.standard_lead_time_type,
+                  data?.date
+                );
+
+                if (!values.accept_delivery_date) {
+                  form.setFieldValue(field.name, calculatedDate);
+                }
+
+                return (
                   <DatePicker
                     style={
-                      dayjs(values?.delivery_date).format("YYYY-MM-DD") !==
-                        dayjs(
-                          CalculateDate(
-                            values?.Product?.standard_lead_time,
-                            values?.Product?.standard_lead_time_type,
-                            data?.date
-                          )
-                        ).format("YYYY-MM-DD") &&
-                      !values?.is_delivery_date_change && {
-                        backgroundColor: `red`,
-                        color: "white",
-                      }
+                      dayjs(values?.accept_delivery_date).isAfter(
+                        dayjs(values?.delivery_date)
+                      ) && !values?.is_delivery_date_change
+                        ? { backgroundColor: "red", color: "white" }
+                        : {}
                     }
                     placeholder="Brothers Delivery Date"
                     field={field}
                     form={form}
-                    value={CalculateDate(
-                      values?.Product?.standard_lead_time,
-                      values?.Product?.standard_lead_time_type,
-                      data?.date
-                    )}
+                    value={
+                      values.accept_delivery_date
+                        ? new Date(values.accept_delivery_date)
+                        : calculatedDate
+                    }
                     onChange={(date) => {
-                      form.setFieldValue(field.name, date);
-                      form.setFieldValue("is_delivery_date_change", true);
+                      if (!date) return;
+
+                      const formattedDate = dayjs(date).isValid()
+                        ? dayjs(date).format("YYYY-MM-DD")
+                        : "";
+
+                      form.setFieldValue(field.name, formattedDate);
                     }}
                   />
-                </>
-              )}
+                );
+              }}
             </Field>
           </FormItem>
         </div>
@@ -229,7 +239,7 @@ const ItemInformationFields = (props) => {
           </FormItem>
         </div>
       </div>
-      <Table className="relative mb-4" compact={true}>
+      {/* <Table className="relative mb-4" compact={true}>
         <THead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>
@@ -267,7 +277,7 @@ const ItemInformationFields = (props) => {
             </Tr>
           ))}
         </TBody>
-      </Table>
+      </Table> */}
     </>
   );
 };

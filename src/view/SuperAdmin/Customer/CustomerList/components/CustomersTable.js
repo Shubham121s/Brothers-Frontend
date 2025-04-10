@@ -166,6 +166,7 @@ const columns = [
   {
     header: "",
     accessorKey: "id",
+    size: 60,
     cell: (props) => {
       const row = props.row.original;
       return <ActionColumn row={row} />;
