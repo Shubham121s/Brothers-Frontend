@@ -31,7 +31,7 @@ const ItemForm = forwardRef((props, ref) => {
     currency,
   } = props;
 
-  const [content, setContent] = useState(initialData.remarks);
+  const [content, setContent] = useState(initialData.remark);
   return (
     <Formik
       innerRef={ref}
@@ -48,7 +48,6 @@ const ItemForm = forwardRef((props, ref) => {
       }}
     >
       {({ values, touched, errors, setFieldValue }) => {
-        console.log(values);
         return (
           <Form>
             <FormContainer>

@@ -47,6 +47,8 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
   const projectNumbers = useSelector(
     (state) => state.masterPP.data.projectNumber
   );
+
+  console.log("projectNumbers", projectNumbers);
   const PoNumber = useSelector((state) => state.masterPP.data.poNumber);
   const serialNumber = useSelector((state) => state.masterPP.data.serialNumber);
   const PoDates = useSelector((state) => state.masterPP.data.poDates);
@@ -215,6 +217,13 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
           customer_id: e.value,
           number: po_no,
           DeliveryStatus,
+        })
+      );
+      dispatch(
+        getAllProjectNumber({
+          customer_id: e.value,
+          DeliveryStatus,
+          number: po_no,
         })
       );
       debounceFn(e.value, type);

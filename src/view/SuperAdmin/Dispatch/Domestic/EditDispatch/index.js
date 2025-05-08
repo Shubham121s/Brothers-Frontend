@@ -115,6 +115,7 @@ const EditDispatch = () => {
       const action = await dispatch(
         getDomesticInvoiceDetailsByInvoiceId({ dispatch_invoice_id })
       );
+
       setCharges(
         action.payload.data.data?.DispatchShippingAndOtherDetail
           ?.packing_charges
@@ -149,6 +150,7 @@ const EditDispatch = () => {
         dispatch_invoice_id: data.dispatch_invoice_id,
         packing_charges: charges,
         fright_charges: fright,
+        other_charges: other,
       })
     );
     navigate("/dispatch-list");
@@ -248,6 +250,7 @@ const EditDispatch = () => {
             </div>
             <Card className="my-4">
               {StateDispatchList.DispatchLocations.map((list, index) => {
+                console.log("list", list);
                 return (
                   <div
                     className={

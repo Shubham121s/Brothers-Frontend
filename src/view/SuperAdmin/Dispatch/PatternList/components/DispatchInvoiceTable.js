@@ -21,7 +21,7 @@ import { MdDetails } from "react-icons/md";
 import DetailDialog from "./DetailsDialog";
 
 const statusColor = {
-  confirm: {
+  confirmed     : {
     label: "Dispatched",
     dotClass: "bg-emerald-500",
     textClass: "text-emerald-500",

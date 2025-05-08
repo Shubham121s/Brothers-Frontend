@@ -491,7 +491,7 @@ const DispatchTable = (props) => {
         accessorKey: "rate",
         size: 80,
         cell: (props) => {
-          const row = props.row.original;
+          const row = props.row?.original;
           return (
             <p className="text-center">
               {Number(row?.PoList?.unit_price).toFixed(2)}
@@ -504,10 +504,11 @@ const DispatchTable = (props) => {
         accessorKey: "net_amount",
         size: 80,
         cell: (props) => {
-          const row = props.row.original;
+          const row = props.row?.original;
+
           return (
             <p className="text-center">
-              {Number(row?.PoList?.unit_price * row.item_quantity).toFixed(2)}
+              {Number(row?.PoList?.unit_price * row?.item_quantity).toFixed(2)}
             </p>
           );
         },

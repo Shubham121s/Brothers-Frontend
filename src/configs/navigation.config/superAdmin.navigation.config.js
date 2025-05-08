@@ -261,6 +261,28 @@ const superAdminNavigationConfig = [
         authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN],
         subMenu: [],
       },
+
+      {
+        key: "quality.control",
+        path: "",
+        title: "Quality Control",
+        translateKey: "nav.quality",
+        icon: "quality",
+        type: "collapse",
+        authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
+        subMenu: [
+          {
+            key: "quality.form.new",
+            path: `/quality/new`,
+            title: "Quality Form",
+            translateKey: "nav.quality.form.new",
+            type: "item",
+            authority: [SUPER_ADMIN, ADMIN, EXECUTIVE],
+            subMenu: [],
+          },
+        ],
+      },
+
       {
         key: "workers",
         path: `/workers`,

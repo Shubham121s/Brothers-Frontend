@@ -3,6 +3,7 @@ import {
   apiGetAllPatternsWithPagination,
   apiPostNewPattern,
   apiUpdatePattern,
+  apiDeletePattern,
 } from "../../../../../../services/SuperAdmin/Product/PatternService";
 import { apiGetAllCustomersOption } from "../../../../../../services/SuperAdmin/Customer/CustomerService";
 
@@ -34,6 +35,18 @@ export const updatePattern = createAsyncThunk(
   async (data) => {
     try {
       const response = await apiUpdatePattern(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
+
+export const deletePattern = createAsyncThunk(
+  "product/setting/pattern/data/delete",
+  async (data) => {
+    try {
+      const response = await apiDeletePattern(data);
       return response;
     } catch (error) {
       return error?.response;
@@ -104,6 +117,7 @@ const dataSlice = createSlice({
     [getAllCustomerOption.fulfilled]: (state, action) => {
       state.customerOption = action.payload?.data?.data || [];
     },
+    [deletePattern.fulfilled]: (state, action) => {},
   },
 });
 

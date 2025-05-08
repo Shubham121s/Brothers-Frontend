@@ -35,7 +35,7 @@ const AllRoutes = (props) => {
     let newSocket;
 
     const initializeSocket = () => {
-      newSocket = io("https://api-erp.brothers.net.in", {
+      newSocket = io("https://mastererp.5techg.com", {
         path: "/api/socket.io/",
         rejectUnauthorized: false,
         transports: ["websocket", "polling"],

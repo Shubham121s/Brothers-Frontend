@@ -39,7 +39,7 @@ const DownloadColumn = ({ row }) => {
     // });
     // console.log(URL);
     const splitString = URL?.split("/uploads/");
-    const transformedString = `https://api-casting.brothers.net.in/api/static/${splitString[1]}`;
+    const transformedString = `https://mastererp.5techg.com/api/static/${splitString[1]}`;
     window.open(transformedString, "_blank");
   };
   return (

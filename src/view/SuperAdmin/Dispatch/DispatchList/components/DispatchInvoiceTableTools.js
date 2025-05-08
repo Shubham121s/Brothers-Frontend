@@ -21,6 +21,7 @@ const DispatchInvoiceTableTools = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const inputRef = useRef();
+  const [isCustomerSelected, setIsCustomerSelected] = useState(false);
 
   const tableData = useSelector(
     (state) => state.dispatch_invoice.data.tableData
@@ -45,15 +46,24 @@ const DispatchInvoiceTableTools = () => {
   const years = useSelector((state) => state.dispatch_invoice.data.years);
   const months = useSelector((state) => state.dispatch_invoice.data.months);
 
-  const invoiceNumberOptions = data?.length
-    ? data.map((item) => ({ value: item.invoice_no, label: item.invoice_no }))
+  const invoiceNumberOptions = isCustomerSelected
+    ? data?.length
+      ? data.flatMap((group) =>
+          group.invoices.map((invoice) => ({
+            value: invoice.invoice_no,
+            label: invoice.invoice_no,
+          }))
+        )
+      : []
     : invoiceNumber;
 
-  const invoiceDateOptions = data?.length
-    ? data.map((item) => ({
-        value: item.invoice_date,
-        label: item.invoice_date,
-      }))
+  const invoiceDateOptions = isCustomerSelected
+    ? data?.length
+      ? data.map((item) => ({
+          value: item.date,
+          label: item.date,
+        }))
+      : []
     : invoiceDates;
   const [customerValues, setCustomerValues] = useState([]);
   const [invoiceNumberValues, setInvoiceNumberValues] = useState([]);
@@ -81,6 +91,7 @@ const DispatchInvoiceTableTools = () => {
       setCustomerValues(e);
       let customer = e.map((m) => m.value);
       newTableData.customer_id = JSON.stringify(customer);
+      setIsCustomerSelected(customer.length > 0);
     } else if (type === "invoiceNumber") {
       setInvoiceNumberValues(e);
       let invoiceNumber = e.map((m) => m.value);

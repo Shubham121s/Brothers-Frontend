@@ -71,7 +71,7 @@ const EditPO = () => {
   };
 
   const handleFormSubmit = async (values, setSubmitting) => {
-    console.log(values);
+    console.log("values from here", values);
     setSubmitting(true);
     const action = await updatePo(values);
     setSubmitting(false);
