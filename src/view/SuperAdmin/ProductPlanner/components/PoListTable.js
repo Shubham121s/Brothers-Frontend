@@ -7,6 +7,7 @@ import {
   getAllPoNumber,
   getAllProductOption,
   getAllProjectNumber,
+  getAllSerialNumber,
   getBrotherDeliveryDate,
   getPODates,
   getPODeliveryDates,
@@ -199,6 +200,14 @@ const ActualPlannedDateCell = ({
   sort,
   query,
   status,
+  customer,
+  po_no,
+  project_no,
+  po_serial_no,
+  product,
+  po_Date,
+  po_del_Date,
+  brother_Date,
 }) => {
   const dispatch = useDispatch();
 
@@ -219,7 +228,23 @@ const ActualPlannedDateCell = ({
       })
     );
 
-    dispatch(getAllPoLists({ pageIndex, pageSize, sort, query, status }));
+    dispatch(
+      getAllPoLists({
+        pageIndex,
+        pageSize,
+        sort,
+        query,
+        status,
+        customer,
+        po_no,
+        project_no,
+        po_serial_no,
+        product,
+        po_Date,
+        po_del_Date,
+        brother_Date,
+      })
+    );
   };
 
   return (
@@ -298,7 +323,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "sr no.",
       accessorKey: "",
-      size: 100,
+      size: 20,
 
       cell: (props) => {
         const { index } = props.row;
@@ -321,6 +346,8 @@ const PoListTable = ({ DeliveryStatus }) => {
     },
     {
       header: "project no",
+      size: 120,
+
       accessorKey: "",
       cell: (props) => {
         const { project_no } = props.row.original;
@@ -343,6 +370,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: `PO date`,
       accessorKey: "",
+      size: 120,
       cell: (props) => {
         const { DATE } = props.row.original;
         return <div>{DATE}</div>;
@@ -359,6 +387,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "item code",
       accessorKey: "",
+      size: 240,
       cell: (props) => {
         const row = props.row.original;
         return <PoAColumn row={row} />;
@@ -380,7 +409,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "rev no.",
       accessorKey: "Drawing.revision_number",
-      size: 100,
+      size: 80,
       cell: (props) => {
         const { revision_number } = props.row.original;
         return (
@@ -393,7 +422,7 @@ const PoListTable = ({ DeliveryStatus }) => {
     {
       header: "material grade",
       accessorKey: "",
-      size: 200,
+      size: 180,
       cell: (props) => {
         const { material_grade } = props.row.original;
         return <div className="uppercase">{material_grade}</div>;
@@ -507,6 +536,14 @@ const PoListTable = ({ DeliveryStatus }) => {
             sort={sort}
             query={query}
             status={status}
+            customer={customer}
+            po_no={po_no}
+            project_no={project_no}
+            po_serial_no={po_serial_no}
+            product={product}
+            po_Date={po_Date}
+            po_del_Date={po_del_Date}
+            brother_Date={brother_Date}
           />
         );
       },
@@ -563,6 +600,14 @@ const PoListTable = ({ DeliveryStatus }) => {
             sort={sort}
             query={query}
             status={status}
+            customer={customer}
+            po_no={po_no}
+            project_no={project_no}
+            po_serial_no={po_serial_no}
+            product={product}
+            po_Date={po_Date}
+            po_del_Date={po_del_Date}
+            brother_Date={brother_Date}
           />
         );
       },
@@ -625,6 +670,14 @@ const PoListTable = ({ DeliveryStatus }) => {
             sort={sort}
             query={query}
             status={status}
+            customer={customer}
+            po_no={po_no}
+            project_no={project_no}
+            po_serial_no={po_serial_no}
+            product={product}
+            po_Date={po_Date}
+            po_del_Date={po_del_Date}
+            brother_Date={brother_Date}
           />
         );
       },
@@ -721,12 +774,45 @@ const PoListTable = ({ DeliveryStatus }) => {
         ...TableData,
       })
     );
-    dispatch(getPODates({ DeliveryStatus }));
-    dispatch(getPODeliveryDates({ DeliveryStatus }));
-    dispatch(getBrotherDeliveryDate({ DeliveryStatus }));
-    dispatch(getAllProjectNumber({ DeliveryStatus }));
-    dispatch(getAllProductOption({ DeliveryStatus }));
-    dispatch(getAllPoNumber({ DeliveryStatus }));
+    dispatch(
+      getPODates({ DeliveryStatus, customer_id: customer, number: po_no })
+    );
+    dispatch(
+      getPODeliveryDates({
+        DeliveryStatus,
+        customer_id: customer,
+        number: po_no,
+      })
+    );
+    dispatch(
+      getBrotherDeliveryDate({
+        DeliveryStatus,
+        customer_id: customer,
+        number: po_no,
+      })
+    );
+    dispatch(
+      getAllProjectNumber({
+        DeliveryStatus,
+        customer_id: customer,
+        number: po_no,
+      })
+    );
+    dispatch(
+      getAllProductOption({
+        DeliveryStatus,
+        project_no: project_no,
+        number: po_no,
+      })
+    );
+    dispatch(getAllPoNumber({ DeliveryStatus, customer_id: customer }));
+    dispatch(
+      getAllSerialNumber({
+        project_no: project_no,
+        number: po_no,
+        DeliveryStatus,
+      })
+    );
   }, [pageIndex, pageSize, sort, query, status, dispatch]);
 
   useEffect(() => {

@@ -31,7 +31,7 @@ const ViewDialog = () => {
       return pushNotification("Error", "danger", `File Not Uploaded Yet`);
     }
     const splitString = url.split("/uploads/");
-    const transformedString = `https://api-casting.brothers.net.in/api/static/${splitString[1]}`;
+    const transformedString = `https://mastererp.5techg.com/api/static/${splitString[1]}`;
     window.open(transformedString, "_blank");
   };
 

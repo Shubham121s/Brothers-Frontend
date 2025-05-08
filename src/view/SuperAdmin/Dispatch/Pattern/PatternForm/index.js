@@ -97,6 +97,11 @@ const ForeignDispatchForm = forwardRef((props, ref) => {
     );
     updatedDispatchList[index] = editItem;
     setFieldValue("DispatchList", updatedDispatchList);
+    dispatch(
+      toggleEditDispatchItemDialog({
+        option: false,
+      })
+    );
   };
 
   const handleNewBoxAdd = (boxes = [], newBox = {}, setFieldValue) => {

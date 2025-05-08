@@ -38,16 +38,34 @@ const ChatPage = () => {
   useEffect(() => {
     if (!socket) return;
 
+    // const handleReply = (message) => {
+    //   console.log("Received message:", message);
+
+    //   setMessages((prevMessages) => [
+    //     ...prevMessages,
+    //     {
+    //       task_id: message.data?.task_id || null,
+    //       receiver_id: message.data?.receiver_id || null,
+    //       sender_id: message.data?.sender_id || null,
+    //       message: message.data?.message || "",
+    //     },
+    //   ]);
+    // };
+
     const handleReply = (message) => {
       console.log("Received message:", message);
+
+      const newMsg = message?.data?.dataValues;
+      if (!newMsg) return;
 
       setMessages((prevMessages) => [
         ...prevMessages,
         {
-          task_id: message.data?.task_id || null,
-          receiver_id: message.data?.receiver_id || null,
-          sender_id: message.data?.sender_id || null,
-          message: message.data?.message || "",
+          task_id: newMsg.task_id || null,
+          receiver_id: newMsg.receiver_id || null,
+          sender_id: newMsg.sender_id || null,
+          message: newMsg.message || "",
+          id: newMsg.task__chat_id || Date.now(), // add a unique ID
         },
       ]);
     };
@@ -113,34 +131,38 @@ const ChatPage = () => {
           backgroundImage: `url(${Wallpaper})`,
         }}
       >
-        {messages.map((message) => (
-          <div
-            key={message.id}
-            className={`flex mb-4 ${
-              message.sender_id === userID ? "justify-end" : "justify-start"
-            }`}
-          >
-            <div
-              className={`max-w-xs p-3 rounded-lg text-white ${
-                message.sender_id === userID
-                  ? "bg-green-500 text-right"
-                  : "bg-green-500 text-black"
-              } transition duration-200 ease-in-out shadow-md ${
-                message.sender_id === userID
-                  ? "round-l text-left"
-                  : "round-r text-left"
-              }`}
-              style={{
-                wordWrap: "break-word",
-                wordBreak: "break-word",
-                overflowWrap: "break-word",
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {message.message}
-            </div>
-          </div>
-        ))}
+        {messages.map((message) => {
+          return (
+            <>
+              <div
+                key={message.id}
+                className={`flex mb-4 ${
+                  message.sender_id === userID ? "justify-end" : "justify-start"
+                }`}
+              >
+                <div
+                  className={`max-w-xs p-3 rounded-lg text-white ${
+                    message.sender_id === userID
+                      ? "bg-green-500 text-right"
+                      : "bg-green-500 text-black"
+                  } transition duration-200 ease-in-out shadow-md ${
+                    message.sender_id === userID
+                      ? "round-l text-left"
+                      : "round-r text-left"
+                  }`}
+                  style={{
+                    wordWrap: "break-word",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
+                    whiteSpace: "pre-wrap",
+                  }}
+                >
+                  {message.message}
+                </div>
+              </div>
+            </>
+          );
+        })}
       </main>
 
       <footer className="p-4 w-full bg-gray-100 border-t shadow-md flex justify-between gap-2">

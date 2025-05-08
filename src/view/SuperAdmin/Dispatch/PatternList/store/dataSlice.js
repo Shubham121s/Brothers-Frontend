@@ -4,6 +4,7 @@ import {
   apiAddInvoiceDetails,
   apiAllPatternInvoicePagination,
   apiGetAllCustomersOption,
+  apiUpdatePatternStatus,
 } from "../../../../../services/SuperAdmin/Invoice/DispatchServices";
 
 export const getDispatchInvoiceWithPagination = createAsyncThunk(
@@ -42,6 +43,17 @@ export const getAllCustomerOption = createAsyncThunk(
   }
 );
 
+export const updatePatterInvoiceStatus = createAsyncThunk(
+  "pattern/invoice/update/status",
+  async (data) => {
+    try {
+      const response = await apiUpdatePatternStatus(data);
+      return response;
+    } catch (error) {
+      return error?.response;
+    }
+  }
+);
 export const initialTableData = {
   total: 0,
   pageIndex: 1,
@@ -89,6 +101,7 @@ const dataSlice = createSlice({
       state.tableData.total = action.payload?.data?.total;
       state.loading = false;
     },
+    [updatePatterInvoiceStatus.fulfilled]: (state) => {},
   },
 });
 

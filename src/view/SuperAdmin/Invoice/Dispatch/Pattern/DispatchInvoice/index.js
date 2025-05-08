@@ -5,14 +5,61 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import DispatchTable from "./components/DispatchTable";
 import { TABLE_ROW_COUNT } from "../constant";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getDispatchInvoiceWithPagination,
+  updatePatterInvoiceStatus,
+} from "../../../../Dispatch/PatternList/store/dataSlice";
+import { toggleInvoiceDialog } from "../../../../Dispatch/PatternList/store/stateSlice";
 
 const DispatchInvoice = ({ data }) => {
   const componentRef = useRef();
+  const dispatch = useDispatch();
+  const { pageIndex, pageSize } = useSelector(
+    (state) => state.pattern_invoice.data.tableData
+  );
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: `invoice-${data?.invoice_no}`,
+    pageStyle: `
+      // @page {
+      //   size: A4;
+      // }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact;
+        }
+        .page {
+          page-break-after: always;
+          page-break-inside: avoid;
+        }
+        .invoice {
+          page-break-inside: avoid;
+        }
+        .pageMargin{
+          padding-left: 20px;
+          padding-right: 10px;
+        }
+      }
+    `,
   });
+
+  const handleCompleted = async () => {
+    try {
+      await dispatch(
+        updatePatterInvoiceStatus({
+          pattern_invoice_id: data?.pattern_invoice_id,
+          status: "confirmed",
+        })
+      );
+
+      dispatch(getDispatchInvoiceWithPagination({ pageIndex, pageSize }));
+      dispatch(toggleInvoiceDialog(false));
+    } catch (error) {
+      console.error("Error in downloading or updating:", error);
+    }
+  };
 
   const TableData = (props) => {
     return (
@@ -54,8 +101,17 @@ const DispatchInvoice = ({ data }) => {
         <Button variant="solid" color="orange-500" onClick={handlePrint}>
           Invoice
         </Button>
+        <Button
+          // variant="solid"
+          className="ml-4 border border-orange-500 !bg-white text-orange-500"
+          onClick={() => {
+            handleCompleted();
+          }}
+        >
+          Completed
+        </Button>
         <div style={{ display: "none" }}>
-          <div ref={componentRef}>
+          <div ref={componentRef} className="pageMargin">
             <RenderPages data={data} />
           </div>
         </div>

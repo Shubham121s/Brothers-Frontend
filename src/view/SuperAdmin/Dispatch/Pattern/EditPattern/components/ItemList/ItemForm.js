@@ -11,6 +11,7 @@ import WeightInformationFields from "./WeightInformationFields";
 import RateField from "./rateField";
 import NoField from "./NoField";
 import TextEditor from "../../../../../Po/PoSetting/utils/TextEditor";
+import { toggleEditDispatchItemDialog } from "../../store/stateSlice";
 
 const validationSchema = Yup.object().shape({
   // PoList: Yup.object().required("Required"),
@@ -32,6 +33,9 @@ const ItemForm = forwardRef((props, ref) => {
   } = props;
 
   const [content, setContent] = useState(initialData.remark);
+
+  console.log("content", content);
+  console.log("initialData", initialData);
   return (
     <Formik
       innerRef={ref}
@@ -41,6 +45,7 @@ const ItemForm = forwardRef((props, ref) => {
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
         handleFormSubmit?.(values, setSubmitting);
+        toggleEditDispatchItemDialog(false);
       }}
     >
       {({ values, touched, errors, setFieldValue, isSubmitting }) => {
@@ -82,11 +87,9 @@ const ItemForm = forwardRef((props, ref) => {
               </div>
               <div className="mt-3 mb-3">
                 <TextEditor
-                  content={values.remark}
-                  setContent={(newContent) =>
-                    setFieldValue("remark", newContent)
-                  }
-                  placeholder="Add Product Remarks"
+                  content={content}
+                  setContent={setContent}
+                  placeholder="Add Product Remark"
                 />
               </div>
               <div className="flex gap-2 justify-end">

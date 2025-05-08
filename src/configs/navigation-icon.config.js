@@ -13,7 +13,7 @@ import {
   FaRegHandRock,
   FaHireAHelper,
 } from "react-icons/fa";
-import { MdOutlineShoppingCart } from "react-icons/md";
+import { MdOutlinePestControl, MdOutlineShoppingCart } from "react-icons/md";
 import { BsTools } from "react-icons/bs";
 
 const navigationIcon = {
@@ -38,6 +38,7 @@ const navigationIcon = {
   worker: <FaHireAHelper />,
   instrument: <BsTools />,
   task: <BiTask />,
+  quality: <MdOutlinePestControl />,
 };
 
 export default navigationIcon;

@@ -234,3 +234,12 @@ export async function apiUpdateStatus(data) {
     data,
   });
 }
+
+export async function apiUpdatePatternStatus(data) {
+  console.log("data", data);
+  return ApiService.fetchData({
+    url: "v1/web/company/invoice/dispatch/patternInvoice/update/status",
+    method: "put",
+    data,
+  });
+}

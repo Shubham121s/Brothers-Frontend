@@ -3,7 +3,7 @@ import { Notification, Toast } from "../../../../../../components/ui";
 import { ConfirmDialog } from "../../../../../../components/shared";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDeletePatternDialog } from "../store/stateSlice";
-import { getAllPatterns } from "../store/dataSlice";
+import { deletePattern, getAllPatterns } from "../store/dataSlice";
 import { apiDeletePattern } from "../../../../../../services/SuperAdmin/Product/PatternService";
 
 const PatternDeleteConfirmation = () => {
@@ -24,9 +24,23 @@ const PatternDeleteConfirmation = () => {
 
   const onDelete = async () => {
     setLoading(true);
-    const response = await apiDeletePattern(selectedPattern);
-    if (response.data?.success) {
+    const response = await dispatch(
+      deletePattern({ pattern_id: selectedPattern?.pattern_id })
+    );
+    if (response.payload?.data?.success) {
       deleteSucceed(true);
+    } else if (response.payload?.data?.status === 400) {
+      setLoading(false);
+      Toast.push(
+        <Notification title={"Error"} type="danger" duration={2500}>
+          {response.payload?.data?.message}
+        </Notification>,
+        {
+          placement: "top-center",
+        }
+      );
+
+      onDialogClose();
     }
     setLoading(false);
   };
@@ -35,6 +49,7 @@ const PatternDeleteConfirmation = () => {
     if (success) {
       onDialogClose();
       dispatch(getAllPatterns(tableData));
+
       Toast.push(
         <Notification
           title={"Successfully Deleted"}

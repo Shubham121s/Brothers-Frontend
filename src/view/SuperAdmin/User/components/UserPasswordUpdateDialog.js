@@ -30,8 +30,6 @@ const UserPasswordUpdateDialog = () => {
   const [decryptedPassword, setDecryptedPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  console.log("showPassword", showPassword);
-
   const UserPasswordDialog = useSelector(
     (state) => state.user.state.passwordDialog
   );
@@ -52,10 +50,13 @@ const UserPasswordUpdateDialog = () => {
       return "Unable to decrypt password";
     }
   };
-
   useEffect(() => {
     if (UserPasswordDialog) {
+      setDecryptedPassword(""); 
       fetchUserPassword();
+    } else {
+      setDecryptedPassword(""); 
+      setPassword("");
     }
   }, [UserPasswordDialog]);
 
@@ -106,12 +107,13 @@ const UserPasswordUpdateDialog = () => {
       onClose={onDialogClose}
       onRequestClose={onDialogClose}
       type="success"
-      title="Change Password"
+      title="Change Passworsd"
       onCancel={onDialogClose}
       onConfirm={handleFormSubmit}
       confirmText={"Save"}
       confirmButtonColor="purple-600"
       width={450}
+      showFooter={!!password}
     >
       {decryptedPassword && (
         <div className="text-sm text-gray-600 mb-2 mt-4 relative">

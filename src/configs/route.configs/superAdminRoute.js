@@ -295,6 +295,13 @@ const superAdminRoute = [
     authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
   },
 
+  {
+    key: "quality.form.new",
+    path: `/quality/new`,
+    component: React.lazy(() => import("../../view/SuperAdmin/QualityControl")),
+    authority: [SUPER_ADMIN, ADMIN, SUB_ADMIN, EXECUTIVE],
+  },
+
   // TEST
   // **************START***************
   {
