@@ -99,7 +99,7 @@ const ItemTable = ({
         accessorKey: "unit_price",
         cell: (props) => {
           const { unit_price } = props.row.original;
-          return <div>{unit_price.toFixed(2)}</div>;
+          return <div>{unit_price}</div>;
         },
       },
       {
