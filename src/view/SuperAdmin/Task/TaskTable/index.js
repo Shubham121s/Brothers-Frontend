@@ -25,23 +25,19 @@ const Task = () => {
     dispatch(toggleEyeDialog(false));
   };
 
-  const { type } = useSelector((state) => state.auth.user);
-  console.log("type", type);
-  console.log("type of", typeof type);
-
   return (
     <div>
       <h3 className="mb-4">Task List</h3>
-      {(type === "super-admin" || type === "admin") && (
-        <div className="w-full flex justify-end mb-4">
-          <Button
-            className="bg-blue-600 text-blue-100 hover:bg-blue-700 hover:text-blue-100 active:bg-blue-600 focus:bg-blue-600"
-            onClick={onDialogOpen}
-          >
-            Add Task
-          </Button>
-        </div>
-      )}
+
+      <div className="w-full flex justify-end mb-4">
+        <Button
+          className="bg-blue-600 text-blue-100 hover:bg-blue-700 hover:text-blue-100 active:bg-blue-600 focus:bg-blue-600"
+          onClick={onDialogOpen}
+        >
+          Add Task
+        </Button>
+      </div>
+
       <TaskForm />
 
       <Card>

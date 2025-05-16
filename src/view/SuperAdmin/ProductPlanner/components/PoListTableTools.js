@@ -48,7 +48,6 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
     (state) => state.masterPP.data.projectNumber
   );
 
-  console.log("projectNumbers", projectNumbers);
   const PoNumber = useSelector((state) => state.masterPP.data.poNumber);
   const serialNumber = useSelector((state) => state.masterPP.data.serialNumber);
   const PoDates = useSelector((state) => state.masterPP.data.poDates);
@@ -78,6 +77,8 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
     raw_date,
     machining_date,
   } = useSelector((state) => state.masterPP.data.tableData);
+
+  console.log("customersss", customer);
 
   const onClearAll = () => {
     dispatch(getPODates({ DeliveryStatus }));
@@ -111,40 +112,40 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
 
     fetchData(newTableData);
   };
-  useEffect(() => {
-    if (selectedTab) {
-      dispatch(getPODates({ DeliveryStatus }));
-      dispatch(getPODeliveryDates({ DeliveryStatus }));
-      dispatch(getBrotherDeliveryDate({ DeliveryStatus }));
-      dispatch(getAllProjectNumber({ DeliveryStatus }));
-      dispatch(
-        getAllProductOption({
-          DeliveryStatus,
-        })
-      );
-      dispatch(getAllPoNumber({ DeliveryStatus }));
-      const newTableData = cloneDeep(tableData);
-      dispatch(setAllFilterData([]));
-      newTableData.customer = "";
-      newTableData.project_no = "";
-      newTableData.po_serial_no = "";
-      newTableData.product = "";
-      newTableData.item_code = "";
-      newTableData.revision_no = "";
-      newTableData.material_grade = "";
-      newTableData.po_no = "";
-      newTableData.po_Date = "";
-      newTableData.po_del_Date = "";
-      newTableData.brother_Date = "";
-      newTableData.raw_date = "";
-      newTableData.machining_date = "";
-      setBrotherDeliveryVAlues([]);
-      setPoDateValues([]);
-      setPoDeliveryVAlues([]);
+  // useEffect(() => {
+  //   if (selectedTab) {
+  //     dispatch(getPODates({ DeliveryStatus }));
+  //     dispatch(getPODeliveryDates({ DeliveryStatus }));
+  //     dispatch(getBrotherDeliveryDate({ DeliveryStatus }));
+  //     dispatch(getAllProjectNumber({ DeliveryStatus }));
+  //     dispatch(
+  //       getAllProductOption({
+  //         DeliveryStatus,
+  //       })
+  //     );
+  //     dispatch(getAllPoNumber({ DeliveryStatus }));
+  //     const newTableData = cloneDeep(tableData);
+  //     dispatch(setAllFilterData([]));
+  //     newTableData.customer = "";
+  //     newTableData.project_no = "";
+  //     newTableData.po_serial_no = "";
+  //     newTableData.product = "";
+  //     newTableData.item_code = "";
+  //     newTableData.revision_no = "";
+  //     newTableData.material_grade = "";
+  //     newTableData.po_no = "";
+  //     newTableData.po_Date = "";
+  //     newTableData.po_del_Date = "";
+  //     newTableData.brother_Date = "";
+  //     newTableData.raw_date = "";
+  //     newTableData.machining_date = "";
+  //     setBrotherDeliveryVAlues([]);
+  //     setPoDateValues([]);
+  //     setPoDeliveryVAlues([]);
 
-      fetchData(newTableData);
-    }
-  }, [selectedTab]);
+  //     fetchData(newTableData);
+  //   }
+  // }, [selectedTab]);
 
   const searchInput = useRef();
 
@@ -152,6 +153,7 @@ const PoListTableTools = ({ DeliveryStatus, selectedTab }) => {
 
   function handleDebounceFn(val, type) {
     const newTableData = cloneDeep(tableData);
+
     if (type === "customer") {
       newTableData.customer = val;
     } else if (type === "project_no") {
