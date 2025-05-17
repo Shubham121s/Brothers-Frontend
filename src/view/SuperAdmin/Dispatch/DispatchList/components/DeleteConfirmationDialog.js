@@ -33,6 +33,8 @@ const DeleteInvoiceConfirmationDialog = () => {
   const selectedInvoice = useSelector(
     (state) => state.dispatch_invoice.state.selectedInvoice
   );
+
+  console.log("selectedInvoice", selectedInvoice);
   const deleteDialog = useSelector(
     (state) => state.dispatch_invoice.state.deleteConfirmation
   );

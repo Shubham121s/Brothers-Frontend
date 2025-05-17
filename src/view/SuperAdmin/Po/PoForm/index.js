@@ -56,7 +56,6 @@ const PoForm = forwardRef((props, ref) => {
     Condition = [],
   } = props;
 
-  console.log("initialData", initialData);
   const dispatch = useDispatch();
   const [data, setData] = useState(() => {
     if (type === "edit" && initialData && initialData.PoLists) {

@@ -95,9 +95,9 @@ const PoAColumn = ({ row }) => {
 const PoTable = () => {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.po_list.data.poList);
+
   const loading = useSelector((state) => state.po_list.data.loading);
   const { status } = useSelector((state) => state.po_list.data.filterData);
-  console.log("data", data);
   const sortedData = useMemo(() => {
     return data.slice().sort((a, b) => {
       const poaA = parseFloat(a.poa) || 0;
@@ -200,7 +200,6 @@ const PoTable = () => {
       accessorKey: "Amount",
       cell: (props) => {
         const row = props.row.original;
-        console.log("row", row);
         return (
           <div>
             {row?.currency_type === "INR"
@@ -260,6 +259,7 @@ const PoTable = () => {
         year,
         date,
         customer_id,
+        po_id: data?.po_id,
       })
     );
   }, [
