@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 import { DatePicker, FormItem } from '../../../../../components/ui'
 import { Field } from 'formik'
+import dayjs from 'dayjs'
 
 const PoDateInformationFields = (props) => {
     const { errors, touched } = props
@@ -19,7 +20,8 @@ const PoDateInformationFields = (props) => {
                         form={form}
                         value={field.value}
                         onChange={(date) => {
-                            form.setFieldValue(field.name, date)
+                            const formatted = date ? dayjs(date).format("YYYY-MM-DD") : null;
+                            form.setFieldValue(field.name, formatted);
                         }}
                     />
                 )}

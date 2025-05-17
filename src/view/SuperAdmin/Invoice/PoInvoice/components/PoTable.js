@@ -17,7 +17,7 @@ const PriceAmount = ({ value }) => {
   return (
     <NumericFormat
       displayType="text"
-      value={Number(value).toFixed(2)}
+      value={Number(value)}
       thousandSeparator={true}
     />
   );
@@ -191,7 +191,7 @@ const PoTable = ({
           const row = props.row.original;
           return (
             <div className={`text-center ${className}`}>
-              <PriceAmount value={row?.unit_price * row?.quantity} />
+              <PriceAmount value={(row?.unit_price * row?.quantity).toFixed(2)} />
             </div>
           );
         },
