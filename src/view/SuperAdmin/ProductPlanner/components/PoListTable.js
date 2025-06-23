@@ -219,8 +219,6 @@ const ActualPlannedDateCell = ({
     const newDate = e.target.value;
     setUpdatedDate(newDate);
 
-    console.log(`${dateField} updated to:`, newDate);
-
     await dispatch(
       postActualDates({
         [dateField]: newDate, // Dynamically update the correct date field
@@ -688,8 +686,11 @@ const PoListTable = ({ DeliveryStatus }) => {
       accessorKey: "list_status",
       size: 120,
       cell: (props) => {
-        const { list_status } = props.row.original;
+        const { list_status, pending_quantity } = props.row.original;
         const status = statusColor[list_status] || {};
+
+        const isDelivered =
+          list_status === "accepted" && pending_quantity === 0;
 
         return (
           <div className="mr-2">
@@ -698,7 +699,7 @@ const PoListTable = ({ DeliveryStatus }) => {
                 status.textClass || ""
               } border-0`}
             >
-              {status.label || "Unknown"}
+              {isDelivered ? "Delivered" : status.label || "Unknown"}
             </Tag>
           </div>
         );

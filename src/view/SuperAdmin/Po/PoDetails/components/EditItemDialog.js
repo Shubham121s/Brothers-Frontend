@@ -246,9 +246,9 @@ const EditItemDialog = forwardRef((props, ref) => {
                                   data?.date
                                 )
                               ).format("YYYY-MM-DD") &&
-                            !values?.is_delivery_date_change && {
-                              color: "red",
-                            }
+                            !values?.is_delivery_date_change
+                              ? { color: "red" }
+                              : undefined
                           }
                         >
                           {CalculateDate(

@@ -37,6 +37,7 @@ const EditDispatchItemDialog = (props) => {
   };
 
   const handelFormSubmit = async (values, setSubmitting) => {
+    console.log("vacdlues", values);
     setSubmitting(true);
     const action = await dispatch(updateDispatchListByDispatchListId(values));
     setSubmitting(false);

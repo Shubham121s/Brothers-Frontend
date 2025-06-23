@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import DataTable from "../../../../../components/shared/DataTable";
 import { MdOutlineMessage } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTask } from "../store/dataSlice";
+import { getAllTask, setTableData } from "../store/dataSlice";
 import { useNavigate } from "react-router-dom";
 import useThemeClass from "../../../../../utils/hooks/useThemeClass";
 import { HiEye, HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
@@ -14,6 +14,7 @@ import {
   toggleEyeDialog,
   toggleNewTaskDialog,
 } from "../store/stateSlice";
+import cloneDeep from "lodash/cloneDeep";
 import { Badge, Tag } from "../../../../../components/ui";
 import DeleteConfirm from "./DeleteConfirm";
 
@@ -57,6 +58,7 @@ const TaskTable = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.task.data.taskList);
+  const loading = useSelector((state) => state.task.data.loading);
 
   const { pageIndex, pageSize, query, total } = useSelector(
     (state) => state.task.data.tableData
@@ -69,6 +71,11 @@ const TaskTable = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData, pageIndex, pageSize]);
+
+  const tableData = useMemo(
+    () => ({ pageIndex, pageSize, query, total }),
+    [pageIndex, pageSize, query, total]
+  );
 
   const onReply = (row) => {
     console.log("row", row);
@@ -202,8 +209,17 @@ const TaskTable = () => {
     },
   ];
 
-  const onSelectChange = (selectedRows) => {
-    console.log("Selected rows:", selectedRows);
+  const onPaginationChange = (page) => {
+    const newTableData = cloneDeep(tableData);
+    newTableData.pageIndex = page;
+    dispatch(setTableData(newTableData));
+  };
+
+  const onSelectChange = (value) => {
+    const newTableData = cloneDeep(tableData);
+    newTableData.pageSize = Number(value);
+    newTableData.pageIndex = 1;
+    dispatch(setTableData(newTableData));
   };
 
   return (
@@ -211,10 +227,10 @@ const TaskTable = () => {
       <DataTable
         columns={columns}
         data={data}
-        // loading={loading}
+        loading={loading}
         pagingData={{ pageIndex, pageSize, query, total }}
-        // onPaginationChange={onPaginationChange}
-        // onSelectChange={onSelectChange}
+        onPaginationChange={onPaginationChange}
+        onSelectChange={onSelectChange}
       />
       <DeleteConfirm fetchData={fetchData} />
     </div>
