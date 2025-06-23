@@ -218,7 +218,7 @@ const NewDomesticForm = forwardRef((props, ref) => {
                       <div className="flex justify-between">
                         <span>
                           <h5 className="font-semibold text-gray-700">
-                            Receiver & Recipient Information
+                            Receiver & Recipient Informations
                           </h5>
                           <p className="mb-2">
                             Section to config receiver & recipient information

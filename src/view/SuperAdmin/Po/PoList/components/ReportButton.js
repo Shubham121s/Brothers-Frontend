@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 
 const ReportButton = () => {
   const tableData = useSelector((state) => state.po_list.data.tableData);
-  console.log("tableData", tableData);
   const [isDownloading, setIsDownloading] = useState(false);
 
   const downloadExcel = async () => {

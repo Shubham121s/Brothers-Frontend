@@ -15,16 +15,22 @@ const validationSchema = Yup.object().shape({
 
 const ItemForm = forwardRef((props, ref) => {
   const { initialData, onDiscard, handleFormSubmit, dispatchList } = props;
-  const [content, setContent] = useState(initialData.remark);
+  console.log("initialData", initialData);
+  const [content, setContent] = useState(initialData.remarks);
+
+  console.log("content", content);
   return (
     <Formik
       innerRef={ref}
       initialValues={{
         ...initialData,
+        remarks: initialData.remarks || "",
       }}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
-        handleFormSubmit?.(values, setSubmitting);
+        console.log("sdhv values", values);
+        const valuesWithRemarks = { ...values, remarks: content };
+        handleFormSubmit?.(valuesWithRemarks, setSubmitting);
       }}
     >
       {({ values, setFieldValue, isSubmitting }) => (

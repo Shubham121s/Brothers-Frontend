@@ -106,7 +106,7 @@ export const getAllCustomerName = createAsyncThunk(
     }
   }
 );
-export const initialTableData = { 
+export const initialTableData = {
   total: 0,
   pageIndex: 1,
   pageSize: 10,
@@ -141,7 +141,10 @@ const dataSlice = createSlice({
   },
   reducers: {
     setTableData: (state, action) => {
-      state.tableData = action.payload;
+      state.tableData = {
+        ...state.tableData,
+        ...action.payload,
+      };
     },
     setFilterData: (state, action) => {
       state.filterData = action.payload;
@@ -155,6 +158,7 @@ const dataSlice = createSlice({
   },
   extraReducers: {
     [getAllPoWithPagination.fulfilled]: (state, action) => {
+      console.log("action.payload", action.payload);
       state.poList = action.payload.data?.data || [];
       state.tableData.total = action.payload.data.total || 0;
       state.loading = false;
