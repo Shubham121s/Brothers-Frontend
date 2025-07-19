@@ -103,15 +103,8 @@ const NewDispatchItemDialog = (props) => {
       console.warn("Invalid locationIndex:", locationIndex);
     }
 
-    // addNewItemInPoList((prevData) => {
-    //   return [
-    //     ...prevData,
-    //     {
-    //       ...values,
-    //       pattern_invoice_id: action.payload.data?.data.pattern_invoice_id,
-    //     },
-    //   ];
-    // });
+
+    addNewItemInPoList?.(updatedDispatchList);
     await fetchData();
     setSubmitting(false);
     onDialogClose();

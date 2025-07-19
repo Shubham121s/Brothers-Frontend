@@ -76,6 +76,16 @@ const NewDispatchItemDialog = (props) => {
     }
     pushNotification("Product Added Successfully", "success", "Successfull");
     const updatedDispatchList = [...dispatchList];
+
+    if (!updatedDispatchList[locationIndex]) {
+      setSubmitting(false);
+      return pushNotification(
+        "Invalid location index. Please try again.",
+        "danger",
+        "Error"
+      );
+    }
+
     updatedDispatchList[locationIndex] = {
       ...updatedDispatchList[locationIndex],
       DispatchLists: [

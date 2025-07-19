@@ -22,8 +22,10 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "ajv": "^6.12.6",
+    "ajv-keywords": "^3.5.2",
     "antd": "^5.22.5",
-    "apexcharts": "^3.48.0",
+    "apexcharts": "^5.2.0",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
     "crypto-js": "^4.2.0",
@@ -53,7 +55,7 @@
     "react-quill": "^2.0.0",
     "react-redux": "^8.0.7",
     "react-router-dom": "^6.11.2",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "react-select": "^5.7.3",
     "react-to-print": "^2.14.15",
     "reactflow": "^11.7.3",
@@ -92,7 +94,6 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "react-refresh": "^0.16.0"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
   }
 }

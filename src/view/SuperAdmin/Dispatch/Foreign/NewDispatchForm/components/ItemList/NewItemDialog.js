@@ -40,21 +40,21 @@ const NewDispatchItemDialog = (props) => {
   };
 
   const handleNewItem = async (values) => {
-    // const find = dispatchList[locationIndex]?.poList.find((f) => {
-    //   if (
-    //     f?.Po?.number === values?.Po?.number &&
-    //     f?.PoList?.po_list_id === values?.PoList?.po_list_id
-    //   )
-    //     return f;
-    // });
+    const find = dispatchList[locationIndex]?.poList.find((f) => {
+      if (
+        f?.Po?.number === values?.Po?.number &&
+        f?.PoList?.po_list_id === values?.PoList?.po_list_id
+      )
+        return f;
+    });
 
-    // if (find) {
-    //   return pushNotification(
-    //     `PO ${values?.Po?.number} and ${values?.PoList?.Product?.name} Already Added You Can Edit it.`,
-    //     "danger",
-    //     "Error"
-    //   );
-    // }
+    if (find) {
+      return pushNotification(
+        `PO ${values?.Po?.number} and ${values?.PoList?.Product?.name} Already Added You Can Edit it.`,
+        "danger",
+        "Error"
+      );
+    }
 
     addNewItemInPoList?.(dispatchList, values, locationIndex, setFieldValue);
     onDialogClose();
