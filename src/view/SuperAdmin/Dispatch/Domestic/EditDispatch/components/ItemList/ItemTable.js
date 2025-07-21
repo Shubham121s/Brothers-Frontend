@@ -121,7 +121,14 @@ const ItemTable = ({ initialData = [], dispatchList, setFieldValue }) => {
             cell: (props) => {
               const row = props.row.original;
               return (
-                <div className="uppercase text-center">{row?.item_name}</div>
+                <div className="uppercase text-center">
+                  {row?.item_name}
+                  <div className="flex justify-center">
+                    <div
+                      dangerouslySetInnerHTML={{ __html: row?.remarks || "" }}
+                    ></div>
+                  </div>
+                </div>
               );
             },
           },

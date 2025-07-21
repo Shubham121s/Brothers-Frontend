@@ -88,8 +88,8 @@ export async function apiGetMachiningDates(data) {
 
 export async function apiUpdatePOListByPOListId(data) {
   return ApiService.fetchData({
-    url: "v1/web/company/po-list/id",
-    method: "put",
+    url: "/v1/web/company/executive/po/list/update",
+    method: "post",
     data,
   });
 }

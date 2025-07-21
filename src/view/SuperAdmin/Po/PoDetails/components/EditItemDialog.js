@@ -10,7 +10,7 @@ import {
 } from "../../../../../components/ui";
 import ItemInformationFields from "./ItemInformationFields";
 import * as Yup from "yup";
-import { Form, Formik } from "formik";
+import { Form, Formik, Field } from "formik";
 import {
   toggleEditPoItemDialog,
   toggleViewPoItemDialog,
@@ -18,6 +18,7 @@ import {
 import { isEmpty, cloneDeep } from "lodash";
 import dayjs from "dayjs";
 import { updatePOListByPOListId } from "../store/dataSlice";
+import { Input } from "../../../../../components/ui";
 
 const validationSchema = Yup.object().shape({
   accept_description: Yup.string().required("Required"),
@@ -73,7 +74,14 @@ const EditItemDialog = forwardRef((props, ref) => {
 
   const handleUpdatePoList = async (values, setSubmitting) => {
     setSubmitting(true);
-    const action = await dispatch(updatePOListByPOListId(values));
+    const payload = {
+      po_list_id: values.po_list_id,
+      unit_price: values.unit_price,
+      accept_delivery_date: values.accept_delivery_date,
+      accept_description: values.accept_description,
+      list_status: values.list_status,
+    };
+    const action = await dispatch(updatePOListByPOListId(payload));
     setSubmitting(false);
     if (action.payload?.status === 200) {
       onDialogClose();
@@ -145,21 +153,12 @@ const EditItemDialog = forwardRef((props, ref) => {
         innerRef={ref}
         initialValues={{
           ...initialData,
+          unit_price: initialData.unit_price || "",
           is_delivery_date_change: false,
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          const formData = cloneDeep(values);
-          const { po_list_id, accept_delivery_date, accept_description } =
-            formData;
-          const newData = {
-            po_id,
-            po_list_id,
-            accept_delivery_date,
-            list_status: "accepted",
-            accept_description,
-          };
-          handleUpdatePoList?.(newData, setSubmitting);
+          handleUpdatePoList?.(values, setSubmitting);
         }}
       >
         {({
@@ -213,9 +212,15 @@ const EditItemDialog = forwardRef((props, ref) => {
                         </strong>{" "}
                         <span>{values?.quantity || "-"}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <strong>Price ({currency}):</strong>{" "}
-                        <span>{values?.unit_price || "-"}</span>
+                        <Field
+                          name="unit_price"
+                          type="number"
+                          component={Input}
+                          className="ml-2"
+                          style={{ width: 120 }}
+                        />
                       </div>
                       <div className="flex justify-between">
                         <strong>Amount ({currency}):</strong>{" "}
