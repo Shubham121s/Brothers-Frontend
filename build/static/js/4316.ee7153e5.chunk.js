@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkBrother_Industrises=self.webpackChunkBrother_Industrises||[]).push([[4316],{54316:(s,e,l)=>{l.r(e),l.d(e,{default:()=>t});l(65043);var a=l(40185),r=l(70579);const t=s=>(0,r.jsx)("div",{className:"app-layout-blank flex flex-auto flex-col h-[100vh]",children:(0,r.jsx)(a.A,{...s})})}}]);
+//# sourceMappingURL=4316.ee7153e5.chunk.js.map
