@@ -69,7 +69,7 @@ const PoForm = forwardRef((props, ref) => {
     if (type === "edit" && initialData && initialData.PoLists) {
       setData(initialData.PoLists);
     }
-  }, [type, initialData]);
+  }, [type]);
 
   const [item, setItem] = useState({});
   const [itemtype, setType] = useState(false);

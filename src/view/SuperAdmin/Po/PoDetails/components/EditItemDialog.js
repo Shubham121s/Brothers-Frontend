@@ -18,7 +18,7 @@ import {
 import { isEmpty, cloneDeep } from "lodash";
 import dayjs from "dayjs";
 import { updatePOListByPOListId } from "../store/dataSlice";
-import { Input } from "../../../../../components/ui";
+import { Input, Tooltip } from "../../../../../components/ui";
 
 const validationSchema = Yup.object().shape({
   accept_description: Yup.string().required("Required"),
@@ -74,14 +74,7 @@ const EditItemDialog = forwardRef((props, ref) => {
 
   const handleUpdatePoList = async (values, setSubmitting) => {
     setSubmitting(true);
-    const payload = {
-      po_list_id: values.po_list_id,
-      unit_price: values.unit_price,
-      accept_delivery_date: values.accept_delivery_date,
-      accept_description: values.accept_description,
-      list_status: values.list_status,
-    };
-    const action = await dispatch(updatePOListByPOListId(payload));
+    const action = await dispatch(updatePOListByPOListId(values));
     setSubmitting(false);
     if (action.payload?.status === 200) {
       onDialogClose();
@@ -99,7 +92,8 @@ const EditItemDialog = forwardRef((props, ref) => {
   };
 
   const handleReject = (values, setFieldError, setFieldTouched) => {
-    const { po_list_id, accept_delivery_date, accept_description } = values;
+    const { po_list_id, accept_delivery_date, accept_description, unit_price } =
+      values;
     if (!accept_description) {
       setFieldTouched("accept_description", "Required");
       return setFieldError("accept_description", "Required");
@@ -114,6 +108,7 @@ const EditItemDialog = forwardRef((props, ref) => {
       accept_delivery_date,
       list_status: "rejected",
       accept_description,
+      unit_price,
     };
     handleUpdatePoList(newData, setRejectLoading);
   };
@@ -153,12 +148,26 @@ const EditItemDialog = forwardRef((props, ref) => {
         innerRef={ref}
         initialValues={{
           ...initialData,
-          unit_price: initialData.unit_price || "",
           is_delivery_date_change: false,
         }}
         validationSchema={validationSchema}
         onSubmit={(values, { setSubmitting }) => {
-          handleUpdatePoList?.(values, setSubmitting);
+          const formData = cloneDeep(values);
+          const {
+            po_list_id,
+            accept_delivery_date,
+            accept_description,
+            unit_price,
+          } = formData;
+          const newData = {
+            po_id,
+            po_list_id,
+            accept_delivery_date,
+            list_status: "accepted",
+            accept_description,
+            unit_price,
+          };
+          handleUpdatePoList?.(newData, setSubmitting);
         }}
       >
         {({
@@ -214,13 +223,30 @@ const EditItemDialog = forwardRef((props, ref) => {
                       </div>
                       <div className="flex justify-between items-center">
                         <strong>Price ({currency}):</strong>{" "}
-                        <Field
-                          name="unit_price"
-                          type="number"
-                          component={Input}
-                          className="ml-2"
-                          style={{ width: 120 }}
-                        />
+                        {values?.list_status !== "accepted" ? (
+                          <Tooltip title="You can edit the price after the item is accepted.">
+                            <div
+                              style={{ display: "inline-block", width: 120 }}
+                            >
+                              <Field
+                                name="unit_price"
+                                type="number"
+                                component={Input}
+                                className="ml-2"
+                                style={{ width: 120 }}
+                                disabled
+                              />
+                            </div>
+                          </Tooltip>
+                        ) : (
+                          <Field
+                            name="unit_price"
+                            type="number"
+                            component={Input}
+                            className="ml-2"
+                            style={{ width: 120 }}
+                          />
+                        )}
                       </div>
                       <div className="flex justify-between">
                         <strong>Amount ({currency}):</strong>{" "}
