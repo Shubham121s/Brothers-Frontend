@@ -40,6 +40,7 @@ const StockDialogueForm = () => {
   const dispatch = useDispatch();
   const [stock, setStock] = useState({});
   const [edit, SetEdit] = useState(null);
+  const user = useSelector((state) => state.auth.user);
 
   const dialogOpen = useSelector((state) => state.stock.state.addDialog);
   const selectedStock = useSelector((state) => state.stock.state.selectedStock);
@@ -96,6 +97,8 @@ const StockDialogueForm = () => {
             stock_expiry_date: dayjs(values.stock_expiry_date).format(
               "YYYY-MM-DD"
             ),
+            added_by: user.name || user.username,
+            added_by_id: user._id || user.user_id,
           };
           try {
             if (edit) {

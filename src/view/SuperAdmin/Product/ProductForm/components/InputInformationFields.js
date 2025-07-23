@@ -56,6 +56,7 @@ const InputInformationFields = (props) => {
         component={Input}
         value={values[name] || ""}
         onChange={handleChange}
+        {...(type === "number" ? { onWheel: (e) => e.target.blur() } : {})}
       />
     </FormItem>
   );

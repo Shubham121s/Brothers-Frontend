@@ -38,6 +38,7 @@ const DrawingFields = (props) => {
             placeholder="Raw weight"
             suffix="Kg"
             component={Input}
+            onWheel={(e) => e.target.blur()}
           />
         </FormItem>
         <FormItem
@@ -54,6 +55,7 @@ const DrawingFields = (props) => {
             placeholder="Finish weight"
             suffix="Kg"
             component={Input}
+            onWheel={(e) => e.target.blur()}
           />
         </FormItem>
         <FormItem className="mb-4" label="Scrap weight">
