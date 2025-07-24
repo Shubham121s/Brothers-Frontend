@@ -11,7 +11,7 @@ import {
   setTableData,
 } from "../store/dataSlice";
 import useThemeClass from "../../../../../utils/hooks/useThemeClass";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../../components/shared/DataTable";
@@ -72,7 +72,7 @@ const ActionColumn = ({ row }) => {
     if (row?.invoice_type === "domestic")
       navigate(`/dispatch/domestic/edit/${row?.dispatch_invoice_id}`);
     else navigate(`/dispatch/foreign/edit/${row?.dispatch_invoice_id}`);
-  }, [row]);
+  }, [row, navigate]);
 
   const onDelete = () => {
     dispatch(togglDeleteConfirmationDialog(true));
@@ -100,13 +100,26 @@ const ActionColumn = ({ row }) => {
       >
         <MdDetails />
       </span>
-      <span
-        onClick={onEdit}
-        className={`cursor-pointer hover:${textTheme}`}
-        // to={`/dispatch/foreign/dispatch-invoice/${row?.dispatch_invoice_id}`}
-      >
-        <HiOutlinePencil />
-      </span>
+      {row.status === "confirmed" ? (
+        <span
+          title="Completed invoices cannot be edited"
+          style={{ display: "inline-block" }}
+        >
+          <span
+            className="opacity-50 cursor-not-allowed text-lg"
+            style={{ pointerEvents: "none", display: "inline-block" }}
+          >
+            <HiOutlinePencil />
+          </span>
+        </span>
+      ) : (
+        <span
+          onClick={onEdit}
+          className={`cursor-pointer hover:${textTheme} text-lg`}
+        >
+          <HiOutlinePencil />
+        </span>
+      )}
       <span
         onClick={onDelete}
         className={`cursor-pointer hover:${textTheme}`}
@@ -321,6 +334,7 @@ const DispatchInvoiceTable = () => {
     invoice_date,
     year,
     months,
+    dispatch,
   ]);
 
   useEffect(() => {
@@ -329,9 +343,8 @@ const DispatchInvoiceTable = () => {
     dispatch(getAllInvoiceDate());
     dispatch(getAllYears());
     dispatch(getAllMonths());
-
     // dispatch(getAllPoDates());
-  }, []);
+  }, [dispatch]);
 
   const tableData = useMemo(
     () => ({

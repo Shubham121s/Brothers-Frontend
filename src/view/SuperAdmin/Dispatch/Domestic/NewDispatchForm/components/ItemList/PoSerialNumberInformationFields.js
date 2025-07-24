@@ -3,19 +3,37 @@ import { Card, FormItem, Select } from "../../../../../../../components/ui";
 import { Field } from "formik";
 import { isEmpty } from "lodash";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 const PoSerialNumberInformationFields = (props) => {
-  const { errors, values, Po, touched } = props;
-  console.log(Po?.PoLists);
+  const { errors, values, Po, touched, dispatchList } = props;
+
+  const poDetails = useSelector(
+    (state) => state.new_domestic_invoice.data.poDetails
+  );
+  const latestPoList =
+    poDetails?.PoLists?.find(
+      (list) => list.po_list_id === values?.po_list_id
+    ) || values;
+  const dispatchedQty =
+    (dispatchList || [])
+      ?.flatMap((d) => d.poList)
+      ?.filter((item) => item?.PoList?.po_list_id === latestPoList?.po_list_id)
+      ?.reduce((sum, po) => sum + parseInt(po?.quantity), 0) || 0;
+  const pendingQty = Math.max(
+    parseInt(latestPoList?.quantity) - dispatchedQty,
+    0
+  );
+
   const poSerialNumberListData = useMemo(() => {
-    if (!Po) return [];
-    return Po?.PoLists?.map((list) => {
+    if (!poDetails || !poDetails.PoLists) return [];
+    return poDetails.PoLists.map((list) => {
       return {
         label: `${list?.serial_number} : ${list?.Product?.name}`,
         value: list,
       };
     });
-  }, [Po]);
+  }, [poDetails]);
 
   return (
     <FormItem
@@ -57,7 +75,10 @@ const PoSerialNumberInformationFields = (props) => {
               <strong>Price :</strong> <span>{values?.unit_price || "-"}</span>
             </div>
             <div>
-              <strong>Qty :</strong> <span>{values?.quantity || "-"}</span>
+              <strong>Qty :</strong>{" "}
+              <span>
+                {pendingQty} / {latestPoList?.quantity || "-"}
+              </span>
             </div>
           </div>
         </Card>

@@ -24,6 +24,7 @@ import EditDrawingDialog from "./EditDrawingDialog";
 import NewDrawingDialog from "./NewDrawingDialog";
 
 import { apiPostDownloadDrawingAttachment } from "../../../../../../services/SuperAdmin/Product/DrawingService";
+import appConfig from "../../../../../../configs/app.config";
 import {
   flexRender,
   getCoreRowModel,
@@ -34,12 +35,10 @@ const { Tr, Th, Td, THead, TBody } = Table;
 
 const DownloadColumn = ({ row }) => {
   const onDownload = async (URL) => {
-    // const response = await apiPostDownloadDrawingAttachment({
-    //   pdf_attachment_id,
-    // });
-    // console.log(URL);
     const splitString = URL?.split("/uploads/");
-    const transformedString = `https://mastererp.5techg.com/api/static/${splitString[1]}`;
+    let apiPrefix = appConfig.apiPrefix;
+    if (!apiPrefix.endsWith("/")) apiPrefix += "/";
+    const transformedString = `${apiPrefix}static/${splitString[1]}`;
     window.open(transformedString, "_blank");
   };
   return (
