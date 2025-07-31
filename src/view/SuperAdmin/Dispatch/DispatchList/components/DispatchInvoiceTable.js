@@ -1,5 +1,11 @@
-import React, { useEffect, useCallback, useMemo } from "react";
-import { Badge, Tag } from "../../../../../components/ui";
+import React, { useEffect, useCallback, useMemo, useState } from "react";
+import {
+  Badge,
+  Tag,
+  Input,
+  Dialog,
+  Button,
+} from "../../../../../components/ui";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCustomerOption,
@@ -16,6 +22,7 @@ import dayjs from "dayjs";
 import cloneDeep from "lodash/cloneDeep";
 import DataTable from "../../../../../components/shared/DataTable";
 import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from "react-icons/hi";
+import { HiOutlineEyeOff } from "react-icons/hi";
 import {
   setSelectedInvoice,
   toggleInvoiceDialog,
@@ -26,6 +33,137 @@ import {
 import { MdDetails } from "react-icons/md";
 import DetailDialog from "./DetailsDialog";
 import DeleteInvoiceConfirmationDialog from "./DeleteConfirmationDialog";
+
+const PasswordDialog = ({ isOpen, onClose, onConfirm }) => {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  // Reset state when dialog opens
+  useEffect(() => {
+    if (isOpen) {
+      setPassword("");
+      setError("");
+      setShowPassword(false);
+    }
+  }, [isOpen]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (password === "Brothers2025@") {
+      setError("");
+      setPassword("");
+      setShowPassword(false);
+      onConfirm();
+      onClose();
+    } else {
+      setError("Incorrect password. Please try again.");
+    }
+  };
+
+  const handleClose = () => {
+    setPassword("");
+    setError("");
+    setShowPassword(false);
+    onClose();
+  };
+
+  const handleCancel = () => {
+    setPassword("");
+    setError("");
+    setShowPassword(false);
+    onClose();
+  };
+
+  return (
+    <Dialog
+      isOpen={isOpen}
+      onClose={handleClose}
+      onRequestClose={handleClose}
+      width={420}
+    >
+      <div className="p-8">
+        <h4 className="mb-4 text-2xl font-bold text-center text-gray-800">
+          Authorization Required
+        </h4>
+        <p className="mb-8 text-center text-gray-600 text-base">
+          To edit completed invoices, please enter your password
+        </p>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-8">
+            <div className="relative">
+              <Input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`pr-12 ${error ? "border-red-500" : ""}`}
+                style={{
+                  height: "3rem",
+                  fontSize: "1rem",
+                  paddingRight: "3rem",
+                }}
+              />
+              <button
+                type="button"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none transition-colors duration-200"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: "0.5rem",
+                  cursor: "pointer",
+                }}
+              >
+                {showPassword ? (
+                  <HiOutlineEyeOff size={20} />
+                ) : (
+                  <HiOutlineEye size={20} />
+                )}
+              </button>
+            </div>
+            {error && (
+              <p className="mt-3 text-sm text-red-600 flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {error}
+              </p>
+            )}
+          </div>
+          <div className="flex justify-center gap-6">
+            <Button
+              variant="plain"
+              onClick={handleCancel}
+              className="px-8 py-3 text-base font-medium border border-gray-300 hover:bg-gray-50 transition-colors duration-200"
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="solid"
+              color="blue-600"
+              type="submit"
+              disabled={!password.trim()}
+              className="px-8 py-3 text-base font-semibold shadow-md hover:shadow-lg transition-all duration-200"
+            >
+              Confirm
+            </Button>
+          </div>
+        </form>
+      </div>
+    </Dialog>
+  );
+};
 
 const statusColor = {
   confirmed: {
@@ -62,6 +200,7 @@ const ActionColumn = ({ row }) => {
   const { textTheme } = useThemeClass();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPasswordDialog, setShowPasswordDialog] = useState(false);
 
   const onInvoiceDialog = () => {
     dispatch(toggleInvoiceDialog(true));
@@ -84,50 +223,59 @@ const ActionColumn = ({ row }) => {
     dispatch(setSelectedInvoice(row));
   };
 
+  const handlePasswordConfirm = () => {
+    onEdit();
+  };
+
+  const handleEditClick = () => {
+    if (row.status === "confirmed") {
+      setShowPasswordDialog(true);
+    } else {
+      onEdit();
+    }
+  };
+
   return (
-    <div className="flex justify-center text-lg gap-x-4">
-      <span
-        onClick={onInvoiceDialog}
-        className={`cursor-pointer hover:text-pink-500 `}
-        // to={`/dispatch/foreign/dispatch-invoice/${row?.dispatch_invoice_id}`}
-      >
-        <HiOutlineEye />
-      </span>
-      <span
-        onClick={onDetailsDialog}
-        className={`cursor-pointer hover:text-lime-500 `}
-        // to={`/dispatch/foreign/dispatch-invoice/${row?.dispatch_invoice_id}`}
-      >
-        <MdDetails />
-      </span>
-      {row.status === "confirmed" ? (
+    <>
+      <div className="flex justify-center text-lg gap-x-4">
         <span
-          title="Completed invoices cannot be edited"
-          style={{ display: "inline-block" }}
+          onClick={onInvoiceDialog}
+          className={`cursor-pointer hover:text-pink-500 `}
         >
-          <span
-            className="opacity-50 cursor-not-allowed text-lg"
-            style={{ pointerEvents: "none", display: "inline-block" }}
-          >
-            <HiOutlinePencil />
-          </span>
+          <HiOutlineEye />
         </span>
-      ) : (
         <span
-          onClick={onEdit}
-          className={`cursor-pointer hover:${textTheme} text-lg`}
+          onClick={onDetailsDialog}
+          className={`cursor-pointer hover:text-lime-500 `}
+        >
+          <MdDetails />
+        </span>
+        <span
+          onClick={handleEditClick}
+          className={`cursor-pointer hover:${textTheme} text-lg ${
+            row.status === "confirmed" ? "opacity-50" : ""
+          }`}
+          title={
+            row.status === "confirmed"
+              ? "Click to enter password for editing"
+              : ""
+          }
         >
           <HiOutlinePencil />
         </span>
-      )}
-      <span
-        onClick={onDelete}
-        className={`cursor-pointer hover:${textTheme}`}
-        // to={`/dispatch/foreign/dispatch-invoice/${row?.dispatch_invoice_id}`}
-      >
-        <HiOutlineTrash />
-      </span>
-    </div>
+        <span
+          onClick={onDelete}
+          className={`cursor-pointer hover:${textTheme}`}
+        >
+          <HiOutlineTrash />
+        </span>
+      </div>
+      <PasswordDialog
+        isOpen={showPasswordDialog}
+        onClose={() => setShowPasswordDialog(false)}
+        onConfirm={handlePasswordConfirm}
+      />
+    </>
   );
 };
 

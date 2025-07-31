@@ -264,60 +264,15 @@ const PoListTable = ({ DeliveryStatus }) => {
   const TableData = useSelector((state) => state.masterPP.data.tableData);
 
   const columns = [
-    // {
-    //   header: "raw date",
-    //   accessorKey: "raw_date",
-    //   cell: (props) => {
-    //     const { raw_date, dispatch_list_id } = props.row.original;
-    //     const date = raw_date ? new Date(raw_date) : null;
-    //     return (
-    //       <DatePicker
-    //         style={{ width: "150px" }}
-    //         placeholder="Raw Date"
-    //         value={date}
-    //         size="sm"
-    //         onChange={async (date) => {
-    //           await dispatch(
-    //             UpdateRawMachiningDate({
-    //               raw_date: dayjs(date).format("YYYY-MM-DD"),
-    //               dispatch_list_id: dispatch_list_id,
-    //             })
-    //           );
-    //           dispatch(
-    //             getAllPoLists({ pageIndex, pageSize, sort, query, status })
-    //           );
-    //         }}
-    //       />
-    //     );
-    //   },
-    // },
-    // {
-    //   header: "mach. date",
-    //   accessorKey: "machining_date",
-    //   cell: (props) => {
-    //     const { machining_date, dispatch_list_id } = props.row.original;
-    //     const date = machining_date ? new Date(machining_date) : null;
-    //     return (
-    //       <DatePicker
-    //         style={{ width: "150px" }}
-    //         placeholder="Machining Date"
-    //         value={date}
-    //         size="sm"
-    //         onChange={async (date) => {
-    //           await dispatch(
-    //             UpdateRawMachiningDate({
-    //               machining_date: dayjs(date).format("YYYY-MM-DD"),
-    //               dispatch_list_id: dispatch_list_id,
-    //             })
-    //           );
-    //           dispatch(
-    //             getAllPoLists({ pageIndex, pageSize, sort, query, status })
-    //           );
-    //         }}
-    //       />
-    //     );
-    //   },
-    // },
+    {
+      header: "Action",
+      accessorKey: "action",
+      size: 100,
+      cell: (props) => {
+        const row = props.row.original;
+        return <ActionColumn row={row} />;
+      },
+    },
     {
       header: "sr no.",
       accessorKey: "",
@@ -705,16 +660,6 @@ const PoListTable = ({ DeliveryStatus }) => {
         );
       },
     },
-    {
-      header: "Action",
-      accessorKey: "action",
-      size: 100,
-      cell: (props) => {
-        const row = props.row.original;
-        return <ActionColumn row={row} />;
-      },
-    },
-
     // {
     //   header: "remarks",
     //   accessorKey: "description",
