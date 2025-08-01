@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from "react";
+import { memo, useMemo } from "react";
 import { Table } from "../../../../../components/ui";
 import {
   useReactTable,
@@ -125,14 +125,88 @@ const PoTable = ({ data = [], currency = "INR", po_id }) => {
         header: `br dry date`,
         accessorKey: "accept_delivery_date",
         cell: (props) => {
-          const { accept_delivery_date } = props.row.original;
-          return (
-            <div>
-              {accept_delivery_date
-                ? dayjs(accept_delivery_date)?.format("DD-MMM-YYYY")
-                : "-"}
-            </div>
-          );
+          const { accept_delivery_date, Product, delivery_date } =
+            props.row.original;
+          if (accept_delivery_date) {
+            return (
+              <div>{dayjs(accept_delivery_date)?.format("DD-MMM-YYYY")}</div>
+            );
+          }
+          // Debug: Check why calculation might fail
+          console.log("Product Data Check:", {
+            hasProduct: !!Product,
+            standardLeadTime: Product?.standard_lead_time,
+            standardLeadTimeType: Product?.standard_lead_time_type,
+            productName: Product?.name,
+          });
+
+          if (Product?.standard_lead_time && Product?.standard_lead_time_type) {
+            const CalculateDate = (SLT, SLTT, date) => {
+              let formattedTime;
+              const originalDate = new Date(date);
+
+              if (SLTT === "days") {
+                originalDate.setDate(originalDate.getDate() + SLT);
+                formattedTime = dayjs(originalDate);
+              }
+              if (SLTT === "weeks") {
+                originalDate.setDate(originalDate.getDate() + 7 * SLT);
+                formattedTime = dayjs(originalDate);
+              }
+              if (SLTT === "months") {
+                originalDate.setMonth(originalDate.getMonth() + SLT);
+                formattedTime = dayjs(originalDate);
+              }
+              if (SLTT === "years") {
+                originalDate.setFullYear(originalDate.getFullYear() + SLT);
+                formattedTime = dayjs(originalDate);
+              }
+
+              return new Date(formattedTime);
+            };
+
+            const poDate = data?.date;
+            const calculatedDate = CalculateDate(
+              Product.standard_lead_time,
+              Product.standard_lead_time_type,
+              poDate
+            );
+
+            // Check if Brothers can meet customer's delivery timeline
+            const isOnTime =
+              dayjs(calculatedDate).isBefore(dayjs(delivery_date)) ||
+              dayjs(calculatedDate).isSame(dayjs(delivery_date));
+
+            // Debug: Log the dates being compared
+            console.log("Date Comparison:", {
+              calculatedDate: dayjs(calculatedDate).format("DD-MMM-YYYY"),
+              deliveryDate: dayjs(delivery_date).format("DD-MMM-YYYY"),
+              isOnTime: isOnTime,
+              productName: Product?.name,
+            });
+
+            return (
+              <div
+                className={
+                  isOnTime
+                    ? "text-green-600 font-semibold"
+                    : "text-red-600 font-semibold"
+                }
+              >
+                {dayjs(calculatedDate).format("DD-MMM-YYYY")}
+              </div>
+            );
+          }
+
+          // Debug: Log when calculation fails for pending items
+          console.log("Calculation Failed for Pending Item:", {
+            hasProduct: !!Product,
+            standardLeadTime: Product?.standard_lead_time,
+            standardLeadTimeType: Product?.standard_lead_time_type,
+            productName: Product?.name,
+            listStatus: props.row.original.list_status,
+          });
+          return <div>-</div>;
         },
       },
       {

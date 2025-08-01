@@ -402,14 +402,68 @@ const PoListTable = ({ DeliveryStatus }) => {
       header: "brother cnf date",
       accessorKey: "accept_delivery_date",
       cell: (props) => {
-        const { accept_delivery_date } = props.row.original || {};
-        return (
-          <div>
-            {accept_delivery_date
-              ? dayjs(accept_delivery_date).format("YYYY-MM-DD")
-              : "-"}
-          </div>
-        );
+        const {
+          accept_delivery_date,
+          standard_lead_time,
+          standard_lead_time_type,
+          delivery_date,
+        } = props.row.original || {};
+
+        if (accept_delivery_date) {
+          return <div>{dayjs(accept_delivery_date).format("YYYY-MM-DD")}</div>;
+        }
+        if (standard_lead_time && standard_lead_time_type && delivery_date) {
+          const CalculateDate = (SLT, SLTT, date) => {
+            let formattedTime;
+            const originalDate = new Date(date);
+
+            if (SLTT === "days") {
+              originalDate.setDate(originalDate.getDate() + SLT);
+              formattedTime = dayjs(originalDate);
+            }
+            if (SLTT === "weeks") {
+              originalDate.setDate(originalDate.getDate() + 7 * SLT);
+              formattedTime = dayjs(originalDate);
+            }
+            if (SLTT === "months") {
+              originalDate.setMonth(originalDate.getMonth() + SLT);
+              formattedTime = dayjs(originalDate);
+            }
+            if (SLTT === "years") {
+              originalDate.setFullYear(originalDate.getFullYear() + SLT);
+              formattedTime = dayjs(originalDate);
+            }
+
+            return new Date(formattedTime);
+          };
+
+          // Use PO date instead of delivery_date for real-world calculation
+          const poDate = props.row.original?.DATE; // PO creation date
+          const calculatedDate = CalculateDate(
+            standard_lead_time,
+            standard_lead_time_type,
+            poDate
+          );
+
+          // Check if Brothers can meet customer's delivery timeline
+          const isOnTime =
+            dayjs(calculatedDate).isBefore(dayjs(delivery_date)) ||
+            dayjs(calculatedDate).isSame(dayjs(delivery_date));
+
+          return (
+            <div
+              className={
+                isOnTime
+                  ? "text-green-600 font-semibold"
+                  : "text-red-600 font-semibold"
+              }
+            >
+              {dayjs(calculatedDate).format("YYYY-MM-DD")}
+            </div>
+          );
+        }
+
+        return <div>-</div>;
       },
     },
     {
