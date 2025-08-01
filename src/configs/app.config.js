@@ -5,7 +5,7 @@ const appConfig = {
   // apiPrefix: "https://brothers-backend.onrender.com/api/",
   // apiPrefix: "https://brothersapi.vaishnaviprofile.com/api/",
 
-  // apiPrefix: "https://mastererp.5techg.com/api/",
+  apiPrefix: "https://mastererp.5techg.com/api/",
  
 
   //apiPrefix: "https://api-casting.brothers.net.in/api/",
@@ -15,7 +15,7 @@ const appConfig = {
 
 
 
-  apiPrefix: "http://64.227.167.235:5005/api/",
+  //apiPrefix: "http://64.227.167.235:5005/api/",
   
   authenticatedEntryPath: "/dashboard",
   unAuthenticatedEntryPath: "/sign-in",
