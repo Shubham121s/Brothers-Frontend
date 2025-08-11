@@ -13,8 +13,11 @@ const appConfig = {
 
   //apiPrefix: "https://api.mastererp.5techg.com/api/",
 
-  apiPrefix: "http://159.89.160.250:5004/api/",
+  //apiPrefix: "http://159.89.160.250:5004/api/",
 
+  apiPrefix: "https://mastererpapi.5techg.com/api/",
+
+  
   authenticatedEntryPath: "/dashboard",
   unAuthenticatedEntryPath: "/sign-in",
   tourPath: "/",
