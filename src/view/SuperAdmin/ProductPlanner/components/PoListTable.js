@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useMemo } from "react";
-import { Tag, Tooltip, DatePicker, Input } from "../../../../components/ui";
+import { Tag, Tooltip, Input } from "../../../../components/ui";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllCustomerOption,
@@ -265,15 +265,6 @@ const PoListTable = ({ DeliveryStatus }) => {
 
   const columns = [
     {
-      header: "Action",
-      accessorKey: "action",
-      size: 100,
-      cell: (props) => {
-        const row = props.row.original;
-        return <ActionColumn row={row} />;
-      },
-    },
-    {
       header: "sr no.",
       accessorKey: "",
       size: 20,
@@ -282,6 +273,15 @@ const PoListTable = ({ DeliveryStatus }) => {
         const { index } = props.row;
         const serialNumber = index + 1;
         return <div>{serialNumber}</div>;
+      },
+    },
+    {
+      header: "Action",
+      accessorKey: "action",
+      size: 100,
+      cell: (props) => {
+        const row = props.row.original;
+        return <ActionColumn row={row} />;
       },
     },
     {
@@ -813,14 +813,26 @@ const PoListTable = ({ DeliveryStatus }) => {
         DeliveryStatus,
       })
     );
-  }, [pageIndex, pageSize, sort, query, status, dispatch]);
+  }, [
+    pageIndex,
+    pageSize,
+    sort,
+    query,
+    status,
+    dispatch,
+    DeliveryStatus,
+    TableData,
+    customer,
+    po_no,
+    project_no,
+  ]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData, pageIndex, pageSize, sort, status]);
   useEffect(() => {
     dispatch(getAllCustomerOption());
-  }, []);
+  }, [dispatch]);
 
   const tableData = useMemo(
     () => ({
@@ -868,13 +880,6 @@ const PoListTable = ({ DeliveryStatus }) => {
   const onPaginationChange = (page) => {
     const newTableData = cloneDeep(tableData);
     newTableData.pageIndex = page;
-    dispatch(setTableData(newTableData));
-  };
-
-  const onSelectChange = (value) => {
-    const newTableData = cloneDeep(tableData);
-    newTableData.pageSize = Number(value);
-    newTableData.pageIndex = 1;
     dispatch(setTableData(newTableData));
   };
 

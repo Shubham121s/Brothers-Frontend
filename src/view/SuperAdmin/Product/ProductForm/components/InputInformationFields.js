@@ -30,6 +30,7 @@ const InputInformationFields = (props) => {
     values.machine_lead_time,
     values.quality_lead_time,
     setFieldValue,
+    name,
   ]);
 
   const handleChange = (e) => {

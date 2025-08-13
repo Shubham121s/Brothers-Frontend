@@ -1,11 +1,10 @@
 import React, { useMemo } from "react";
-import { Field, FieldArray, Form, Formik, getIn } from "formik";
+import { Field, FieldArray, getIn } from "formik";
 import {
   FormItem,
   Button,
   Input,
   Select,
-  DatePicker,
   Table,
 } from "../../../../../../../components/ui";
 import { HiCheck } from "react-icons/hi";
@@ -106,10 +105,6 @@ const ItemForm = ({ values, errors, touched, Products = [], type = "new" }) => {
                     const quantityFeedBack = fieldFeedback(
                       form,
                       `items[${index}].quantity`
-                    );
-                    const deliveryFeedBack = fieldFeedback(
-                      form,
-                      `items[${index}].delivery_date`
                     );
                     return (
                       <Tr key={index}>

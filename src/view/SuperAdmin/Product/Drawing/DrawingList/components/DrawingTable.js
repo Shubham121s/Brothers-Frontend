@@ -1,5 +1,5 @@
-import React, { useMemo, useCallback, useEffect } from "react";
-import { Button, Table, Tooltip } from "../../../../../../components/ui";
+import React, { useMemo, useCallback } from "react";
+import { Table, Tooltip } from "../../../../../../components/ui";
 import dayjs from "dayjs";
 import {
   HiOutlineDocumentDownload,
@@ -7,14 +7,7 @@ import {
   HiOutlineTrash,
 } from "react-icons/hi";
 import useThemeClass from "../../../../../../utils/hooks/useThemeClass";
-import DataTable from "../../../../../../components/shared/DataTable";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteDrawingByDrawingId,
-  getAllDrawingsByProductId,
-  setTableData,
-} from "../store/dataSlice";
-import { cloneDeep } from "lodash";
+import { useDispatch } from "react-redux";
 import {
   setSelectedDrawing,
   toggleDeleteDrawingDialog,
@@ -23,7 +16,6 @@ import {
 import EditDrawingDialog from "./EditDrawingDialog";
 import NewDrawingDialog from "./NewDrawingDialog";
 
-import { apiPostDownloadDrawingAttachment } from "../../../../../../services/SuperAdmin/Product/DrawingService";
 import appConfig from "../../../../../../configs/app.config";
 import {
   flexRender,
@@ -109,7 +101,7 @@ const ActionColumn = ({ row }) => {
   const onEdit = useCallback(() => {
     dispatch(setSelectedDrawing(row));
     dispatch(toggleEditDrawingDialog(true));
-  }, [row]);
+  }, [row, dispatch]);
 
   const onDelete = () => {
     dispatch(setSelectedDrawing(row));
@@ -135,7 +127,6 @@ const DrawingTable = ({ data }) => {
         header: "Drawing",
         accessorKey: "",
         cell: (props) => {
-          const row = props.row.original;
           return <span className="uppercase">{data?.drawing_number}</span>;
         },
       },
@@ -144,7 +135,7 @@ const DrawingTable = ({ data }) => {
         accessorKey: "",
         cell: (props) => {
           const row = props.row.original;
-          return <span className="uppercase">{row.revision_number}</span>;
+          return <span>{row.revision_number}</span>;
         },
       },
       {
@@ -196,12 +187,11 @@ const DrawingTable = ({ data }) => {
         header: "Action",
         accessorKey: "",
         cell: (props) => {
-          const row = props.row.original;
-          return <ActionColumn row={row} />;
+          return <ActionColumn row={props.row.original} />;
         },
       },
     ],
-    []
+    [data?.drawing_number]
   );
   const table = useReactTable({
     data: data?.Drawings || [],
@@ -237,14 +227,13 @@ const DrawingTable = ({ data }) => {
         </THead>
         <TBody>
           {table.getRowModel().rows.map((row) => {
-            const { list_status } = row.original;
             return (
               <Tr
                 key={row.id}
                 className={`${
-                  list_status === "reject"
+                  row.original.list_status === "reject"
                     ? "bg-red-400 text-white"
-                    : list_status === "accept"
+                    : row.original.list_status === "accept"
                     ? "bg-emerald-400 text-white"
                     : ""
                 }`}
