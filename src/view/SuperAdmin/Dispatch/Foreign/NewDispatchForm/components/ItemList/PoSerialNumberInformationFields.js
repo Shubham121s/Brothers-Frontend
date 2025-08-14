@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
 import { Card, FormItem, Select } from "../../../../../../../components/ui";
 import { Field } from "formik";
 import { isEmpty } from "lodash";
@@ -14,6 +14,10 @@ const PoSerialNumberInformationFields = (props) => {
         label: `${list?.serial_number} : ${list?.Product?.name}`,
         value: list,
       };
+    }).sort((a, b) => {
+      const serialA = parseInt(a.value?.serial_number) || 0;
+      const serialB = parseInt(b.value?.serial_number) || 0;
+      return serialA - serialB;
     });
   }, [Po]);
 
