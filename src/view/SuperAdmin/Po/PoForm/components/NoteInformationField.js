@@ -1,9 +1,9 @@
-import React, { memo } from 'react'
-import { FormItem, Input } from '../../../../../components/ui'
-import { Field } from 'formik'
+import React, { memo } from "react";
+import { FormItem, Input } from "../../../../../components/ui";
+import { Field } from "formik";
 
 const NoteInformationFields = (props) => {
-  const { errors, touched, values = '' } = props
+  const { errors, touched, values = "" } = props;
 
   return (
     <FormItem
@@ -21,7 +21,7 @@ const NoteInformationFields = (props) => {
         component={Input}
       />
     </FormItem>
-  )
-}
+  );
+};
 
-export default memo(NoteInformationFields)
+export default memo(NoteInformationFields);
