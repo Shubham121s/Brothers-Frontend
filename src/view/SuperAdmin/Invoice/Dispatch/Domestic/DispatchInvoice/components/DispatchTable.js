@@ -149,7 +149,7 @@ const TableFooterRows = ({
           colSpan="1"
           className={`uppercase ${className}`}
         >
-          P & F Charges
+          P & F CHARGES
         </Td>
         <Td
           style={{ border: ".5px solid black", padding: "3px" }}

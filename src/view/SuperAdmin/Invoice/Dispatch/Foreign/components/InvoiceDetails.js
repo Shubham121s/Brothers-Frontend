@@ -28,7 +28,7 @@ const InvoiceDetails = ({ data, location_code }) => {
         </div>
         <div className="flex gap-1 items-center ml-2">
           <p className="font-normal text-center text-gray-500 print:text-xs">
-            INVOICE DATE
+            INVOICE DATE 
           </p>
           <p className="text-center text-gray-500 print:text-xs">-</p>
           <h6
