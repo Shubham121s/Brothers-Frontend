@@ -1,7 +1,7 @@
 const appConfig = {
   // apiPrefix: "https://api-erp.brothers.net.in/api/",
   // apiPrefix: "https://3b54-103-16-30-68.ngrok-free.app/api/",
-    apiPrefix: "http://localhost:5004/api/",
+   // apiPrefix: "http://localhost:5004/api/",
   // apiPrefix: "https://brothers-backend.onrender.com/api/",
   // apiPrefix: "https://brothersapi.vaishnaviprofile.com/api/",
 
@@ -17,6 +17,10 @@ const appConfig = {
 
   // apiPrefix: "https://mastererpapi.5techg.com/api/",
 
+  apiPrefix: "https://brothers-backend-50uu.onrender.com/api/",
+
+
+    
   
   authenticatedEntryPath: "/dashboard",
   unAuthenticatedEntryPath: "/sign-in",
